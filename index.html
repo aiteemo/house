@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>装修助手 - 88.45㎡两居室装修规划</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Three.js r137 -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.137.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.137.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="logo">
+            <span class="logo-icon">🏠</span>
+            <span class="logo-text">装修助手</span>
+            <span class="logo-sub">88.45㎡ 两居室 · 1楼</span>
+        </div>
+        <nav class="tabs">
+            <button class="tab active" data-tab="requirements">需求清单</button>
+            <button class="tab" data-tab="coreProblems">核心问题</button>
+            <button class="tab" data-tab="preview3d">3D预览</button>
+            <button class="tab" data-tab="calculator">价格计算</button>
+            <button class="tab" data-tab="decision">决策分析</button>
+        </nav>
+    </header>
+
+    <!-- 需求清单面板 -->
+    <div class="panel active" id="panel-requirements">
+        <div class="req-layout">
+            <aside class="req-sidebar">
+                <h3>装修模块</h3>
+                <ul class="module-list" id="moduleList"></ul>
+                <button class="btn-add-module" id="btnAddModule">+ 自定义模块</button>
+            </aside>
+            <main class="req-main">
+                <div class="req-header">
+                    <h2 id="currentModuleName">基础工程</h2>
+                    <div class="req-stats">
+                        <span id="reqChecked">0</span> / <span id="reqTotal">0</span> 已确认
+                    </div>
+                </div>
+                <div class="req-search-bar">
+                    <input type="text" id="reqSearchInput" class="req-search-input" placeholder="搜索需求项（名称/描述）...">
+                </div>
+                <div class="req-list" id="reqList"></div>
+                <button class="btn-add-req" id="btnAddReq">+ 添加需求项</button>
+            </main>
+        </div>
+    </div>
+
+    <!-- 核心问题面板 -->
+    <div class="panel" id="panel-coreProblems">
+        <div class="core-layout">
+            <div class="core-list" id="coreList"></div>
+            <div class="core-summary" id="coreSummary"></div>
+        </div>
+    </div>
+
+    <!-- 3D预览面板 -->
+    <div class="panel" id="panel-preview3d">
+        <div class="preview3d-container">
+            <div class="viewport" id="viewport"></div>
+            <div class="viewport-controls">
+                <button class="vp-btn active" data-view="perspective" title="自由视角">🎮</button>
+                <button class="vp-btn" data-view="top" title="俯视图">⬆</button>
+                <button class="vp-btn" data-view="living" title="客厅视角">🛋</button>
+                <button class="vp-btn" data-view="bedroom" title="卧室视角">🛏</button>
+                <button class="vp-btn" data-view="kitchen" title="厨房视角">🍳</button>
+                <div class="vp-divider"></div>
+                <button class="vp-btn toggle" id="toggleWalls" title="墙体透明">🧱</button>
+                <button class="vp-btn toggle" id="toggleLight" title="灯光开关">💡</button>
+                <button class="vp-btn toggle active" id="toggleAirflow" title="气流显示">🌬</button>
+                <button class="vp-btn toggle" id="toggleLabels" title="房间标签">🏷</button>
+                <button class="vp-btn toggle" id="toggleFurniture" title="家具显示">🪑</button>
+            </div>
+            <div class="room-info-tooltip" id="roomTooltip" style="display:none;">
+                <h4 id="tooltipRoomName"></h4>
+                <div id="tooltipRoomArea"></div>
+                <div id="tooltipRoomReqs"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 价格计算面板 -->
+    <div class="panel" id="panel-calculator">
+        <div class="calc-layout">
+            <div class="calc-left">
+                <h3>分项价格明细</h3>
+                <div class="tier-selector">
+                    <button class="tier-btn" data-tier="economy">经济型</button>
+                    <button class="tier-btn active" data-tier="comfort">舒适型</button>
+                    <button class="tier-btn" data-tier="quality">品质型</button>
+                </div>
+                <div class="calc-items" id="calcItems"></div>
+            </div>
+            <div class="calc-right">
+                <div class="total-card">
+                    <div class="total-label">预估总价</div>
+                    <div class="total-price" id="totalPrice">¥0</div>
+                    <div class="total-tier" id="totalTier">舒适型</div>
+                </div>
+                <canvas id="priceChart" width="360" height="360"></canvas>
+                <div class="price-summary" id="priceSummary"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 决策分析面板 -->
+    <div class="panel" id="panel-decision">
+        <div class="decision-layout">
+            <div class="decision-header">
+                <h2>全包 vs 半包 决策分析</h2>
+                <p class="decision-desc">根据您的需求清单，自动分析哪种方式更适合您</p>
+            </div>
+            <div class="decision-comparison" id="decisionComparison"></div>
+            <div class="decision-recommendation" id="decisionRecommendation"></div>
+        </div>
+    </div>
+
+    <!-- JS模块 -->
+    <script src="js/data.js"></script>
+    <script src="js/scene.js"></script>
+    <script src="js/room.js"></script>
+    <script src="js/furniture.js"></script>
+    <script src="js/lighting.js"></script>
+    <script src="js/airflow.js"></script>
+    <script src="js/requirements.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/decision.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

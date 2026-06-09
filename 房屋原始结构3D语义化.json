@@ -1,0 +1,129 @@
+{
+  "project_info": {
+    "name": "Kunming_Apartment_Base",
+    "version": "1.0.0",
+    "unit": "mm",
+    "global_config": {
+      "default_wall_height": 2800,
+      "default_wall_thickness": 240
+    }
+  },
+  "coordinate_system": {
+    "origin": "Top-Left corner of Bedroom_B",
+    "x_axis": "Rightwards",
+    "y_axis": "Downwards"
+  },
+  "rooms": [
+    {
+      "id": "bedroom_b",
+      "name": "卧室B",
+      "original_area_sqm": 10.8,
+      "polygon": [
+        {"x": 0, "y": 0},
+        {"x": 3812, "y": 0},
+        {"x": 3812, "y": 2640},
+        {"x": 0, "y": 2640}
+      ]
+    },
+    {
+      "id": "storage_room",
+      "name": "储物间",
+      "original_area_sqm": 1.5,
+      "polygon": [
+        {"x": 3812, "y": 0},
+        {"x": 4390, "y": 0},
+        {"x": 4390, "y": 2640},
+        {"x": 3812, "y": 2640}
+      ]
+    },
+    {
+      "id": "kitchen",
+      "name": "厨房",
+      "original_area_sqm": 5.2,
+      "polygon": [
+        {"x": 0, "y": 2640},
+        {"x": 3812, "y": 2640},
+        {"x": 3812, "y": 4399},
+        {"x": 0, "y": 4399}
+      ]
+    },
+    {
+      "id": "bedroom_a",
+      "name": "卧室A",
+      "original_area_sqm": 13.5,
+      "polygon": [
+        {"x": 0, "y": 4399},
+        {"x": 3812, "y": 4399},
+        {"x": 3812, "y": 8897},
+        {"x": 0, "y": 8897}
+      ]
+    },
+    {
+      "id": "entrance_hallway",
+      "name": "玄关/走道",
+      "polygon": [
+        {"x": 4390, "y": 0},
+        {"x": 5702, "y": 0},
+        {"x": 5702, "y": 2604},
+        {"x": 4390, "y": 2604}
+      ]
+    },
+    {
+      "id": "bathroom",
+      "name": "卫生间",
+      "original_area_sqm": 4.7,
+      "polygon": [
+        {"x": 5702, "y": 0},
+        {"x": 7501, "y": 0},
+        {"x": 7501, "y": 2604},
+        {"x": 5702, "y": 2604}
+      ]
+    },
+    {
+      "id": "living_room",
+      "name": "客厅",
+      "original_area_sqm": 24.3,
+      "polygon": [
+        {"x": 3812, "y": 2604},
+        {"x": 7501, "y": 2604},
+        {"x": 7501, "y": 8997},
+        {"x": 3812, "y": 8997}
+      ]
+    },
+    {
+      "id": "living_balcony",
+      "name": "客厅阳台",
+      "original_area_sqm": 2.9,
+      "polygon": [
+        {"x": 4744, "y": 8997},
+        {"x": 7501, "y": 8997},
+        {"x": 7501, "y": 10039},
+        {"x": 4744, "y": 10039}
+      ]
+    }
+  ],
+  "walls": [
+    {
+      "id": "wall_kitchen_living",
+      "description": "厨房与客厅之间的隔墙",
+      "start": {"x": 3812, "y": 2640},
+      "end": {"x": 3812, "y": 4399},
+      "thickness": 120,
+      "is_bearing": false,
+      "removable": true
+    },
+    {
+      "id": "wall_bedroom_b_hallway",
+      "description": "卧室B/储物间面向走道的墙",
+      "start": {"x": 3812, "y": 2640},
+      "end": {"x": 4390, "y": 2640},
+      "thickness": 120,
+      "is_bearing": false,
+      "removable": true
+    }
+  ],
+  "furniture_layout_schemes": {
+    "current_active": "NONE",
+    "schemes": []
+  }
+}
