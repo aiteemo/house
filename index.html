@@ -23,6 +23,7 @@
             <button class="tab" data-tab="preview3d">3D预览</button>
             <button class="tab" data-tab="calculator">价格计算</button>
             <button class="tab" data-tab="decision">决策分析</button>
+            <button class="tab" data-tab="memo">沟通备忘</button>
         </nav>
     </header>
 
@@ -30,7 +31,10 @@
     <div class="panel active" id="panel-requirements">
         <div class="req-layout">
             <aside class="req-sidebar">
-                <h3>装修模块</h3>
+                <div class="sidebar-toggle">
+                    <button class="sidebar-toggle-btn active" data-view="module">按模块</button>
+                    <button class="sidebar-toggle-btn" data-view="stage">按阶段</button>
+                </div>
                 <ul class="module-list" id="moduleList"></ul>
                 <button class="btn-add-module" id="btnAddModule">+ 自定义模块</button>
             </aside>
@@ -119,6 +123,27 @@
         </div>
     </div>
 
+    <!-- 沟通备忘面板 -->
+    <div class="panel" id="panel-memo">
+        <div class="memo-layout">
+            <aside class="req-sidebar">
+                <h3>备忘分类</h3>
+                <ul class="module-list" id="memoCategoryList"></ul>
+            </aside>
+            <main class="req-main">
+                <div class="req-header">
+                    <div>
+                        <h2 id="currentMemoName">我需要提供的</h2>
+                        <div class="memo-desc" id="currentMemoDesc"></div>
+                    </div>
+                    <div class="memo-actions" id="memoActions"></div>
+                </div>
+                <div class="memo-progress" id="memoProgress"></div>
+                <div class="memo-items" id="memoItems"></div>
+            </main>
+        </div>
+    </div>
+
     <!-- JS模块 -->
     <script src="js/data.js"></script>
     <script src="js/scene.js"></script>
@@ -128,6 +153,7 @@
     <script src="js/airflow.js"></script>
     <script src="js/requirements.js"></script>
     <script src="js/core.js"></script>
+    <script src="js/memo.js"></script>
     <script src="js/calculator.js"></script>
     <script src="js/decision.js"></script>
     <script src="js/app.js"></script>

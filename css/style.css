@@ -94,6 +94,48 @@ body {
     letter-spacing: 1px;
     margin-bottom: 12px;
 }
+.sidebar-toggle {
+    display: flex;
+    margin: 0 20px 16px;
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 3px;
+}
+.sidebar-toggle-btn {
+    flex: 1;
+    padding: 6px 0;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.sidebar-toggle-btn.active {
+    background: var(--accent);
+    color: #fff;
+}
+.stage-progress-mini {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.stage-progress-bar {
+    width: 36px;
+    height: 4px;
+    background: var(--bg);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.stage-progress-bar span {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s;
+}
 .module-list { list-style: none; }
 .module-list li {
     padding: 10px 20px;
@@ -905,3 +947,431 @@ body {
     font-size: 14px;
 }
 .btn-secondary:hover { color: var(--text); }
+
+/* ========== 沟通备忘 ========== */
+.memo-layout {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.memo-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 4px;
+}
+.memo-progress {
+    margin-bottom: 20px;
+}
+.memo-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--bg);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+.memo-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+.memo-progress-text {
+    font-size: 12px;
+    color: var(--text-dim);
+}
+.memo-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.memo-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: all 0.15s;
+}
+.memo-item:hover {
+    border-color: var(--accent);
+}
+.memo-item.checked {
+    border-color: rgba(74, 222, 128, 0.3);
+    background: rgba(74, 222, 128, 0.04);
+}
+.memo-check {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    margin-top: 2px;
+}
+.memo-check:hover {
+    border-color: var(--accent);
+}
+.memo-item.checked .memo-check {
+    border-color: var(--green);
+    background: var(--green);
+}
+.memo-check-icon {
+    font-size: 14px;
+    color: #fff;
+    font-weight: 700;
+}
+.memo-content {
+    flex: 1;
+    min-width: 0;
+}
+.memo-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.memo-item.checked .memo-name {
+    color: var(--green);
+}
+.memo-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+.memo-tip {
+    font-size: 12px;
+    color: var(--orange);
+    background: rgba(251, 146, 60, 0.08);
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+.memo-notes-row {
+    margin-top: 4px;
+}
+.memo-notes-input {
+    width: 100%;
+    padding: 6px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.memo-notes-input:focus {
+    border-color: var(--accent);
+}
+.memo-notes-input::placeholder {
+    color: var(--text-dim);
+    opacity: 0.5;
+}
+
+/* ========== 业主信息可编辑 ========== */
+.memo-editable-desc {
+    width: 100%;
+    padding: 8px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 36px;
+    outline: none;
+    resize: none;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+.memo-editable-desc:focus {
+    border-color: var(--accent);
+}
+.memo-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* ========== 公司对比 ========== */
+.comp-header {
+    margin-bottom: 20px;
+}
+.comp-search-bar {
+    margin-top: 12px;
+}
+.comp-search-input {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.comp-search-input:focus { border-color: var(--accent); }
+.comp-search-input::placeholder { color: var(--text-dim); opacity: 0.5; }
+.comp-company-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.comp-tab {
+    padding: 8px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+}
+.comp-tab:hover { border-color: var(--accent); }
+.comp-tab.active {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    color: var(--accent);
+}
+.comp-tab-del {
+    font-size: 16px;
+    color: var(--text-dim);
+    cursor: pointer;
+    line-height: 1;
+}
+.comp-tab-del:hover { color: var(--red); }
+.comp-tab-add {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+.comp-tab-add:hover { border-color: var(--accent); color: var(--accent); }
+.comp-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-size: 14px;
+}
+.comp-table {
+    overflow-x: auto;
+}
+.comp-thead {
+    display: flex;
+    gap: 1px;
+    margin-bottom: 1px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+}
+.comp-th {
+    flex: 1;
+    min-width: 160px;
+    padding: 10px 12px;
+    background: var(--bg-card);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 2px solid var(--border);
+}
+.comp-th.active {
+    border-bottom-color: var(--accent);
+    color: var(--accent);
+}
+.comp-th-label {
+    flex: 0 0 140px;
+    min-width: 140px;
+    text-align: left;
+    color: var(--text-dim);
+}
+.comp-cat-row {
+    padding: 10px 12px;
+    background: var(--bg-hover);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 8px;
+    border-radius: 6px;
+}
+.comp-cat-section {
+    margin-top: 8px;
+}
+.comp-cat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--bg-hover);
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+}
+.comp-cat-header:hover { background: var(--bg-active); }
+.comp-cat-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+}
+.comp-cat-toggle {
+    font-size: 11px;
+    color: var(--text-dim);
+    transition: transform 0.2s;
+}
+.comp-cat-section.collapsed .comp-cat-toggle { transform: rotate(-90deg); }
+.comp-cat-section.collapsed .comp-cat-body { display: none; }
+.comp-cat-body {
+    padding: 12px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+}
+.comp-cat-tip {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+.comp-cat-guide {
+    font-size: 12px;
+    color: var(--orange);
+    background: rgba(251, 146, 60, 0.08);
+    padding: 8px 10px;
+    border-radius: 6px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+.comp-cat-notes-area {
+    margin-top: 4px;
+}
+.comp-cat-notes-view {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+.comp-cat-notes-text {
+    flex: 1;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+.comp-cat-notes-placeholder {
+    color: var(--text-dim);
+    opacity: 0.5;
+}
+.comp-cat-notes-edit {
+    flex-shrink: 0;
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-dim);
+    font-size: 11px;
+    cursor: pointer;
+}
+.comp-cat-notes-edit:hover { border-color: var(--accent); color: var(--accent); }
+.comp-cat-notes-editing {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.comp-cat-notes-textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 8px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.6;
+    outline: none;
+    resize: vertical;
+    font-family: inherit;
+}
+.comp-cat-notes-textarea:focus { border-color: var(--accent); }
+.comp-cat-notes-save {
+    align-self: flex-end;
+    padding: 5px 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+.comp-cat-notes-save:hover { opacity: 0.9; }
+.comp-row {
+    display: flex;
+    gap: 1px;
+    border-bottom: 1px solid var(--border);
+}
+.comp-cell {
+    flex: 1;
+    min-width: 160px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.comp-cell.active {
+    background: rgba(108, 140, 255, 0.04);
+}
+.comp-cell-label {
+    flex: 0 0 140px;
+    min-width: 140px;
+    justify-content: center;
+}
+.comp-q-name {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+}
+.comp-text-input {
+    width: 100%;
+    padding: 6px 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 12px;
+    outline: none;
+}
+.comp-text-input:focus { border-color: var(--accent); }
+.comp-note-input {
+    width: 100%;
+    padding: 4px 8px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: var(--text-dim);
+    font-size: 11px;
+    outline: none;
+}
+.comp-note-input:focus {
+    border-color: var(--border);
+    background: var(--bg-card);
+}

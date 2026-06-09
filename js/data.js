@@ -29,60 +29,60 @@ function polygonSize(polygon, wallThickness) {
 // ========== 户型数据（基于JSON精确坐标） ==========
 const WT_MM = 240; // JSON中的墙厚(mm)
 const ROOM_DATA = {
-    totalArea: 89.8,  // 各房间面积之和(OBJ墙体提取)
+    totalArea: 70.3,  // 专有建筑面积
     floor: 1,
     rooms: [
         {
-            id: 'bedroom_b', name: '卧室B', area: 7.9,
+            id: 'bedroom_b', name: '卧室B', area: 10.8,
             cx: -2.164, cz: -2.827,
             width: 2.942, depth: 2.720,
             color: 0x06b6d4, desc: '次卧室',
             polygon: [{x:0,y:0},{x:2942,y:0},{x:2942,y:2720},{x:0,y:2720}],
         },
         {
-            id: 'kitchen', name: '厨房', area: 1.6,
+            id: 'kitchen', name: '厨房', area: 5.2,
             cx: -2.164, cz: -1.892,
             width: 2.942, depth: 0.545,
             color: 0xf59e0b, desc: '厨房',
             polygon: [{x:0,y:2720},{x:2942,y:2720},{x:2942,y:3265},{x:0,y:3265}],
         },
         {
-            id: 'bedroom_a', name: '卧室A', area: 17.9,
+            id: 'bedroom_a', name: '卧室A', area: 13.5,
             cx: -2.164, cz: 1.794,
             width: 2.942, depth: 6.065,
             color: 0x8b5cf6, desc: '主卧室',
             polygon: [{x:0,y:3265},{x:2942,y:3265},{x:2942,y:9330},{x:0,y:9330}],
         },
         {
-            id: 'bedroom_a_balcony', name: '卧室A阳台', area: 4.3,
+            id: 'bedroom_a_balcony', name: '卧室A阳台', area: 1.9,
             cx: -2.164, cz: 3.621,
             width: 2.942, depth: 1.454,
             color: 0x34d399, desc: '卧室A阳台',
             polygon: [{x:0,y:9330},{x:2942,y:9330},{x:2942,y:10784},{x:0,y:10784}],
         },
         {
-            id: 'living_room', name: '客厅', area: 34.1,
+            id: 'living_room', name: '客厅', area: 24.3,
             cx: 1.270, cz: 1.359,
             width: 5.388, depth: 6.322,
             color: 0x3b82f6, desc: '客厅，连接阳台',
             polygon: [{x:2942,y:3005},{x:8330,y:3005},{x:8330,y:9330},{x:2942,y:9330}],
         },
         {
-            id: 'living_balcony', name: '客厅阳台', area: 7.8,
+            id: 'living_balcony', name: '客厅阳台', area: 2.9,
             cx: 1.537, cz: 3.621,
             width: 5.388, depth: 1.454,
             color: 0x22c55e, desc: '客厅阳台',
             polygon: [{x:2942,y:9330},{x:8330,y:9330},{x:8330,y:10784},{x:2942,y:10784}],
         },
         {
-            id: 'entrance_hallway', name: '玄关/过道', area: 3.0,
+            id: 'entrance_hallway', name: '玄关/过道', area: 7.0,
             cx: -0.077, cz: -2.227,
             width: 0.986, depth: 3.005,
             color: 0x64748b, desc: '玄关和过道',
             polygon: [{x:5174,y:0},{x:6160,y:0},{x:6160,y:3005},{x:5174,y:3005}],
         },
         {
-            id: 'bathroom', name: '卫生间', area: 6.5,
+            id: 'bathroom', name: '卫生间', area: 4.7,
             cx: 2.123, cz: -2.227,
             width: 2.170, depth: 3.005,
             color: 0x14b8a6, desc: '卫生间',
@@ -289,6 +289,252 @@ const CORE_PROBLEMS = [
         severity: 'medium',
         linkedItems: ['other_cat_litter', 'bath_exhaust', 'hvac_fresh_air'],
     },
+];
+
+// ========== 装修阶段定义 ==========
+const STAGES = [
+    { id: 'demolish', name: '拆改', icon: '🔨', order: 1 },
+    { id: 'plumbing', name: '水电', icon: '🔧', order: 2 },
+    { id: 'tiling', name: '泥瓦', icon: '🧱', order: 3 },
+    { id: 'carpentry', name: '木工', icon: '🪵', order: 4 },
+    { id: 'painting', name: '油漆', icon: '🎨', order: 5 },
+    { id: 'installation', name: '安装', icon: '🔩', order: 6 },
+    { id: 'finishing', name: '收尾', icon: '✨', order: 7 },
+];
+
+// 需求项 → 阶段映射
+const ITEM_STAGE_MAP = {
+    // 拆改
+    basic_demolish: 'demolish',
+    basic_master_bath_layout: 'demolish',
+    // 水电
+    basic_water: 'plumbing',
+    hvac_floor_heat: 'plumbing',
+    hvac_ac: 'plumbing',
+    hvac_fresh_air: 'plumbing',
+    hvac_dehumidifier: 'plumbing',
+    // 泥瓦
+    basic_waterproof: 'tiling',
+    basic_floor: 'tiling',
+    kitchen_tile: 'tiling',
+    bath_tile: 'tiling',
+    living_floor: 'tiling',
+    bed_floor: 'tiling',
+    balcony_tile: 'tiling',
+    bed_balcony_tile: 'tiling',
+    // 木工
+    basic_ceiling: 'carpentry',
+    kitchen_cabinet: 'carpentry',
+    bath_vanity: 'carpentry',
+    living_tv_wall: 'carpentry',
+    other_storage: 'carpentry',
+    bed_master_wardrobe: 'carpentry',
+    bed_second_wardrobe: 'carpentry',
+    // 油漆
+    basic_wall: 'painting',
+    // 安装
+    kitchen_countertop: 'installation',
+    kitchen_hood: 'installation',
+    kitchen_sink: 'installation',
+    kitchen_door: 'installation',
+    bath_toilet: 'installation',
+    bath_shower: 'installation',
+    bath_exhaust: 'installation',
+    bath_water_heater: 'installation',
+    dw_entrance_door: 'installation',
+    dw_room_door: 'installation',
+    dw_window: 'installation',
+    light_living_main: 'installation',
+    light_living_downlight: 'installation',
+    light_living_strip: 'installation',
+    light_master_main: 'installation',
+    light_master_bedside: 'installation',
+    light_second_main: 'installation',
+    light_kitchen: 'installation',
+    light_bathroom: 'installation',
+    light_entrance: 'installation',
+    light_smart: 'installation',
+    bed_master_bed: 'installation',
+    bed_second_bed: 'installation',
+    // 收尾
+    living_curtain: 'finishing',
+    bed_curtain: 'finishing',
+    living_water_bar: 'finishing',
+    living_dining: 'finishing',
+    living_sofa: 'finishing',
+    living_coffee_table: 'finishing',
+    balcony_seal: 'finishing',
+    balcony_wash: 'finishing',
+    balcony_storage: 'finishing',
+    other_clean: 'finishing',
+    other_monitor: 'finishing',
+    other_smart_lock: 'finishing',
+    other_cat_litter: 'finishing',
+};
+
+// ========== 沟通备忘数据 ==========
+const MEMO_DATA = [
+    {
+        id: 'owner_info',
+        name: '业主信息',
+        icon: '👤',
+        desc: '我们的基本信息和需求，沟通前先发给设计师',
+        items: [
+            { id: 'oi_style', name: '装修风格/色彩倾向', desc: '一层采光受限，整体不能选暗色，也不能偏冷色调', tip: '适合：暖白、奶油色、原木色、浅暖灰；避免：深灰、深蓝、冷白', status: 'checked', notes: '' },
+            { id: 'oi_furniture', name: '保留家具情况', desc: '有部分电器，无家具带入', tip: '需要全屋家具采购，提前列清单', status: 'checked', notes: '' },
+            { id: 'oi_window_door', name: '窗户/暖气/门', desc: '窗户评估后够用不建议换；打算做地暖+新风；防盗门暂不换', tip: '地暖+新风属于大项，需提前和设计师确认层高影响', status: 'checked', notes: '' },
+            { id: 'oi_population', name: '常住人口', desc: '2人5猫，偶尔父母过来短住', tip: '次卧需要兼顾办公+客卧+衣帽间功能', status: 'checked', notes: '' },
+            { id: 'oi_guest', name: '会客需求', desc: '很少，朋友过来能有地方坐即可', tip: '客厅不需要大沙发，可以更灵活布局', status: 'checked', notes: '' },
+            { id: 'oi_dining', name: '用餐人数', desc: '平时2人，偶尔最多4人', tip: '4人餐桌即可，不用占太大空间', status: 'checked', notes: '' },
+            { id: 'oi_second_room', name: '次卧规划', desc: '办公+客卧+衣帽间三合一', tip: '方案：榻榻米/墨菲床+书桌+衣柜一体化设计', status: 'checked', notes: '' },
+            { id: 'oi_dressing', name: '梳妆台需求', desc: '主卧有最好', tip: '可以和衣柜/床头柜一体化设计，节省空间', status: 'checked', notes: '' },
+            { id: 'oi_storage', name: '储物要求', desc: '每个空间都要有储物设计', tip: '重点：玄关鞋柜、卧室衣柜、厨房橱柜、阳台柜、卫生间镜柜', status: 'checked', notes: '' },
+            { id: 'oi_laundry', name: '洗衣需求', desc: '需要洗衣机+烘干机', tip: '阳台洗衣区需预留两个位置+上下水', status: 'checked', notes: '' },
+            { id: 'oi_smoking', name: '吸烟情况', desc: '无', tip: '', status: 'checked', notes: '' },
+            { id: 'oi_pets', name: '宠物情况', desc: '5只猫，2个电动猫砂盆', tip: '猫砂盆需解决摆放位置+专用排风换气，避免异味扩散全屋', status: 'checked', notes: '' },
+            { id: 'oi_schedule', name: '工期要求', desc: '正常工期，不加急', tip: '', status: 'checked', notes: '' },
+            { id: 'oi_fengshui', name: '风水要求', desc: '注重风水', tip: '提前和设计师沟通：入户门对阳台（穿堂煞）、卫生间位置、床位朝向等', status: 'checked', notes: '' },
+            { id: 'oi_supervision', name: '监理安排', desc: '环保、设计、工长都重视，自己请第三方监理', tip: '第三方监理费用约3000-5000元，独立于装修公司', status: 'checked', notes: '' },
+        ]
+    },
+];
+
+// ========== 公司对比分类提示 ==========
+const COMPARE_CATEGORY_TIPS = {
+    '报价': {
+        tip: '拿到报价单后，先看总价区间是否合理，再逐项对比单价。注意是否有"按实结算"的模糊条款——这类后期容易加钱。付款节点要分4-5期，尾款不低于10%。所有增项必须提前书面签字确认，未经同意不得施工。',
+        guide: '怎么问：「请给我一份详细的逐项报价单，包含品牌型号和数量。增项怎么处理？需要书面确认吗？」',
+    },
+    '拆除清运': {
+        tip: '开工第一步，最易隐形增项。90%初始报价仅含铲乳胶漆+腻子，铲基层、保温层、抹灰均会单独加价。垃圾清运要确认小区是否有专用堆放点，无堆放点时外运费用（北京参考：小车300-500元、中车500-800元/车）及预估车数，要求签一口价协议。',
+        guide: '怎么问：「铲墙皮铲到什么层？保温层铲不铲？垃圾清运包含到完工吗？外运怎么收费？能签一口价吗？」',
+    },
+    '基层处理': {
+        tip: '装修公司常前期不提地面不平，开工后强制要求找平加价。冲筋找平价格远高于普通找平，后期会以「柜子有缝隙」为由强制要求。挂网材质默认玻璃纤维网，钢丝网需额外加价，施工时以「不挂网会开裂」临时要求加钱。',
+        guide: '怎么问：「地面需要找平吗？含自流平吗？墙面要不要冲筋找平？挂网包含哪些位置？用什么材质？」',
+    },
+    '瓷砖铺贴': {
+        tip: '增项高发区。初始报价常按半瓷砖报，业主买全瓷砖后要求加辅材费（瓷砖胶、背胶、拉毛乳液）。海棠角、对缝等特殊工艺常单独收费。大砖（600×1200）、小砖、异形砖有加价标准。北京参考：600×1200全瓷砖铺贴（人工+辅材）90-120元/㎡。',
+        guide: '怎么问：「全瓷砖铺贴包含辅材吗？海棠角、对缝怎么收费？大砖加价多少？能写进合同吗？」',
+    },
+    '施工工艺': {
+        tip: '工艺决定质量底线。防水是最容易偷工减料的地方——淋浴区必须刷到1.8m，闭水48小时。厨房、阳台防水常被遗漏后期单独加价。下水管道包封的隔音棉、阻尼片前期不报，施工时以「隔音差」为由强制推荐加价。墙面漆免费调色数量有限，超出收费。',
+        guide: '怎么问：「防水做几遍？淋浴区刷多高？厨房阳台做防水吗？闭水多久？管道包封含隔音棉吗？」',
+    },
+    '辅材品牌': {
+        tip: '辅材虽然藏在墙里看不见，但决定了入住后的安全和耐用。电线看截面（2.5㎡/4㎡）、穿线管规格（205轻型vs305中型），水管看品牌（伟星、日丰等）。美缝材料差价大：环氧彩砂>瓷缝剂>勾缝剂，初始报价常用最便宜的。',
+        guide: '怎么问：「电线用什么牌子？几平方的？穿线管什么规格？水管什么品牌？美缝用什么材料？」',
+    },
+    '服务保障': {
+        tip: '质保年限看隐蔽工程（水电）是否≥5年。工期要有明确排期和延期违约条款。验收流程要每阶段业主签字确认。施工图纸必须有——没有图纸的施工全靠工人经验。我们已确定请第三方监理，提前告知装修公司。',
+        guide: '怎么问：「质保几年？隐蔽工程和表面工程分别多久？延期怎么赔？每个阶段验收标准是什么？」',
+    },
+    '回填美缝': {
+        tip: '卫生间回填材料差价大：发泡水泥>陶粒>碳渣，警惕用便宜碳渣冒充。美缝材料：环氧彩砂>瓷缝剂>勾缝剂，初始报价常用最便宜的勾缝剂，升级需大幅加价。确认美缝剂具体品牌型号。',
+        guide: '怎么问：「回填用什么材料？美缝用什么品牌型号？按米还是按平米收费？压缝还是平缝？」',
+    },
+    '责任划分': {
+        tip: '全包含什么、半包含什么、哪些需要自采，必须逐项确认写进合同。灰色地带（封阳台、入户门、窗户更换）最容易扯皮——我们的情况是窗户不换、防盗门不换、封阳台要做。',
+        guide: '怎么问：「这个报价包含哪些？哪些不含？封阳台算在里面吗？如果我自己买主材，安装你们负责吗？」',
+    },
+    '防坑': {
+        tip: '低价签约→后期加项是最常见的坑。报价比别人低30%以上要警惕。所有口头承诺必须写进合同或微信留痕。材料进场时拍照验收、对比合同。定金不退、订金可退——签之前搞清楚。',
+        guide: '怎么问：「增项超过多少需要我确认？材料进场我能验收吗？这些承诺能写进合同吗？」',
+    },
+    '综合': {
+        tip: '设计师负责出方案，工长负责落地执行——两个都重要。看设计师是否理解你的需求，工长是否有同户型经验。整体印象看沟通是否顺畅、回复是否及时。尽量签订分项一口价协议，明确「超出部分由装修公司承担」。',
+        guide: '怎么问：「设计师跟哪个工长搭配？这个工长做过几套同户型的？能看在建工地吗？」',
+    },
+};
+
+// ========== 公司对比问题 ==========
+const COMPARE_QUESTIONS = [
+    // 报价相关
+    { id: 'pricing_type', category: '报价', question: '报价方式', options: ['按项目逐项报', '按平米套餐报', '一口价'] },
+    { id: 'electric_pricing', category: '报价', question: '水电计价', options: ['按点位', '按米', '按面积'] },
+    { id: 'change_limit', category: '报价', question: '增项上限', options: ['合同约定≤5%', '合同约定≤8%', '合同约定≤10%', '未约定'] },
+    { id: 'change_confirm', category: '报价', question: '增项确认方式', options: ['书面签字确认', '微信确认即可', '口头确认', '未约定'] },
+    { id: 'payment_ratio', category: '报价', question: '付款节点', options: ['3-3-3-1', '3-3-2-1-1', '5-3-1-1', '其他'] },
+    { id: 'deposit', category: '报价', question: '定金/订金', options: ['定金（不退）', '订金（可退）', '无需预付'] },
+    { id: 'lump_sum', category: '报价', question: '是否签一口价协议', options: ['水电一口价', '分项一口价', '不签', '待协商'] },
+
+    // 拆除清运
+    { id: 'demo_scope', category: '拆除清运', question: '拆除范围', options: ['全屋拆除', '部分拆除', '不含拆除'] },
+    { id: 'wall_scrape', category: '拆除清运', question: '铲墙皮标准', options: ['铲至红砖层', '铲至水泥砂浆层', '仅铲腻子+乳胶漆', '未说明'] },
+    { id: 'insulation_remove', category: '拆除清运', question: '保温层处理', options: ['包含铲除', '不铲除', '需加价', '无保温层'] },
+    { id: 'hollow_wall', category: '拆除清运', question: '空鼓墙面处理', options: ['包含修补', '铲后重新抹灰另收费', '未提及'] },
+    { id: 'trash_removal', category: '拆除清运', question: '垃圾清运', options: ['包含到完工', '仅含小区内搬运', '不含', '一口价'] },
+    { id: 'trash_haul', category: '拆除清运', question: '外运费用', options: [] },
+
+    // 基层处理
+    { id: 'floor_leveling', category: '基层处理', question: '地面找平', options: ['包含', '含自流平', '不含', '需加价'] },
+    { id: 'wall_leveling', category: '基层处理', question: '墙面找平', options: ['普通找平包含', '冲筋找平另收费', '冲筋找平包含', '未说明'] },
+    { id: 'mesh_type', category: '基层处理', question: '挂网材质', options: ['玻璃纤维网', '钢丝网', '按需选择', '未说明'] },
+    { id: 'mesh_scope', category: '基层处理', question: '挂网位置', options: ['新建墙体+开槽处', '全屋挂网', '仅新建墙体', '未说明'] },
+
+    // 瓷砖铺贴
+    { id: 'tile_type', category: '瓷砖铺贴', question: '瓷砖类型适配', options: ['全瓷砖包含辅材', '半瓷砖铺贴', '全瓷砖需加辅材费', '未说明'] },
+    { id: 'tile_adhesive', category: '瓷砖铺贴', question: '全瓷砖辅材', options: ['瓷砖胶+背胶包含', '仅含水泥砂浆', '需加价', '未说明'] },
+    { id: 'tile_edge', category: '瓷砖铺贴', question: '海棠角/对缝工艺', options: ['包含', '单独收费', '未提及'] },
+    { id: 'tile_size_price', category: '瓷砖铺贴', question: '大砖/异形砖加价', options: [] },
+
+    // 施工工艺
+    { id: 'waterproof_scope', category: '施工工艺', question: '防水区域', options: ['卫生间+厨房+阳台', '仅卫生间+厨房', '仅卫生间'] },
+    { id: 'waterproof', category: '施工工艺', question: '防水涂刷标准', options: ['淋浴区1.8m+其他30cm', '全墙1.8m', '全墙1.2m'] },
+    { id: 'waterproof_test', category: '施工工艺', question: '闭水试验', options: ['48小时', '24小时', '未承诺'] },
+    { id: 'pipe_wrap', category: '施工工艺', question: '下水管道包封', options: ['含隔音棉+阻尼片', '仅包管道不含隔音', '不含', '未说明'] },
+    { id: 'ceiling_type', category: '施工工艺', question: '吊顶工艺', options: ['轻钢龙骨+石膏板', '木龙骨+石膏板', '集成吊顶'] },
+    { id: 'ceiling_access', category: '施工工艺', question: '检修口', options: ['包含', '另收费', '未提及'] },
+    { id: 'paint_process', category: '施工工艺', question: '墙面漆工艺', options: ['1底2面', '1底1面', '2底2面'] },
+    { id: 'paint_color', category: '施工工艺', question: '调色', options: ['免费调色不限', '免费2-3色', '调色另收费', '未说明'] },
+    { id: 'paint_method', category: '施工工艺', question: '涂刷方式', options: ['滚筒涂刷', '喷涂', '可选', '未说明'] },
+    { id: 'putty_type', category: '施工工艺', question: '腻子类型', options: ['耐水腻子', '普通腻子', '未说明'] },
+    { id: 'brand_confirm', category: '施工工艺', question: '材料品牌确认方式', options: ['合同写明品牌+型号', '口头承诺', '未确认'] },
+
+    // 辅材品牌
+    { id: 'wire_brand', category: '辅材品牌', question: '电线品牌及规格', options: [] },
+    { id: 'conduit_brand', category: '辅材品牌', question: '穿线管规格', options: ['205轻型', '305中型', '未说明'] },
+    { id: 'pipe_brand', category: '辅材品牌', question: '水管品牌', options: [] },
+    { id: 'cement_brand', category: '辅材品牌', question: '水泥品牌', options: [] },
+    { id: 'waterproof_brand', category: '辅材品牌', question: '防水涂料品牌', options: [] },
+    { id: 'tile_glue_brand', category: '辅材品牌', question: '瓷砖胶/背胶品牌', options: [] },
+    { id: 'sealant_brand', category: '辅材品牌', question: '美缝剂品牌型号', options: [] },
+    { id: 'backfill_brand', category: '辅材品牌', question: '回填材料', options: ['发泡水泥', '陶粒', '碳渣', '未说明'] },
+
+    // 服务保障
+    { id: 'drawing', category: '服务保障', question: '施工图纸', options: ['提供全套图纸', '仅平面图', '不提供'] },
+    { id: 'warranty', category: '服务保障', question: '质保年限', options: ['隐蔽工程5年+其他2年', '全屋2年', '隐蔽工程3年+其他1年'] },
+    { id: 'schedule', category: '服务保障', question: '工期承诺', options: ['60天', '75天', '90天', '其他'] },
+    { id: 'penalty', category: '服务保障', question: '延期违约', options: ['千分之三/天', '千分之五/天', '未约定'] },
+    { id: 'supervisor', category: '服务保障', question: '是否配监理', options: ['公司配专属监理', '巡检制（不专属）', '无'] },
+    { id: 'acceptance', category: '服务保障', question: '验收流程', options: ['每阶段验收+业主签字', '仅最终验收', '未说明'] },
+
+    // 回填美缝
+    { id: 'backfill_type', category: '回填美缝', question: '回填材料', options: ['发泡水泥', '陶粒', '碳渣', '未说明'] },
+    { id: 'backfill_included', category: '回填美缝', question: '回填是否包含', options: ['包含找平层', '仅含回填', '不含', '未说明'] },
+    { id: 'sealant_type', category: '回填美缝', question: '美缝材料', options: ['环氧彩砂', '瓷缝剂', '勾缝剂', '未说明'] },
+    { id: 'sealant_method', category: '回填美缝', question: '美缝工艺', options: ['压缝', '平缝', '未说明'] },
+    { id: 'sealant_pricing', category: '回填美缝', question: '美缝计价', options: ['按米', '按平米', '一口价'] },
+
+    // 责任划分
+    { id: 'scope_construction', category: '责任划分', question: '施工方负责', options: [] },
+    { id: 'scope_full_material', category: '责任划分', question: '全包含主材', options: [] },
+    { id: 'scope_self_buy', category: '责任划分', question: '需自采项目', options: [] },
+    { id: 'scope_grey', category: '责任划分', question: '灰色地带', options: [] },
+
+    // 防坑
+    { id: 'pit_oral', category: '防坑', question: '承诺留证方式', options: ['合同+微信留痕', '仅口头', '不清楚'] },
+    { id: 'pit_low_price', category: '防坑', question: '报价是否偏低', options: ['正常范围', '明显偏低', '偏高'] },
+    { id: 'pit_split_item', category: '防坑', question: '项目拆分情况', options: ['拆分合理', '拆分过细', '未拆分'] },
+    { id: 'pit_material_swap', category: '防坑', question: '材料进场验收', options: ['支持业主验收', '公司自检', '未说明'] },
+
+    // 综合评价
+    { id: 'design_cycle', category: '综合', question: '设计周期', options: ['3天内', '1周内', '2周内', '其他'] },
+    { id: 'total_price', category: '综合', question: '报价总价', options: [] },
+    { id: 'designer', category: '综合', question: '设计师', options: [] },
+    { id: 'foreman', category: '综合', question: '工长', options: [] },
+    { id: 'impression', category: '综合', question: '整体印象', options: ['非常满意', '比较满意', '一般', '不太满意'] },
+    { id: 'decision', category: '综合', question: '是否入选', options: ['候选', '优先考虑', '暂不考虑', '淘汰'] },
 ];
 
 // ========== 全包/半包定义 ==========

@@ -4,6 +4,8 @@ class RequirementsManager {
         this.modules = JSON.parse(JSON.stringify(REQUIREMENTS_DATA));
         this.activeModule = this.modules[0].id;
         this.searchQuery = '';
+        this.viewMode = 'module'; // 'module' or 'stage'
+        this.activeStage = STAGES[0].id;
         this.onUpdate = null;
         this.loadState();
     }
@@ -127,6 +129,39 @@ class RequirementsManager {
         return { checked, total: mod.items.length };
     }
 
+    // ========== 阶段管理 ==========
+    getItemsByStage(stageId) {
+        const items = [];
+        this.modules.forEach(m => {
+            m.items.forEach(item => {
+                if (ITEM_STAGE_MAP[item.id] === stageId) {
+                    items.push({ ...item, moduleName: m.name, moduleIcon: m.icon });
+                }
+            });
+        });
+        return items;
+    }
+
+    getStageStats(stageId) {
+        let checked = 0, total = 0;
+        this.modules.forEach(m => {
+            m.items.forEach(item => {
+                if (ITEM_STAGE_MAP[item.id] === stageId) {
+                    total++;
+                    if (item.status === 'checked') checked++;
+                }
+            });
+        });
+        return { checked, total };
+    }
+
+    getStageStatsAll() {
+        return STAGES.map(stage => ({
+            ...stage,
+            ...this.getStageStats(stage.id),
+        }));
+    }
+
     getAllCheckedItems() {
         const items = [];
         this.modules.forEach(m => {
@@ -219,11 +254,38 @@ class RequirementsManager {
         });
     }
 
+    renderStageList(container) {
+        container.innerHTML = '';
+        const allStats = this.getStageStatsAll();
+        allStats.forEach(stage => {
+            const li = document.createElement('li');
+            li.className = stage.id === this.activeStage ? 'active' : '';
+            const pct = stage.total > 0 ? Math.round(stage.checked / stage.total * 100) : 0;
+            li.innerHTML = `
+                <span class="module-icon">${stage.icon}</span>
+                <span>${stage.name}</span>
+                <span class="stage-progress-mini">
+                    <span class="stage-progress-bar"><span style="width:${pct}%"></span></span>
+                    <span class="module-count">${stage.checked}/${stage.total}</span>
+                </span>
+            `;
+            li.addEventListener('click', () => {
+                this.activeStage = stage.id;
+                this.renderStageList(container);
+                this.renderReqList(document.getElementById('reqList'));
+                document.getElementById('currentModuleName').textContent = stage.name;
+            });
+            container.appendChild(li);
+        });
+    }
+
     renderReqList(container) {
         container.innerHTML = '';
 
         if (this.searchQuery) {
             this.renderSearchResults(container);
+        } else if (this.viewMode === 'stage') {
+            this.renderStageItems(container, this.activeStage);
         } else {
             this.renderModuleItems(container, this.getActiveModule());
         }
@@ -263,6 +325,31 @@ class RequirementsManager {
     renderModuleItems(container, mod) {
         if (!mod) return;
         mod.items.forEach(item => this.renderItemCard(container, item));
+    }
+
+    renderStageItems(container, stageId) {
+        const items = this.getItemsByStage(stageId);
+        if (items.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'req-empty';
+            empty.textContent = '该阶段暂无需求项';
+            container.appendChild(empty);
+            return;
+        }
+        // Group by module within stage
+        const groups = {};
+        items.forEach(item => {
+            const key = item.moduleName;
+            if (!groups[key]) groups[key] = [];
+            groups[key].push(item);
+        });
+        Object.entries(groups).forEach(([moduleName, groupItems]) => {
+            const header = document.createElement('div');
+            header.className = 'req-module-header';
+            header.textContent = `${groupItems[0].moduleIcon} ${moduleName}`;
+            container.appendChild(header);
+            groupItems.forEach(item => this.renderItemCard(container, item));
+        });
     }
 
     renderItemCard(container, item) {

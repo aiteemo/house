@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初始化核心问题管理器
     const coreProblems = new CoreProblemsManager(reqManager);
 
+    // 初始化沟通备忘管理器
+    const memoManager = new MemoManager();
+
     // 3D场景（延迟初始化）
     let sceneManager, roomBuilder, furnitureBuilder, lightingManager, airflowManager;
     let sceneInitialized = false;
@@ -67,9 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             const moduleId = roomModuleMap[roomId];
             if (moduleId) {
+                reqManager.viewMode = 'module';
                 reqManager.activeModule = moduleId;
+                document.querySelectorAll('.sidebar-toggle-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.sidebar-toggle-btn[data-view="module"]').classList.add('active');
                 switchTab('requirements');
-                reqManager.renderModuleList(document.getElementById('moduleList'));
+                renderSidebar();
                 reqManager.renderReqList(document.getElementById('reqList'));
                 const mod = reqManager.getActiveModule();
                 if (mod) document.getElementById('currentModuleName').textContent = mod.name;
@@ -97,6 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
             calculator.renderAll();
         } else if (tabName === 'decision') {
             decision.renderAll();
+        } else if (tabName === 'memo') {
+            memoManager.renderAll();
         }
     }
 
@@ -104,11 +112,36 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => switchTab(tab.dataset.tab));
     });
 
+    // ========== 侧边栏视图切换 ==========
+    function renderSidebar() {
+        if (reqManager.viewMode === 'stage') {
+            reqManager.renderStageList(document.getElementById('moduleList'));
+            document.getElementById('btnAddModule').style.display = 'none';
+        } else {
+            reqManager.renderModuleList(document.getElementById('moduleList'));
+            document.getElementById('btnAddModule').style.display = '';
+        }
+    }
+
+    document.querySelectorAll('.sidebar-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.sidebar-toggle-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            reqManager.viewMode = btn.dataset.view;
+            renderSidebar();
+            reqManager.renderReqList(document.getElementById('reqList'));
+            const title = reqManager.viewMode === 'stage'
+                ? STAGES.find(s => s.id === reqManager.activeStage)?.name || '阶段'
+                : reqManager.getActiveModule()?.name || '模块';
+            document.getElementById('currentModuleName').textContent = title;
+        });
+    });
+
     // ========== 需求清单初始化 ==========
-    reqManager.renderModuleList(document.getElementById('moduleList'));
+    renderSidebar();
     reqManager.renderReqList(document.getElementById('reqList'));
     reqManager.onUpdate = () => {
-        reqManager.renderModuleList(document.getElementById('moduleList'));
+        renderSidebar();
         reqManager.renderReqList(document.getElementById('reqList'));
     };
 
