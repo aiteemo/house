@@ -24,6 +24,7 @@
             <button class="tab" data-tab="calculator">价格计算</button>
             <button class="tab" data-tab="decision">决策分析</button>
             <button class="tab" data-tab="memo">沟通备忘</button>
+            <button class="tab" data-tab="pitfalls">装修避坑</button>
         </nav>
     </header>
 
@@ -144,6 +145,26 @@
         </div>
     </div>
 
+    <!-- 装修避坑面板 -->
+    <div class="panel" id="panel-pitfalls">
+        <div class="pitfall-layout">
+            <aside class="req-sidebar">
+                <h3>避坑分类</h3>
+                <ul class="module-list" id="pitfallCategoryList"></ul>
+            </aside>
+            <main class="req-main">
+                <div class="req-header">
+                    <div>
+                        <h2 id="currentPitfallName">物业要求</h2>
+                        <div class="pitfall-cat-desc" id="currentPitfallDesc"></div>
+                    </div>
+                </div>
+                <div class="pitfall-progress" id="pitfallProgress"></div>
+                <div class="pitfall-items" id="pitfallItems"></div>
+            </main>
+        </div>
+    </div>
+
     <!-- JS模块 -->
     <script src="js/data.js"></script>
     <script src="js/scene.js"></script>
@@ -154,6 +175,7 @@
     <script src="js/requirements.js"></script>
     <script src="js/core.js"></script>
     <script src="js/memo.js"></script>
+    <script src="js/pitfalls.js"></script>
     <script src="js/calculator.js"></script>
     <script src="js/decision.js"></script>
     <script src="js/app.js"></script>

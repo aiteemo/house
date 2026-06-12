@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初始化沟通备忘管理器
     const memoManager = new MemoManager();
 
+    // 初始化装修避坑管理器
+    const pitfallsManager = new PitfallsManager();
+
     // 3D场景（延迟初始化）
     let sceneManager, roomBuilder, furnitureBuilder, lightingManager, airflowManager;
     let sceneInitialized = false;
@@ -105,6 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
             decision.renderAll();
         } else if (tabName === 'memo') {
             memoManager.renderAll();
+        } else if (tabName === 'pitfalls') {
+            pitfallsManager.renderAll();
         }
     }
 

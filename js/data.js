@@ -550,6 +550,108 @@ const COMPARE_QUESTIONS = [
     { id: 'decision', category: '综合', question: '是否入选', options: ['候选', '优先考虑', '暂不考虑', '淘汰'] },
 ];
 
+// ========== 装修避坑数据 ==========
+const PITFALLS_DATA = [
+    {
+        id: 'property',
+        name: '物业要求',
+        icon: '🏢',
+        desc: '世华泊郡装修办理须知，必须提前了解',
+        items: [
+            { id: 'prop_docs', name: '装修办理资料', desc: '公装需携带：业主身份证、装修设计图纸（改动走向图）、电工本复印件、装修合同（有签字页）、装修公司营业执照及资质证明（加盖红章）', tip: '自装只需身份证+设计图纸+电工本', status: 'pending', notes: '' },
+            { id: 'prop_agreement', name: '签订装修服务协议', desc: '携带资料至客服中心签订《装修服务协议》，办理施工手续', tip: '未办理手续不得开工', status: 'pending', notes: '' },
+            { id: 'prop_window', name: '更换窗户要求', desc: '按原有交付标准更换，不得擅自改动外框颜色、分隔尺寸、开启方向', tip: '需提前咨询管家，携带身份证+装修公司资质（二级以上）+签承诺书，高处作业需高处作业证', status: 'pending', notes: '' },
+            { id: 'prop_window_check', name: '窗户进场验收', desc: '安装前物业在南门对加工的窗户及阳台部件进行验收，合格后方可安装', tip: '安装完成后物业现场验收合格方可撤场', status: 'pending', notes: '' },
+            { id: 'prop_balcony', name: '封闭阳台要求', desc: '保持楼体外观统一，按交付标准封闭，不得改动外框颜色和开启方向', tip: '和窗户要求一致，提前咨询管家', status: 'pending', notes: '' },
+            { id: 'prop_door', name: '更换户门要求', desc: '按首次交付标准更换，不得加装外开防盗门或改变开启方向，走廊禁止装饰或垫高，门外勿包框', tip: '不了解交付开启方向可向管家咨询', status: 'pending', notes: '' },
+            { id: 'prop_trash', name: '装修垃圾处理', desc: '装修垃圾自行处理，不要堆积在楼道及公共区域', tip: '确认小区是否有建筑垃圾堆放点，无堆放点需外运', status: 'pending', notes: '' },
+            { id: 'prop_time', name: '施工时间规定', desc: '在规定时间内施工，禁止拆改承重墙结构、各种管线和破坏防水层', tip: '保持外立面整齐，不得影响共用部位和相邻业主', status: 'pending', notes: '' },
+            { id: 'prop_liability', name: '损坏赔偿责任', desc: '因装饰装修导致共用部位、共用设施设备及其他业主利益受损，应承担修复赔偿责任', tip: '业主需无条件配合拆除违规装修', status: 'pending', notes: '' },
+            { id: 'prop_phone', name: '物业24小时电话', desc: '4000-222-111', tip: '有问题随时联系', status: 'checked', notes: '' },
+        ]
+    },
+    {
+        id: 'contract',
+        name: '合同签约',
+        icon: '📝',
+        desc: '签合同前必须确认的关键条款',
+        items: [
+            { id: 'ct_lump', name: '闭口合同（一口价）', desc: '优先签闭口合同，总价锁定，超出部分装修公司承担', tip: '开口合同（按实结算）增项空间极大，尽量避免', status: 'pending', notes: '' },
+            { id: 'ct_change', name: '增项书面确认', desc: '所有增项必须提前书面签字确认，未经业主同意不得施工', tip: '口头确认无效', status: 'pending', notes: '' },
+            { id: 'ct_payment', name: '付款节点比例', desc: '分4-5期付款，尾款不低于10%验收后付', tip: '建议：开工30%→水电30%→泥木20%→油漆10%→验收10%', status: 'pending', notes: '' },
+            { id: 'ct_brand', name: '材料品牌写进合同', desc: '合同写清品牌+型号+规格，"同品牌"不能签字', tip: '进场时拍照验收对比合同', status: 'pending', notes: '' },
+            { id: 'ct_oral', name: '口头承诺留痕', desc: '所有承诺写进合同或微信留痕，口头答应的不算数', tip: '微信聊天记录可作为证据', status: 'pending', notes: '' },
+            { id: 'ct_deposit', name: '定金/订金区分', desc: '"定金"不退，"订金"可退，签之前搞清楚', tip: '别被忽悠交"定金"', status: 'pending', notes: '' },
+            { id: 'ct_warranty', name: '质保条款', desc: '隐蔽工程（水电）质保≥5年，写进合同', tip: '质保范围和维修响应时间也要明确', status: 'pending', notes: '' },
+            { id: 'ct_penalty', name: '延期违约条款', desc: '约定延期违约金，没有违约条款的工期承诺等于零', tip: '参考：千分之三~五/天', status: 'pending', notes: '' },
+            { id: 'ct_acceptance', name: '验收标准流程', desc: '每阶段完工后验收标准和流程，水电验收必须在封槽前拍照留档', tip: '业主签字确认后才进入下一阶段', status: 'pending', notes: '' },
+        ]
+    },
+    {
+        id: 'hidden_cost',
+        name: '隐形增项',
+        icon: '⚠️',
+        desc: '90%会遇到的增项，签合同前逐项确认',
+        items: [
+            { id: 'hc_trash', name: '垃圾清运', desc: '确认报价是否含全屋垃圾清运至完工，外运费用标准及预估车数', tip: '警惕单独收取"垃圾搬运上车费"，要求签一口价', status: 'pending', notes: '' },
+            { id: 'hc_scrape', name: '铲墙皮标准', desc: '确认铲至什么层：红砖层/水泥砂浆层/仅腻子+乳胶漆', tip: '90%初始报价仅含腻子+乳胶漆，铲基层/保温层/抹灰均另加价', status: 'pending', notes: '' },
+            { id: 'hc_floor_level', name: '地面找平', desc: '确认是否含全屋找平、自流平，铲至楼板层必须做找平', tip: '装修公司常前期不提，开工后强制加价', status: 'pending', notes: '' },
+            { id: 'hc_wall_level', name: '墙面冲筋找平', desc: '确认普通找平还是冲筋找平（价格差远），柜体安装区墙面找平标准', tip: '后期以"柜子有缝隙"为由强制要求高价冲筋', status: 'pending', notes: '' },
+            { id: 'hc_mesh', name: '挂网', desc: '确认挂网材质（玻璃纤维/钢丝网）、位置（新建墙体+开槽处）', tip: '施工时以"不挂网会开裂"临时加钱', status: 'pending', notes: '' },
+            { id: 'hc_pipe_wrap', name: '管道包封隔音', desc: '确认是否含隔音棉、阻尼片，按根还是按米收费', tip: '前期不报，施工时以"隔音差"强制推荐加价', status: 'pending', notes: '' },
+            { id: 'hc_tile_glue', name: '全瓷砖辅材', desc: '买全瓷砖后是否需加瓷砖胶、背胶、拉毛乳液费用', tip: '初始报价按半瓷砖报，买全瓷砖后加辅材费', status: 'pending', notes: '' },
+            { id: 'hc_tile_edge', name: '瓷砖特殊工艺', desc: '海棠角、对缝、倒角是否单独收费，大砖/异形砖加价标准', tip: '这些工艺费初始报价常不含', status: 'pending', notes: '' },
+            { id: 'hc_ceiling_access', name: '吊顶检修口', desc: '确认检修口数量及收费标准（参考80-120元/个）', tip: '刻意隐瞒检修口项目，施工时单独收费', status: 'pending', notes: '' },
+            { id: 'hc_paint_color', name: '墙面调色费', desc: '免费调色数量，超出部分收费标准', tip: '施工时要求更换涂刷方式（滚涂/喷涂）以此加价', status: 'pending', notes: '' },
+            { id: 'hc_backfill', name: '卫生间回填', desc: '回填材料确认：发泡水泥>陶粒>碳渣', tip: '用便宜碳渣冒充陶粒/发泡水泥，或后期要求更换加价', status: 'pending', notes: '' },
+            { id: 'hc_sealant', name: '美缝', desc: '美缝材料确认：环氧彩砂>瓷缝剂>勾缝剂，按米还是按平米', tip: '初始报价用最便宜的勾缝剂，升级需大幅加价', status: 'pending', notes: '' },
+        ]
+    },
+    {
+        id: 'acceptance',
+        name: '施工验收',
+        icon: '✅',
+        desc: '各阶段验收要点，拍照留档',
+        items: [
+            { id: 'acc_waterproof', name: '防水验收', desc: '闭水48小时，淋浴区≥1.8m，厨房阳台也要做', tip: '闭水前通知楼下邻居，漏水责任划分要明确', status: 'pending', notes: '' },
+            { id: 'acc_electric', name: '水电验收', desc: '封槽前拍照留档，确认点位数量、走向、材料品牌', tip: '水电是隐蔽工程，封槽后无法检查', status: 'pending', notes: '' },
+            { id: 'acc_pipe', name: '管道验收', desc: '水管打压测试，下水管道通畅测试', tip: '打压0.8MPa保持30分钟不掉压', status: 'pending', notes: '' },
+            { id: 'acc_tile', name: '瓷砖验收', desc: '空鼓率检测（单片≤15%，整体≤5%），平整度、对缝检查', tip: '用小锤逐片敲击检查空鼓', status: 'pending', notes: '' },
+            { id: 'acc_paint', name: '墙面验收', desc: '无开裂、无色差、无流坠，阴阳角顺直', tip: '侧光观察墙面平整度', status: 'pending', notes: '' },
+            { id: 'acc_final', name: '整体验收', desc: '所有项目逐一对照合同验收，确认无遗漏', tip: '验收合格后才付尾款', status: 'pending', notes: '' },
+        ]
+    },
+    {
+        id: 'circuit',
+        name: '回路规划',
+        icon: '🔌',
+        desc: '水电阶段就要规划好，哪些设备需要独立回路',
+        items: [
+            { id: 'cir_fridge', name: '冰箱独立回路', desc: '冰箱单独一路，出远门拉总闸时留这一路', tip: '冰箱断电食物全毁，独立回路是最基本的', status: 'checked', notes: '' },
+            { id: 'cir_camera', name: '监控/摄像头回路', desc: '监控单独一路或和路由器同路，断电等于瞎了', tip: '断网也白搭，路由器也要同路', status: 'checked', notes: '' },
+            { id: 'cir_router', name: '路由器/光猫回路', desc: '路由器和光猫独立供电，所有智能设备依赖网络', tip: '建议和监控走同一回路，出远门一起留', status: 'checked', notes: '' },
+            { id: 'cir_cat_litter', name: '电动猫砂盆回路', desc: '2个电动猫砂盆独立回路，断电猫没法上厕所', tip: '猫砂盆功耗不大但不能断，可以和猫粮器同路', status: 'checked', notes: '' },
+            { id: 'cir_cat_feeder', name: '电动猫粮器/饮水机', desc: '自动喂食器和饮水机独立供电', tip: '饮水机断电猫没水喝，出远门几天很危险', status: 'checked', notes: '' },
+            { id: 'cir_label', name: '配电箱回路标签', desc: '每个回路贴标签，标注控制哪个区域/设备', tip: '出远门拉闸时一目了然，不用一个个试', status: 'pending', notes: '' },
+            { id: 'cir_reserve', name: '预留备用回路', desc: '配电箱预留1-2个空位，未来加设备不用改线', tip: '智能家居、新设备越来越多，预留不吃亏', status: 'pending', notes: '' },
+            { id: 'cir_away_group', name: '出远门留电分组', desc: '规划好出门时哪些回路留、哪些断，贴在配电箱内侧', tip: '建议：冰箱+监控+路由器+猫设备一组留电，其他全断', status: 'pending', notes: '' },
+        ]
+    },
+    {
+        id: 'purchase',
+        name: '采购避坑',
+        icon: '🛒',
+        desc: '买材料和家具时的注意事项',
+        items: [
+            { id: 'buy_measure', name: '量尺复核', desc: '定制类产品（橱柜、衣柜、门窗）下单前必须复核尺寸', tip: '设计师出图后自己再量一遍，误差>5mm要反馈', status: 'pending', notes: '' },
+            { id: 'buy_contract', name: '采购合同条款', desc: '写清品牌型号、颜色、数量、交货时间、安装时间、退换条件', tip: '口头约定的色号/型号不写进合同，到货可能不对', status: 'pending', notes: '' },
+            { id: 'buy_delivery', name: '到货验收', desc: '到货后当面开箱检查，核对品牌型号、数量、外观', tip: '有问题当场拒收或拍照留证，签收后维权难', status: 'pending', notes: '' },
+            { id: 'buy_install', name: '安装确认', desc: '安装前确认安装条件（水电位、墙体承重、尺寸）', tip: '安装师傅到场发现条件不具备，可能收取空跑费', status: 'pending', notes: '' },
+            { id: 'buy_invoice', name: '索要发票', desc: '大额采购索要正规发票，保修需要', tip: '没有发票可能无法享受品牌质保', status: 'pending', notes: '' },
+        ]
+    },
+];
+
 // ========== 全包/半包定义 ==========
 const PACKAGE_DATA = {
     fullPackage: {
