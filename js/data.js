@@ -449,6 +449,10 @@ const COMPARE_CATEGORY_TIPS = {
         tip: '设计师负责出方案，工长负责落地执行——两个都重要。看设计师是否理解你的需求，工长是否有同户型经验。整体印象看沟通是否顺畅、回复是否及时。尽量签闭口合同，明确「超出部分由装修公司承担」。',
         guide: '怎么问：「设计师跟哪个工长搭配？这个工长做过几套同户型的？能看在建工地吗？」',
     },
+    '主材配置': {
+        tip: '主材品牌和规格直接影响入住体验和后期维护成本。重点关注地砖品牌及规格、乳胶漆环保等级、开关插座材质、踢脚线工艺。对比时逐项记录品牌+型号+规格，口头承诺的不算数。多个品牌用/分隔表示备选范围。',
+        guide: '怎么问：「地砖用的什么品牌什么规格？乳胶漆是水性还是油性？开关插座什么材质？踢脚线是成品还是现场贴？」',
+    },
 };
 
 // ========== 公司对比问题 ==========
@@ -548,6 +552,107 @@ const COMPARE_QUESTIONS = [
     { id: 'foreman', category: '综合', question: '工长', options: [] },
     { id: 'impression', category: '综合', question: '整体印象', options: ['非常满意', '比较满意', '一般', '不太满意'] },
     { id: 'decision', category: '综合', question: '是否入选', options: ['候选', '优先考虑', '暂不考虑', '淘汰'] },
+
+    // 主材配置 — 门厅/客厅
+    { id: 'mat_lv_floor_tile', category: '主材配置', question: '【门厅/客厅】大地砖', options: ['马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人'] },
+    { id: 'mat_lv_latex_paint', category: '主材配置', question: '【门厅/客厅】乳胶漆', options: ['大师/芬琳'] },
+    { id: 'mat_lv_window_sill', category: '主材配置', question: '【门厅/客厅】窗台板', options: [] },
+    { id: 'mat_lv_switch', category: '主材配置', question: '【门厅/客厅】开关插座', options: ['罗格朗/施耐德/公牛/西门子'] },
+    { id: 'mat_lv_baseboard', category: '主材配置', question: '【门厅/客厅】踢脚线', options: ['马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人'] },
+
+    // 主材配置 — 厨房
+    { id: 'mat_kt_floor_tile', category: '主材配置', question: '【厨房】大地砖', options: ['马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人'] },
+    { id: 'mat_kt_threshold', category: '主材配置', question: '【厨房】过门石', options: [] },
+    { id: 'mat_kt_ceiling', category: '主材配置', question: '【厨房】吊顶', options: ['法狮龙/奥普/名族'] },
+    { id: 'mat_kt_light', category: '主材配置', question: '【厨房】照明灯', options: ['法狮龙/奥普/名族'] },
+    { id: 'mat_kt_wall_tile', category: '主材配置', question: '【厨房】墙砖', options: ['马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人'] },
+    { id: 'mat_kt_switch', category: '主材配置', question: '【厨房】开关插座', options: ['罗格朗/施耐德/公牛/西门子'] },
+    { id: 'mat_kt_combo_outlet', category: '主材配置', question: '【厨房】联排插座', options: ['罗格朗'] },
+    { id: 'mat_kt_cabinet_door', category: '主材配置', question: '【厨房】整体橱柜（门板）', options: ['R+W（H）/金牌/好莱客/欧铂尼'] },
+    { id: 'mat_kt_countertop', category: '主材配置', question: '【厨房】橱柜台面', options: ['喜仕隆/赛丽石/富仕隆/金牌/好莱客/欧铂尼'] },
+    { id: 'mat_kt_hood_cooktop', category: '主材配置', question: '【厨房】烟机灶具', options: ['老板/方太/卡萨帝/美的'] },
+    { id: 'mat_kt_sink', category: '主材配置', question: '【厨房】水槽及龙头', options: ['邦克/维拉/金牌/好莱客/欧派'] },
+    { id: 'mat_kt_door', category: '主材配置', question: '【厨房】内门系统', options: ['R+W/TATA'] },
+
+    // 主材配置 — 卫生间
+    { id: 'mat_bt_small_tile', category: '主材配置', question: '【卫生间】小地砖', options: ['马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人'] },
+    { id: 'mat_bt_threshold', category: '主材配置', question: '【卫生间】过门石', options: [] },
+    { id: 'mat_bt_ceiling', category: '主材配置', question: '【卫生间】吊顶', options: ['法狮龙/奥普/名族'] },
+    { id: 'mat_bt_bath_heater', category: '主材配置', question: '【卫生间】风暖浴霸', options: ['法狮龙/奥普/名族'] },
+    { id: 'mat_bt_wall_tile', category: '主材配置', question: '【卫生间】墙砖', options: ['马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人'] },
+    { id: 'mat_bt_switch', category: '主材配置', question: '【卫生间】开关插座', options: ['罗格朗/施耐德/公牛/西门子'] },
+    { id: 'mat_bt_sanitary', category: '主材配置', question: '【卫生间】卫浴洁具套装（面盆/花洒/座便器/浴室柜）', options: ['贝朗/法恩莎/恒洁/惠达/九牧/木乐'] },
+    { id: 'mat_bt_door', category: '主材配置', question: '【卫生间】内门系统', options: ['精诚鸣仁/欧克美佳'] },
+    { id: 'mat_bt_drain', category: '主材配置', question: '【卫生间】地漏', options: ['潜水艇'] },
+    { id: 'mat_bt_washer_valve', category: '主材配置', question: '【卫生间】洗衣机龙头', options: ['潜水艇'] },
+
+    // 主材配置 — 客厅/封闭阳台
+    { id: 'mat_lr_floor_tile', category: '主材配置', question: '【客厅/阳台】大地砖', options: ['马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人'] },
+    { id: 'mat_lr_latex_paint', category: '主材配置', question: '【客厅/阳台】乳胶漆', options: ['大师/芬琳'] },
+    { id: 'mat_lr_baseboard', category: '主材配置', question: '【客厅/阳台】踢脚线', options: ['马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人'] },
+    { id: 'mat_lr_switch', category: '主材配置', question: '【客厅/阳台】开关插座', options: ['罗格朗/施耐德/公牛/西门子'] },
+
+    // 主材配置 — 卧室/次卧/卧室阳台
+    { id: 'mat_br_floor', category: '主材配置', question: '【卧室】地板', options: ['爱格/卢森/圣象/德尔/生活家/和邦盛世'] },
+    { id: 'mat_br_threshold', category: '主材配置', question: '【卧室】过门石', options: [] },
+    { id: 'mat_br_latex_paint', category: '主材配置', question: '【卧室】乳胶漆', options: ['大师/芬琳'] },
+    { id: 'mat_br_window_sill', category: '主材配置', question: '【卧室】窗台板', options: [] },
+    { id: 'mat_br_switch', category: '主材配置', question: '【卧室】开关插座', options: ['罗格朗/施耐德/公牛/西门子'] },
+    { id: 'mat_br_usb_outlet', category: '主材配置', question: '【卧室】USB五孔插座', options: ['罗格朗/施耐德/公牛/西门子'] },
+    { id: 'mat_br_door', category: '主材配置', question: '【卧室】内门系统', options: ['R+W/TATA'] },
+];
+
+// ========== 预置公司数据（首次加载时自动填入） ==========
+const DEFAULT_COMPANIES = [
+    {
+        id: 'boloni_default',
+        name: '博洛尼',
+        answers: {
+            // 门厅/客厅
+            mat_lv_floor_tile: { value: '800×800MM', notes: '马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人' },
+            mat_lv_latex_paint: { value: '水性漆', notes: '大师/芬琳' },
+            mat_lv_window_sill: { value: '进深≤250MM', notes: '' },
+            mat_lv_switch: { value: 'PC阻燃材料 86×86MM', notes: '罗格朗/施耐德/公牛/西门子' },
+            mat_lv_baseboard: { value: '成品瓷质踢脚线', notes: '马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人' },
+            // 厨房
+            mat_kt_floor_tile: { value: '800×800MM', notes: '马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人' },
+            mat_kt_threshold: { value: '900×250×15MM 1块', notes: '' },
+            mat_kt_ceiling: { value: '铝扣板 300×600MM', notes: '法狮龙/奥普/名族' },
+            mat_kt_light: { value: 'LED照明 300×300MM/300×600MM 1个', notes: '法狮龙/奥普/名族' },
+            mat_kt_wall_tile: { value: '300×600MM/400×800MM', notes: '马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人' },
+            mat_kt_switch: { value: 'PC阻燃材料 86×86MM', notes: '罗格朗/施耐德/公牛/西门子' },
+            mat_kt_combo_outlet: { value: 'PC阻燃材料 86×86MM 1套', notes: '罗格朗' },
+            mat_kt_cabinet_door: { value: '耐磨板', notes: 'R+W（H）/金牌/好莱客/欧铂尼' },
+            mat_kt_countertop: { value: '石英石', notes: '喜仕隆/赛丽石/富仕隆/金牌/好莱客/欧铂尼' },
+            mat_kt_hood_cooktop: { value: '直吸/侧吸烟机+双眼灶 1套', notes: '老板/方太/卡萨帝/美的' },
+            mat_kt_sink: { value: '不锈钢 1套', notes: '邦克/维拉/金牌/好莱客/欧派' },
+            mat_kt_door: { value: '免漆 1樘', notes: 'R+W/TATA' },
+            // 卫生间
+            mat_bt_small_tile: { value: '300×300MM', notes: '马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人' },
+            mat_bt_threshold: { value: '900×250×15MM', notes: '' },
+            mat_bt_ceiling: { value: '铝扣板 300×300MM/300×600MM', notes: '法狮龙/奥普/名族' },
+            mat_bt_bath_heater: { value: '300×600MM', notes: '法狮龙/奥普/名族' },
+            mat_bt_wall_tile: { value: '300×600MM/400×800MM', notes: '马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人' },
+            mat_bt_switch: { value: 'PC阻燃材料 86×86MM', notes: '罗格朗/施耐德/公牛/西门子' },
+            mat_bt_sanitary: { value: '陶瓷/纯铜镀铬/航空铝·实木多层板·防潮板 1套', notes: '贝朗/法恩莎/恒洁/惠达/九牧/木乐' },
+            mat_bt_door: { value: '合金门 1樘', notes: '精诚鸣仁/欧克美佳' },
+            mat_bt_drain: { value: '纯铜镀铬 3个', notes: '潜水艇' },
+            mat_bt_washer_valve: { value: '纯铜镀铬 1个', notes: '潜水艇' },
+            // 客厅/封闭阳台
+            mat_lr_floor_tile: { value: '800×800MM', notes: '马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人' },
+            mat_lr_latex_paint: { value: '水性漆', notes: '大师/芬琳' },
+            mat_lr_baseboard: { value: '成品瓷质踢脚线', notes: '马可波罗/L&D/冠珠/欧神诺/依诺/金意陶/稻草人' },
+            mat_lr_switch: { value: 'PC阻燃材料 86×86MM', notes: '罗格朗/施耐德/公牛/西门子' },
+            // 卧室/次卧/卧室阳台
+            mat_br_floor: { value: '强化复合地板', notes: '爱格/卢森/圣象/德尔/生活家/和邦盛世' },
+            mat_br_threshold: { value: '900×250×15MM 1块', notes: '' },
+            mat_br_latex_paint: { value: '水性漆', notes: '大师/芬琳' },
+            mat_br_window_sill: { value: '进深≤250MM', notes: '' },
+            mat_br_switch: { value: 'PC阻燃材料 86×86MM', notes: '罗格朗/施耐德/公牛/西门子' },
+            mat_br_usb_outlet: { value: 'PC阻燃材料 86×86MM 1个', notes: '罗格朗/施耐德/公牛/西门子' },
+            mat_br_door: { value: '免漆，平板R+W烤漆', notes: 'R+W/TATA' },
+        },
+    },
 ];
 
 // ========== 装修避坑数据 ==========

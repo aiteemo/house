@@ -49,6 +49,39 @@ class MemoManager {
                 }
             } catch (e) { /* ignore */ }
         }
+        // 合并预置公司数据（按名字匹配，已有的合并答案，没有的新增）
+        if (typeof DEFAULT_COMPANIES !== 'undefined') {
+            let dirty = false;
+            DEFAULT_COMPANIES.forEach(dc => {
+                const existing = this.companies.find(c => c.name === dc.name);
+                if (existing) {
+                    if (!existing.answers) existing.answers = {};
+                    Object.entries(dc.answers).forEach(([qid, ans]) => {
+                        const cur = existing.answers[qid];
+                        // 迁移旧格式：value 里品牌+规格混在一起 → 拆分到 value(规格) + notes(品牌)
+                        if (cur && cur.value && !cur.notes && ans.notes && cur.value.includes(ans.notes)) {
+                            existing.answers[qid] = {
+                                value: cur.value.replace(ans.notes, '').trim(),
+                                notes: ans.notes
+                            };
+                            dirty = true;
+                        }
+                        // 空字段直接填入
+                        if (!cur || !cur.value) {
+                            existing.answers[qid] = JSON.parse(JSON.stringify(ans));
+                            dirty = true;
+                        }
+                    });
+                } else {
+                    this.companies.push(JSON.parse(JSON.stringify(dc)));
+                    dirty = true;
+                }
+            });
+            if (!this.activeCompany && this.companies.length > 0) {
+                this.activeCompany = this.companies[0].id;
+            }
+            if (dirty) this.saveCompanies();
+        }
     }
 
     saveCompanies() {
@@ -346,23 +379,46 @@ class MemoManager {
         `;
         container.appendChild(header);
 
-        // 搜索
+        // 搜索（模糊匹配问题名称 + 所有输入框值 + 备注）
         const searchInput = header.querySelector('#compSearchInput');
         let searchTimer = null;
         searchInput.addEventListener('input', () => {
             clearTimeout(searchTimer);
             searchTimer = setTimeout(() => {
                 const q = searchInput.value.trim().toLowerCase();
-                container.querySelectorAll('.comp-cat-section').forEach(section => {
-                    let hasVisibleRow = false;
-                    section.querySelectorAll('.comp-row').forEach(row => {
-                        const name = row.querySelector('.comp-q-name');
-                        const match = !q || (name && name.textContent.toLowerCase().includes(q));
-                        row.style.display = match ? '' : 'none';
-                        if (match) hasVisibleRow = true;
-                    });
-                    section.style.display = hasVisibleRow || !q ? '' : 'none';
-                    if (q && hasVisibleRow) section.classList.remove('collapsed');
+                const sections = container.querySelectorAll('.comp-cat-section');
+                const rows = container.querySelectorAll('.comp-row');
+
+                // 按分类名收集每个 section 的名字
+                const sectionNames = [];
+                sections.forEach(s => {
+                    const n = s.querySelector('.comp-cat-name');
+                    sectionNames.push(n ? n.textContent : '');
+                });
+
+                // 先隐藏/显示每行
+                rows.forEach(row => {
+                    if (!q) { row.style.display = ''; return; }
+                    const allText = row.textContent.toLowerCase();
+                    row.style.display = allText.includes(q) ? '' : 'none';
+                });
+
+                // 再按 section 判断是否有可见行
+                sections.forEach((section, i) => {
+                    if (!q) { section.style.display = ''; return; }
+                    // 行紧跟在 section 后面，直到下一个 section
+                    let nextSection = sections[i + 1];
+                    let hasMatch = sectionNames[i].toLowerCase().includes(q);
+                    let sibling = section.nextElementSibling;
+                    while (sibling && !sibling.classList.contains('comp-cat-section')) {
+                        if (sibling.classList.contains('comp-row') && sibling.style.display !== 'none') {
+                            hasMatch = true;
+                            break;
+                        }
+                        sibling = sibling.nextElementSibling;
+                    }
+                    section.style.display = hasMatch ? '' : 'none';
+                    if (hasMatch) section.classList.remove('collapsed');
                 });
             }, 150);
         });
