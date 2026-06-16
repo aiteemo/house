@@ -543,6 +543,152 @@ body {
     line-height: 1.8;
 }
 
+/* ========== 价格计算 Tab ========== */
+.calc-tab-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+.calc-tab {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-dim);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+.calc-tab:hover { border-color: var(--accent); color: var(--text); }
+.calc-tab.active {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* ========== 博洛尼报价表格 ========== */
+.quote-section {
+    margin-bottom: 24px;
+}
+.quote-section-title {
+    font-size: 14px;
+    color: #8b8fa3;
+    margin-bottom: 10px;
+    font-weight: 600;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+}
+.quote-table {
+    width: 100%;
+    font-size: 13px;
+}
+.quote-thead {
+    display: flex;
+    padding: 8px 12px;
+    background: rgba(108,140,255,0.08);
+    border-radius: 6px 6px 0 0;
+    font-weight: 600;
+    color: var(--text-dim);
+}
+.quote-th {
+    padding: 4px 0;
+}
+.quote-row {
+    display: flex;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s;
+}
+.quote-row:hover {
+    background: rgba(108,140,255,0.05);
+}
+.quote-row-highlight {
+    background: rgba(108,140,255,0.1);
+    font-weight: 600;
+    border-radius: 0 0 6px 6px;
+}
+.quote-td {
+    padding: 4px 0;
+    color: var(--text);
+}
+.quote-price {
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+}
+
+/* 赠送权益 */
+.quote-gifts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.quote-gift-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+.quote-gift-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.quote-gift-content { flex: 1; }
+.quote-gift-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+.quote-gift-desc { font-size: 12px; color: var(--text-dim); }
+
+/* 主辅材品牌 */
+.quote-material-block {
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+.quote-material-area {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+}
+.quote-material-items {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+}
+.quote-edit-input {
+    width: 90px;
+    padding: 4px 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 13px;
+    text-align: right;
+    transition: border-color 0.2s;
+}
+.quote-edit-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+.quote-edit-input:hover {
+    border-color: var(--accent);
+}
+
 /* ========== 决策分析 ========== */
 .decision-layout {
     width: 100%;

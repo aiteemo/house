@@ -92,17 +92,15 @@
     <div class="panel" id="panel-calculator">
         <div class="calc-layout">
             <div class="calc-left">
-                <h3>分项价格明细</h3>
-                <div class="tier-selector">
-                    <button class="tier-btn" data-tier="economy">经济型</button>
-                    <button class="tier-btn active" data-tier="comfort">舒适型</button>
-                    <button class="tier-btn" data-tier="quality">品质型</button>
+                <div class="calc-tab-bar">
+                    <button class="calc-tab active" data-calc-tab="estimate">需求估价</button>
+                    <button class="calc-tab" data-calc-tab="boloni">博洛尼报价</button>
                 </div>
                 <div class="calc-items" id="calcItems"></div>
             </div>
             <div class="calc-right">
                 <div class="total-card">
-                    <div class="total-label">预估总价</div>
+                    <div class="total-label" id="totalLabel">预估总价</div>
                     <div class="total-price" id="totalPrice">¥0</div>
                     <div class="total-tier" id="totalTier">舒适型</div>
                 </div>

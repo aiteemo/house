@@ -653,6 +653,21 @@ const DEFAULT_COMPANIES = [
             mat_br_door: { value: '免漆，平板R+W烤漆', notes: 'R+W/TATA' },
         },
     },
+    {
+        id: 'yzf_default',
+        name: '业之峰',
+        answers: {},
+    },
+    {
+        id: 'beiwo_default',
+        name: '被窝',
+        answers: {},
+    },
+    {
+        id: 'jinzhao_default',
+        name: '今朝',
+        answers: {},
+    },
 ];
 
 // ========== 装修避坑数据 ==========
@@ -797,6 +812,125 @@ const PACKAGE_DATA = {
         laborRatio: 0.55,
     }
 };
+
+// ========== 博洛尼报价数据（世华泊郡88㎡ Yan π high 套餐） ==========
+const BOLONI_QUOTE = {
+    // 可调基础变量
+    vars: {
+        baseBuildingArea: 80,      // 基准户型面积
+        extraArea: 8,              // 超标面积 B（可调）
+        basePackagePrice: 123400,  // Yan high 基础标配包
+        extraAreaPrice: 1380,      // 面积差额单价 元/平米
+        buildingArea: 88,          // 建筑面积（设计费基数）
+        designFeeRate: 120,        // 设计费单价 元/平米
+        packageDiscount: -23800,   // 全案套餐专属优惠（负数=减免，可调）
+        designDiscount: -7560,     // 设计费优惠（负数=减免，可调）
+        personalExtraDiscount: 0,  // 个性化施工额外减免（负数=减免，可调）
+        acEquipment: 15000,        // 中央空调设备原价
+        acDiscount: 0,             // 中央空调优惠减免（负数=减免，可调）
+    },
+    // 固定费率
+    rates: {
+        management: 0.15,          // 装饰管理费率 15%
+        tax: 0.0341,               // 工程税率 3.41%
+    },
+    // 付款比例
+    paymentRatio: [
+        { stage: '意向协议阶段', ratio: 0.30 },
+        { stage: '正签正式合同', ratio: 0.50 },
+        { stage: '工程中期验收', ratio: 0.18 },
+        { stage: '尾期竣工验收', ratio: 0.02 },
+    ],
+    // 个性化施工项目（单价和数量可调）
+    personalized: [
+        { name: '吊顶', price: 4000, unit: '平米', qty: 1, note: '直线顶施工' },
+        { name: '直线顶 (超标预估)', price: 185, unit: '平米', qty: 0, note: '预估项，根据最后设计方案确定' },
+        { name: '窗帘盒', price: 123, unit: '米', qty: 0, note: '预估项' },
+        { name: '电源点位增加', price: 203, unit: '个', qty: 0, note: '超出套餐50个后的电位单价' },
+        { name: '水位增加', price: 400, unit: '个', qty: 0, note: '超出套餐10个后的水位单价' },
+        { name: '配电箱', price: 350, unit: '个', qty: 0, note: '预估项' },
+        { name: '入户线', price: 120, unit: '米', qty: 0, note: '预估项' },
+        { name: '厨房下水', price: 200, unit: '个', qty: 0, note: '预估项' },
+        { name: '拆墙', price: 80, unit: '平米', qty: 0, note: '预估项' },
+        { name: '新建墙体', price: 331, unit: '平米', qty: 0, note: '预估项' },
+        { name: '过梁', price: 268, unit: '米', qty: 0, note: '预估项' },
+        { name: '灯具加零线', price: 1500, unit: '项', qty: 1, note: '独立个性化工艺收费' },
+        { name: '基础修复/工艺项 A', price: 103, unit: '平米', qty: 77.28, note: '全屋套内面积基础工艺/修复' },
+        { name: '基础修复/工艺项 B', price: 190, unit: '项', qty: 10, note: '零散工艺/小项合并' },
+        { name: '基础调增项', price: 0, unit: '—', qty: 0, note: '原始清单明细总和与小计的差额', fixedTotal: 5000 },
+    ],
+    // 老房翻新模板（已含在套餐内，仅供参考）
+    oldHouseTemplate: [
+        { name: '水电全改修复', price: 230, unit: '平米', qty: '含50电位/10水位', note: '全屋水电路彻底换新' },
+        { name: '破坏性拆除', price: 70, unit: '平米', qty: '含12.4㎡定制柜拆除', note: '拆除到水泥毛坯状态' },
+        { name: '上楼费/材料搬运', price: 8, unit: '平米', qty: '7件家具/7㎡定制', note: '搬运上楼' },
+        { name: '专项保护及零星', price: 0, unit: '项', qty: 1, note: '防盗门窗防护、布帘、艺术漆、美缝' },
+    ],
+    gifts: [
+        { name: '免费赠送橱柜抽屉/拉篮', desc: '免费赠送橱柜抽屉一组，或锅碗篮一套，或2个大抽屉' },
+        { name: '免费赠送烟机封板', desc: '免费赠送橱柜烟机柜顶封板' },
+        { name: '免费赠送台下盆工艺', desc: '厨房水槽免费升级为台下盆工艺（更易打理）' },
+        { name: '彩色开关面板免费升级', desc: '全屋开关插座面板免费升级为彩色款' },
+        { name: '免费赠送厨卫瓷砖薄贴法', desc: '厨卫墙面瓷砖升级为薄贴法施工（稳固、防空鼓）' },
+        { name: '厨卫瓷砖规格免费升级', desc: '厨卫墙砖免费升级为400×800规格' },
+        { name: '免费赠送保温防结露工艺', desc: '给水管道免费赠送专业的保温防结露保护' },
+        { name: '免费赠送下水管静音工艺', desc: '下水管免费赠送金色阻尼片工艺进行降噪包裹' },
+    ],
+    materials: [
+        { area: '基础统一', items: '瓷砖：马可波罗、金意陶、冠珠、L&D、欧神诺等\n地板：圣象、瑞士卢森、德国爱格等（含扣条/踢脚线/过门石）\n电线：飞利浦电线、飞利浦六类屏蔽网线\n水管：朴勒水管\n防水/瓷砖胶：德高防水、德高瓷砖粘接剂\n墙面辅料：瓦涂士石膏及腻子\n密封胶：万华玻璃胶' },
+        { area: '厨房空间', items: '橱柜不限延米数（L型/一字型）、油烟机及灶具、水槽龙头及冷热水配件、铝扣板吊顶及配套照明、厨房门、门套、门吸及磁吸静音锁' },
+        { area: '卫生间空间', items: '马桶、整体淋浴花洒（手持、顶喷、下出水）、成品浴室柜组合（龙头/面盆/镜柜）、铝扣板吊顶、四合一风暖机、合金门及配套五金' },
+        { area: '客卧空间', items: '所有卧室木门、门套、门吸、磁吸静音门锁；全屋开关插座（含厨房多功能插座、床头USB五孔插座）；全屋窗台石' },
+        { area: '自备减项退费', items: '马桶不要可减500元；花洒不要可减200-300元；风暖机不要可减200元' },
+    ],
+};
+
+// ========== 博洛尼报价联动计算引擎 ==========
+function calcBolonQuote(vars, rates, personalized) {
+    // 1. 联动A：面积超标补差
+    const extraAreaFee = vars.extraAreaPrice * vars.extraArea;
+
+    // 2. 全案标准包小计
+    const standardSubtotal = vars.basePackagePrice + extraAreaFee;
+
+    // 3. 联动C/D：管理费 & 税金（基于全案小计）
+    const managementFee = Math.round(standardSubtotal * rates.management * 100) / 100;
+    const taxFee = Math.round(standardSubtotal * rates.tax * 100) / 100;
+
+    // 4. 老房套餐未优惠总计
+    const oldHouseBeforeDiscount = standardSubtotal + managementFee + taxFee;
+
+    // 5. 联动B：设计费
+    const designFeeOriginal = vars.designFeeRate * vars.buildingArea;
+    const designFeeFinal = designFeeOriginal + vars.designDiscount;
+
+    // 6. 个性化施工联动E
+    const personalRawTotal = personalized.reduce((sum, item) => {
+        return sum + (item.fixedTotal != null ? item.fixedTotal : item.price * item.qty);
+    }, 0);
+    const personalWithTax = Math.round(personalRawTotal * (1 + rates.management) * (1 + rates.tax) * 100) / 100;
+    const personalDiscount = Math.round((personalWithTax - personalRawTotal) * 100) / 100;
+
+    // 7. 联动F：终极总合计
+    const total = oldHouseBeforeDiscount + vars.packageDiscount
+        + designFeeFinal
+        + personalRawTotal + vars.personalExtraDiscount
+        + vars.acEquipment + vars.acDiscount;
+
+    return {
+        extraAreaFee,
+        standardSubtotal,
+        managementFee,
+        taxFee,
+        oldHouseBeforeDiscount,
+        designFeeOriginal,
+        designFeeFinal,
+        personalRawTotal,
+        personalWithTax,
+        personalDiscount,
+        total: Math.round(total * 100) / 100,
+    };
+}
 
 // ========== 档位价格映射（用于汇总） ==========
 function getItemPrice(item, tier) {

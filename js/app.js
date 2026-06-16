@@ -161,12 +161,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 200);
     });
 
-    // ========== 档位切换 ==========
-    document.querySelectorAll('.tier-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            calculator.setTier(btn.dataset.tier);
+    // ========== 价格计算 Tab 切换 ==========
+    document.querySelectorAll('.calc-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.calc-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            calculator.activeTab = tab.dataset.calcTab;
+            const label = tab.dataset.calcTab === 'boloni' ? '博洛尼报价' : '预估总价';
+            document.getElementById('totalLabel').textContent = label;
             calculator.renderAll();
         });
     });
@@ -296,7 +298,4 @@ document.addEventListener('DOMContentLoaded', () => {
             overlay.remove();
         });
     });
-
-    // ========== 初始默认档位 ==========
-    window._currentTier = 'comfort';
 });
