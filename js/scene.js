@@ -24,14 +24,15 @@ class SceneManager {
     init() {
         // 场景
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x0a0c12);
-        this.scene.fog = new THREE.FogExp2(0x0a0c12, 0.012);
+        this.scene.background = new THREE.Color(0x0a0c1a);
+        this.scene.fog = new THREE.FogExp2(0x0a0c1a, 0.008);
 
-        // 相机
+        // 相机 - 等距视角
         const w = this.container.clientWidth;
         const h = this.container.clientHeight;
-        this.camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 1000);
-        this.camera.position.set(0, 15, -14);
+        this.camera = new THREE.PerspectiveCamera(35, w / h, 0.1, 1000);
+        // 等距视角位置：从右上方俯视
+        this.camera.position.set(12, 18, 12);
         this.camera.lookAt(0, 0, 0);
 
         // WebGL渲染器
@@ -53,18 +54,19 @@ class SceneManager {
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.08;
-        this.controls.maxPolarAngle = Math.PI * 0.48;
-        this.controls.minDistance = 5;
-        this.controls.maxDistance = 50;
-        this.controls.target.set(0, 0, 0.3);
+        this.controls.maxPolarAngle = Math.PI * 0.45;
+        this.controls.minPolarAngle = Math.PI * 0.15;
+        this.controls.minDistance = 8;
+        this.controls.maxDistance = 40;
+        this.controls.target.set(0, 0, 0);
 
         // 环境光
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         this.scene.add(ambientLight);
 
-        // 主方向光
-        const dirLight = new THREE.DirectionalLight(0xfff5e6, 0.8);
-        dirLight.position.set(10, 15, 8);
+        // 主方向光 - 从右上方
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(15, 20, 10);
         dirLight.castShadow = true;
         dirLight.shadow.mapSize.width = 2048;
         dirLight.shadow.mapSize.height = 2048;
@@ -76,19 +78,18 @@ class SceneManager {
         dirLight.shadow.camera.bottom = -20;
         this.scene.add(dirLight);
 
-        // 补光
+        // 补光 - 从左侧
         const fillLight = new THREE.DirectionalLight(0xb4c6ff, 0.3);
-        fillLight.position.set(-8, 10, -5);
+        fillLight.position.set(-10, 12, -8);
         this.scene.add(fillLight);
 
-        // 地面网格
-        const gridHelper = new THREE.GridHelper(40, 40, 0x1a1d27, 0x1a1d27);
-        gridHelper.position.y = -0.01;
-        this.scene.add(gridHelper);
-
-        // 地面平面
-        const groundGeo = new THREE.PlaneGeometry(40, 40);
-        const groundMat = new THREE.MeshStandardMaterial({ color: 0x0f1117, roughness: 1 });
+        // 地面
+        const groundGeo = new THREE.PlaneGeometry(50, 50);
+        const groundMat = new THREE.MeshStandardMaterial({
+            color: 0x0d1020,
+            roughness: 1,
+            metalness: 0,
+        });
         const ground = new THREE.Mesh(groundGeo, groundMat);
         ground.rotation.x = -Math.PI / 2;
         ground.position.y = -0.02;
@@ -194,24 +195,30 @@ class SceneManager {
         let pos, target;
         switch (viewName) {
             case 'top':
-                pos = [0, 22, 0.3];
-                target = [0, 0, 0.3];
+                // 俯视图
+                pos = [0, 25, 0.1];
+                target = [0, 0, 0];
                 break;
             case 'living':
-                pos = [1.270, 4, -3];
-                target = [1.270, 1.2, 1.359];
+                // 客厅视角
+                pos = [8, 6, 0];
+                target = [2, 0, 2];
                 break;
             case 'bedroom':
-                pos = [-2.164, 4, -2];
-                target = [-2.164, 1.2, 1.513];
+                // 卧室视角
+                pos = [-6, 6, 2];
+                target = [-2, 0, 2];
                 break;
             case 'kitchen':
-                pos = [-2.164, 4, -4.5];
-                target = [-2.164, 1.2, -1.200];
+                // 厨房视角
+                pos = [-6, 5, -2];
+                target = [-2, 0, -1];
                 break;
+            case 'perspective':
             default:
-                pos = [0, 15, -14];
-                target = [0, 0, 0.3];
+                // 等距视角（默认）
+                pos = [12, 18, 12];
+                target = [0, 0, 0];
         }
         this.animateCamera(pos, target);
     }

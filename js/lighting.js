@@ -8,6 +8,14 @@ class LightingManager {
         this.lights = [];
         this.enabled = true;
         this.currentMode = 'daily';
+        this.sceneOrigin = { x: 4400, y: 5000 };
+    }
+
+    toScene(x, y) {
+        return {
+            x: (x - this.sceneOrigin.x) / 1000,
+            z: (y - this.sceneOrigin.y) / 1000,
+        };
     }
 
     buildAll() {
@@ -16,7 +24,7 @@ class LightingManager {
         this.buildBedroomBLights();
         this.buildKitchenLights();
         this.buildBathroomLights();
-        this.buildHallwayLights();
+        this.buildDiningLights();
         this.setMode('daily');
     }
 
@@ -30,10 +38,10 @@ class LightingManager {
                 fixtureGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.04, 12);
                 break;
             case 'strip':
-                fixtureGeo = new THREE.BoxGeometry(2.0, 0.02, 0.05);
+                fixtureGeo = new THREE.BoxGeometry(1.8, 0.02, 0.04);
                 break;
             case 'pendant':
-                fixtureGeo = new THREE.SphereGeometry(0.12, 16, 16);
+                fixtureGeo = new THREE.SphereGeometry(0.1, 16, 16);
                 break;
             default:
                 fixtureGeo = new THREE.CylinderGeometry(0.1, 0.15, 0.06, 12);
@@ -64,80 +72,83 @@ class LightingManager {
         light.castShadow = false;
         this.lightsGroup.add(light);
 
-        const coneGeo = new THREE.ConeGeometry(0.8, 2.5, 16, 1, true);
+        const coneGeo = new THREE.ConeGeometry(0.7, 2.2, 16, 1, true);
         const coneMat = new THREE.MeshBasicMaterial({
             color,
             transparent: true,
-            opacity: 0.06,
+            opacity: 0.05,
             side: THREE.DoubleSide,
             depthWrite: false,
         });
         const cone = new THREE.Mesh(coneGeo, coneMat);
-        cone.position.set(pos[0], pos[1] - 1.25, pos[2]);
+        cone.position.set(pos[0], pos[1] - 1.1, pos[2]);
         this.lightsGroup.add(cone);
 
         this.lights.push({ fixture, light, cone, pos, type, color, intensity });
     }
 
     buildLivingLights() {
-        const ox = 1.127, oz = 0.469;
+        // 客厅中心：x:6000, y:6000 → 场景 (1.6, 1.0)
+        const ox = 1.6, oz = 1.0;
         // 主灯
-        this.createLightFixture([ox, 2.75, oz + 0.5], 'pendant', 0xfff5e6, 1.5);
+        this.createLightFixture([ox, 2.7, oz], 'pendant', 0xfff5e6, 1.4);
         // 筒灯
         const downlightPos = [
-            [ox - 1.2, 2.78, oz - 1.0],
-            [ox - 1.2, 2.78, oz + 1.5],
-            [ox + 0.8, 2.78, oz - 1.0],
-            [ox + 0.8, 2.78, oz + 1.5],
-            [ox, 2.78, oz - 2.0],
-            [ox, 2.78, oz + 2.5],
-            [ox + 1.2, 2.78, oz - 0.3],
-            [ox + 1.2, 2.78, oz + 0.8],
+            [ox - 1.2, 2.75, oz - 1.0],
+            [ox - 1.2, 2.75, oz + 1.2],
+            [ox + 1.2, 2.75, oz - 1.0],
+            [ox + 1.2, 2.75, oz + 1.2],
+            [ox, 2.75, oz - 1.8],
+            [ox, 2.75, oz + 1.8],
         ];
-        downlightPos.forEach(p => this.createLightFixture(p, 'downlight', 0xfff8ee, 0.8));
+        downlightPos.forEach(p => this.createLightFixture(p, 'downlight', 0xfff8ee, 0.7));
         // 灯带
-        this.createLightFixture([ox, 2.76, oz - 2.5], 'strip', 0xffe4b5, 0.5);
+        this.createLightFixture([ox, 2.72, oz - 2.2], 'strip', 0xffe4b5, 0.4);
     }
 
     buildBedroomALights() {
-        const ox = -1.845, oz = 1.619;
-        this.createLightFixture([ox, 2.75, oz + 0.3], 'ceiling', 0xfff5e6, 1.2);
+        // 主卧中心：x:1600, y:6400 → 场景 (-2.8, 1.4)
+        const ox = -2.8, oz = 1.4;
+        this.createLightFixture([ox, 2.7, oz], 'ceiling', 0xfff5e6, 1.1);
         // 床头灯
-        this.createLightFixture([ox - 0.9, 1.2, oz + 1.0], 'pendant', 0xffd699, 0.4);
-        this.createLightFixture([ox + 0.9, 1.2, oz + 1.0], 'pendant', 0xffd699, 0.4);
+        this.createLightFixture([ox - 0.85, 1.15, oz + 0.8], 'pendant', 0xffd699, 0.35);
+        this.createLightFixture([ox + 0.85, 1.15, oz + 0.8], 'pendant', 0xffd699, 0.35);
     }
 
     buildBedroomBLights() {
-        const ox = -1.845, oz = -2.380;
-        this.createLightFixture([ox, 2.75, oz + 0.3], 'ceiling', 0xfff5e6, 1.0);
+        // 次卧中心：x:1600, y:1600 → 场景 (-2.8, -3.4)
+        const ox = -2.8, oz = -3.4;
+        this.createLightFixture([ox, 2.7, oz], 'ceiling', 0xfff5e6, 0.9);
     }
 
     buildKitchenLights() {
-        const ox = -1.845, oz = -0.620;
-        this.createLightFixture([ox, 2.75, oz], 'ceiling', 0xffffff, 1.0);
+        // 厨房中心：x:1600, y:3600 → 场景 (-2.8, -1.4)
+        const ox = -2.8, oz = -1.4;
+        this.createLightFixture([ox, 2.7, oz], 'ceiling', 0xffffff, 0.9);
         // 操作台灯
-        this.createLightFixture([ox, 2.76, oz + 0.4], 'strip', 0xffffff, 0.6);
+        this.createLightFixture([ox, 2.72, oz + 0.35], 'strip', 0xffffff, 0.5);
     }
 
     buildBathroomLights() {
-        const ox = 2.776, oz = -2.398;
-        this.createLightFixture([ox, 2.75, oz], 'ceiling', 0xffffff, 0.8);
+        // 卫生间中心：x:7800, y:1600 → 场景 (3.4, -3.4)
+        const ox = 3.4, oz = -3.4;
+        this.createLightFixture([ox, 2.7, oz], 'ceiling', 0xffffff, 0.7);
         // 镜前灯
-        this.createLightFixture([ox - 0.3, 1.6, oz + 0.5], 'strip', 0xfff8ee, 0.4);
+        this.createLightFixture([ox - 0.25, 1.55, oz + 0.4], 'strip', 0xfff8ee, 0.35);
     }
 
-    buildHallwayLights() {
-        const ox = 1.371, oz = -2.398;
-        this.createLightFixture([ox, 2.75, oz - 0.8], 'downlight', 0xfff8ee, 0.6);
-        this.createLightFixture([ox, 2.75, oz + 0.5], 'downlight', 0xfff8ee, 0.6);
+    buildDiningLights() {
+        // 餐厅中心：x:5000, y:1600 → 场景 (0.6, -3.4)
+        const ox = 0.6, oz = -3.4;
+        this.createLightFixture([ox, 2.7, oz], 'pendant', 0xfff5e6, 0.8);
     }
 
     setMode(mode) {
         this.currentMode = mode;
         const presets = {
-            daily: { ambient: 0.4, lightMul: 1.0, coneOpacity: 0.06 },
-            movie: { ambient: 0.1, lightMul: 0.3, coneOpacity: 0.02 },
-            party: { ambient: 0.2, lightMul: 0.8, coneOpacity: 0.08 },
+            daily: { ambient: 0.45, lightMul: 1.0, coneOpacity: 0.05 },
+            movie: { ambient: 0.12, lightMul: 0.3, coneOpacity: 0.02 },
+            party: { ambient: 0.22, lightMul: 0.8, coneOpacity: 0.07 },
         };
         const p = presets[mode] || presets.daily;
 
@@ -156,7 +167,7 @@ class LightingManager {
         this.enabled = !this.enabled;
         this.lightsGroup.visible = this.enabled;
         this.sm.scene.children.forEach(c => {
-            if (c instanceof THREE.AmbientLight) c.intensity = this.enabled ? 0.4 : 0.8;
+            if (c instanceof THREE.AmbientLight) c.intensity = this.enabled ? 0.45 : 0.8;
         });
         return this.enabled;
     }

@@ -32,6 +32,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         roomBuilder.buildAll();
 
+        // 初始化家具
+        furnitureBuilder = new FurnitureBuilder(sceneManager);
+        furnitureBuilder.buildAll();
+
+        // 初始化灯光
+        lightingManager = new LightingManager(sceneManager);
+        lightingManager.buildAll();
+
+        // 初始化气流
+        airflowManager = new AirflowManager(sceneManager);
+        airflowManager.buildAll();
+
         // 房间悬停提示
         const tooltip = document.getElementById('roomTooltip');
         sceneManager.onRoomHover = (roomId, mx, my) => {
@@ -69,7 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 bathroom: 'bathroom',
                 living_balcony: 'balcony_area',
                 bedroom_a_balcony: 'bedroom',
-                entrance_hallway: 'other',
+                entrance: 'other',
+                dining: 'living_room',
             };
             const moduleId = roomModuleMap[roomId];
             if (moduleId) {

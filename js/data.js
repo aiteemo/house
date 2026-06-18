@@ -26,71 +26,65 @@ function polygonSize(polygon, wallThickness) {
     };
 }
 
-// ========== 户型数据（基于JSON精确坐标） ==========
-const WT_MM = 240; // JSON中的墙厚(mm)
+// ========== 户型数据（基于户型图精确坐标） ==========
+// 坐标系：原点在左上角，X向右，Y向下，单位mm
+// 88平米两室两厅一卫：次卧、厨房、主卧在左侧；餐厅、客厅、卫生间在右侧
+const WT_MM = 200; // 墙厚(mm)
 const ROOM_DATA = {
-    totalArea: 70.3,  // 专有建筑面积
+    totalArea: 88.45,
     floor: 1,
     rooms: [
+        // === 左侧房间（从上到下） ===
         {
-            id: 'bedroom_b', name: '卧室B', area: 10.8,
-            cx: -2.164, cz: -2.827,
-            width: 2.942, depth: 2.720,
-            color: 0x06b6d4, desc: '次卧室',
-            polygon: [{x:0,y:0},{x:2942,y:0},{x:2942,y:2720},{x:0,y:2720}],
+            id: 'bedroom_b', name: '次卧', area: 10.5,
+            color: 0x6366f1, desc: '次卧室/书房',
+            polygon: [{x:0,y:0},{x:3200,y:0},{x:3200,y:3200},{x:0,y:3200}],
         },
         {
-            id: 'kitchen', name: '厨房', area: 5.2,
-            cx: -2.164, cz: -1.892,
-            width: 2.942, depth: 0.545,
+            id: 'kitchen', name: '厨房', area: 5.5,
             color: 0xf59e0b, desc: '厨房',
-            polygon: [{x:0,y:2720},{x:2942,y:2720},{x:2942,y:3265},{x:0,y:3265}],
+            polygon: [{x:0,y:3200},{x:3200,y:3200},{x:3200,y:4000},{x:0,y:4000}],
         },
         {
-            id: 'bedroom_a', name: '卧室A', area: 13.5,
-            cx: -2.164, cz: 1.794,
-            width: 2.942, depth: 6.065,
-            color: 0x8b5cf6, desc: '主卧室',
-            polygon: [{x:0,y:3265},{x:2942,y:3265},{x:2942,y:9330},{x:0,y:9330}],
+            id: 'bedroom_a', name: '主卧', area: 15.0,
+            color: 0x8b5cf6, desc: '主卧室，带飘窗',
+            polygon: [{x:0,y:4000},{x:3200,y:4000},{x:3200,y:8800},{x:0,y:8800}],
         },
         {
-            id: 'bedroom_a_balcony', name: '卧室A阳台', area: 1.9,
-            cx: -2.164, cz: 3.621,
-            width: 2.942, depth: 1.454,
-            color: 0x34d399, desc: '卧室A阳台',
-            polygon: [{x:0,y:9330},{x:2942,y:9330},{x:2942,y:10784},{x:0,y:10784}],
+            id: 'bedroom_a_balcony', name: '主卧阳台', area: 2.5,
+            color: 0x10b981, desc: '主卧阳台',
+            polygon: [{x:0,y:8800},{x:3200,y:8800},{x:3200,y:10000},{x:0,y:10000}],
         },
+        // === 右侧房间（从上到下） ===
         {
-            id: 'living_room', name: '客厅', area: 24.3,
-            cx: 1.270, cz: 1.359,
-            width: 5.388, depth: 6.322,
-            color: 0x3b82f6, desc: '客厅，连接阳台',
-            polygon: [{x:2942,y:3005},{x:8330,y:3005},{x:8330,y:9330},{x:2942,y:9330}],
-        },
-        {
-            id: 'living_balcony', name: '客厅阳台', area: 2.9,
-            cx: 1.537, cz: 3.621,
-            width: 5.388, depth: 1.454,
-            color: 0x22c55e, desc: '客厅阳台',
-            polygon: [{x:2942,y:9330},{x:8330,y:9330},{x:8330,y:10784},{x:2942,y:10784}],
-        },
-        {
-            id: 'entrance_hallway', name: '玄关/过道', area: 7.0,
-            cx: -0.077, cz: -2.227,
-            width: 0.986, depth: 3.005,
-            color: 0x64748b, desc: '玄关和过道',
-            polygon: [{x:5174,y:0},{x:6160,y:0},{x:6160,y:3005},{x:5174,y:3005}],
-        },
-        {
-            id: 'bathroom', name: '卫生间', area: 4.7,
-            cx: 2.123, cz: -2.227,
-            width: 2.170, depth: 3.005,
+            id: 'bathroom', name: '卫生间', area: 4.5,
             color: 0x14b8a6, desc: '卫生间',
-            polygon: [{x:6160,y:0},{x:8330,y:0},{x:8330,y:3005},{x:6160,y:3005}],
+            polygon: [{x:6800,y:0},{x:8800,y:0},{x:8800,y:3200},{x:6800,y:3200}],
+        },
+        {
+            id: 'dining', name: '餐厅', area: 6.0,
+            color: 0xec4899, desc: '餐厅区域',
+            polygon: [{x:3200,y:0},{x:6800,y:0},{x:6800,y:3200},{x:3200,y:3200}],
+        },
+        {
+            id: 'living_room', name: '客厅', area: 25.0,
+            color: 0x3b82f6, desc: '客厅，连接阳台',
+            polygon: [{x:3200,y:3200},{x:8800,y:3200},{x:8800,y:8800},{x:3200,y:8800}],
+        },
+        {
+            id: 'living_balcony', name: '客厅阳台', area: 3.5,
+            color: 0x22c55e, desc: '客厅阳台',
+            polygon: [{x:3200,y:8800},{x:8800,y:8800},{x:8800,y:10000},{x:3200,y:10000}],
+        },
+        // === 入户区域 ===
+        {
+            id: 'entrance', name: '玄关', area: 3.0,
+            color: 0x64748b, desc: '入户玄关',
+            polygon: [{x:6800,y:3200},{x:8800,y:3200},{x:8800,y:4200},{x:6800,y:4200}],
         },
     ],
     wallHeight: 2.8,
-    wallThickness: WT_MM / 1000,  // 0.24m
+    wallThickness: WT_MM / 1000,
     doorWidth: 0.9,
     doorHeight: 2.1,
     windowWidth: 1.5,
@@ -136,6 +130,9 @@ const REQUIREMENTS_DATA = [
             { id: 'kitchen_sink', name: '水槽+龙头', desc: '大单槽/双槽 + 抽拉龙头', status: 'checked', room: 'kitchen', price3: 3000, price2: 1500, price1: 800 },
             { id: 'kitchen_tile', name: '墙地砖', desc: '厨房墙砖+地砖铺贴', status: 'checked', room: 'kitchen', price3: 5000, price2: 3500, price1: 2000 },
             { id: 'kitchen_door', name: '厨房推拉门', desc: '玻璃推拉门/折叠门', status: 'checked', room: 'kitchen', price3: 3000, price2: 2000, price1: 1200 },
+            { id: 'kitchen_round_table', name: '圆饭桌', desc: '圆饭桌，平时2人偶尔4人', status: 'pending', room: 'living_room', price3: 0, price2: 0, price1: 0 },
+            { id: 'kitchen_sideboard', name: '餐边柜', desc: '餐边柜，收纳餐具和杂物', status: 'pending', room: 'living_room', price3: 0, price2: 0, price1: 0 },
+            { id: 'kitchen_snack_storage', name: '零食收纳', desc: '零食收纳（主卧、客厅、餐厅）', status: 'pending', room: null, price3: 0, price2: 0, price1: 0 },
         ]
     },
     {
@@ -149,6 +146,21 @@ const REQUIREMENTS_DATA = [
             { id: 'bath_tile', name: '墙地砖', desc: '卫生间墙砖+地砖铺贴', status: 'checked', room: 'bathroom', price3: 4000, price2: 3000, price1: 2000 },
             { id: 'bath_exhaust', name: '排风扇', desc: '卫生间排风换气', status: 'checked', room: 'bathroom', price3: 800, price2: 500, price1: 300 },
             { id: 'bath_water_heater', name: '热水器', desc: '燃气热水器/电热水器', status: 'checked', room: 'bathroom', price3: 6000, price2: 3500, price1: 2000 },
+            { id: 'bath_smart_toilet', name: '智能马桶', desc: '智能马桶（自动翻盖/冲洗/烘干）', status: 'pending', room: 'bathroom', price3: 5000, price2: 3000, price1: 1500 },
+            { id: 'bath_cat_litter_a', name: '电动猫砂盆A', desc: '电动猫砂盆A，尺寸约60×80cm，需易打理+通风', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
+            { id: 'bath_cat_litter_b', name: '电动猫砂盆B', desc: '电动猫砂盆B，需易打理+通风', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
+            { id: 'bath_sensor_trash', name: '感应垃圾桶', desc: '卫浴感应垃圾桶，解放双手', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
+            { id: 'bath_tissue_holder', name: '厕所纸/收纳', desc: '厕纸收纳方案', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
+            { id: 'bath_tissue_wall', name: '纸巾收纳', desc: '纸巾收纳到墙面/柜体内', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
+            { id: 'bath_toothbrush_rack', name: '牙刷架', desc: '牙刷立起来，保持干燥卫生', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
+            { id: 'bath_face_products', name: '洗面奶收纳', desc: '洗面奶、保湿喷雾随手可拿', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
+            { id: 'bath_face_towel', name: '洗脸巾收纳', desc: '洗脸巾收纳到前面/柜体内', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
+            { id: 'bath_hair_dryer', name: '吹风机收纳', desc: '吹风机挂起来，方便拿取', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
+            { id: 'bath_cosmetics', name: '化妆品收纳', desc: '化妆品收纳方案', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
+            { id: 'bath_mirror_pull', name: '化妆镜', desc: '化妆镜可以拉近，方便化妆', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
+            { id: 'bath_shower_partition', name: '淋浴干湿分离', desc: '独立淋浴区，干湿分离', status: 'pending', room: 'bathroom', price3: 3000, price2: 2000, price1: 1200 },
+            { id: 'bath_quiet_fan', name: '静音排风扇', desc: '静音排风扇，持续除湿', status: 'pending', room: 'bathroom', price3: 800, price2: 500, price1: 300 },
+            { id: 'bath_floor_washer', name: '洗地机', desc: '洗地机，需要有充电口', status: 'pending', room: 'bathroom', price3: 0, price2: 0, price1: 0 },
         ]
     },
     {
@@ -163,6 +175,8 @@ const REQUIREMENTS_DATA = [
             { id: 'living_dining', name: '餐厅区域', desc: '餐桌椅+餐边柜', status: 'checked', room: 'living_room', price3: 6000, price2: 4000, price1: 2500 },
             { id: 'living_sofa', name: '沙发', desc: 'L型/一字型沙发', status: 'checked', room: 'living_room', price3: 8000, price2: 5000, price1: 3000 },
             { id: 'living_coffee_table', name: '茶几+电视柜', desc: '茶几和电视柜', status: 'checked', room: 'living_room', price3: 4000, price2: 2500, price1: 1500 },
+            { id: 'living_cat_tree', name: '猫爬架', desc: '猫爬架，崽子们活动空间', status: 'pending', room: 'living_room', price3: 0, price2: 0, price1: 0 },
+            { id: 'living_clean_tools', name: '清洁工具收纳', desc: '家政间清洁工具收纳', status: 'pending', room: 'living_room', price3: 0, price2: 0, price1: 0 },
         ]
     },
     {
@@ -177,6 +191,11 @@ const REQUIREMENTS_DATA = [
             { id: 'bed_floor', name: '卧室地面', desc: '木地板铺贴', status: 'checked', room: null, price3: 10000, price2: 7000, price1: 4500 },
             { id: 'bed_curtain', name: '卧室窗帘', desc: '遮光窗帘（含轨道）', status: 'checked', room: null, price3: 3000, price2: 2000, price1: 1200 },
             { id: 'bed_balcony_tile', name: '卧室A阳台', desc: '阳台地砖+封阳台+晾衣区', status: 'checked', room: 'bedroom_a_balcony', price3: 8000, price2: 5000, price1: 3000 },
+            { id: 'bed_temp_bed', name: '临时双人床', desc: '次卧临时床（丈母娘/老丈人/亲友来访用）', status: 'pending', room: 'bedroom_b', price3: 0, price2: 0, price1: 0 },
+            { id: 'bed_hang_clothes', name: '常用衣物挂放', desc: '常用衣服挂起来（主卧、次卧）', status: 'pending', room: null, price3: 0, price2: 0, price1: 0 },
+            { id: 'bed_seasonal_clothes', name: '换季衣物收纳', desc: '不常用衣服收纳起来（次卧）', status: 'pending', room: 'bedroom_b', price3: 0, price2: 0, price1: 0 },
+            { id: 'bed_quilt_storage', name: '被子收纳', desc: '被子收纳（次卧）', status: 'pending', room: 'bedroom_b', price3: 0, price2: 0, price1: 0 },
+            { id: 'bed_suitcase', name: '行李箱收纳', desc: '行李箱收纳位置', status: 'pending', room: null, price3: 0, price2: 0, price1: 0 },
         ]
     },
     {
@@ -188,6 +207,8 @@ const REQUIREMENTS_DATA = [
             { id: 'balcony_seal', name: '封阳台', desc: '断桥铝窗户封闭阳台', status: 'checked', room: 'living_balcony', price3: 6000, price2: 4000, price1: 2500 },
             { id: 'balcony_wash', name: '洗衣区', desc: '洗衣机柜+晾衣架', status: 'checked', room: 'living_balcony', price3: 4000, price2: 2500, price1: 1500 },
             { id: 'balcony_storage', name: '阳台柜', desc: '储物柜/杂物柜', status: 'pending', room: 'living_balcony', price3: 3000, price2: 2000, price1: 1200 },
+            { id: 'balcony_badminton', name: '羽毛球装备收纳', desc: '羽毛球拍、球、喷雾、鞋收纳，希望拎着就走', status: 'pending', room: 'living_balcony', price3: 0, price2: 0, price1: 0 },
+            { id: 'balcony_umbrella', name: '雨伞收纳', desc: '雨伞收纳位置', status: 'pending', room: 'living_balcony', price3: 0, price2: 0, price1: 0 },
         ]
     },
     {
@@ -227,6 +248,17 @@ const REQUIREMENTS_DATA = [
             { id: 'other_smart_lock', name: '智能门锁', desc: '指纹/密码锁', status: 'pending', room: null, price3: 3000, price2: 2000, price1: 1000 },
             { id: 'other_storage', name: '入户鞋柜', desc: '玄关鞋柜定制', status: 'checked', room: 'entrance_hallway', price3: 4000, price2: 2500, price1: 1500 },
             { id: 'other_cat_litter', name: '猫厕所换气', desc: '猫厕所位置规划+专用排风换气', status: 'pending', room: null, price3: 3000, price2: 2000, price1: 1000 },
+            { id: 'other_key_hooks', name: '入户随手收纳', desc: '钥匙/围巾/手套/防晒/香水随手放', status: 'pending', room: 'entrance_hallway', price3: 0, price2: 0, price1: 0 },
+            { id: 'other_helmet', name: '头盔/护具收纳', desc: '头盔、护具收纳位置', status: 'pending', room: 'entrance_hallway', price3: 0, price2: 0, price1: 0 },
+            { id: 'other_cat_food', name: '猫粮收纳', desc: '猫粮收纳（客厅/待定）', status: 'pending', room: null, price3: 0, price2: 0, price1: 0 },
+            { id: 'other_cat_sand', name: '猫砂收纳', desc: '猫砂收纳位置', status: 'pending', room: null, price3: 0, price2: 0, price1: 0 },
+            { id: 'other_display_cabinet', name: '陈列柜', desc: '陈列柜：娃娃、书展示', status: 'pending', room: null, price3: 0, price2: 0, price1: 0 },
+            { id: 'other_tea', name: '喝茶区', desc: '喝茶区设置', status: 'pending', room: null, price3: 0, price2: 0, price1: 0 },
+            { id: 'other_coffee', name: '咖啡区', desc: '搞咖啡的地方（餐厅）', status: 'pending', room: 'living_room', price3: 0, price2: 0, price1: 0 },
+            { id: 'other_karaoke', name: '唱歌设备', desc: '唱歌设备收纳（客厅/主卧）', status: 'pending', room: 'living_room', price3: 0, price2: 0, price1: 0 },
+            { id: 'other_tv_cabinet', name: '电视柜', desc: '电视柜', status: 'pending', room: 'living_room', price3: 0, price2: 0, price1: 0 },
+            { id: 'other_dual_desk', name: '双人办公桌', desc: '次卧双人办公桌，同时容纳两人办公', status: 'pending', room: 'bedroom_b', price3: 0, price2: 0, price1: 0 },
+            { id: 'other_dual_chair', name: '办公椅x2', desc: '两把办公椅', status: 'pending', room: 'bedroom_b', price3: 0, price2: 0, price1: 0 },
         ]
     },
 ];
@@ -370,6 +402,9 @@ const ITEM_STAGE_MAP = {
     other_monitor: 'finishing',
     other_smart_lock: 'finishing',
     other_cat_litter: 'finishing',
+    bath_smart_toilet: 'installation',
+    bath_shower_partition: 'installation',
+    bath_quiet_fan: 'installation',
 };
 
 // ========== 沟通备忘数据 ==========
