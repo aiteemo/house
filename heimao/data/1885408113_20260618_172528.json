@@ -1,0 +1,1854 @@
+{
+  "couid": "1885408113",
+  "timestamp": "20260618_172528",
+  "info": {
+    "name": "业之峰装饰",
+    "avatar": "https://tvax1.sinaimg.cn/crop.0.0.1080.1080.180/70610b71ly8gceimg4mjrj20u00u0wfk.jpg?KID=imgbed,tva&Expires=1781785470&ssig=YefRuPmEim",
+    "eval_points": "3",
+    "valid_amt": "91",
+    "replied_amt": "14",
+    "completed_amt": "14",
+    "valid30d": "1",
+    "reply30d": "0",
+    "complete30d": "0",
+    "bkrpt": "0",
+    "is_noexp": false,
+    "pzxfmember": "0",
+    "is_virtual": "0"
+  },
+  "complaints": [
+    {
+      "main": {
+        "sn": "17398549861",
+        "title": "业之峰诺华家具装饰集团股份有限公司第二分公司 拒不退费",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退款",
+        "issue": "欺骗消费者,退款问题",
+        "comment_id": "tousu_complaint_51345495",
+        "summary": "本人于2026年5月23日参加业之峰29周年庆活动，并于活动现场交纳97000元预付款，用于后续设计装修服务。公司未与本人签订任何正式设计或装修服务合同，也未告知我们相关条款和违约可能责任。后续公司在未实际量房，我们也未完全认可平面设计的情况下出了所谓效果图，现在我们不想装修了，要求退还全部预付款，公司还要我...",
+        "status": 4,
+        "timestamp": "2026-06-13",
+        "url": "https://tousu.sina.com.cn/complaint/view/17398549861/?sld=5611e3c5ada659e5d75d796e3d022dbb",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1781347925"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17397286340",
+        "title": "大兴区清泰路装修淹房，业之峰推诿且态度蛮横",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,依法追究责任,加强对平台的管理,公平给出解释,道歉",
+        "issue": "态度恶劣,赔偿问题",
+        "comment_id": "tousu_complaint_50081974",
+        "summary": "我是北京市大兴区清泰路1号院1号楼4单元304的业主 该公司业之峰于今年五月九号在清泰路1号院1号楼4单元404装修期间把我们家的房顶给淹了 墙皮都掉了 我曾上楼与他们施工经理沟通 对方态度蛮横无理 毫无素质 与他电话沟通也一直推诿责任 投诉了很多地方都没有反馈 难道该公司就敢做不敢当吗 如果不进行赔偿道歉我将在各大...",
+        "status": 4,
+        "timestamp": "2026-05-14",
+        "url": "https://tousu.sina.com.cn/complaint/view/17397286340/?sld=bdefe325c05f0ae806cdd571831a18bf",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1778765416"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17396649341",
+        "title": "潢川业之峰，不按市场价退款，",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "要求退回合理费用",
+        "issue": "退款",
+        "comment_id": "tousu_complaint_49444975",
+        "summary": "2025年底和业之峰装饰签了装修合同，目前只做了小部分墙面拆改，水电，上木工时发现板材与合同不一致，当时业之峰装饰承诺如果发现弄虚做假全额退款，不纯在违约，我们现在的要求是做到哪我们认到哪，跟市场价走，但是他们现在算的价钱远远超出市场价格，",
+        "status": 7,
+        "timestamp": "2026-05-01",
+        "url": "https://tousu.sina.com.cn/complaint/view/17396649341/?sld=390237f12a794c0fbfd23cc6b65fedaa",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1777557878"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17396617103",
+        "title": "南阳业之峰装饰有限公司霸王条款，不平等格式条款，拒不退款",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款",
+        "issue": "不予退款,霸王条款",
+        "comment_id": "tousu_complaint_49412737",
+        "summary": "您好！我要投诉南阳市业之峰装饰有限公司（以下简称 “业之峰装饰”）恶意侵害消费者权益的行为，具体情况如下：\n一、基本情况\n合同关系：本人和家属于 2025 年 8.17 日在南阳市张衡大道与邓禹路交汇处（业之峰装饰）与业之峰装饰签订《家庭居室〈蓝钻工程〉装饰装修工程施工合同》，约定由该公司为我的房屋提供装修服务。...",
+        "status": 7,
+        "timestamp": "2026-04-30",
+        "url": "https://tousu.sina.com.cn/complaint/view/17396617103/?sld=24a518109bf6c1ae296a536812a341bc",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1777513973"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17396593825",
+        "title": "吐槽业之峰装饰，高额设计费，增项多，工地垃圾留",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "停止骚扰,快速处理,公平给出解释,解释,加强对平台的管理",
+        "issue": "电话骚扰,欺骗消费者",
+        "comment_id": "tousu_complaint_49389459",
+        "summary": "设计费高昂，签约后增项不断，最气人的工地做到一半给人不做了，垃圾也不处理",
+        "status": 4,
+        "timestamp": "2026-04-29",
+        "url": "https://tousu.sina.com.cn/complaint/view/17396593825/?sld=80fba456faadc8af3c82ebb07a09ca94",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1777451156"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17396496510",
+        "title": "北京业之峰克扣订金无法退还！",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退费,退款",
+        "issue": "虚假宣传,欺诈,退款问题",
+        "comment_id": "tousu_complaint_49292144",
+        "summary": "本人于2026.3.8向业之峰转账3万元装修订金，由于后续业之峰设计服务未达到我们的标准，双方停止继续合作。\n但业之峰客户经理不同意退还全部押金，要把签约礼折合成现金从订金中扣除，以上行为构成违法。\n我要求押金全部退回。",
+        "status": 4,
+        "timestamp": "2026-04-27",
+        "url": "https://tousu.sina.com.cn/complaint/view/17396496510/?sld=0826c02a33d1f1acea036449e76390e8",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1777274767"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17395904530",
+        "title": "不交钱不让走，承诺说交的意向金，随时可以退，然后一个月了一直拖着不给退！！！",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,公平给出解释,退款,改善服务",
+        "issue": "欺骗消费者,退款问题,合作商户不诚信",
+        "comment_id": "tousu_complaint_48700164",
+        "summary": "我在26年2月28日，在济南市历下区经十路8000号龙奥金座一号楼业之峰装饰（济南总店）交了两万意向金，当时销售不让走，一直承诺交的是意向金，可以随时退，让我们尽管去其他家对比，如果不想在她那装修立马就把钱退给我，3.11号准备在其他家装修，找她退意向金，一直往后拖，说自己在冲业绩，让我帮帮忙，先别退，4.3号...",
+        "status": 4,
+        "timestamp": "2026-04-14",
+        "url": "https://tousu.sina.com.cn/complaint/view/17395904530/?sld=87130882b989677a343b5765c07873ad",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1776138676"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17395604822",
+        "title": "业之峰装饰漏装地排插座，违约拒赔20000元",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "免费维修,赔偿整改 书面承诺",
+        "issue": "服务欺诈,赔偿问题,售后服务质量",
+        "comment_id": "tousu_complaint_48400456",
+        "summary": "本人新房首次装修，现已全部基本完工、家具进场、全屋完成深度开荒保洁。业之峰装饰未按双方签订的装修合同及施工图纸施工，严重漏装地排插座，属于明显施工过错与工程质量问题，已构成严重违约。\n\n该问题直接导致：家中岛台无法进场安装使用、沙发双电门无法接线使用，房屋正常使用功能受严重影响，直接打乱入住计划。...",
+        "status": 4,
+        "timestamp": "2026-04-08",
+        "url": "https://tousu.sina.com.cn/complaint/view/17395604822/?sld=7e5cbe72c82ccfbd2d9a90d5dafead46",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1775611800"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17394941394",
+        "title": "业之峰与生活家地板合作糟，望处理地板问题及赔工期",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,改善服务,退款",
+        "issue": "售后服务,售后服务质量",
+        "comment_id": "tousu_complaint_47737028",
+        "summary": "我家房子装修，与武汉业之峰诺华装饰有限公司签署合同由该公司承包家装工程。在地板安装环节由于我是延用旧地板，就委托装修公司找到了与其有业务合作的生活家地板负责旧地板的安装工作，并支付了费用。但生活家地板委派的工作人员安装粗糙，地板安装后出现了各类问题，尤其是打龙骨未找平，导致地面不平，误差超过2cm，...",
+        "status": 4,
+        "timestamp": "2026-03-24",
+        "url": "https://tousu.sina.com.cn/complaint/view/17394941394/?sld=50ffaefb98d3d67aea95f4b1147f5e6e",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1774322989"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17394755682",
+        "title": "业之峰装饰不守信，交的意向金何时能全额退回",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退款,退费,加强对平台的管理",
+        "issue": "退款问题,欺骗消费者,欺诈,服务欺诈,态度恶劣",
+        "comment_id": "tousu_complaint_47551316",
+        "summary": "本人于2025.8.23日向坐落于北京市朝阳区来广营乡水岸中街润泽庄园351号的业之峰装饰北五环旗舰店支付装修意向金45000元，2025.12.30本人到店办理了意向金退款手续，并将意向金收据交回业之峰装饰，截止目前，该店未将意向金退还，意向金收据上明明承诺着:全额无条件退款，7个工作日到账，（详见附件意向金收据照片），该...",
+        "status": 4,
+        "timestamp": "2026-03-19",
+        "url": "https://tousu.sina.com.cn/complaint/view/17394755682/?sld=0c298f62ec0f2a9afa4782b244a0b6ed",
+        "share_amount": 5,
+        "comment_amount": 2,
+        "upvote_amount": 28,
+        "is_upvote": false,
+        "created_at": "1773926575"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17393451094",
+        "title": "以营销活动以及全额退款承诺诱导消费者付费，事后拒绝履行承诺",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,依法追究责任,公平给出解释,道歉,退款,退费",
+        "issue": "欺骗消费者,退款问题,欺诈,虚假宣传,服务欺诈",
+        "comment_id": "tousu_complaint_46246728",
+        "summary": "我家老人于2025年7月19日以及2025年8月9日分别向业之峰装饰公司支付1万以及8.5万元，合计9.5万元，支付时对方客户经理承诺后期如果不用业之峰团队则可全额退款。后我家老人表达了采用另外一家装修公司，并申请退款，对方业务经理孙盈盈以及设计师杨金凯均承诺退款并沟通内部流程，但沟通数月直至今日，未退还任何款项。...",
+        "status": 4,
+        "timestamp": "2026-02-09",
+        "url": "https://tousu.sina.com.cn/complaint/view/17393451094/?sld=a5bcafa83cc4f3ab65e87a3e576155f3",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1770623513"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17393103048",
+        "title": "业之峰装饰不退订金，各种理由拖延，啥时候给我钱？",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款,快速处理",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_45898682",
+        "summary": "我于2025年12月21号，在业之峰交了7000元订金，在设计阶段讨论方案的时候，因为超出预算，没能达成合作。2026年1月5号，我要求退款，对方一直没有退，以各种理由拖延，至今未退。",
+        "status": 7,
+        "timestamp": "2026-01-31",
+        "url": "https://tousu.sina.com.cn/complaint/view/17393103048/?sld=515342fbce30783f0b20fe44271a166c",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1769844399"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17392797111",
+        "title": "业之峰装修公司付款后不给施工也不给退款",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,道歉,退款",
+        "issue": "欺骗消费者,退款问题,服务欺诈,合作商户不诚信,服务效率",
+        "comment_id": "tousu_complaint_45592745",
+        "summary": "我在2025年10月购买了业之峰的整装服务，整装费用126***，我按期付款了63333后，他们现在不给干活了说赔钱，目前三个月里面无故中断停止施工3次，并且施工质量有严重的问题。最近一次是1月14号无故停止施工，联系多个负责人互相踢皮球，既不继续施工也不给退款，给我造成了很大的心里焦虑，最终联系董事长也不给解决问题...",
+        "status": 4,
+        "timestamp": "2026-01-23",
+        "url": "https://tousu.sina.com.cn/complaint/view/17392797111/?sld=3b72e277ae28582af2f8ae91d4fa54df",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1769140476"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17392517446",
+        "title": "志邦家居质量差 无售后",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款,免费维修",
+        "issue": "售后服务质量,产品质量问题,售后不及时",
+        "comment_id": "tousu_complaint_45313080",
+        "summary": "我于2023年7月在业之峰志邦家居定制橱柜，10月完成安装。\n2025年4月发现柜体出现开裂，其他柜门也陆续出现无法正常闭合情况。发现问题后已多次联系售后，但处理进度缓慢，问题一直未得到解决。\n希望贵方尽快给出明确处理方案并落实更换或退费事宜。",
+        "status": 4,
+        "timestamp": "2026-01-16",
+        "url": "https://tousu.sina.com.cn/complaint/view/17392517446/?sld=a3cbf6368623e2581b0d0cbe2e1bb3c4",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1768528325"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17389106424",
+        "title": "北京业之峰装饰(北五环旗舰店)恶意拖延意向金288***元53天",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_41902058",
+        "summary": "本人于2025年6月30日与北京业之峰装饰(北五环旗舰店)签订装修协议，支付订金3000元、预付款25374元，合计28374元。  \n**关键事实**：  \n1. 付款前销售人员在微信中明确承诺：“未签署正式施工协议前，订金及预付款可全额退还”（见附件1）；  \n2. 本人于2025年8月31日提出终止装修并要求退款，汪亚伟当场同意并承诺“7个工...",
+        "status": 4,
+        "timestamp": "2025-10-24",
+        "url": "https://tousu.sina.com.cn/complaint/view/17389106424/?sld=ab7676b6d486b7034f7bae8fb40f9d96",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1761238753"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17388010289",
+        "title": "业之峰诺华家居装饰公司未履行“2%现金返现”承诺，涉嫌虚假宣传，欺诈消费者",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "支付折扣返款",
+        "issue": "欺骗消费者,欺诈,虚假宣传,服务欺诈,退款问题,合作商户不诚信",
+        "comment_id": "tousu_complaint_40805923",
+        "summary": "本人于2025年4月与业之峰诺华家居装饰集团股份有限公司第三分公司签订住宅装修合同。在签约前，我方明确提出需获得4%总金额折扣作为签约条件（其中2%以减免管理费形式体现，另2%在装修完成后以现金形式返还）。设计师倪明表示将向领导汇报，并通过电话沟通确认可执行。随后，在与设计师助理马维良的多次微信沟通中，其明...",
+        "status": 7,
+        "timestamp": "2025-09-26",
+        "url": "https://tousu.sina.com.cn/complaint/view/17388010289/?sld=b4860ad3bcf51627505f810ca81bba98",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1758897906"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17387665046",
+        "title": "青岛业之峰诱导签订预售合同，意向金摇身一变成定金",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,依法追究责任,退款,加强对平台的管理",
+        "issue": "欺骗消费者,退款问题,欺诈",
+        "comment_id": "tousu_complaint_40460680",
+        "summary": "2024年9月与业之峰签订预售协议，缴纳意向金31178元，当时承诺订贵了双倍退钱，而且明确我缴纳的是意向金，而不是定金。后面让我在手机上签字。现在由于业之峰工期存在问题，想进行退款。业之峰告知有1w违约金。诉求，业之峰全额退换，并对承诺问题进行解释道歉。",
+        "status": 4,
+        "timestamp": "2025-09-17",
+        "url": "https://tousu.sina.com.cn/complaint/view/17387665046/?sld=6cae7ffd8a750565f9c5aef5154c9eb9",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1758118429"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17387630681",
+        "title": "业之峰装饰公司一直拖延退款意向金",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_40426315",
+        "summary": "本人8月31日在北京业之峰装饰第二公司（业之峰装饰(南四环店)）咨询装修事宜，并缴纳了71000元的意向金，其业务经理娄赛楠承诺如不选择业之峰，可以在通知业之峰后一周内全额可退。本人在9月9日已经通过快递邮寄回其需要的缴费收据凭证，之后每次询问都是使用“已经提交流程”或者“我再催促下”理由拖延，至今没有进展。要...",
+        "status": 7,
+        "timestamp": "2025-09-17",
+        "url": "https://tousu.sina.com.cn/complaint/view/17387630681/?sld=186afcd5e3ed20ed5c964774d69e7be6",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1758072196"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17386823751",
+        "title": "天津业之峰装饰工期超且问题多，半年未处理，求尽快完工赔偿",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退款,改善服务",
+        "issue": "欺骗消费者,售后服务,售后不及时,产品质量问题,售后服务质量,收费问题,虚假宣传,服务欺诈,服务效率",
+        "comment_id": "tousu_complaint_39619385",
+        "summary": "本人与乙方：天津业之峰诺华装饰有限公司签订合同后，于24年3月正式开工至今，早已超过工期多日但仍有极多装修问题未处理完成，包括但不限于：两面墙电位全部不通、管道遮盖等问题，已沟通半年有余乙方无任何处理措施，非常影响入住使用；诉求：1个月内处理完成全部遗留问题以及处理问题过程中带来的其他已建成装饰破坏...",
+        "status": 4,
+        "timestamp": "2025-08-26",
+        "url": "https://tousu.sina.com.cn/complaint/view/17386823751/?sld=d641897b87c580730b05ac5783b60b91",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1756199598"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17386332676",
+        "title": "业之峰拖欠定金不予退还",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退款,退费,专员解答",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_39128310",
+        "summary": "我于7月19号在北京业之峰北五环旗舰店内交了装修预付款¥65500，由于事情有变故，我便申请退款，但是签约设计师与设计师主管一再保证，定金可随时全退，并且会在很快的时间内到账，但到目前为止，即将一个月了并没有一分钱到账，业之分公司那边也没有任何人员与我的沟通",
+        "status": 4,
+        "timestamp": "2025-08-13",
+        "url": "https://tousu.sina.com.cn/complaint/view/17386332676/?sld=378d3d29aeffd3254723edc2b88c3e81",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1755073341"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17385996555",
+        "title": "业之峰南四环店耍赖，4万意向金久拖未还，1周内快退款！",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_38792189",
+        "summary": "我于2025年2月21日和业之峰南四环店签订了预售协议，并支付意向金4万元，由于买房手续问题导致无法过户，遂于4月28日向业之峰设计师联系退款，设计师也回复可以原路退回，后便找各种理由，诸如公司业绩考核、有新客户可以支付、领导出差等等说法，我本着相信的选择也一直催促尽快完成退款。直到今天2025年8月5日，还未收...",
+        "status": 4,
+        "timestamp": "2025-08-05",
+        "url": "https://tousu.sina.com.cn/complaint/view/17385996555/?sld=cfe70da84deb7fb00a1adcd729e2ae08",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1754364915"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17384859448",
+        "title": "业之峰不退装修订金",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退费",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_37655082",
+        "summary": "，6月15日我们在业之峰设计的催促下交了2万元的订金，现场询问说是没有订金合同，只有一个收据，再三确认无理由退款，7天原路返回，后我们决定不装修了，要求业之峰退订金，再三推脱，收据6月24日寄到公司，承诺公司周二，周四退款，截至今日，一直推脱不给退订金，打电话和我们说公司让他们拖着，这笔钱很着急，现在要...",
+        "status": 7,
+        "timestamp": "2025-07-06",
+        "url": "https://tousu.sina.com.cn/complaint/view/17384859448/?sld=0aa60e07ead40367191382f1a30632c0",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1751734296"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17383654903",
+        "title": "设计缓慢方案不达标还不改",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退费,退货退款",
+        "issue": "欺骗消费者,虚假宣传,退款问题,服务质量差",
+        "comment_id": "tousu_complaint_36450537",
+        "summary": "24年11月在业之峰交款3万装修，交款前承诺四方排雷、响应时间等服务，在交完款后均没有体现，并且整体设计过程缓慢，设计方案一直不达标，设计周期长，给出的设计图纸未按要求进行修改，多次以只能这么做、房子空间有限等理由迫使我接受，我的诉求是退款。",
+        "status": 4,
+        "timestamp": "2025-06-03",
+        "url": "https://tousu.sina.com.cn/complaint/view/17383654903/?sld=39106085881282545af4cc424f2f8120",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1748943762"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17382959692",
+        "title": "方案增项后却拒绝退款",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款,依法追究责任",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_35755326",
+        "summary": "我于2025年5月4日在业之峰装饰公司签订装修预售协议并支付意向金3万元，但是在5月14日再次确认方案时装修金额增项20%，要求办理退款手续，但是业之峰拒绝退款，现要求业之峰全额退还意向金并予以处罚，保证后期不会产生任何纠纷！",
+        "status": 4,
+        "timestamp": "2025-05-15",
+        "url": "https://tousu.sina.com.cn/complaint/view/17382959692/?sld=27bcab668483f787ab94936d68dd90e9",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1747281415"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17382448098",
+        "title": "退费～补偿",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退款,解释,依法追究责任",
+        "issue": "态度恶劣,欺骗消费者,退款问题,赔偿问题,服务欺诈,虚假宣传,产品质量问题",
+        "comment_id": "tousu_complaint_35243732",
+        "summary": "我于2024年在青岛业之峰签约精品装修，瓦工铺贴质量差，验收不合格，验收敷衍，使用非合同以外的虚假材料",
+        "status": 4,
+        "timestamp": "2025-04-30",
+        "url": "https://tousu.sina.com.cn/complaint/view/17382448098/?sld=d6126987925aa5300117e5dc4fd78a54",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1745994021"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17382283474",
+        "title": "唐山业之峰押金退款迟迟不到",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退款,退费",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_35079108",
+        "summary": "2025年1月4日付给唐山业之峰押金一万元整，后面不想使用该公司全包，于3月2日协商退款，3月7日递交收据资料，至今50天仍未收到退款。我要求唐山业之峰尽快全额退款。",
+        "status": 7,
+        "timestamp": "2025-04-25",
+        "url": "https://tousu.sina.com.cn/complaint/view/17382283474/?sld=d0d36bcd2b6f065740a1223b6b935d1c",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1745567891"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17382192839",
+        "title": "业之峰的预售协议退款太难",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_34988473",
+        "summary": "2025年3月4日，为了给我岳母（刘红）的房子装修，跟设计师徐金达沟通后，我交了4万元意向金，我岳母签署了预售协议。3月18日，我告知设计师，我方暂停装修，要求全额返还意向金。设计师以3月业绩不达标为由，请求4月初退换意向金。我于4月1日，联系设计师，催促其退款。设计师称已经提交退款手续。4月9日，我再次询问退...",
+        "status": 7,
+        "timestamp": "2025-04-23",
+        "url": "https://tousu.sina.com.cn/complaint/view/17382192839/?sld=f0eeb11fce93f451a4330b4695b706e4",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1745338327"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17382156793",
+        "title": "兰州业之峰装饰集团全额退款定金",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退款,退费",
+        "issue": "退款问题,态度恶劣",
+        "comment_id": "tousu_complaint_34952427",
+        "summary": "我于2025年3月18日联系兰州业之峰装饰集团第一次上门量房，2025年3月20日第一次在兰州业之峰装饰集团看方案（平面图）2025年3月21日第一次和业之峰装饰集团设计师助理看工地并和公司签合同交了一万定金，2025年3月26日第二次在兰州业之峰装饰集团看设计图（3D图）2025年4月6号我本人砸开需要装修的墙发现是承重墙后我联...",
+        "status": 4,
+        "timestamp": "2025-04-22",
+        "url": "https://tousu.sina.com.cn/complaint/view/17382156793/?sld=10717e28fdb274ba58d37bf2851bef7f",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1745256398"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17382123306",
+        "title": "装修订金退款多次推脱拖延",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_34918940",
+        "summary": "2月22日在业之峰咨询了一下装修事宜，和设计师倪清有了初步的沟通并缴纳了订金40000元整，后续于3月7日告知设计师房子不打算装修了而提出退款，但是设计师以第一季度绩效考核为由告知是否可以4月初退款，我方选择同意。我方4月2日再次主动询问退款情况，设计师告知让把订金条送回，我方于4月3日亲自将押金条送到业之峰公...",
+        "status": 7,
+        "timestamp": "2025-04-21",
+        "url": "https://tousu.sina.com.cn/complaint/view/17382123306/?sld=47dd9c3a89424e8c799f5651132cbca7",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1745199233"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17382046715",
+        "title": "业之峰公司虚假宣传诱导欺诈，以承诺书和返点优惠为噱头诱导交付6万订金后拒绝退款。",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,依法追究责任,退款,加强对平台的管理",
+        "issue": "退款问题,虚假宣传,服务欺诈,收费问题,欺骗消费者",
+        "comment_id": "tousu_complaint_34842349",
+        "summary": "业之峰装饰公司以“排雷五不签”宣传承诺书及返点优惠为噱头，诱导消费者预先支付高额订金（于2025年3月16日及3月30日累计支付6万元：分别为未明确提供详细设计方案及准确报价前收取2万订金，并通过返点活动，诱惑消费者又支付4万元）。并承诺“签约前不满意可无条件退款”。然而后续流程中业主发现报价，增项，合同条款等存...",
+        "status": 7,
+        "timestamp": "2025-04-18",
+        "url": "https://tousu.sina.com.cn/complaint/view/17382046715/?sld=a3194e40d964bdb99f0a90567e2ff82f",
+        "share_amount": 1,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1744962622"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17381787006",
+        "title": "订金退还",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款",
+        "issue": "不予退款,未履行7天无理由退货",
+        "comment_id": "tousu_complaint_34582640",
+        "summary": "本人于2025年3月20日和业之峰北京二公司设计师王茜签了装修订金协议，同时交了4万订金并开了收据，收据上手写标记如果不合作7天无理由全额退款并按了手印。3月24日我们告知对方取消合作退还4万订金，对方同意办理，并且收据原件本人按王茜要求退给了她，她也要了我的账户信息等，截止4月10日王茜领导答应最后退款日也没...",
+        "status": 7,
+        "timestamp": "2025-04-11",
+        "url": "https://tousu.sina.com.cn/complaint/view/17381787006/?sld=dbe1782d95640c70840e23899a1e83e8",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1744319519"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17379773436",
+        "title": "欺诈消费者，强制消费",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退费",
+        "issue": "欺骗消费者,收费问题,合作商户不诚信",
+        "comment_id": "tousu_complaint_32569070",
+        "summary": "装修公司作为乙方，损害甲方消费者权益，不仅对甲方消费者实施了欺诈行为，还强行要求消费者支付超出合同总额费用。更为甚者，在12月14日采取了停工的极端手段，胁迫消费者缴纳远超合同约定的装修款项。甲方消费者已累计多次支付合同总金额90505元中的73829元，占总金额的82%。根据合同，2月6日为装修工程的最终交付日期...",
+        "status": 4,
+        "timestamp": "2025-02-05",
+        "url": "https://tousu.sina.com.cn/complaint/view/17379773436/?sld=4e2700770295435779bda0bde4779515",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1738763776"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17379281189",
+        "title": "房屋水电改造线路问题",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "解释,退费,修复故障",
+        "issue": "产品质量问题",
+        "comment_id": "tousu_complaint_32076823",
+        "summary": "线路改造电压不足，一路只有150kw，几个插座没电，还跳闸。",
+        "status": 4,
+        "timestamp": "2025-01-15",
+        "url": "https://tousu.sina.com.cn/complaint/view/17379281189/?sld=47c4a24e4c2fa035481fe8aec461449b",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1736923596"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17377944205",
+        "title": "南通业之峰对客户承诺不实",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理",
+        "issue": "合作商户不诚信,售后不及时,产品质量问题,虚假宣传",
+        "comment_id": "tousu_complaint_30739839",
+        "summary": "于2024年6月签订合同，装修接近尾声，提前要求业主签字，但后续收尾工作已经持续一个月无人处理，每天都是踢皮球，“好的”等敷衍解释，完全没有承诺可言，今天拖明天，明天拖后天。诉求是：立刻解决没有完成的工作：地板补漆  地砖抛光  门晃 封门口电箱 补墙漆 电闸 吊顶补胶 浴室门槛修补。",
+        "status": 4,
+        "timestamp": "2024-11-29",
+        "url": "https://tousu.sina.com.cn/complaint/view/17377944205/?sld=ad61d010313655da9d560844845d92d0",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1732868127"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17375482613",
+        "title": "装修时长拖了3年仍未完工",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,修复故障",
+        "issue": "产品质量问题,售后不及时",
+        "comment_id": "tousu_complaint_28278209",
+        "summary": "装修3年了，电路不通、空调不好用、新风不好用，墙面开裂，联系售后处理，一个月了没给答复！",
+        "status": 4,
+        "timestamp": "2024-08-27",
+        "url": "https://tousu.sina.com.cn/complaint/view/17375482613/",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1724742123"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17374373429",
+        "title": "业之峰装饰公司（昭通分公司）言而无信，视合同为废纸，出尔反尔说话不算数",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,公平给出解释,加强对平台的管理,改善服务,履行合约,赔偿损失,按期交付",
+        "issue": "态度恶劣,欺骗消费者,虚假宣传,赔偿问题,合作商户不诚信,服务效率,推诿扯皮,单方面毁约,信守承诺",
+        "comment_id": "tousu_complaint_27169025",
+        "summary": "我家于2024年2月16日与业之峰装饰公司（昭通分公司）沃尔玛店签订了装修合同，总价为160***（装修过程中又增加了6000多），全包，包括沙发，床，餐桌，窗帘等家具，合同约定工期为4个月，也就是2024年6月27日完成，明确付款方式为前期80%，中期15%，最后5%为双方验收合格满意后交付，截止2024年4月6日已支付前期80%和中...",
+        "status": 4,
+        "timestamp": "2024-07-11",
+        "url": "https://tousu.sina.com.cn/complaint/view/17374373429/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1720676296"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17373223287",
+        "title": "与济南业之峰装饰工程有限公司3月9号签订装修合同，现装修公司已单方停工",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "赔偿,改善服务,开发票",
+        "issue": "价格问题,装修工程停滞",
+        "comment_id": "tousu_complaint_26018883",
+        "summary": "与济南业之峰装饰工程有限公司24年3月9号签订装修合同，\n截止目前项目进行到刷乳胶漆阶段，已收费32W+，现在增项还是不断，恶意条款较多，现装修公司已单方停工5天；\n24年4月，业之峰在基础装修阶段，恶意增项近2W元；\n24年5月17日，业之峰再次在「卧室门」项上，提出因门体超高，增项1000元+，我方已拒绝接受增项，装修...",
+        "status": 4,
+        "timestamp": "2024-05-18",
+        "url": "https://tousu.sina.com.cn/complaint/view/17373223287/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1716013287"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17372905389",
+        "title": "峰子伟装饰装修退款",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退款,退费",
+        "issue": "欺骗消费者,虚假宣传,广告促销误导消费,售后服务质量,产品质量问题",
+        "comment_id": "tousu_complaint_25700985",
+        "summary": "天津峰子伟装饰，交2.8万块钱，最开始说不满意可以退，虚假宣传，后用合同说一分钱不\n给退。半年装修方案没有完成，本地口碑太差，公司员工流动量太大不稳定（我原来见到所有人包括店长都不在了）。综合上诉原因，想要退款。",
+        "status": 4,
+        "timestamp": "2024-05-02",
+        "url": "https://tousu.sina.com.cn/complaint/view/17372905389/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1714659865"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17372524775",
+        "title": "关于北京业之峰装饰非法扣押客户订金及主材款拒不归还的投诉 ",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "依法追究责任,退款,退费",
+        "issue": "服务欺诈",
+        "comment_id": "tousu_complaint_25320371",
+        "summary": "1、本人田新，于2023年3月19日、31日分别支付业之峰装饰装修订金48200元、主材款人民币10000元。后因收到所装修房屋进行市政上下水改造通知，双方约定于2024年3月停暖后开展相关工作。\n2、2024年3月23日，业之峰设计师、工长、管家前往我家进行实地测量、排雷。期间因客厅、卧室地砖订货面积明显高于我家房本建筑面积（...",
+        "status": 4,
+        "timestamp": "2024-04-13",
+        "url": "https://tousu.sina.com.cn/complaint/view/17372524775/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1713021879"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17371177806",
+        "title": "在业之峰装饰有限公司潍坊分公司签订装修合同 未如约按照合同装修且找不到公司老板",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_23973402",
+        "summary": "2021年10月21号在业之峰装饰有限公司潍坊分公司总共交了22000元 其中包含2000元订金以及两万元定金 结果付款完毕后装修公司迟迟未动工且出现资金断裂导致无法装修 事后联系公司一直未得到解决且找不到具体负责人 最后签订装修合同的原公司倒闭且不退款 未按合同履行合约 要求退还20000",
+        "status": 4,
+        "timestamp": "2024-01-24",
+        "url": "https://tousu.sina.com.cn/complaint/view/17371177806/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1706097891"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17370519792",
+        "title": "房屋漏水",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,修复故障,免费维修,赔偿经济损失",
+        "issue": "产品质量问题",
+        "comment_id": "tousu_complaint_23315360",
+        "summary": "整装装修，在装修过程中发现卫生间顶部出现漏水渗水问题，工程是从六月份开始到现在还没解决，服务态度懒散缓慢，拖到现在十二月份，目前我们在外面租房，对我们造成了经济损失，要求赔偿和维修。还要我们打工剩余程款。",
+        "status": 4,
+        "timestamp": "2023-12-20",
+        "url": "https://tousu.sina.com.cn/complaint/view/17370519792/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1703054467"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17369635301",
+        "title": "没有刷地固，没有包隔音棉，合同写的伟星水管用的别的牌子！",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款,赔偿",
+        "issue": "欺骗消费者",
+        "comment_id": "tousu_complaint_22430869",
+        "summary": "群里问了隔音棉包了没有，说包了，然后去现场看，结果就口那塞两块保温棉，如果不细心，砖都镶上了就看不见了！欺诈消费者！\n地固墙固都没刷，辛亏发现的早，要不地砖镶完根本就看不见了！\n合同写的用的伟星水管，用的别的牌子的水管！",
+        "status": 4,
+        "timestamp": "2023-11-05",
+        "url": "https://tousu.sina.com.cn/complaint/view/17369635301/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1699195257"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17368653796",
+        "title": "装修质量及售后问题",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "道歉,免费维修,赔偿",
+        "issue": "产品质量问题",
+        "comment_id": "tousu_complaint_21449364",
+        "summary": "1，安全问题。卫生间火线铜丝裸露在外面，有触电隐患。地面线管中全是积水，极容易短路。\n2，工程质量问题，墙面不平整，阳角斜度达到10%!管道设计不合理，下水道易堵塞。定制衣柜变形。\n3，施工进度问题。工期违约，合同约定的赔偿不兑现。\n4，资质问题。未展示施工人员从业资质证书。\n5，售后问题。以上问题反馈客服，...",
+        "status": 4,
+        "timestamp": "2023-09-14",
+        "url": "https://tousu.sina.com.cn/complaint/view/17368653796/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1694651920"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17368169678",
+        "title": "交定金承诺送床垫，现在完工3个月床垫迟迟不给送",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,送货",
+        "issue": "虚假宣传",
+        "comment_id": "tousu_complaint_20965246",
+        "summary": "2022年11月6日缴纳2万元定金，业之峰设计师承诺从一张价值2000元以上的床垫，在2022年12月24日缴纳8万元的装修款，在2023年5月下旬硬装结束并缴纳尾款，此时按照业之峰设计师意思床垫已经安排发货，后续沟通中发现床垫并未发货，现已交涉俩月有余，当初答应的赠品迟迟未见，目前已有两日联系不到设计师，往业之峰兑现当...",
+        "status": 4,
+        "timestamp": "2023-08-18",
+        "url": "https://tousu.sina.com.cn/complaint/view/17368169678/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1692343828"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17367818279",
+        "title": "业之峰设计合同霸王条款，没有履行能力，还拒绝退款",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_20613847",
+        "summary": "本人于2022年9月6日与贵州业之峰创艺装饰工程有限公司签订设计协议，一次性支付设计费服务费16000元，在接受服务过程中发现该经营者涉违反《合同行政监督管理办法》第四条、第五条、第七条、第八条、第九条、第十四条规定。《价格非法行为行政处罚规定》第九条规定。经营者至今未完成服务内容，本人向经营者提出退款，经...",
+        "status": 4,
+        "timestamp": "2023-07-31",
+        "url": "https://tousu.sina.com.cn/complaint/view/17367818279/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1690750008"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17367344075",
+        "title": "合同私自发生变更不告知业主，实际面积和装修面积相差过大，也不支持退款退费",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退款,退费",
+        "issue": "虚假宣传,合作商户不诚信",
+        "comment_id": "tousu_complaint_20139643",
+        "summary": "，图一为本人签收的预签合同，图二为公司内部的装修细则，图一中的合同完完全全没有注明面积的情况下，要求我按照合同面积90平来进行全包圆计算，目前签订正式合同无果，相关部门查实。在待签订正式合同的一年期间，公司变更版本不周知用户，如此重大条款也在预签合同中标注模棱两可字样，现本人已走法律诉讼流程，决定...",
+        "status": 4,
+        "timestamp": "2023-07-04",
+        "url": "https://tousu.sina.com.cn/complaint/view/17367344075/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1688422650"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17367213376",
+        "title": "业之峰十年质保虚假宣传，入住3个月浴室柜开裂厕所反味均说人为，不处理",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款,赔偿,道歉,作出处罚",
+        "issue": "客服不处理,服务不到位,价格问题,未履行保价承诺,三包问题",
+        "comment_id": "tousu_complaint_20008944",
+        "summary": "2022年10月委托业之峰装修12月竣工，23年4月入住，不到3个月浴室柜开裂，说是人为泡水拒绝保修。\n实际浴室柜使用过程有挡水条，根本不会泡水，产品品控极差，出现问题推脱责任，售后无门，虚假宣传，要求维修换货并赔偿",
+        "status": 4,
+        "timestamp": "2023-06-29",
+        "url": "https://tousu.sina.com.cn/complaint/view/17367213376/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1687772582"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17366330280",
+        "title": "乱收费，不退",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退费",
+        "issue": "欺骗消费者,退款问题",
+        "comment_id": "tousu_complaint_19123540",
+        "summary": "当初说收取18000千元，随时可退，家里老人过去就交了，交的时候没有任何合同和收据，现在我们去看装修细节，觉得不合适，就打算退费。现在业之峰中北镇店，设计师张茜，总是拖时间，告诉我们等她有时间再联系。现在需要投诉，并原封不动退回18000千元。",
+        "status": 7,
+        "timestamp": "2023-05-07",
+        "url": "https://tousu.sina.com.cn/complaint/view/17366330280/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "uid": 0,
+        "created_at": "1683456833"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/tech/hmapp/user_default.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17365837483",
+        "title": "快速退款",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_18630743",
+        "summary": "今年3月17日，我来到天津滨海开发区业之峰咨询房子装修。工作人员说交2000元先锁定装修折扣，同时可参加活动，领取奖品，也反复说后期不装修可无条件随时退款，没有时间限制，所以就交了2000元。然后我又走了两家装修公司，最后选定了其它公司并于18日下午申请让他们退回2000元，但到现在也未收到退款，请帮忙处理，尽快...",
+        "status": 4,
+        "timestamp": "2023-04-09",
+        "url": "https://tousu.sina.com.cn/complaint/view/17365837483/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1681014853"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17365671312",
+        "title": "北京业之峰北五环店出售通体大理石瓷砖实为普通抛釉砖欺诈消费者",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款,赔偿,道歉,作出处罚,改善服务",
+        "issue": "欺诈消费者",
+        "comment_id": "tousu_complaint_18464572",
+        "summary": "投诉北京业之峰北五环旗舰店销售的通体大理石瓷砖实为普通抛釉砖欺诈消费者。\n\n地点：北京业之峰北五环旗舰店二层瓷砖选材区\n\n事件经过：我们跟业之峰签的是4.0的整装，店内提供的瓷砖说明写的是通体大理石瓷砖（有照片），我们选择了一款品牌为蒙娜丽莎的瓷砖，贴完砖后发现只是普通抛釉砖，没有通体砖特有的胚体和砖表...",
+        "status": 4,
+        "timestamp": "2023-03-30",
+        "url": "https://tousu.sina.com.cn/complaint/view/17365671312/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "uid": 0,
+        "created_at": "1680147057"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/tech/hmapp/user_default.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17365515716",
+        "title": "商家不按合同办事",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退费,发货",
+        "issue": "欺骗消费者,赔偿问题,合作商户不诚信",
+        "comment_id": "tousu_complaint_18308976",
+        "summary": "2022年3月份，我去业之峰咨询，当时业之峰设计师倪清承诺，只要交够8000元设计费，可以赠送汉斯格雅牌恒温花洒和杜拉维特牌马桶，然后我和业之峰签订了装修合同，并开始了接下来的装修工程。照片为合同详情，按照业之峰说法，我们可以在方案A和方案B中自选\n\n2022年下半年，我在业之峰选购花洒和马桶的主材时，主动向设计...",
+        "status": 4,
+        "timestamp": "2023-03-21",
+        "url": "https://tousu.sina.com.cn/complaint/view/17365515716/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1679310327"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17363884344",
+        "title": "无条件退还定金",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,道歉,退款",
+        "issue": "欺骗消费者,退款问题",
+        "comment_id": "tousu_complaint_16677604",
+        "summary": "2019.3月华夏家博会上业之峰工作人员把我领到展台对装修进行咨询，当时定什么时候能装，他们的套餐合不合适我不确定，他们工作人员反复说可交500定金先锁定装修折扣，同时可领一个奖品，反复强调后期不装修可无条件退款，没有时间限制，不需回礼品所以交了定金。工作人员在收宣传单上写上了无条件退款。后期由于房子情况...",
+        "status": 4,
+        "timestamp": "2022-12-20",
+        "url": "https://tousu.sina.com.cn/complaint/view/17363884344/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1671547505"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17363027195",
+        "title": "业之峰隐性增项，巧立收费明目，项目经理恐吓威胁",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退费,解除合同",
+        "issue": "威胁恐吓,收费问题,虚假宣传,虚假收费",
+        "comment_id": "tousu_complaint_15820455",
+        "summary": "在北京业之峰北五环签的装修合同，装修过程中工长不断要求增项，列出了很多事先装修公司以及工长根本未提前告知的项目，而且收费价格异常不合理。要求解决，项目经理恐吓说，不配合还是你们吃亏。\n业之峰是强盗公司吗？\n虚假收费：地梁本身只做了4米多，按10米，200/米收费。冲筋面积只有100，收了131，很多面积未减去。...",
+        "status": 4,
+        "timestamp": "2022-11-13",
+        "url": "https://tousu.sina.com.cn/complaint/view/17363027195/",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "uid": 0,
+        "created_at": "1668314200"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/tech/hmapp/user_default.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17363017366",
+        "title": "1.不按收费标准收费，客户发现后还不退费。\n2.已经两个月了，扔不退费。",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,道歉,退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_15810626",
+        "summary": "1.不按收费标准收费，客户发现后还不退费。\n2.已经两个月了，扔不退费。",
+        "status": 4,
+        "timestamp": "2022-11-12",
+        "url": "https://tousu.sina.com.cn/complaint/view/17363017366/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1668259686"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17362908852",
+        "title": "唐山友谊北路（业之峰装饰公司）欺诈消费者，墙体内部全是烂线后接头，涉及安全隐患。",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款,更换,免费维修",
+        "issue": "欺骗消费者,服务欺诈,赔偿问题,产品质量问题",
+        "comment_id": "tousu_complaint_15702112",
+        "summary": "本人2018年在唐山友谊北路业之峰装饰公司选择该公司来装修，2022年发现内部电源线用的不是本公司产品，皆为烂线，电线管内有多个连接头，非常危险，造成生命安全隐患，合同明确不允许线路有接头和其他连接线，对我们造成极大的困扰，有工长录音为证，该公司人员故意损坏他人财物，属于职务内，视频录音还包含多项故意损...",
+        "status": 4,
+        "timestamp": "2022-11-08",
+        "url": "https://tousu.sina.com.cn/complaint/view/17362908852/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1667889718"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17362755858",
+        "title": "天津著名装饰公司业之峰欺诈消费者并后续沟通继续敷衍消费者",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,道歉,退款",
+        "issue": "态度恶劣,欺诈,欺骗消费者,收费问题",
+        "comment_id": "tousu_complaint_15549118",
+        "summary": "21年我们去“天津业之峰诺华装饰有限公司“咨询装修，邹唯肖老师设计费为1万元，需要我们提前支付定金2000元，我们于2021年8月22日支付定金2000元，定金优惠协议中承诺若不满意，订金可退。经与设计师两次沟通装修想法和明确装修预算后，我们需要支付剩余8000元，设计师才能出初版设计图，于是我们于2021年9月4日支付8000...",
+        "status": 4,
+        "timestamp": "2022-11-01",
+        "url": "https://tousu.sina.com.cn/complaint/view/17362755858/",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1667286623"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17361498270",
+        "title": "石家庄业之峰装饰承诺定金无条件可以退款，目前拖了三个月不退款",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退款,退费",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_14291530",
+        "summary": "在2022年3月份石家庄业之峰举办的消费者权益活动日去参观了一下，我反复强调了我是有装修打算，第一次来看装修公司，我们肯定会再去多看几家装修公司的，最后不一定选你们，他们再三说如果定了其他装修公司，这个一万五千元的定金可以随时退，一个星期一定能原路退回，我才放心给了钱，我在6月2日跟他们说我们找到更合适...",
+        "status": 7,
+        "timestamp": "2022-08-27",
+        "url": "https://tousu.sina.com.cn/complaint/view/17361498270/",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "uid": 0,
+        "created_at": "1661563236"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/tech/hmapp/user_default.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17361180578",
+        "title": "业之峰装饰，南四环店，售后服务跟不上，已报修将近一个月，无人联系解决问题。",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,改善服务,专员解答,修复故障",
+        "issue": "售后服务,售后服务质量",
+        "comment_id": "tousu_complaint_13973838",
+        "summary": "洗澡间因装修时工人施工作业失误，导致下水管道排水有问题，最终导致墙体渗水，墙面起皮，去年冬季修补后，于今年夏季再次出现墙面起皮现象。\n根据业之峰的报修规则，在保修期内，我于今年7月17日线上报修，客服简单回复已反馈相关部门后，至8月13日期间再无人与我取得联系，同时，我与去年冬季负责售后的工程部人员微信...",
+        "status": 4,
+        "timestamp": "2022-08-13",
+        "url": "https://tousu.sina.com.cn/complaint/view/17361180578/",
+        "share_amount": 0,
+        "comment_amount": 2,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "created_at": "1660324024"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17360581394",
+        "title": "欺诈消费者，用料严重不符",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款",
+        "issue": "欺骗消费者",
+        "comment_id": "tousu_complaint_13374654",
+        "summary": "2022年7月份在济南业之峰全包圆装饰，选了1199一平米的梦幻小镇套餐，结果只有家具是梦幻小镇里的，花了42800元，剩下的装修均与梦幻小镇无关，就连橱柜都改了材质，啥999/1099/1199一平米只是家具不同，其他都一样。",
+        "status": 4,
+        "timestamp": "2022-07-17",
+        "url": "https://tousu.sina.com.cn/complaint/view/17360581394/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1658041096"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17360140762",
+        "title": "业之峰装修太差劲",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退费",
+        "issue": "欺骗消费者",
+        "comment_id": "tousu_complaint_12934022",
+        "summary": "基装选择了业之峰，橱柜选了欧派全屋定制，签合同之前是舔狗，签完合同他是爷。一个室内面积不到80平的装了整整8个月，装完各种问题，状况百出，什么木工泥瓦专业自由团队，纯粹扯淡，衣柜总长1.88米，能和墙面凸出来1CM，窗台石还能装的一高一低，所有的问题没有在装修的时候进行纠正，结果我搬进去之后，业之峰的处理...",
+        "status": 4,
+        "timestamp": "2022-06-27",
+        "url": "https://tousu.sina.com.cn/complaint/view/17360140762/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 2,
+        "is_upvote": false,
+        "created_at": "1656335701"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17360135442",
+        "title": "业之峰增减项霸王条款，业主成为业之峰及其合作黑心商待宰羔羊",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "道歉,解释,退费,改善服务,专员解答,修复故障,免费维修",
+        "issue": "欺骗消费者,收费问题,虚假宣传,合作商户不诚信,广告促销误导消费,产品质量问题",
+        "comment_id": "tousu_complaint_12928702",
+        "summary": "一、虚假宣传。业之峰诺华整装1299套餐，号称一价全包，纯属虚假宣传，其所谓套餐总价高达近15万元，却仅仅包含最基本的墙地面基础工程和少量柜体，基本家装项目故意漏项严重，装出来基本算工装档次，如果想要得到比较正常的家装效果，那么套餐外增项将是一笔不菲的额外投入。\n二、增减项霸王条款，非法侵占消费者利益。...",
+        "status": 4,
+        "timestamp": "2022-06-27",
+        "url": "https://tousu.sina.com.cn/complaint/view/17360135442/",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1656321389"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17358711679",
+        "title": "业之峰施工质量不合格，无人解决问题，态度恶劣",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,道歉,更换,免费维修,赔偿",
+        "issue": "态度恶劣,威胁恐吓,欺骗消费者,退款问题,服务欺诈,合作商户不诚信,售后服务,服务效率,售后服务质量,产品质量问题",
+        "comment_id": "tousu_complaint_11504939",
+        "summary": "业之峰装修施工，墙砖、地砖不平，不对缝，空鼓，多处瓷砖损坏，卫生间地漏不是最低点，且多次维修不合格，公司验收糊弄事儿，欺骗消费者验收合格。工长无责任心，在发现问题时辱骂消费者。且公司存在乱收费现象。现诉求一次性赔偿24000元，将明显问题处维修。业之峰公司无负责人出面处理，仅派无任何权限员工出面，态度...",
+        "status": 4,
+        "timestamp": "2022-04-21",
+        "url": "https://tousu.sina.com.cn/complaint/view/17358711679/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1650528359"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17358059830",
+        "title": "售前虚假宣传，售后服务差",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,解释,改善服务",
+        "issue": "欺骗消费者,收费问题",
+        "comment_id": "tousu_complaint_10853090",
+        "summary": "1.装修还要客户拿3.44%税（不知道是否合理）2.售前用低价收钱，售后由客户补差价。3.服务对接差：售后只要不是买的公司合作商产品，安装对接麻烦4.售前承诺除个性化需要拿钱，别的均包含，但是实际情况不是这样",
+        "status": 4,
+        "timestamp": "2022-03-17",
+        "url": "https://tousu.sina.com.cn/complaint/view/17358059830/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1647493226"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17357785233",
+        "title": "业之峰装修质量差宣传虚假",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,退费,修复故障",
+        "issue": "虚假宣传,产品质量问题",
+        "comment_id": "tousu_complaint_10578457",
+        "summary": "业之峰装饰公司在未签合同前承诺各种所谓优质服务，並承诺不用业主操心保证装修质量。而事实上，1、装修各环节都要业主到场，甚至所有进料要业主自己验收签字；2021年11月19日入住后出现了多种质量问题，比较严重的是1）装修管线漏水，造成楼下住户损失；报修后並没有及时处理。2）地面不平，装修验收胡弄，通过打胶找平...",
+        "status": 4,
+        "timestamp": "2022-03-01",
+        "url": "https://tousu.sina.com.cn/complaint/view/17357785233/",
+        "share_amount": 1,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1646133148"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17357693067",
+        "title": "装修公司效率低，导致工期严重延后",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,公平给出解释,改善服务",
+        "issue": "服务效率",
+        "comment_id": "tousu_complaint_10486291",
+        "summary": "地点：西安\n门店：业之峰曲江店\n内容：从10月份工地基础施工到现在，几乎没有任何动作。施工期间催款效率特别高，基础施工完成后主材部分，由于业之峰工作安排问题，迟迟没有主材安装，国庆到现在几乎没有任何实际成果。原本签合同前说整体工期三个月就可以完工，目前仅干等时间已经4个多月，减去西安疫情封城一个月和春...",
+        "status": 4,
+        "timestamp": "2022-02-24",
+        "url": "https://tousu.sina.com.cn/complaint/view/17357693067/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1645661993"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17357645773",
+        "title": "业之峰内的欧派橱柜设计缺陷，调味拉篮无法使用",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,加强对平台的管理,修复故障,送货",
+        "issue": "欺骗消费者,虚假宣传,服务欺诈,产品质量问题",
+        "comment_id": "tousu_complaint_10438997",
+        "summary": "欧派橱柜调味拉篮左侧无空间，东西无法取放",
+        "status": 4,
+        "timestamp": "2022-02-21",
+        "url": "https://tousu.sina.com.cn/complaint/view/17357645773/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "uid": 0,
+        "created_at": "1645420921"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/tech/hmapp/user_default.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17357602302",
+        "title": "油烟机残次品，以次充好",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,更换",
+        "issue": "产品质量问题",
+        "comment_id": "tousu_complaint_10395526",
+        "summary": "业之峰全包圆项目里的油烟机问题:油烟机多处破损，装在墙面的一面变了形，都是不容易发现的。(一开始他们送错了油烟机款式，后来协商他们说原来的型号没了给我们另一个型号的，结果送来的是残次品，而且都破损在不容易发现的地方，故意欺骗消费者)我们发现后第一时间反馈了问题，他们一拖再拖，没有实际行动。",
+        "status": 4,
+        "timestamp": "2022-02-18",
+        "url": "https://tousu.sina.com.cn/complaint/view/17357602302/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "uid": 0,
+        "created_at": "1645177415"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/tech/hmapp/user_default.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17355176064",
+        "title": "虚假宣传，增项工长随意收费，公司无人管理",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,依法追究责任,解释,改善服务",
+        "issue": "欺诈,欺骗消费者,收费问题,虚假宣传,服务欺诈",
+        "comment_id": "tousu_complaint_7969289",
+        "summary": "1、签署水电一口价合同，为断点改造，工长施工后称项目为全屋改造，要求额外收费一万九千余元，公司宣传水电一口价，加价三倍赔偿，工长并不承认，涉嫌公司虚假宣传，低价吸引客户，后期高收费。\n2、项目工长随意报价，多次要求公司提供工程标准价格无果，部门之间账户推诿，无人处理。\n3、工长虚增工程量，原称将门洞降...",
+        "status": 4,
+        "timestamp": "2021-09-28",
+        "url": "https://tousu.sina.com.cn/complaint/view/17355176064/",
+        "share_amount": 1,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "uid": 0,
+        "created_at": "1632824082"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/tech/hmapp/user_default.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17355058399",
+        "title": "虚假宣传",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,依法追究责任",
+        "issue": "欺诈,虚假宣传",
+        "comment_id": "tousu_complaint_7851624",
+        "summary": "4月签订装修合同，直至今日未完工，设计师答应装修内容未兑现，目前联系不到人，装修公司反馈该设计师离职，装修公司不作为，恶意延期，不处理客诉",
+        "status": 4,
+        "timestamp": "2021-09-21",
+        "url": "https://tousu.sina.com.cn/complaint/view/17355058399/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "uid": 0,
+        "created_at": "1632207852"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/tech/hmapp/user_default.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17354873753",
+        "title": "北京业之峰装饰 质量差，售后服务态度也差劲",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,道歉,解释,改善服务",
+        "issue": "虚假宣传,售后服务,售后服务质量,产品质量问题,售后不及时",
+        "comment_id": "tousu_complaint_7666978",
+        "summary": "墙壁开裂，质量极差，服务极差。图片只是家中墙壁开裂的其中之一，还有至少10多处更多的裂痕。从今年6月份打客服电话保修至今，服务极差，并且没有任何后续进展，之前发过一次黑猫投诉，商家也没处理。这次再发，如还没有处理，我会每隔一段时间发起一次投诉。",
+        "status": 4,
+        "timestamp": "2021-09-10",
+        "url": "https://tousu.sina.com.cn/complaint/view/17354873753/",
+        "share_amount": 1,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "uid": 0,
+        "created_at": "1631243778"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/tech/hmapp/user_default.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17354726221",
+        "title": "要求业之峰按合同赔付延期款项13500元及利息。",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,依法追究责任",
+        "issue": "赔偿问题",
+        "comment_id": "tousu_complaint_7519447",
+        "summary": "我们于2021年1月20日在业之峰北五环旗舰店，与业之峰签订家装合同，合同竣工日期为2021年5月20日，工程期限95日（工作日）。实际竣工日期为2021年7月27日，该日期业之峰项目管家和设计师均认可。业之峰项目管家计算的延期天数45日（工作日），按照双方补充签署的“零”延迟承诺书规定，延期赔偿为每日300元（该数额为设计...",
+        "status": 4,
+        "timestamp": "2021-09-01",
+        "url": "https://tousu.sina.com.cn/complaint/view/17354726221/",
+        "share_amount": 1,
+        "comment_amount": 1,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1630475411"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17354400196",
+        "title": "业之峰售后服务不作为",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "解释,改善服务,修复故障,免费维修",
+        "issue": "售后服务,售后服务质量,产品质量问题",
+        "comment_id": "tousu_complaint_7193422",
+        "summary": "2019年上半年装修，没过1年，墙壁开始出现裂纹，打电话业之峰客服提出了保修，后服务人员联系，建议过段时间维修，后又由于疫情等原因，维修再次延后。今年6月，再次致电客服提出维修，然一直到月底也没有人员联系，中间多次电话联系客服。到7月1号终于服务人员联系，按照要求通过微信发送了家中裂痕部位图片，并且说尽...",
+        "status": 4,
+        "timestamp": "2021-08-11",
+        "url": "https://tousu.sina.com.cn/complaint/view/17354400196/",
+        "share_amount": 0,
+        "comment_amount": 2,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1628659702"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17354256790",
+        "title": "业之峰旗下全包圆装饰装修新房后，地板三处隆起，售后不管",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理",
+        "issue": "售后不及时",
+        "comment_id": "tousu_complaint_7050016",
+        "summary": "去年12月份，在业之峰公司旗下全包圆装饰装修了我的新房，于7月29号发现木地板有三处隆起，影响正常走路，十分严重。\n7月29号致电全包员售后客服，反馈以后客服代表明确告知24到48小时内会有专员和我联系，7月30号再次致电全包圆客服，依旧被客服告知会24到48小时内有专员和我联系，7月31号依旧无人联系我。",
+        "status": 4,
+        "timestamp": "2021-07-31",
+        "url": "https://tousu.sina.com.cn/complaint/view/17354256790/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "created_at": "1627706025"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17354239919",
+        "title": "巴州业之峰欺诈消费者",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_7033145",
+        "summary": "2020年11月18日，我和家人前往巴州业之峰大宅建筑装饰工程有限公司了解装修活动，期间设计师花言巧语催签合同，并保证在我们的预算范围内工程量预估充分，承诺后期不增项，因此在没有具体装修图纸装修方案、合同也没有材料报价清单约束的情况下，我们缴纳了一万元装修定金，之后过了几天量完房出的设计图。等了半年，于2...",
+        "status": 4,
+        "timestamp": "2021-07-30",
+        "url": "https://tousu.sina.com.cn/complaint/view/17354239919/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1627591130"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17354033786",
+        "title": "业之峰装饰集团西安分公司",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "退款",
+        "issue": "不予退款,虚假宣传",
+        "comment_id": "tousu_complaint_6827037",
+        "summary": "本人于20年11月在业之峰订装修，交了10000定金，在5月份参观考察完他们施工工地后以宣传不符，施工质量堪忧提出退订，工作人员先承诺6月下旬退款，未退，后联系又称7月15前退款，至今未退。",
+        "status": 4,
+        "timestamp": "2021-07-15",
+        "url": "https://tousu.sina.com.cn/complaint/view/17354033786/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1626325044"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17353953895",
+        "title": "该商家三番五次通过网络虚拟号拨打推销电话骚扰我",
+        "cotitle": "业之峰装饰",
+        "couid": "1885408113",
+        "appeal": "快速处理,停止骚扰,公平给出解释,加强对平台的管理",
+        "issue": "电话骚扰",
+        "comment_id": "tousu_complaint_6747146",
+        "summary": "该企业三番五次用网络虚拟电话号，拨打推销电话给我，并且每次都播放的同一个电话录音，我之前试图听完录音想等人工接通之后告知对方不希望再接到电话推广，但无奈每次录音的最后都是让添加业之峰的微信。该企业之前在业界还是挺知名的，并且口碑和质量还不错，但是这番轮番推销电话的轰炸，完全毁掉了在消费者心中的好...",
+        "status": 4,
+        "timestamp": "2021-07-09",
+        "url": "https://tousu.sina.com.cn/complaint/view/17353953895/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1625807784"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    }
+  ]
+}

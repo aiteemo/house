@@ -1,0 +1,1414 @@
+{
+  "couid": "5075621390",
+  "timestamp": "20260618_172718",
+  "info": {
+    "name": "被窝整装",
+    "avatar": "https://tvax1.sinaimg.cn/crop.0.0.1080.1080.180/005xuMZ8ly8grme6r5dl1j30u00u040a.jpg?KID=imgbed,tva&Expires=1781785415&ssig=fkqV5h04B%2F",
+    "eval_points": "4",
+    "valid_amt": "60",
+    "replied_amt": "47",
+    "completed_amt": "36",
+    "valid30d": "4",
+    "reply30d": "0",
+    "complete30d": "0",
+    "bkrpt": "0",
+    "is_noexp": false,
+    "pzxfmember": "0",
+    "is_virtual": "0"
+  },
+  "complaints": [
+    {
+      "main": {
+        "sn": "17398697170",
+        "title": "套餐内门锁质量问题",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款",
+        "issue": "产品质量问题,售后服务,售后不及时",
+        "comment_id": "tousu_complaint_51492804",
+        "summary": "本人于【2022年6月】与【北京被窝装饰有限公司】签订全屋装修套餐服务，入户门及配套指纹锁为该装修套餐标配包含产品，指纹锁为被窝装修合作第三方品牌产品，整体系购自被窝装修，并非自行外购。\n产品正常使用仅两年多，无任何进水、摔砸、外力损坏、人为改装情况，近期突然出现指纹、密码、解锁功能失效/电机故障/无法...",
+        "status": 4,
+        "timestamp": "2026-06-17",
+        "url": "https://tousu.sina.com.cn/complaint/view/17398697170/?sld=954651f9d963791cfb6544d38c135312",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1781684010"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17398613248",
+        "title": "北京被窝装饰有限公司涉嫌消费欺诈，违反且拒不履行合同约定",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "赔偿,维修,改善服务",
+        "issue": "联系不到客服,假货,违反合同约定,擅自更换材料",
+        "comment_id": "tousu_complaint_51408882",
+        "summary": "本人于2025年3月28日在北京被窝装饰有限公司回龙观店与北京被窝装饰有限公司签订《室内装饰装修工程施工合同》。合同条款4.10约定“水路改造保修十年”“乙方按照合同内所包含的施工项目和主材产品的工程施工质量、质保相关条款约定承担维保义务，对施工质量问题及商品质量问题所造成的损失承担责任”；合同附件约定“客户与...",
+        "status": 4,
+        "timestamp": "2026-06-15",
+        "url": "https://tousu.sina.com.cn/complaint/view/17398613248/?sld=e865616dc6910d8619da176586f294c3",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1781508737"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17398409737",
+        "title": "被窝装修质量太次，拒不赔偿！",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,依法追究责任,道歉,退款,退费,退货退款,赔偿",
+        "issue": "退款问题,产品质量问题,售后服务质量,电话骚扰,私闯民宅",
+        "comment_id": "tousu_complaint_51205371",
+        "summary": "最初对被窝充满了期待，感觉贝壳旗下应该问题不大，基础施工、木作衣柜、电器等都在一个渠道，各个环节能协商方便。但是，当橱柜衣柜开始安装时，问题接二连三出现。\n我第一次去看，发现橱柜尺寸不对，燃气管道包管做小了，就用厚厚的胶水来补；其他管道包管包小了，吊柜突出；吊柜没有装背板等等。\n我把问题反馈给被窝...",
+        "status": 4,
+        "timestamp": "2026-06-10",
+        "url": "https://tousu.sina.com.cn/complaint/view/17398409737/?sld=b1a67e7e7eee7102219010b3b38442cc",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1781066591"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17398180296",
+        "title": "五月签合同至今未开工，被窝整装扣钱太霸道",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退费,退款,改善服务",
+        "issue": "退款问题,赔偿问题",
+        "comment_id": "tousu_complaint_50975930",
+        "summary": "五月初被窝整装回龙观店签了整装合同，预计5.25开工，已支付60％项目款，但项目至今未开工，现要求取消合作并全额退款，被窝要求扣除20%违约金，但项目尚未开始，未使用被窝一砖一瓦，未造成任何实际损失，扣除违约金属企业霸王条款不合理。要求3个工作日内全额退款，并修改固定合同要求扣除20%的违约金条款，与民法典87...",
+        "status": 4,
+        "timestamp": "2026-06-04",
+        "url": "https://tousu.sina.com.cn/complaint/view/17398180296/?sld=2764b3b274d006c5ab1bcd9805f491aa",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1780571318"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17397007095",
+        "title": "北京被窝装饰有限公司 装修质量严重缺陷",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,免费维修,修复故障,赔偿",
+        "issue": "欺骗消费者,售后服务,售后服务质量,售后不及时,产品质量问题",
+        "comment_id": "tousu_complaint_49802729",
+        "summary": "2022年装修完成后，在厨房和走廊过道等处的灯口，一到饭点就有油烟冒出，走廊离得很远仍是如此，经自己检查，应该是烟道被装修时破坏而未修复，同时水电管走线破坏了墙壁也未修复导致，所以属于装修质量缺陷，被窝一直以超过2年来搪塞，售后人员就是不处理，而且要200元上门服务费，认为跟他们没关系，但又讲不清是什么...",
+        "status": 4,
+        "timestamp": "2026-05-09",
+        "url": "https://tousu.sina.com.cn/complaint/view/17397007095/?sld=836a9a664276dcd2facc5193d4344b50",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1778297062"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17396527219",
+        "title": "恶意拖延拒绝退还意向金",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款",
+        "issue": "退款问题,广告促销误导消费,售后不及时",
+        "comment_id": "tousu_complaint_49322853",
+        "summary": "投诉对象：被窝整装（贝壳旗下）\n投诉人：谢超凡\n涉及金额：人民币27827.24元\n事发时间：2025年4月2日签约、4月18日提出退款\n事发地址：被窝整装(南四环旗舰店) 丰台区马家堡东路189号福海棠华苑2-4底商\n事实与理由：\n本人于4月2日通过贝壳找房购房时，被该中介及驻场的被窝整装销售诱导消费，支付了装修意向金。交易过...",
+        "status": 4,
+        "timestamp": "2026-04-28",
+        "url": "https://tousu.sina.com.cn/complaint/view/17396527219/?sld=84e39223f6975f40e91b10d2df8b58aa",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1777343747"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17395569373",
+        "title": "被窝整装",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "专员解答,快速处理",
+        "issue": "赔偿问题,售后服务,买到假货",
+        "comment_id": "tousu_complaint_48365007",
+        "summary": "一、时间：2025年12月10日。地点：北京市。事件经过：\n1、2025年7月6日与被窝整装签订机械学院510室整装合同，同年7月26日，在被窝订购门窗暖套餐（包含入户门、阳台系统窗和屋内暖气）共计21500元，套餐内包含的系统窗为帕豪尊享87平齐系列。\n2、2025年12月10日，被窝首次提供编号为SDBZ-MC240****的帕豪尊享87平齐系统...",
+        "status": 7,
+        "timestamp": "2026-04-07",
+        "url": "https://tousu.sina.com.cn/complaint/view/17395569373/?sld=62eaaa4bff5c2b0de798f62e30944abe",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "created_at": "1775541816"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17395405765",
+        "title": "被窝整装偷工减料，以次充好，售后拖拉",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退费",
+        "issue": "产品质量问题,合作商户不诚信,欺骗消费者",
+        "comment_id": "tousu_complaint_48201399",
+        "summary": "我与2023年与被窝整装签订装修合同，装修完成之后。发现装修公司不按合同施工，以次充好，偷工减料。合同中约定的冷风机没安装，橱柜品牌等等存在问题",
+        "status": 4,
+        "timestamp": "2026-04-03",
+        "url": "https://tousu.sina.com.cn/complaint/view/17395405765/?sld=2906564a8ac9ca4cbba8850391cbe8ed",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1775201045"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17392171693",
+        "title": "被窝装修质量堪忧",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退费,修复故障",
+        "issue": "赔偿问题,售后服务,产品质量问题",
+        "comment_id": "tousu_complaint_44967327",
+        "summary": "选择被窝B3装修套餐，于2025年3月12日竣工。入住不到一年，于2025年11月和2025年12月分别出现两块地砖产生裂痕现象。以及阳台定制橱柜潮气严重，发霉长毛，出现板材变形现象。对被窝装修质量产生严重怀疑。要求被窝更换其他品牌全屋地砖，或者进行一万元赔偿。",
+        "status": 7,
+        "timestamp": "2026-01-08",
+        "url": "https://tousu.sina.com.cn/complaint/view/17392171693/?sld=6d48c028b9aa671fa5bb9336ddc660a9",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1767786700"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17391636309",
+        "title": "被窝整装因施工不规范、施工与设计不一致、产品质量有问题以及退款遭遇不合理对待",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款,退费,赔偿损失",
+        "issue": "欺骗消费者,退款问题,虚假宣传,服务欺诈,赔偿问题,产品质量问题",
+        "comment_id": "tousu_complaint_44431943",
+        "summary": "2025年7月30号，基于对北京被窝装饰有限公司的虚假宣传（选择被窝，省事省心，安心的承诺），选择被窝家装，交了14415元的管理费用，希望省事省时省心，但还是被装修过程中存在的诸多质量问题伤心、闹心、烦心，被窝把我家的装修工程外包给工长陈克银，有装修管家、设计师跟进，但工人施工过程中的监督形同虚设，施工不...",
+        "status": 7,
+        "timestamp": "2025-12-24",
+        "url": "https://tousu.sina.com.cn/complaint/view/17391636309/?sld=a964ffeb79ffa91d71276cdae37a4a76",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1766568917"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17389546344",
+        "title": "被窝家装以次充好，违反合同",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,公平给出解释,退费,退款,解释,退货退款,改善服务,道歉",
+        "issue": "赔偿问题,服务欺诈,售后不及时,产品质量问题,退款问题,售后服务质量",
+        "comment_id": "tousu_complaint_42341978",
+        "summary": "25年3月和被窝公司签订了装修及全屋定制家具的合同，合同中约定提供的全屋定制家具为欧派铂尼思整装大家居；25年8月全屋定制安装完成，10月发现柜子存在严重质量问题；多次和被窝公司交涉无果。后经被窝系统查询，被窝实际提供的不是合同中约定的欧派铂尼思整装大家居，而是欧派贝美链（被窝），经欧派官网查询，并没有...",
+        "status": 7,
+        "timestamp": "2025-11-04",
+        "url": "https://tousu.sina.com.cn/complaint/view/17389546344/?sld=a263974011c60267d78c83daa4e29a56",
+        "share_amount": 1,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1762212279"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17389183040",
+        "title": "被窝装修合作商违约并造成消费者人身伤害",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "道歉,解释,赔偿",
+        "issue": "服务欺诈,服务效率,合作商户不诚信,造成消费者人身伤害",
+        "comment_id": "tousu_complaint_41978674",
+        "summary": "我于2025年签约整装项目，约定于2025.10.25配送床垫。10.24客服致电，确认次日安排，承诺中午之前送达。10.25上午，工人表示最早只能晚六七点配送。消费者表示不接受，因为已另安排行程，要求协商调整，按约定当日中午之前，如无法送达则不再等待，另改次周周六配送。\n对方在明知来不及的情况下，通过欺骗的方式，拖延时...",
+        "status": 7,
+        "timestamp": "2025-10-25",
+        "url": "https://tousu.sina.com.cn/complaint/view/17389183040/?sld=473b738e24bf20061439bef635f6238f",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1761397505"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17388119014",
+        "title": "被窝提供的索菲亚橱柜 装修一年后甲醛甲苯超标严重",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "道歉,快速处理,依法追究责任,公平给出解释,退费,退货退款",
+        "issue": "欺骗消费者,售后服务,虚假宣传,退款问题,产品质量问题",
+        "comment_id": "tousu_complaint_40914648",
+        "summary": "关于被窝装修及索菲亚橱柜欺诈销售导致严重污染并要求“退一赔三”\n\n致：被窝装修公司\n\n\n本人就贵司在为我提供家装及橱柜服务过程中，因虚假宣传、提供不合格产品，构成消费欺诈，并导致我宅室内空气严重超标一事，向贵司提出严正投诉，并依据《中华人民共和国消费者权益保护法》第五十五条，正式提出 “退一赔三”的赔偿要...",
+        "status": 6,
+        "timestamp": "2025-09-29",
+        "url": "https://tousu.sina.com.cn/complaint/view/17388119014/?sld=d3b3fa74b8159803216cafc94155ceae",
+        "share_amount": 1,
+        "comment_amount": 0,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "created_at": "1759142643"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17386915381",
+        "title": "北京被窝与贝壳找房联合出具违规装修改造方案诱导签约",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款,赔偿",
+        "issue": "虚假宣传,虚假承诺诱导签约",
+        "comment_id": "tousu_complaint_39711015",
+        "summary": "北京被窝与贝壳找房联合，在购房前出具虚假承诺，出具违规装修改造方案，诱导签约，装修改造方案中多处存在违背建设部令第110号《住宅室内装饰装修管理办法》要求，造成所购房屋无法实现购房时承诺的功能分区、空间布置，无法满足使用需求。",
+        "status": 6,
+        "timestamp": "2025-08-29",
+        "url": "https://tousu.sina.com.cn/complaint/view/17386915381/?sld=88606807aedfa7af7e4d1334f61d2677",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1756434290"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17383138289",
+        "title": "被窝装修不退首付款",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_35933923",
+        "summary": "尊敬的相关部门/平台：\n您好！我要投诉北京被窝装饰有限公司在退款方面存在的问题。\n我于2025年3月31日，因有装修需求，在链家签约服务中心（常营）经链家中介介绍与被窝装修公司接触，当时工作人员承诺[正式施工合同签署前，甲方有权以任何理由要求解除整装首期款合同并要求退还已支付全部首期工程款，即简易工程款的20...",
+        "status": 7,
+        "timestamp": "2025-05-20",
+        "url": "https://tousu.sina.com.cn/complaint/view/17383138289/?sld=ef4bcd22a28a0d76ad24107d6f819b40",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1747670138"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17379037827",
+        "title": "被窝家装恶意收费，消费者要求免费打猫眼！",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退货退款,修复故障,免费维修,改善服务",
+        "issue": "收费问题",
+        "comment_id": "tousu_complaint_31833461",
+        "summary": "在被窝家装订购了步阳金诺德防盗门，说好的上门打猫眼，现在需要其上门服务了，该公司要求给200块钱才能有这项服务，恶意收费。现在要求：1.马上上门打猫眼，我拒绝付费。2.如果该公司一定要收钱才给打猫眼，我要退货退款！",
+        "status": 7,
+        "timestamp": "2025-01-07",
+        "url": "https://tousu.sina.com.cn/complaint/view/17379037827/?sld=3aa11e1aa7c4a21b8cd05c84c104c776",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1736256808"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17377114640",
+        "title": "被窝整装设计师前期承诺负责灯具安装，现在灯具到场后，拒绝安装，并要求我付费安装。",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,道歉,改善服务,免费安装,赔付延期款",
+        "issue": "收费问题,服务欺诈",
+        "comment_id": "tousu_complaint_29910274",
+        "summary": "整装设计师前期答应，有我们业主负责购买灯具，如果灯具厂家不负责安装，则由被窝来安装。并在整个装修期间，装修团队所有人（包括设计师本人），并没有告知我，灯具的安装是需要额外付费的。现阶段灯具到货，设计师突然说要付费，我理解是在恶意增项，坐地起价。\n\n如果他们没有承诺负责安装，我甚至不会选在现在购买的...",
+        "status": 4,
+        "timestamp": "2024-11-01",
+        "url": "https://tousu.sina.com.cn/complaint/view/17377114640/?sld=f1d0da3537277c366c68cd242b19c4ac",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "created_at": "1730452844"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17376726872",
+        "title": "全额退款",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款,退费",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_29522506",
+        "summary": "首期款已付，合同图纸已草签，正式合同未签，对对方付款方式不满意，要求退款",
+        "status": 7,
+        "timestamp": "2024-10-18",
+        "url": "https://tousu.sina.com.cn/complaint/view/17376726872/?sld=5e733cf2c6fd8bf9954f0bfa6e5f794b",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1729250862"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17376637192",
+        "title": "被窝整装退款难",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_29432826",
+        "summary": "被窝整装解约后，未按时退款，一直拖延不处理",
+        "status": 7,
+        "timestamp": "2024-10-15",
+        "url": "https://tousu.sina.com.cn/complaint/view/17376637192/?sld=dc5fee1d12f3a53faf3f923f4963d9c4",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1728977899"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17376476437",
+        "title": "被窝整装交定金前说的是随时可以退款，申请退款时却拖拖拉拉不给退",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款,退费",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_29272071",
+        "summary": "在链家博泰国际店二手房签约时，被窝整装的设计师来宣传推广装修服务，当时给简单讲了一下装修方案，给了一个宣传手册，写了可以随时退款，讲方案的时候我也特意问了退款的相关事宜，承诺的都是随时可退，当时觉得反正随时能退，也有装修的想法，就先付款了。现在考虑到家里小孩还小，冬天装修耗时长，不打算装修了，申...",
+        "status": 6,
+        "timestamp": "2024-10-09",
+        "url": "https://tousu.sina.com.cn/complaint/view/17376476437/?sld=48fa2d5f065da5bee043ddba92b0dd01",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1728440091"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17376198878",
+        "title": "被窝整装订金不退还",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款,退费",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_28994512",
+        "summary": "在链家买的房子，中介强推旗下被窝整装，原本不打算找装修公司打算自装，中介软磨硬泡让先交个订金（月底完成业绩），了解一下被窝的服务，对比一下再决定用不用，不用的话退还订金。6月27日交订金27672.18元，7月3日第一时间告诉中介不用整装要求退订金，7月6日和设计师也确认了，7月23日又要求我在群里说一句明确一下...",
+        "status": 6,
+        "timestamp": "2024-09-26",
+        "url": "https://tousu.sina.com.cn/complaint/view/17376198878/?sld=060517a69e5c29480c5fd03c242213dc",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1727318127"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17376197653",
+        "title": "北京被窝装饰有限公司 退款",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款,赔偿,道歉",
+        "issue": "不予退款,虚假宣传",
+        "comment_id": "tousu_complaint_28993287",
+        "summary": "本人于2024.06.09在链家地产（旧宫新苑店）拟定北京被窝装饰有限公司（被窝）进行装修，在被窝工作人员的引导下支付了意向金￥22448.00元，未签订合同；并承诺不选择被窝意向金可退（承诺15个工作日内退款到账）。于2024.09.01正式告知被窝工作人员按被窝承诺退意向金。至今（2024.09.25）已超15个工作日，退款未到账，...",
+        "status": 6,
+        "timestamp": "2024-09-26",
+        "url": "https://tousu.sina.com.cn/complaint/view/17376197653/?sld=0d6fe6f230b5ade970ff570187896d33",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "created_at": "1727315991"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17376047829",
+        "title": "被窝拒绝退还首期工程款",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_28843463",
+        "summary": "本人老婆，王彦妍，于2024年5月12日与北京被窝装饰有限公司，签订了装修合同并缴费了预计装修总金额的20%作为首期工程款，共计31609.08圆，大写人民币叁万壹仟陆佰零玖元零捌分。在之后的设计沟通阶段，多轮沟通后发现无法满足我们需求，本人立刻找北京被窝装饰有限公司协商，要求解除装修合约并退还缴纳的工程款，对方...",
+        "status": 7,
+        "timestamp": "2024-09-20",
+        "url": "https://tousu.sina.com.cn/complaint/view/17376047829/?sld=f2d05e059e29a45bee20b72be939f6c1",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1726769948"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17376024227",
+        "title": "诱导交定金后，被窝整装不退定金",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款",
+        "issue": "退款问题,服务欺诈,服务效率",
+        "comment_id": "tousu_complaint_28819861",
+        "summary": "在北京被窝整装北四环旗舰店被销售一顿忽悠交了定金：20838元（当天交可以参加活动，晚了就没有了），第二天不想在被窝装修了，销售马上变脸说钱不可能退。设计师一开始私下说是可以退的，实际退的时候，销售表示不退",
+        "status": 7,
+        "timestamp": "2024-09-19",
+        "url": "https://tousu.sina.com.cn/complaint/view/17376024227/?sld=e46cb6074cf3226c8560cd12b96384e7",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1726710578"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17376023891",
+        "title": "在被窝整装回龙观旗舰店预定装修，退订不退订金",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款,退费",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_28819525",
+        "summary": "7月28日在被窝整装回龙观旗舰店参观预定装修，缴纳订金23046元，后续设计师上门测量出方案，但是后续沟通过程中发现被窝整装不符合我的需求，所以和销售经理郭静沟通退款，对方态度很强硬，拒绝退款，说他们没有退款这一说，这太霸王条款了，没有给我产生实际的劳动，我也没用他家装修为什么不能退款？",
+        "status": 7,
+        "timestamp": "2024-09-19",
+        "url": "https://tousu.sina.com.cn/complaint/view/17376023891/?sld=6741a06bfa9d3bae4e83d47ecd4c9aa8",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1726709849"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17375546292",
+        "title": "被窝整装未退款：交定金后申请退款遭拒",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_28341888",
+        "summary": "我于2024年6月27日在被窝整装交了2万元定金，本无装修意向，申请退款两个月不予受理，诉求是立即退款。",
+        "status": 7,
+        "timestamp": "2024-08-30",
+        "url": "https://tousu.sina.com.cn/complaint/view/17375546292/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1724977461"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17375504409",
+        "title": "项目实施严重拖期，施工质量令人发指",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款",
+        "issue": "欺诈,欺骗消费者,退款问题,虚假宣传,赔偿问题,服务效率,产品质量问题",
+        "comment_id": "tousu_complaint_28300005",
+        "summary": "水电改造为了节省管线，偷懒不开槽，在实体墙上穿孔螺线过墙，严重违规；现场选材宣传的多年质保，在合同里除水电和整体衣柜其他一律不是一年就是2年质保，严重欺诈；防水工序偷工减料，导致闭水试验漏水到楼下；地砖铺贴不合格，导致铺了凿，凿了铺，导致严重拖期，楼下邻居投诉；工长一个人同时承接9个以上的项目，现...",
+        "status": 7,
+        "timestamp": "2024-08-28",
+        "url": "https://tousu.sina.com.cn/complaint/view/17375504409/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1724821859"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17375361529",
+        "title": "被窝装修收款信息不明确，报价不合理，欺骗消费者定金可退，但实际申请无人理会",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款,退费",
+        "issue": "欺骗消费者,退款问题,收费问题",
+        "comment_id": "tousu_complaint_28157125",
+        "summary": "2024年6月16号用链家买房刚签约完被窝销售就进来收2万定金，承诺不用可退，到合同里成了首付工程款，定金为空，之后在2024年8月21号报价和6月16号不一致，产品服务也不一致，要求退2万定金",
+        "status": 7,
+        "timestamp": "2024-08-22",
+        "url": "https://tousu.sina.com.cn/complaint/view/17375361529/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1724303899"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17375292142",
+        "title": "退款不及时，商家不诚信",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,道歉,退款,退费",
+        "issue": "欺骗消费者,退款问题,合作商户不诚信,服务效率,售后不及时",
+        "comment_id": "tousu_complaint_28087738",
+        "summary": "买房的时候说交的设计定金可退款，现在房本到手，一个半月时间定金没退下来，商户承诺100%可退，消费用户的信任，希望及时退款，不然会同时其他渠道投诉。",
+        "status": 7,
+        "timestamp": "2024-08-19",
+        "url": "https://tousu.sina.com.cn/complaint/view/17375292142/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1724058013"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17375204138",
+        "title": "贝壳联合被窝家装套路客户签订被窝装修订金",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款",
+        "issue": "客服不处理,不予退款",
+        "comment_id": "tousu_complaint_27999734",
+        "summary": "2024年07月14日通过贝壳买了一套二手房，最终成交价格是406.7万，中介提到卖家最低410万可以出，有另外一个优惠卖家正好也要装修如果两家一起签单的话可以406.7万成交，另外需要交32154元装修定金，这样卖家也能节省32154元装修钱，后通过和卖家沟通，卖家根本没有装修需求。感觉自己被套路，后要求退款，联系被窝客服和...",
+        "status": 7,
+        "timestamp": "2024-08-15",
+        "url": "https://tousu.sina.com.cn/complaint/view/17375204138/",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "created_at": "1723721374"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17375059225",
+        "title": "投诉：北京被窝装饰有限公司施工不规范/工人没素质/客服和售后推卸责任不理睬用户。",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款,赔偿,道歉,作出处罚,换货",
+        "issue": "客服不处理,工程质量问题,员工素质问题,售后不处理问题",
+        "comment_id": "tousu_complaint_27854821",
+        "summary": "我于2023年11月18日就大兴区一房屋与北京被窝装饰有限公司(统一社会信用代码：911*****MA0040GN9T)签订装修合同。\n施工期间该公司并未按照合同约定设计图施工，且后期施工口头沟通方案经常因“工人好干活”而更改，最终活干完了我不得不接受。\n现装修工程已交付于我，装修工程又发生了一些问题，我找该公司售后，售后说没...",
+        "status": 6,
+        "timestamp": "2024-08-09",
+        "url": "https://tousu.sina.com.cn/complaint/view/17375059225/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1723210341"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17375048111",
+        "title": "当时答应橱柜门用多层实木，交完费后告知只有颗粒板，也不给赔偿",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退费",
+        "issue": "欺骗消费者",
+        "comment_id": "tousu_complaint_27843707",
+        "summary": "在谈合同之前，我们要求橱柜门用多层实木板，他们说只有少部分颜色可以选，我们说可以，结果装修开始了，设计厨柜了告知我们没有多层，门板都用颗粒板，",
+        "status": 7,
+        "timestamp": "2024-08-09",
+        "url": "https://tousu.sina.com.cn/complaint/view/17375048111/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1723184503"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17374989348",
+        "title": "退款流程太久，审批领导失联",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_27784944",
+        "summary": "被窝答应8月2日前退款，一直没到账，等到8月6日消费者多番沟通，才发现内部的退款流程没走完，如果我不追问，那么这笔退款一直都不会到账。追要退款期间态度很好，就是一直不作为。领导休假就失联，没有职业精神，也没有备案处理。",
+        "status": 7,
+        "timestamp": "2024-08-07",
+        "url": "https://tousu.sina.com.cn/complaint/view/17374989348/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1722995935"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17374842584",
+        "title": "被窝施工质量存在严重问题，新房装修一年卫生间和厨房墙砖出现大面积空鼓起翘开裂",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "免费维修,赔偿",
+        "issue": "施工质量问题",
+        "comment_id": "tousu_complaint_27638180",
+        "summary": "2023年2月与被窝家装签订装修合同，3月份开始施工，施工过程中被窝公司泥瓦工极不负责，地砖验收环节，发现铺贴的全屋地砖出现非常多的空鼓，无奈敲掉重铺，并因此更换了工长和瓦工。但是卫生间和厨房墙砖也是该瓦工施工，当时验收未发现异常，结果一年后2024年5月，发现卫生间墙砖已出现大面积空鼓起翘开裂，厨房也出现...",
+        "status": 7,
+        "timestamp": "2024-07-31",
+        "url": "https://tousu.sina.com.cn/complaint/view/17374842584/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1722421835"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17374690345",
+        "title": "被窝安装的窗子有严重质量问题，退款时被窝提出各种不合理不公平的限制条件",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_27485941",
+        "summary": "与被窝装饰公司签订装修合同。被窝安装的两个窗子有大缝和大洞，从23年11月提出问题后，一直拖延不解决。多次催促后仍未解决问题。后经协商，被窝退款，自行购置安装。安装完毕后，要求退款时，被窝提出各种不合理不公平的限制条件，不满足他们的条件不给退款。多次催促仍不给退款。",
+        "status": 7,
+        "timestamp": "2024-07-24",
+        "url": "https://tousu.sina.com.cn/complaint/view/17374690345/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1721832749"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17374518636",
+        "title": "答应退款，一直未退成功",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,加强对平台的管理,退款",
+        "issue": "欺诈,退款问题,服务欺诈,合作商户不诚信",
+        "comment_id": "tousu_complaint_27314232",
+        "summary": "4月2号交款，交款前答应未开工无理由可退、说无任何违约金，目前不考虑此公司装，5月16号提退的、至今没有退成功，这样公司不知道怎么培育的管理，说的跟做的的永远对不上",
+        "status": 6,
+        "timestamp": "2024-07-17",
+        "url": "https://tousu.sina.com.cn/complaint/view/17374518636/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1721216167"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17374403297",
+        "title": "扣押钱款不予退还",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "公平给出解释,加强对平台的管理,退款",
+        "issue": "欺诈,欺骗消费者,退款问题,虚假宣传,服务欺诈,合作商户不诚信",
+        "comment_id": "tousu_complaint_27198893",
+        "summary": "1. 虚假宣传“退意向金，十日到账”，已经一个半月未退款。\n2. 2024.5.28提出退意向金，公司退款流程是半个月，中间与相关人员沟通多次，均回复会尽快，最后一次保证2024.7.12前退款，至今仍未退款。该企业存在欺骗消费者的问题，是严重的欺诈行为，申请退款并进行投诉举报。",
+        "status": 7,
+        "timestamp": "2024-07-12",
+        "url": "https://tousu.sina.com.cn/complaint/view/17374403297/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1720775444"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17374237569",
+        "title": "施工与设计不一致，有外包情况",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,道歉,退款",
+        "issue": "服务欺诈",
+        "comment_id": "tousu_complaint_27033165",
+        "summary": "装修施工问题，设计与施工不一致，有外包情况，完工时间",
+        "status": 6,
+        "timestamp": "2024-07-05",
+        "url": "https://tousu.sina.com.cn/complaint/view/17374237569/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1720157089"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17373904999",
+        "title": "被窝整装4万意向订金19天未退！",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款,退费",
+        "issue": "退款问题,虚假宣传",
+        "comment_id": "tousu_complaint_26700595",
+        "summary": "投诉公司：北京被窝装饰有限公司；\n投诉地址：被窝整装（回龙观店）霍营西路与龙锦三街交叉口；\n投诉内容：投诉被窝整装公司，虚假宣传“退意向金，十日到账”，要求他们立刻退还定金39583.92元。被窝官宣“退意向金，十日到账”为虚假宣传。本人5.31日申请退款装修意向金，到6.19日未退，离宣传承诺退款时效已经过去9日。\n...",
+        "status": 7,
+        "timestamp": "2024-06-19",
+        "url": "https://tousu.sina.com.cn/complaint/view/17373904999/",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "created_at": "1718799298"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17373549371",
+        "title": "合同欺诈，不公平竞争，扰乱市场秩序",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款,作出处罚,改善服务",
+        "issue": "不予退款,合同欺诈",
+        "comment_id": "tousu_complaint_26344967",
+        "summary": "#被窝# 被窝家装欺骗消费者，用链家买房刚签约完被窝销售就进来收2万定金，承诺不用可退，到合同里成了首付工程款，定金为空，金额和实付金额也对不上，打客服电话要求退钱一直推诿让销售联系我，至今没有回复，合同欺诈，流程违法，请链家履行监管职责",
+        "status": 7,
+        "timestamp": "2024-06-03",
+        "url": "https://tousu.sina.com.cn/complaint/view/17373549371/",
+        "share_amount": 1,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1717391488"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17373134901",
+        "title": "被窝整装退款困难",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款",
+        "issue": "欺诈,欺骗消费者,退款问题",
+        "comment_id": "tousu_complaint_25930497",
+        "summary": "2024年1月25号通过链家购买一套二手房，当时谈好了房款，并且原业主给我3万多块钱的装修意向金（打到被窝整装APP我的账户里）。近几年不打算装修，想把这个钱要回来，跟被窝整装的工作人员多次沟通无果，他们拒绝的理由是怕原业主也找他们退款。我现在挺担心的，我账户里的钱别人怎么能看见，别人怎么能申请退款 ，还能...",
+        "status": 7,
+        "timestamp": "2024-05-14",
+        "url": "https://tousu.sina.com.cn/complaint/view/17373134901/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1715658018"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17372754545",
+        "title": "投诉被窝家装意向金不退",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "加强对平台的管理,退款,退费",
+        "issue": "欺骗消费者,退款问题,服务欺诈",
+        "comment_id": "tousu_complaint_25550141",
+        "summary": "2024年3月18日在链家购买二手房时，被窝家装说有个双签活动，付意向金可以免设计费，并承诺不满意，意向金可退，链家的中介可以直接操作。\n后在跟设计师和客户经理沟通时，多次不满意，在4月2号首次跟链家的中介提出，让他操作退款。链家中介在中协调，说可以沟通。中间的报价过程依旧不是很顺利。\n4.7号，再次跟链家中...",
+        "status": 6,
+        "timestamp": "2024-04-25",
+        "url": "https://tousu.sina.com.cn/complaint/view/17372754545/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1714014908"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17371753704",
+        "title": "主材照片与实际不符，欺骗消费者，事故发生后推诿，处理效率极低",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,更换",
+        "issue": "欺骗消费者,虚假宣传,售后服务,服务效率",
+        "comment_id": "tousu_complaint_24549300",
+        "summary": "被窝整装旗舰CBD店（北京）主材木地板照片与实际效果图不符，欺骗消费者，事后客户要求更换木地板，但厂家和店面推诿，处理效率极低，客户微信群不回消息",
+        "status": 7,
+        "timestamp": "2024-03-04",
+        "url": "https://tousu.sina.com.cn/complaint/view/17371753704/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1709477587"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17371288083",
+        "title": "被窝假装产品质量有问题，无售后",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理",
+        "issue": "欺骗消费者,虚假宣传,售后服务,售后服务质量,产品质量问题",
+        "comment_id": "tousu_complaint_24083679",
+        "summary": "被窝假装350***装修竣工后发现全屋地砖斑驳，对方不承认产品质量问题，表示想维修就一个方案，出维修单，更换地砖，拆除所有柜子，再复原，但不能签维修合同，维修周期，维修效果都不能保证，维修费用和损失赔偿也不在解决方案中，店大欺客，营销时假宣传自己的品质和服务。",
+        "status": 7,
+        "timestamp": "2024-01-31",
+        "url": "https://tousu.sina.com.cn/complaint/view/17371288083/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1706663558"
+      },
+      "author": {
+        "title": "勇敢喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17371185873",
+        "title": "被窝整装-意向金退费难，承诺退指定账户后出尔反尔",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款,退款至我指定账户",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_23981469",
+        "summary": "我与家人于2023年10月21日在链家购买二手房，链家中介居间协商价格，除房价外由原房东账户支付装修意向金至被窝整装（链家自己的装修公司），收据付款人为我家人。房屋交易签约时经纪人承诺最终不选择被窝整装，该笔意向金可随时全额退款至我和家人手中。链家及被窝APP也承诺装修前10个工作日内退意向金，现我们决定退款...",
+        "status": 7,
+        "timestamp": "2024-01-25",
+        "url": "https://tousu.sina.com.cn/complaint/view/17371185873/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1706154145"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17370591070",
+        "title": "投诉被窝家装取消订单后不退意向金的问题",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_23386638",
+        "summary": "已向我家装修负责的设计师客户经理等人说明退款事项并达成一致，在退款过程经一系列审批后依旧无法退回，被压着不退，且数次在被窝平台投诉无果，客服无作为，",
+        "status": 7,
+        "timestamp": "2023-12-24",
+        "url": "https://tousu.sina.com.cn/complaint/view/17370591070/",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1703392331"
+      },
+      "author": {
+        "title": "友爱喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17370482192",
+        "title": "被窝装饰公司拖着不给退装修意向金",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,道歉,退款,退费",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_23277760",
+        "summary": "1. 我于2023年9月16日向被窝装饰有限公司交了第一笔装修意向金18561.01元，于9月28日交了第二笔装修意向金9907.87元。工作人员承诺可以随时退还我全额意向金。2. 11月23日我向该公司提出退还意向金，工作人员承诺20个自然日内退还给我所有意向金，但是到目前为止依然没有退费给我。3. 联系他们，他们就一直说在处理中，...",
+        "status": 7,
+        "timestamp": "2023-12-18",
+        "url": "https://tousu.sina.com.cn/complaint/view/17370482192/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1702889288"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17369975806",
+        "title": "浴室柜产生了2000元扣款，但是收到货以后，应该退回我1800元",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退费",
+        "issue": "欠款不给",
+        "comment_id": "tousu_complaint_22771374",
+        "summary": "我是被窝设计师，8月份从被窝离职，离职前有个工地浴室柜送错货了，暂时扣我2000元工资，等换货成功后，扣除200元物流费，剩下1800元会返还给我，到现在也没有返还",
+        "status": 4,
+        "timestamp": "2023-11-21",
+        "url": "https://tousu.sina.com.cn/complaint/view/17369975806/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1700567626"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17369274589",
+        "title": "整包装修及定制家具，通风3个月外加两次治理后，甲醛仍然超标",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款,赔偿",
+        "issue": "售后不及时,甲醛超标",
+        "comment_id": "tousu_complaint_22070157",
+        "summary": "1、本人与被窝装饰公司签订整包装修合同及定制家具合同，选定索菲亚定制家具，被窝装饰公司说明索菲亚板材甲醛等级属于国标ENF（最高级），并声明安装完成通风15天即可检测。 \n2、2023年6月2号定制家具完成，6月27号执行第一次检测，检测结果显示甲醛0.15~0.17mg/立方米，超过GB/T 18883-2002 《室内空气质量标准》0.08m...",
+        "status": 7,
+        "timestamp": "2023-10-18",
+        "url": "https://tousu.sina.com.cn/complaint/view/17369274589/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1697594740"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17368625117",
+        "title": "迟迟不退意向金 毫无信用",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款",
+        "issue": "退款问题",
+        "comment_id": "tousu_complaint_21420685",
+        "summary": "我在2023年8月27日正式和客户经理提出要求退款装修意向金，被窝APP明确写出退款时限不超过10天，然而截止到9月12日，迟迟不退款，客户经理找各种理由推脱；在APP平台上提出投诉，进度显示会有客服联系我，始终没有专属客服联系。办事效率如此之差，交定金前一直催着交钱，以优惠仅限当日的理由哄骗消费者，拿到钱之后退...",
+        "status": 7,
+        "timestamp": "2023-09-12",
+        "url": "https://tousu.sina.com.cn/complaint/view/17368625117/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1694508524"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/3.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17368339499",
+        "title": "被窝家装公司售后不作为！",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退费",
+        "issue": "售后服务",
+        "comment_id": "tousu_complaint_21135067",
+        "summary": "装修的电路有错，以及厨房吊顶问题。从2月9日反应，工作人员说很快来处理，过去4个月无音讯！直到6月13日，再次反应相关问题，答复是6月15日来上门处理。直到现在，8月28日！依旧没有任何人来处理反应的售后问题！装修故障包含电路，开关，厨房，客厅等多项故障！无人管，无人问，给公司反应也无人处理！",
+        "status": 6,
+        "timestamp": "2023-08-28",
+        "url": "https://tousu.sina.com.cn/complaint/view/17368339499/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1693153618"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17368230177",
+        "title": "北京被窝家装强拆施工，造成业主原始地暖破坏漏水，被窝拒绝理赔，并让业主自己维修",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,更换,修复故障,免费维修",
+        "issue": "赔偿问题,售后服务",
+        "comment_id": "tousu_complaint_21025745",
+        "summary": "事情经过：\n施工前业主多次提醒保留原有地暖，并告知工长和相关施工人员，施工前没有粘贴告示，电梯未做保护措施，相关摄像头未装，施工拆除过程中，钻穿业主家原有地暖，地暖压力表变成0，并且有明显漏水现象，工长没有发现和告知业主，业主发现后，告知先暂停施工，到现场工人还在施工，并且工长态度强硬，一直表达公...",
+        "status": 7,
+        "timestamp": "2023-08-22",
+        "url": "https://tousu.sina.com.cn/complaint/view/17368230177/",
+        "share_amount": 4,
+        "comment_amount": 0,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "created_at": "1692628246"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17368008715",
+        "title": "被窝整装装修定金退订不及时",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "退款",
+        "issue": "售后服务,售后服务质量,售后不及时",
+        "comment_id": "tousu_complaint_20804283",
+        "summary": "已经四周了，说好的两周退，已经过去这么长时间了，装修已经不要交订金，什么无理由退订，被装修公司恶心",
+        "status": 6,
+        "timestamp": "2023-08-10",
+        "url": "https://tousu.sina.com.cn/complaint/view/17368008715/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1691636793"
+      },
+      "author": {
+        "title": "洞察喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17366994198",
+        "title": "被窝整装承诺最后不选择他们服务可退款，但提出退款要求后已经半月有余扔拒不退款",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款,退费",
+        "issue": "态度恶劣,欺诈,欺骗消费者,退款问题,收费问题,服务欺诈",
+        "comment_id": "tousu_complaint_19789766",
+        "summary": "被窝整装承诺最后不选择他们服务可退款，但提出退款要求后已经半月有余扔拒不退款，欺骗消费者，态度恶劣",
+        "status": 7,
+        "timestamp": "2023-06-14",
+        "url": "https://tousu.sina.com.cn/complaint/view/17366994198/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1686735354"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17365532005",
+        "title": "装修质量非常差，希望一次一次解决问题",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,修复故障,免费维修",
+        "issue": "产品质量问题",
+        "comment_id": "tousu_complaint_18325265",
+        "summary": "装修质量非常差 家里的很多砖没多久 就脱落了，并且空转非常多 马桶也老出问题。还一直收费",
+        "status": 4,
+        "timestamp": "2023-03-21",
+        "url": "https://tousu.sina.com.cn/complaint/view/17365532005/",
+        "share_amount": 1,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "created_at": "1679388468"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/4.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17359305440",
+        "title": "平台提示认证失败",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理",
+        "issue": "平台认证问题",
+        "comment_id": "tousu_complaint_12098700",
+        "summary": "平台提示身份信息认证失败 可查询运营商实际信息是无误的，联系官方后多次反馈未解决也没给到具体答复   述求希望尽快处理",
+        "status": 4,
+        "timestamp": "2022-05-20",
+        "url": "https://tousu.sina.com.cn/complaint/view/17359305440/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 0,
+        "is_upvote": false,
+        "uid": 0,
+        "created_at": "1653035374"
+      },
+      "author": {
+        "title": "正义喵",
+        "avatar": "https://n.sinaimg.cn/tech/hmapp/user_default.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17358025036",
+        "title": "万链（被窝）装修公司拒不赔偿消费者房屋修缮费用",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "快速处理,退款,改善服务,修复故障,免费维修,赔偿损失",
+        "issue": "赔偿问题,售后服务,售后服务质量,产品质量问题",
+        "comment_id": "tousu_complaint_10818296",
+        "summary": "家中一套房子2020年10月-12月由被窝家装施工。被窝提供的欧雅PVC壁纸异味严重，2021年9月自费检测空气质量，主卧甲醛超标。22年2月底，在通风散味14个月后，一家三口（孩子1岁）搬过去住了2天，壁纸气味熏人，大人孩子明显感觉身体不适。投诉后，邮寄了壁纸小样给被窝售后，被窝售后闻到了味道。后通过电话沟通解决方案...",
+        "status": 4,
+        "timestamp": "2022-03-15",
+        "url": "https://tousu.sina.com.cn/complaint/view/17358025036/",
+        "share_amount": 0,
+        "comment_amount": 1,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "created_at": "1647333597"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    },
+    {
+      "main": {
+        "sn": "17357939300",
+        "title": "被窝家装公司提供的PVC劣质壁纸异味明显，消费者无法居住，还有自费解决",
+        "cotitle": "被窝整装",
+        "couid": "5075621390",
+        "appeal": "赔偿,维修",
+        "issue": "售后解决方案不满意",
+        "comment_id": "tousu_complaint_10732524",
+        "summary": "被窝家装公司（原名万科链家装修公司）提供的PVC劣质壁纸异味明显，消费者无法在房屋居住，已对身体健康和家庭财务造成影响，该气味三方（装修公司、壁纸厂家、空气治理机构）均已确认，是由壁纸产生的，与留在家中的壁纸小样气味一致。目前售后解决方案只承担撕除壁纸和重刷乳胶漆，定制家具、自购电器等需消费者承担，...",
+        "status": 4,
+        "timestamp": "2022-03-10",
+        "url": "https://tousu.sina.com.cn/complaint/view/17357939300/",
+        "share_amount": 0,
+        "comment_amount": 0,
+        "upvote_amount": 1,
+        "is_upvote": false,
+        "created_at": "1646902879"
+      },
+      "author": {
+        "title": "机灵喵",
+        "avatar": "https://n.sinaimg.cn/finance/235fa465/20230314/1.png"
+      }
+    }
+  ]
+}

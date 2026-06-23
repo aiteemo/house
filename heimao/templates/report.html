@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑猫投诉数据报告</title>
+    <script src="/static/echarts.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f7fa; color: #333; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 30px; }
+        .header h1 { font-size: 24px; margin-bottom: 5px; }
+        .header p { opacity: 0.8; font-size: 14px; }
+        .tabs { display: flex; background: #fff; border-bottom: 2px solid #e8e8e8; padding: 0 20px; overflow-x: auto; }
+        .tab { padding: 12px 20px; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; font-size: 14px; color: #666; transition: all 0.2s; }
+        .tab:hover { color: #667eea; }
+        .tab.active { color: #667eea; border-bottom-color: #667eea; font-weight: 600; }
+        .content { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .content.active { display: block; }
+        .stats-card { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .stats-title { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+        .stats-subtitle { color: #999; font-size: 13px; margin-bottom: 20px; }
+        .stats-row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .stat-box { flex: 1; min-width: 140px; text-align: center; padding: 16px; background: #f8f9fe; border-radius: 8px; }
+        .stat-box .value { font-size: 28px; font-weight: 700; color: #667eea; }
+        .stat-box .label { font-size: 13px; color: #888; margin-top: 4px; }
+        .charts-row { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+        .chart-box { flex: 1; min-width: 280px; height: 260px; background: #fff; border-radius: 8px; cursor: pointer; }
+        .list-card { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow: hidden; }
+        .list-header { padding: 16px 24px; background: #fafafa; border-bottom: 1px solid #eee; font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .list-header .filter-tag { display: inline-flex; align-items: center; gap: 4px; background: #667eea; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 400; }
+        .list-header .clear-filter { cursor: pointer; color: #667eea; font-size: 12px; font-weight: 400; text-decoration: underline; }
+        .list-header .clear-filter:hover { color: #764ba2; }
+        .list-table { width: 100%; border-collapse: collapse; }
+        .list-table th { text-align: left; padding: 12px 16px; background: #f8f9fe; font-size: 13px; color: #666; font-weight: 500; }
+        .list-table td { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; font-size: 13px; vertical-align: top; }
+        .list-table tr:hover td { background: #fafbff; }
+        .status-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .status-pending { background: #fff3e0; color: #e65100; }
+        .status-replied { background: #e3f2fd; color: #1565c0; }
+        .status-completed { background: #e8f5e9; color: #2e7d32; }
+        .empty { text-align: center; padding: 60px 20px; color: #999; }
+        .loading { text-align: center; padding: 60px 20px; color: #667eea; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>黑猫投诉数据报告</h1>
+        <p>数据来源：黑猫投诉平台 | 报告生成时间：<span id="genTime"></span></p>
+        <div style="margin-top:10px">
+            <label style="cursor:pointer;font-size:14px;opacity:0.9">
+                <input type="checkbox" id="bjFilter" onchange="render()" style="margin-right:6px">仅显示北京地区
+            </label>
+        </div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div id="panels"><div class="loading">加载中...</div></div>
+
+    <script>
+    let DATA = [];
+    let chartRendered = {};
+    let activeFilter = {};
+
+    function isBeijing(complaint) {
+        const m = complaint.main || {};
+        const text = (m.title || '') + (m.summary || '');
+        return text.includes('北京');
+    }
+
+    function filterComplaints(complaints) {
+        const el = document.getElementById('bjFilter');
+        if (!el || !el.checked) return complaints;
+        return complaints.filter(isBeijing);
+    }
+
+    function applyChartFilter(complaints, idx) {
+        const f = activeFilter[idx];
+        if (!f) return complaints;
+        if (f.type === 'category') return complaints.filter(c => classify(c.main ? c.main.issue : '', c.main ? c.main.title : '', c.main ? c.main.summary : '') === f.value);
+        if (f.type === 'reply') return complaints.filter(c => f.value === '已回复' ? (c.main && c.main.comment_amount > 0) : !(c.main && c.main.comment_amount > 0));
+        if (f.type === 'status') return complaints.filter(c => c.main && String(c.main.status) === f.value);
+        return complaints;
+    }
+
+    function init() {
+        fetch('/api/data?t=' + Date.now())
+            .then(r => r.json())
+            .then(d => { DATA = d; render(); })
+            .catch(() => {
+                document.getElementById('panels').innerHTML = '<div class="empty"><p>无法加载数据，请确保服务已启动</p></div>';
+            });
+    }
+
+    function classify(issue, title, summary) {
+        const text = (title || '') + (summary || '');
+        if (text.includes('增项')) return '增项问题';
+
+        const rules = [
+            ['增项问题', ['增项']],
+            ['工期延期', ['延期', '逾期未发货', '延期发货', '超时限未履约']],
+            ['产品质量', ['产品质量问题', '甲醛超标', '质量差', '货不对板', '三无产品', '产品质量']],
+            ['退款纠纷', ['退款问题', '不予退款', '退费']],
+            ['虚假宣传', ['虚假宣传', '广告促销误导消费', '诱导消费']],
+            ['服务态度', ['态度恶劣']],
+            ['服务欺诈', ['服务欺诈', '欺诈']],
+            ['售后服务', ['售后服务', '售后服务质量', '售后不及时', '服务不到位', '客服不处理', '客服态度差', '服务效率']],
+            ['价格收费', ['收费问题', '价格问题', '乱收费']],
+            ['合同纠纷', ['合同不规范', '霸王条款']],
+            ['赔偿问题', ['赔偿问题']],
+            ['合作商户', ['合作商户不诚信']],
+            ['其他', ['威胁恐吓', '电话骚扰', '逾期未发货', '设计错误', '优惠券问题', '不发货', '延期发货', '超时限未履约']]
+        ];
+        const tags = (issue || '').split(',').map(t => t.trim());
+
+        for (const [cat, keywords] of rules) {
+            if (tags.some(tag => keywords.some(k => tag.includes(k)))) return cat;
+        }
+
+        const hints = [
+            ['增项问题', ['增项']],
+            ['工期延期', ['延期', '拖延', '超期', '未按时', '逾期', '延迟']],
+            ['产品质量', ['质量', '发霉', '开裂', '破损', '甲醛', '异味', '色差', '变形', '生锈', '尺寸']],
+            ['服务态度', ['态度恶劣', '态度差', '推诿', '踢皮球', '挂电话']],
+            ['退款纠纷', ['退款', '退费', '退定金', '不退']]
+        ];
+        for (const [cat, words] of hints) {
+            if (words.some(w => text.includes(w))) return cat;
+        }
+
+        return '其他';
+    }
+
+    function render() {
+        if (!DATA.length) {
+            document.getElementById('panels').innerHTML = '<div class="empty"><p>暂无数据，请先运行 python heimao.py 抓取</p></div>';
+            return;
+        }
+        chartRendered = {};
+        activeFilter = {};
+        document.getElementById('genTime').textContent = new Date().toLocaleString('zh-CN');
+        const tabsEl = document.getElementById('tabs');
+        const panelsEl = document.getElementById('panels');
+        tabsEl.innerHTML = '';
+        panelsEl.innerHTML = '';
+
+        DATA.forEach((item, i) => {
+            const info = item.info || {};
+            const name = info.name || item.couid;
+            const filtered = filterComplaints(item.complaints);
+            const total = filtered.length;
+            const valid = parseInt(info.valid_amt || 0);
+            const replied = parseInt(info.replied_amt || 0);
+            const completed = parseInt(info.completed_amt || 0);
+            const replyRate = valid ? (replied / valid * 100).toFixed(1) : '0';
+            const completeRate = valid ? (completed / valid * 100).toFixed(1) : '0';
+
+            const tab = document.createElement('div');
+            tab.className = 'tab' + (i === 0 ? ' active' : '');
+            tab.textContent = name + ` (${total})`;
+            tab.onclick = () => switchTab(i);
+            tabsEl.appendChild(tab);
+
+            const panel = document.createElement('div');
+            panel.className = 'content' + (i === 0 ? ' active' : '');
+            panel.id = 'panel-' + i;
+            panel.innerHTML = `
+                <div class="stats-card">
+                    <div class="stats-title">${name}</div>
+                    <div class="stats-subtitle">满意度评分：${info.eval_points || '-'} 分</div>
+                    <div class="stats-row">
+                        <div class="stat-box"><div class="value">${valid}</div><div class="label">投诉量</div></div>
+                        <div class="stat-box"><div class="value">${replied}</div><div class="label">已回复（${replyRate}%）</div></div>
+                        <div class="stat-box"><div class="value">${completed}</div><div class="label">已完成（${completeRate}%）</div></div>
+                    </div>
+                    <div class="charts-row">
+                        <div class="chart-box" id="chart-reply-${i}"></div>
+                        <div class="chart-box" id="chart-status-${i}"></div>
+                        <div class="chart-box" id="chart-category-${i}"></div>
+                    </div>
+                </div>
+                <div class="list-card">
+                    <div class="list-header" id="list-header-${i}">投诉列表（共 ${total} 条）</div>
+                    <table class="list-table">
+                        <thead><tr><th>编号</th><th>投诉人</th><th>标题</th><th>问题类型</th><th>诉求</th><th>状态</th></tr></thead>
+                        <tbody id="list-body-${i}">${renderRows(filtered)}</tbody>
+                    </table>
+                </div>
+            `;
+            panelsEl.appendChild(panel);
+        });
+
+        renderCharts(0);
+    }
+
+    function renderList(idx) {
+        const complaints = applyChartFilter(filterComplaints(DATA[idx].complaints), idx);
+        const tbody = document.getElementById('list-body-' + idx);
+        const header = document.getElementById('list-header-' + idx);
+        if (tbody) tbody.innerHTML = renderRows(complaints);
+        if (header) {
+            const f = activeFilter[idx];
+            const total = filterComplaints(DATA[idx].complaints).length;
+            if (f) {
+                header.innerHTML = `投诉列表（共 ${complaints.length} / ${total} 条） <span class="filter-tag">${f.label} <span onclick="clearFilter(${idx})" style="cursor:pointer;margin-left:2px">&times;</span></span> <span class="clear-filter" onclick="clearFilter(${idx})">清除筛选</span>`;
+            } else {
+                header.innerHTML = `投诉列表（共 ${total} 条）`;
+            }
+        }
+    }
+
+    function clearFilter(idx) {
+        activeFilter[idx] = null;
+        renderList(idx);
+    }
+
+    function renderRows(complaints) {
+        const catColors = {'退款纠纷':'#e74c3c','虚假宣传':'#e67e22','产品质量':'#f39c12','售后服务':'#3498db','服务态度':'#9b59b6','价格收费':'#1abc9c','合同纠纷':'#34495e','赔偿问题':'#e91e63','合作商户':'#795548','增项问题':'#00bcd4','工期延期':'#ff5722','其他':'#95a5a6'};
+        return complaints.map((c, i) => {
+            const m = c.main || {};
+            const a = c.author || {};
+            const cat = classify(m.issue || '', m.title || '', m.summary || '');
+            const status = m.status || {};
+            const statusText = status.description || (m.replied_at ? '已回复' : '待处理');
+            const statusClass = status.id == 20 ? 'status-completed' : (m.replied_at ? 'status-replied' : 'status-pending');
+            return `<tr>
+                <td>${i + 1}</td>
+                <td>${a.title || '-'}</td>
+                <td title="${m.title || ''}">${(m.title || '').substring(0, 30)}${(m.title||'').length > 30 ? '...' : ''}</td>
+                <td><span style="color:${catColors[cat]||'#666'};font-weight:500">${cat}</span></td>
+                <td title="${m.appeal || ''}">${(m.appeal || '-').substring(0, 20)}</td>
+                <td><span class="status-tag ${statusClass}">${statusText}</span></td>
+            </tr>`;
+        }).join('');
+    }
+
+    function renderCharts(idx) {
+        ['chart-reply-' + idx, 'chart-status-' + idx, 'chart-category-' + idx].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { const inst = echarts.getInstanceByDom(el); if (inst) inst.dispose(); }
+        });
+
+        const complaints = filterComplaints(DATA[idx].complaints);
+        const info = DATA[idx].info || {};
+        const valid = parseInt(info.valid_amt || 0);
+        const replied = parseInt(info.replied_amt || 0);
+        const completed = parseInt(info.completed_amt || 0);
+        const catColors = {'退款纠纷':'#e74c3c','虚假宣传':'#e67e22','产品质量':'#f39c12','售后服务':'#3498db','服务态度':'#9b59b6','价格收费':'#1abc9c','合同纠纷':'#34495e','赔偿问题':'#e91e63','合作商户':'#795548','增项问题':'#00bcd4','工期延期':'#ff5722','其他':'#95a5a6'};
+
+        const replyEl = document.getElementById('chart-reply-' + idx);
+        if (!replyEl) return;
+
+        const replyChart = echarts.init(replyEl);
+        replyChart.setOption({
+            title: { text: '回复率', left: 'center', textStyle: { fontSize: 14 } },
+            tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+            series: [{
+                type: 'pie', radius: ['40%', '65%'], center: ['50%', '55%'],
+                label: { formatter: '{b}\n{d}%' },
+                data: [
+                    { value: replied, name: '已回复', itemStyle: { color: '#667eea' } },
+                    { value: complaints.length - replied, name: '未回复', itemStyle: { color: '#e8e8e8' } }
+                ].sort((a, b) => b.value - a.value)
+            }]
+        });
+        replyChart.on('click', params => {
+            activeFilter[idx] = { type: 'reply', label: params.name, value: params.name };
+            renderList(idx);
+        });
+        replyChart.on('globalout', () => { activeFilter[idx] = null; renderList(idx); });
+
+        const statusChart = echarts.init(document.getElementById('chart-status-' + idx));
+        const statusMap = { '4': '待处理', '6': '已回复', '7': '已完成' };
+        statusChart.setOption({
+            title: { text: '处理状态', left: 'center', textStyle: { fontSize: 14 } },
+            tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+            series: [{
+                type: 'pie', radius: ['40%', '65%'], center: ['50%', '55%'],
+                label: { formatter: '{b}\n{d}%' },
+                data: [
+                    { value: completed, name: '已完成', itemStyle: { color: '#4caf50' } },
+                    { value: replied - completed, name: '已回复', itemStyle: { color: '#2196f3' } },
+                    { value: complaints.length - replied, name: '待处理', itemStyle: { color: '#ff9800' } }
+                ].sort((a, b) => b.value - a.value)
+            }]
+        });
+        const statusValMap = { '已完成': '7', '已回复': '6', '待处理': '4' };
+        statusChart.on('click', params => {
+            activeFilter[idx] = { type: 'status', label: params.name, value: statusValMap[params.name] };
+            renderList(idx);
+        });
+        statusChart.on('globalout', () => { activeFilter[idx] = null; renderList(idx); });
+
+        const catMap = {};
+        complaints.forEach(c => { const cat = classify(c.main ? c.main.issue : '', c.main ? c.main.title : '', c.main ? c.main.summary : ''); catMap[cat] = (catMap[cat] || 0) + 1; });
+        const catData = Object.entries(catMap).map(([name, value]) => ({ name, value, itemStyle: { color: catColors[name] || '#95a5a6' } })).sort((a, b) => b.value - a.value);
+        const catChart = echarts.init(document.getElementById('chart-category-' + idx));
+        catChart.setOption({
+            title: { text: '问题类型', left: 'center', textStyle: { fontSize: 14 } },
+            tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+            series: [{
+                type: 'pie', radius: ['40%', '65%'], center: ['50%', '55%'],
+                label: { formatter: '{b}\n{d}%' },
+                data: catData
+            }]
+        });
+        catChart.on('click', params => {
+            activeFilter[idx] = { type: 'category', label: params.name, value: params.name };
+            renderList(idx);
+        });
+        catChart.on('globalout', () => { activeFilter[idx] = null; renderList(idx); });
+    }
+
+    function switchTab(idx) {
+        document.querySelectorAll('.tab').forEach((t, i) => t.className = 'tab' + (i === idx ? ' active' : ''));
+        document.querySelectorAll('.content').forEach((p, i) => p.className = 'content' + (i === idx ? ' active' : ''));
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                renderCharts(idx);
+            });
+        });
+    }
+
+    init();
+    </script>
+</body>
+</html>
