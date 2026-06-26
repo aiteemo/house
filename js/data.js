@@ -408,7 +408,29 @@ const ITEM_STAGE_MAP = {
 };
 
 // ========== 沟通备忘数据 ==========
+// 带有个性化的、每家情况不同的内容放这里（如物业规定、业主信息等）
+// 通用的、可复制的装修经验放 PITFALLS_DATA（装修避坑）
 const MEMO_DATA = [
+    {
+        id: 'property_info',
+        name: '物业相关',
+        icon: '🏢',
+        desc: '世华泊郡小区装修管理公告（北京城承物业），依据《北京市物业管理条例》、住建部110号文',
+        items: [
+            { id: 'prop_phone', name: '物业客服电话', desc: '4000-222-111', tip: '有问题随时联系', status: 'checked', notes: '' },
+            { id: 'prop_docs', name: '装修申报材料', desc: '①业主身份证 ②装修设计图纸 ③装修合同（有签字页复印件）④装修公司营业执照及资质证明（加盖公章）⑤装修负责人/人员身份证复印件及联系方式 ⑥外立面改动需额外提供方案及高处作业证件', tip: '非业主本人办理需携带委托书+双方身份证复印件；装修出入证需1寸照片', status: 'pending', notes: '' },
+            { id: 'prop_time', name: '施工时间规定', desc: '工作日 8:00-12:00、14:00-18:00；双休日及法定节假日仅可进行无噪音/无异味/无粉尘类作业', tip: '严禁非施工时间进行敲、砸、切、钻等噪音作业；每日收工须清理现场、关闭水电阀门、锁好入户门，不得留宿', status: 'pending', notes: '' },
+            { id: 'prop_trash', name: '装修垃圾清运', desc: '暂存点：1号楼北侧垃圾站；清运时间：周一/三/五 09:00-18:00；清运单位：北京蓝天顺天环保科技有限公司', tip: '有偿服务，业主付费；必须垃圾分类封装，禁止生活垃圾与建筑垃圾混放；楼内外公共区域禁止放置', status: 'pending', notes: '' },
+            { id: 'prop_forbid_structure', name: '禁止：危害建筑结构', desc: '禁止擅自变动承重结构（拆承重墙/剪力墙/梁柱/扩门洞）；禁止拆除改造公共墙体；地面铺设超30mm厚石材增加荷载；禁止改变卫生间/厨房排水功能', tip: '', status: 'pending', notes: '' },
+            { id: 'prop_forbid_public', name: '禁止：破坏公共设施', desc: '禁止改动公共给排水/燃气/供暖；禁止占用消防通道/公共区域堆物；禁止搭建阳光房/封闭走廊；禁止擅自改动外窗尺寸/颜色/样式', tip: '', status: 'pending', notes: '' },
+            { id: 'prop_forbid_order', name: '禁止：影响小区秩序', desc: '禁止非规定时间施工；禁止随意倾倒垃圾；禁止向下水道倾倒水泥/沙子/涂料造成堵塞', tip: '', status: 'pending', notes: '' },
+            { id: 'prop_civilized', name: '文明施工要求', desc: '材料从地下车库进出，做好单元门口/楼道/电梯轿厢防护围挡；配备灭火器/电源箱；明火作业提前报备；做好闭水防渗漏', tip: '大型材料早8:00前/晚18:00后禁入小区；材料堆放不超2天、不占行人通道；不得开门施工', status: 'pending', notes: '' },
+            { id: 'prop_penalty', name: '违规处理方式', desc: '违规→发《整改通知书》限期整改→逾期未改或情节严重→责令停工+上报住建/城管执法部门依法处罚', tip: '因违规损毁结构/设施/他人财产，由违规业主承担赔偿，物业可追究法律责任', status: 'pending', notes: '' },
+            { id: 'prop_window', name: '更换窗户/阳台要求', desc: '按原有交付标准更换，不得擅自改动外框颜色、分隔尺寸、开启方向；封闭阳台保持楼体外观统一', tip: '需提前咨询管家，携带身份证+装修公司资质（二级以上）+签承诺书；安装前物业在南门验收，完成后现场验收方可撤场', status: 'pending', notes: '' },
+            { id: 'prop_door', name: '更换户门要求', desc: '按首次交付标准更换，不得加装外开防盗门或改变开启方向，走廊禁止装饰或垫高', tip: '不了解交付开启方向可向管家咨询', status: 'pending', notes: '' },
+            { id: 'prop_completion', name: '完工查验', desc: '装修完工后可向物业服务中心申请完工查验', tip: '', status: 'pending', notes: '' },
+        ]
+    },
     {
         id: 'owner_info',
         name: '业主信息',
@@ -706,25 +728,8 @@ const DEFAULT_COMPANIES = [
 ];
 
 // ========== 装修避坑数据 ==========
+// 装修避坑：通用的、可复制的装修经验（不针对特定小区/物业）
 const PITFALLS_DATA = [
-    {
-        id: 'property',
-        name: '物业要求',
-        icon: '🏢',
-        desc: '世华泊郡装修办理须知，必须提前了解',
-        items: [
-            { id: 'prop_docs', name: '装修办理资料', desc: '公装需携带：业主身份证、装修设计图纸（改动走向图）、电工本复印件、装修合同（有签字页）、装修公司营业执照及资质证明（加盖红章）', tip: '自装只需身份证+设计图纸+电工本', status: 'pending', notes: '' },
-            { id: 'prop_agreement', name: '签订装修服务协议', desc: '携带资料至客服中心签订《装修服务协议》，办理施工手续', tip: '未办理手续不得开工', status: 'pending', notes: '' },
-            { id: 'prop_window', name: '更换窗户要求', desc: '按原有交付标准更换，不得擅自改动外框颜色、分隔尺寸、开启方向', tip: '需提前咨询管家，携带身份证+装修公司资质（二级以上）+签承诺书，高处作业需高处作业证', status: 'pending', notes: '' },
-            { id: 'prop_window_check', name: '窗户进场验收', desc: '安装前物业在南门对加工的窗户及阳台部件进行验收，合格后方可安装', tip: '安装完成后物业现场验收合格方可撤场', status: 'pending', notes: '' },
-            { id: 'prop_balcony', name: '封闭阳台要求', desc: '保持楼体外观统一，按交付标准封闭，不得改动外框颜色和开启方向', tip: '和窗户要求一致，提前咨询管家', status: 'pending', notes: '' },
-            { id: 'prop_door', name: '更换户门要求', desc: '按首次交付标准更换，不得加装外开防盗门或改变开启方向，走廊禁止装饰或垫高，门外勿包框', tip: '不了解交付开启方向可向管家咨询', status: 'pending', notes: '' },
-            { id: 'prop_trash', name: '装修垃圾处理', desc: '装修垃圾自行处理，不要堆积在楼道及公共区域', tip: '确认小区是否有建筑垃圾堆放点，无堆放点需外运', status: 'pending', notes: '' },
-            { id: 'prop_time', name: '施工时间规定', desc: '在规定时间内施工，禁止拆改承重墙结构、各种管线和破坏防水层', tip: '保持外立面整齐，不得影响共用部位和相邻业主', status: 'pending', notes: '' },
-            { id: 'prop_liability', name: '损坏赔偿责任', desc: '因装饰装修导致共用部位、共用设施设备及其他业主利益受损，应承担修复赔偿责任', tip: '业主需无条件配合拆除违规装修', status: 'pending', notes: '' },
-            { id: 'prop_phone', name: '物业24小时电话', desc: '4000-222-111', tip: '有问题随时联系', status: 'checked', notes: '' },
-        ]
-    },
     {
         id: 'contract',
         name: '合同签约',

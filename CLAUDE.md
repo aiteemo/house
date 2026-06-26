@@ -39,7 +39,8 @@ No build system, bundler, or package manager — open `index.html` directly in a
 - `CORE_PROBLEMS` — problems linked to requirement item IDs via `linkedItems`
 - `STAGES` / `ITEM_STAGE_MAP` — construction phase ordering
 - `COMPARE_QUESTIONS` / `COMPARE_CATEGORY_TIPS` — company comparison framework
-- `PITFALLS_DATA` / `MEMO_DATA` — checklist data with status and notes
+- `MEMO_DATA` — **个性化**的沟通备忘（每家情况不同：物业规定、业主信息等）
+- `PITFALLS_DATA` — **通用**的装修避坑经验（可复制、不针对特定小区/物业）
 
 ## CSS
 
