@@ -1,2 +1,20 @@
+# 继承全局策略，本仓库额外规则
 * text=auto eol=lf
-heimao/static/*.min.js -text
+
+# 二进制
+*.pdf -text
+*.jpg -text
+*.jpeg -text
+*.png -text
+*.gif -text
+*.xls -text
+*.xlsx -text
+*.xlsm -text
+*.doc -text
+*.docx -text
+*.min.js -text
+*.pyc -text
+*.DS_Store -text
+
+# CSV 若从 Excel 导出常为 CRLF，标为二进制可避免 safecrlf 拦截
+*.csv -text
