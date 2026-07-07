@@ -30,6 +30,7 @@ No build system, bundler, or package manager — open `index.html` directly in a
 
 ## Coordinate System
 
+
 `房屋原始结构3D语义化.json` stores room polygons in mm with origin at Bedroom_B top-left. `data.js` converts to Three.js world coordinates (meters, centered on floor plan) via `jsonToScene()`.
 
 ## Key Data Structures in `data.js`

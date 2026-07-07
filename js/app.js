@@ -1,5 +1,8 @@
 // ========== 主应用 ==========
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // ========== 持久化初始化（优先于所有管理器） ==========
+    await PersistenceManager.init();
+
     // 初始化需求管理器
     const reqManager = new RequirementsManager();
 
@@ -17,6 +20,168 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 初始化装修避坑管理器
     const pitfallsManager = new PitfallsManager();
+
+    // 初始化装修风格助手
+    const styleQuiz = new StyleQuizManager();
+
+    // ========== 持久化工具提示浮窗 ==========
+    const PROMPT_TEXT = `你是一个装修助手工具生成器。请根据以下需求帮我生成一个实用的装修小工具：
+
+工具名称：[填写工具名称]
+工具功能：[简要描述工具的核心功能]
+使用场景：[描述用户在什么情况下会用到这个工具]
+期望交互：[描述用户操作流程和界面交互]
+数据来源：[工具需要哪些数据，数据从哪里获取]
+
+请基于以上信息，生成一个可在浏览器中独立运行的 HTML 小工具。要求：
+1. 界面简洁美观，符合现代设计审美
+2. 交互流畅，操作逻辑清晰
+3. 支持数据本地持久化存储
+4. 代码结构清晰，可维护性强`;
+
+    function createFloatingPrompt() {
+        const float = document.createElement('div');
+        float.className = 'floating-prompt';
+        float.innerHTML = `
+            <div class="floating-prompt-btn" id="floatingPromptBtn">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <rect x="2" y="2" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M7 8h8M7 11h6M7 14h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="floating-prompt-panel" id="floatingPromptPanel">
+                <div class="fp-header">
+                    <span class="fp-title">工具生成提示词</span>
+                    <button class="fp-close" id="fpClose">&times;</button>
+                </div>
+                <div class="fp-body">
+                    <textarea class="fp-textarea" id="fpTextarea">${PROMPT_TEXT}</textarea>
+                </div>
+                <div class="fp-actions">
+                    <button class="fp-btn fp-copy" id="fpCopy">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                            <path d="M10 4V2.5A1.5 1.5 0 008.5 1h-6A1.5 1.5 0 001 2.5v6A1.5 1.5 0 002.5 10H4" stroke="currentColor" stroke-width="1.3"/>
+                        </svg>
+                        复制
+                    </button>
+                    <button class="fp-btn fp-save" id="fpSave">保存修改</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(float);
+
+        const btn = float.querySelector('#floatingPromptBtn');
+        const panel = float.querySelector('#floatingPromptPanel');
+        const textarea = float.querySelector('#fpTextarea');
+        const closeBtn = float.querySelector('#fpClose');
+        const copyBtn = float.querySelector('#fpCopy');
+        const saveBtn = float.querySelector('#fpSave');
+
+        let isOpen = false;
+
+        btn.addEventListener('click', () => {
+            isOpen = !isOpen;
+            panel.classList.toggle('show', isOpen);
+        });
+
+        closeBtn.addEventListener('click', () => {
+            isOpen = false;
+            panel.classList.remove('show');
+        });
+
+        copyBtn.addEventListener('click', () => {
+            const text = textarea.value;
+            navigator.clipboard.writeText(text).then(() => {
+                copyBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 已复制`;
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M10 4V2.5A1.5 1.5 0 008.5 1h-6A1.5 1.5 0 001 2.5v6A1.5 1.5 0 002.5 10H4" stroke="currentColor" stroke-width="1.3"/></svg> 复制`;
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                // fallback
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+                copyBtn.textContent = '已复制';
+                setTimeout(() => { copyBtn.textContent = '复制'; }, 2000);
+            });
+        });
+
+        saveBtn.addEventListener('click', () => {
+            localStorage.setItem('renovation_tool_prompt', textarea.value);
+            saveBtn.textContent = '已保存 ✓';
+            setTimeout(() => { saveBtn.textContent = '保存修改'; }, 2000);
+        });
+
+        // 恢复保存的提示词
+        const savedPrompt = localStorage.getItem('renovation_tool_prompt');
+        if (savedPrompt) textarea.value = savedPrompt;
+    }
+
+    createFloatingPrompt();
+
+    // ========== 持久化导入导出按钮 ==========
+    function createPersistenceBar() {
+        const bar = document.createElement('div');
+        bar.className = 'persistence-bar';
+        bar.innerHTML = `
+            <div class="persistence-inner">
+                <span class="persistence-label">数据同步</span>
+                <button class="persistence-btn" id="persistenceExport">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M7 1v8M3 5l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M1 10v2a1 1 0 001 1h10a1 1 0 001-1v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    导出数据
+                </button>
+                <button class="persistence-btn" id="persistenceImport">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M7 9V1M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M1 10v2a1 1 0 001 1h10a1 1 0 001-1v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    导入数据
+                </button>
+                <input type="file" id="persistenceFileInput" accept=".json" style="display:none">
+                <span class="persistence-hint">导出后提交 git，换电脑拉取后导入即可恢复</span>
+            </div>
+        `;
+        document.body.appendChild(bar);
+
+        bar.querySelector('#persistenceExport').addEventListener('click', () => {
+            PersistenceManager.exportToFile();
+            const btn = bar.querySelector('#persistenceExport');
+            btn.classList.add('done');
+            btn.querySelector('svg').nextSibling.textContent = '已导出 ✓';
+            setTimeout(() => {
+                btn.classList.remove('done');
+                btn.querySelector('svg').nextSibling.textContent = '导出数据';
+            }, 2000);
+        });
+
+        bar.querySelector('#persistenceImport').addEventListener('click', () => {
+            bar.querySelector('#persistenceFileInput').click();
+        });
+
+        bar.querySelector('#persistenceFileInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            try {
+                await PersistenceManager.importFromFile(file);
+                // 重新加载页面以应用数据
+                location.reload();
+            } catch (err) {
+                alert('导入失败：文件格式不正确');
+            }
+            e.target.value = '';
+        });
+    }
+
+    createPersistenceBar();
 
     // 3D场景（延迟初始化）
     let sceneManager, roomBuilder, furnitureBuilder, lightingManager, airflowManager;
@@ -111,6 +276,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
         document.getElementById(`panel-${tabName}`).classList.add('active');
 
+        // 浮窗和持久化条只在 tools tab 显示
+        const floatingPrompt = document.querySelector('.floating-prompt');
+        const persistenceBar = document.querySelector('.persistence-bar');
+        if (floatingPrompt) floatingPrompt.style.display = tabName === 'tools' ? '' : 'none';
+        if (persistenceBar) persistenceBar.style.display = tabName === 'tools' ? '' : 'none';
+
         if (tabName === 'preview3d') {
             setTimeout(() => initScene(), 50);
         } else if (tabName === 'coreProblems') {
@@ -123,6 +294,9 @@ document.addEventListener('DOMContentLoaded', () => {
             memoManager.renderAll();
         } else if (tabName === 'pitfalls') {
             pitfallsManager.renderAll();
+        } else if (tabName === 'tools') {
+            styleQuiz.state = 'home';
+            styleQuiz.renderToolsHome();
         }
     }
 
