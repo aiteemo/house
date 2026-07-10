@@ -4,9 +4,70 @@ class StyleQuizManager {
     constructor() {
         this.currentQuestion = 0;
         this.answers = {};
-        this.state = 'intro'; // intro | quiz | result
+        this.modes = {};       // { qId: 'single' | 'multi' }
+        this.state = 'intro';  // intro | quiz | result
+        this.loadState();
     }
 
+    // ========== 持久化 ==========
+    saveState() {
+        const data = {
+            currentQuestion: this.currentQuestion,
+            answers: this.answers,
+            modes: this.modes,
+            state: this.state
+        };
+        localStorage.setItem('style_quiz_state', JSON.stringify(data));
+    }
+
+    loadState() {
+        const raw = localStorage.getItem('style_quiz_state');
+        if (!raw) return;
+        try {
+            const data = JSON.parse(raw);
+            this.currentQuestion = data.currentQuestion || 0;
+            this.answers = data.answers || {};
+            this.modes = data.modes || {};
+            if (data.state && data.state !== 'home') {
+                this.state = data.state;
+            }
+        } catch {}
+    }
+
+    clearState() {
+        localStorage.removeItem('style_quiz_state');
+    }
+
+    // ========== 多选判断 ==========
+    isMultiSelect(qId) {
+        return this.modes[qId] === 'multi';
+    }
+
+    // 获取某题的已选项数组
+    getSelected(qId) {
+        const val = this.answers[qId];
+        if (!val) return [];
+        return Array.isArray(val) ? val : [val];
+    }
+
+    // 切换单选/多选模式
+    toggleMode(q) {
+        const cur = this.modes[q.id];
+        if (cur === 'multi') {
+            // multi → single: 只保留第一个选中项
+            this.modes[q.id] = 'single';
+            const sel = this.getSelected(q.id);
+            this.answers[q.id] = sel.length > 0 ? sel[0] : '';
+        } else {
+            // single → multi: 把当前选项转为数组
+            this.modes[q.id] = 'multi';
+            const cur = this.answers[q.id];
+            this.answers[q.id] = cur ? [cur] : [];
+        }
+        this.saveState();
+    }
+
+    // ========== 渲染入口 ==========
     renderAll() {
         const container = document.getElementById('panel-tools');
         if (!container) return;
@@ -105,7 +166,9 @@ class StyleQuizManager {
         container.querySelector('#quizStartBtn').addEventListener('click', () => {
             this.currentQuestion = 0;
             this.answers = {};
+            this.modes = {};
             this.state = 'quiz';
+            this.saveState();
             this.renderAll();
         });
     }
@@ -115,6 +178,11 @@ class StyleQuizManager {
         const q = STYLE_QUIZ_QUESTIONS[this.currentQuestion];
         const total = STYLE_QUIZ_QUESTIONS.length;
         const progress = ((this.currentQuestion) / total) * 100;
+        const multi = this.isMultiSelect(q.id);
+        const selected = this.getSelected(q.id);
+        const allIds = q.options.map(o => o.id);
+        const allSelected = multi && allIds.length > 0 && allIds.every(id => selected.includes(id));
+        const hasAnswer = multi ? selected.length > 0 : !!this.answers[q.id];
 
         container.innerHTML = `
             <div class="quiz-container">
@@ -131,22 +199,30 @@ class StyleQuizManager {
                     <div class="quiz-progress-text">${this.currentQuestion} / ${total}</div>
                 </div>
                 <div class="quiz-question">
-                    <h2 class="quiz-q-title">${q.title}</h2>
+                    <div class="quiz-q-header">
+                        <h2 class="quiz-q-title">${q.title}</h2>
+                        <div class="quiz-q-actions">
+                            <button class="quiz-mode-btn ${multi ? 'active' : ''}" id="quizModeToggle">${multi ? '多选' : '单选'}</button>
+                            ${multi ? `<button class="quiz-select-all ${allSelected ? 'active' : ''}" id="quizSelectAll">${allSelected ? '取消全选' : '全选'}</button>` : ''}
+                        </div>
+                    </div>
                     <p class="quiz-q-subtitle">${q.subtitle}</p>
                     <div class="quiz-options">
-                        ${q.options.map(opt => `
-                            <div class="quiz-option ${this.answers[q.id] === opt.id ? 'selected' : ''}" data-option="${opt.id}">
+                        ${q.options.map(opt => {
+                            const isChecked = selected.includes(opt.id);
+                            return `
+                            <div class="quiz-option ${multi ? 'multi' : ''} ${isChecked ? 'selected' : ''}" data-option="${opt.id}">
                                 <div class="quiz-option-radio">
                                     <div class="quiz-option-dot"></div>
                                 </div>
                                 <div class="quiz-option-text">${opt.text}</div>
-                            </div>
-                        `).join('')}
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>
                 <div class="quiz-nav">
                     <button class="quiz-nav-btn quiz-prev" ${this.currentQuestion === 0 ? 'disabled' : ''} id="quizPrev">上一题</button>
-                    <button class="quiz-nav-btn quiz-next" id="quizNext" ${!this.answers[q.id] ? 'disabled' : ''}>
+                    <button class="quiz-nav-btn quiz-next" id="quizNext" ${!hasAnswer ? 'disabled' : ''}>
                         ${this.currentQuestion === total - 1 ? '查看结果' : '下一题'}
                     </button>
                 </div>
@@ -158,9 +234,40 @@ class StyleQuizManager {
             this.renderToolsHome();
         });
 
+        // 模式切换按钮
+        container.querySelector('#quizModeToggle').addEventListener('click', () => {
+            this.toggleMode(q);
+            this.renderQuiz(container);
+        });
+
+        // 全选按钮
+        if (multi) {
+            container.querySelector('#quizSelectAll').addEventListener('click', () => {
+                if (allSelected) {
+                    this.answers[q.id] = [];
+                } else {
+                    this.answers[q.id] = [...allIds];
+                }
+                this.saveState();
+                this.renderQuiz(container);
+            });
+        }
+
+        // 选项点击
         container.querySelectorAll('.quiz-option').forEach(opt => {
             opt.addEventListener('click', () => {
-                this.answers[q.id] = opt.dataset.option;
+                const optId = opt.dataset.option;
+                if (this.isMultiSelect(q.id)) {
+                    const cur = this.getSelected(q.id);
+                    if (cur.includes(optId)) {
+                        this.answers[q.id] = cur.filter(id => id !== optId);
+                    } else {
+                        this.answers[q.id] = [...cur, optId];
+                    }
+                } else {
+                    this.answers[q.id] = optId;
+                }
+                this.saveState();
                 this.renderQuiz(container);
             });
         });
@@ -168,18 +275,23 @@ class StyleQuizManager {
         container.querySelector('#quizPrev').addEventListener('click', () => {
             if (this.currentQuestion > 0) {
                 this.currentQuestion--;
+                this.saveState();
                 this.renderQuiz(container);
             }
         });
 
         container.querySelector('#quizNext').addEventListener('click', () => {
-            if (!this.answers[q.id]) return;
+            const multiNow = this.isMultiSelect(q.id);
+            const ansNow = multiNow ? this.getSelected(q.id).length > 0 : !!this.answers[q.id];
+            if (!ansNow) return;
             if (this.currentQuestion < total - 1) {
                 this.currentQuestion++;
+                this.saveState();
                 this.renderQuiz(container);
             } else {
                 this.calculateResult();
                 this.state = 'result';
+                this.saveState();
                 this.renderAll();
             }
         });
@@ -188,42 +300,45 @@ class StyleQuizManager {
     // ========== 计分逻辑 ==========
     calculateResult() {
         const scores = {};
-        const blacklisted = {}; // style -> [reason]
+        const blacklisted = {};
 
-        // 初始化分数
         Object.keys(STYLE_LIST).forEach(key => {
             scores[key] = 0;
         });
 
-        // 遍历每个问题的选项
-        STYLE_QUIZ_QUESTIONS.forEach(q => {
-            const selectedId = this.answers[q.id];
-            if (!selectedId) return;
-            const option = q.options.find(o => o.id === selectedId);
+        const applyOption = (option) => {
             if (!option) return;
-
-            // 加分
             if (option.bonus) {
                 Object.entries(option.bonus).forEach(([style, pts]) => {
                     scores[style] = (scores[style] || 0) + pts;
                 });
             }
-            // 减分
             if (option.penalty) {
                 Object.entries(option.penalty).forEach(([style, pts]) => {
                     scores[style] = (scores[style] || 0) + pts;
                 });
             }
-            // 黑名单
             if (option.blacklist) {
                 option.blacklist.forEach(b => {
                     if (!blacklisted[b.style]) blacklisted[b.style] = [];
                     blacklisted[b.style].push(b.reason);
                 });
             }
+        };
+
+        STYLE_QUIZ_QUESTIONS.forEach(q => {
+            if (this.isMultiSelect(q.id)) {
+                const selected = this.getSelected(q.id);
+                selected.forEach(optId => {
+                    applyOption(q.options.find(o => o.id === optId));
+                });
+            } else {
+                const selectedId = this.answers[q.id];
+                if (!selectedId) return;
+                applyOption(q.options.find(o => o.id === selectedId));
+            }
         });
 
-        // 排序
         const ranked = Object.entries(scores)
             .map(([key, score]) => ({
                 key,
@@ -325,8 +440,10 @@ class StyleQuizManager {
         container.querySelector('#quizRestart').addEventListener('click', () => {
             this.currentQuestion = 0;
             this.answers = {};
+            this.modes = {};
             this.result = null;
             this.state = 'intro';
+            this.clearState();
             this.renderAll();
         });
         container.querySelector('#quizBackHome').addEventListener('click', () => {

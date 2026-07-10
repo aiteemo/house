@@ -1807,10 +1807,43 @@ body {
 
 /* 题目 */
 .quiz-question { margin-bottom: 32px; }
+.quiz-q-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    gap: 10px;
+}
 .quiz-q-title {
     font-size: 22px;
     font-weight: 700;
-    margin-bottom: 6px;
+}
+.quiz-q-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.quiz-mode-btn, .quiz-select-all {
+    padding: 4px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.quiz-mode-btn:hover, .quiz-select-all:hover { border-color: var(--accent); color: var(--accent); }
+.quiz-mode-btn.active {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.quiz-select-all.active {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--accent);
 }
 .quiz-q-subtitle {
     font-size: 14px;
@@ -1866,6 +1899,19 @@ body {
     transition: background 0.15s;
 }
 .quiz-option.selected .quiz-option-dot {
+    background: #fff;
+}
+/* 多选 checkbox 样式 */
+.quiz-option.multi .quiz-option-radio {
+    border-radius: 5px;
+}
+.quiz-option.multi .quiz-option-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: transparent;
+}
+.quiz-option.multi.selected .quiz-option-dot {
     background: #fff;
 }
 .quiz-option-text {
