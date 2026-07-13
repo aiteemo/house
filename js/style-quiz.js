@@ -74,6 +74,7 @@ class StyleQuizManager {
         if (this.state === 'intro') this.renderIntro(container);
         else if (this.state === 'quiz') this.renderQuiz(container);
         else if (this.state === 'result') this.renderResult(container);
+        else if (this.state === 'colorcard') this.renderColorCardTool(container);
     }
 
     // ========== 工具首页：APP桌面风格 ==========
@@ -110,16 +111,42 @@ class StyleQuizManager {
                             </svg>
                         </div>
                     </div>
-                </div>
-                <div class="tools-coming-soon">
-                    <div class="tools-soon-title">更多工具开发中...</div>
-                    <div class="tools-soon-desc">持续为你的装修之旅提供实用工具</div>
+                    <div class="tool-card" data-tool="colorcard">
+                        <div class="tool-icon">
+                            <svg viewBox="0 0 64 64" width="48" height="48">
+                                <rect x="4" y="4" width="56" height="56" rx="14" fill="#3F3A3A" opacity="0.12"/>
+                                <rect x="8" y="8" width="48" height="48" rx="11" fill="none" stroke="#3F3A3A" stroke-width="2"/>
+                                <rect x="16" y="16" width="32" height="22" rx="4" fill="#3F3A3A"/>
+                                <text x="32" y="31" text-anchor="middle" font-size="10" fill="#fff" font-weight="bold">#3F3A3A</text>
+                                <rect x="16" y="42" width="32" height="8" rx="2" fill="#3F3A3A" opacity="0.2"/>
+                                <rect x="20" y="44" width="16" height="2" rx="1" fill="#3F3A3A" opacity="0.3"/>
+                                <rect x="20" y="47" width="10" height="1.5" rx="0.75" fill="#3F3A3A" opacity="0.2"/>
+                            </svg>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-title">色卡生成</div>
+                            <div class="tool-desc">输入色值，一键生成标准色卡 PNG，方便与商家沟通确认颜色</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
-        container.querySelector('.tool-card').addEventListener('click', () => {
-            this.state = 'intro';
-            this.renderAll();
+        container.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const tool = card.dataset.tool;
+                if (tool === 'colorcard') {
+                    this.state = 'colorcard';
+                    this.renderAll();
+                } else {
+                    this.state = 'intro';
+                    this.renderAll();
+                }
+            });
         });
     }
 
@@ -450,5 +477,303 @@ class StyleQuizManager {
             this.state = 'home';
             this.renderToolsHome();
         });
+    }
+
+    // ========== 色卡生成工具 ==========
+    renderColorCardTool(container) {
+        container.innerHTML = `
+            <div class="quiz-container">
+                <div class="quiz-back" id="ccBack">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    返回工具箱
+                </div>
+                <div class="cc-tool">
+                    <h2 class="cc-tool-title">色卡生成器</h2>
+                    <p class="cc-tool-subtitle">输入色值，生成标准色卡 PNG，方便与商家沟通确认颜色</p>
+                    <div class="cc-tool-body">
+                        <div class="cc-tool-preview">
+                            <canvas id="ccToolCanvas" width="540" height="960"></canvas>
+                        </div>
+                        <div class="cc-tool-controls">
+                            <div class="cc-field">
+                                <label>色值格式</label>
+                                <div class="cc-format-tabs">
+                                    <button class="cc-format-tab active" data-fmt="hex">HEX</button>
+                                    <button class="cc-format-tab" data-fmt="rgb">RGB</button>
+                                    <button class="cc-format-tab" data-fmt="hsl">HSL</button>
+                                    <button class="cc-format-tab" data-fmt="ral">RAL</button>
+                                </div>
+                            </div>
+                            <div class="cc-field cc-hex-field">
+                                <label>HEX 色值</label>
+                                <div class="cc-input-row">
+                                    <input type="color" id="ccToolPicker" value="#3F3A3A" class="cc-color-picker">
+                                    <input type="text" id="ccToolHex" value="#3F3A3A" class="cc-input" maxlength="7" placeholder="#000000">
+                                </div>
+                            </div>
+                            <div class="cc-field cc-rgb-field" style="display:none">
+                                <label>RGB 色值</label>
+                                <div class="cc-rgb-row">
+                                    <input type="number" id="ccToolR" value="63" min="0" max="255" class="cc-input cc-input-sm" placeholder="R">
+                                    <input type="number" id="ccToolG" value="58" min="0" max="255" class="cc-input cc-input-sm" placeholder="G">
+                                    <input type="number" id="ccToolB" value="58" min="0" max="255" class="cc-input cc-input-sm" placeholder="B">
+                                </div>
+                            </div>
+                            <div class="cc-field cc-hsl-field" style="display:none">
+                                <label>HSL 色值</label>
+                                <div class="cc-rgb-row">
+                                    <input type="number" id="ccToolH" value="0" min="0" max="360" class="cc-input cc-input-sm" placeholder="H">
+                                    <input type="number" id="ccToolS" value="4" min="0" max="100" class="cc-input cc-input-sm" placeholder="S%">
+                                    <input type="number" id="ccToolL" value="24" min="0" max="100" class="cc-input cc-input-sm" placeholder="L%">
+                                </div>
+                            </div>
+                            <div class="cc-field cc-ral-field" style="display:none">
+                                <label>RAL 编号</label>
+                                <input type="text" id="ccToolRal" value="8019" class="cc-input" placeholder="如 8019">
+                                <div class="cc-ral-presets">
+                                    <button class="cc-ral-chip" data-ral="8019" data-hex="#3F3A3A" data-name="灰棕色 Grey brown">8019 灰棕</button>
+                                    <button class="cc-ral-chip" data-ral="9003" data-hex="#FFFFFF" data-name="信号白 Signal white">9003 白</button>
+                                    <button class="cc-ral-chip" data-ral="7035" data-hex="#B5B8B5" data-name="浅灰 Light grey">7035 浅灰</button>
+                                    <button class="cc-ral-chip" data-ral="9005" data-hex="#0E0E10" data-name="纯黑 Jet black">9005 黑</button>
+                                    <button class="cc-ral-chip" data-ral="1013" data-hex="#E8D5B7" data-name="象牙白 Oyster white">1013 象牙</button>
+                                    <button class="cc-ral-chip" data-ral="5014" data-hex="#6B7D9E" data-name="鸽蓝 Pigeon blue">5014 鸽蓝</button>
+                                </div>
+                            </div>
+                            <div class="cc-field">
+                                <label>颜色名称</label>
+                                <input type="text" id="ccToolName" value="RAL 8019" class="cc-input" placeholder="如 RAL 8019">
+                            </div>
+                            <div class="cc-field">
+                                <label>中英文说明</label>
+                                <input type="text" id="ccToolDesc" value="灰棕色 (Grey brown)" class="cc-input" placeholder="如 灰棕色 (Grey brown)">
+                            </div>
+                            <button class="cc-download-btn" id="ccToolDownload">⬇ 下载色卡 PNG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const self = this;
+        const canvas = container.querySelector('#ccToolCanvas');
+        const ctx = canvas.getContext('2d');
+        const picker = container.querySelector('#ccToolPicker');
+        const hexInput = container.querySelector('#ccToolHex');
+        const nameInput = container.querySelector('#ccToolName');
+        const descInput = container.querySelector('#ccToolDesc');
+        const formatTabs = container.querySelectorAll('.cc-format-tab');
+
+        // 当前格式
+        let currentFormat = 'hex';
+
+        function hexToRgb(hex) {
+            const m = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+            return m ? { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) } : null;
+        }
+
+        function rgbToHex(r, g, b) {
+            return '#' + [r, g, b].map(x => Math.max(0, Math.min(255, Math.round(x))).toString(16).padStart(2, '0')).join('');
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            if (max === min) { h = s = 0; } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+            return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+        }
+
+        function hslToRgb(h, s, l) {
+            h /= 360; s /= 100; l /= 100;
+            let r, g, b;
+            if (s === 0) { r = g = b = l; } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1; if (t > 1) t -= 1;
+                    if (t < 1/6) return p + (q - p) * 6 * t;
+                    if (t < 1/2) return q;
+                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+        }
+
+        function getCurrentHex() {
+            if (currentFormat === 'hex') return hexInput.value;
+            if (currentFormat === 'rgb') {
+                const r = parseInt(container.querySelector('#ccToolR').value) || 0;
+                const g = parseInt(container.querySelector('#ccToolG').value) || 0;
+                const b = parseInt(container.querySelector('#ccToolB').value) || 0;
+                return rgbToHex(r, g, b);
+            }
+            if (currentFormat === 'hsl') {
+                const h = parseInt(container.querySelector('#ccToolH').value) || 0;
+                const s = parseInt(container.querySelector('#ccToolS').value) || 0;
+                const l = parseInt(container.querySelector('#ccToolL').value) || 0;
+                const rgb = hslToRgb(h, s, l);
+                return rgbToHex(rgb.r, rgb.g, rgb.b);
+            }
+            return hexInput.value;
+        }
+
+        function renderCard() {
+            const hex = getCurrentHex();
+            const name = nameInput.value || '颜色';
+            const desc = descInput.value || '';
+            const W = canvas.width, H = canvas.height;
+
+            ctx.fillStyle = hex;
+            ctx.fillRect(0, 0, W, H);
+
+            const infoH = 200;
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, H - infoH, W, infoH);
+
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, H - infoH);
+            ctx.lineTo(W, H - infoH);
+            ctx.stroke();
+
+            const rgb = hexToRgb(hex) || { r: 0, g: 0, b: 0 };
+            const hexUp = hex.toUpperCase();
+
+            ctx.fillStyle = '#222222';
+            ctx.font = 'bold 36px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(hexUp, W / 2, H - infoH + 42);
+
+            ctx.fillStyle = '#333333';
+            ctx.font = '600 22px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
+            ctx.fillText(name, W / 2, H - infoH + 75);
+
+            ctx.fillStyle = '#888888';
+            ctx.font = '16px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
+            ctx.fillText(desc, W / 2, H - infoH + 105);
+
+            ctx.fillStyle = '#aaaaaa';
+            ctx.font = '14px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
+            ctx.fillText(`RGB(${rgb.r}, ${rgb.g}, ${rgb.b})`, W / 2, H - infoH + 135);
+
+            // 色值方块
+            const swatchSize = 56;
+            const sx = W - 40 - swatchSize;
+            const sy = H - infoH + (infoH - swatchSize) / 2;
+            ctx.fillStyle = hex;
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(sx, sy, swatchSize, swatchSize, 8);
+            } else {
+                const r2 = 8;
+                ctx.moveTo(sx + r2, sy);
+                ctx.lineTo(sx + swatchSize - r2, sy);
+                ctx.quadraticCurveTo(sx + swatchSize, sy, sx + swatchSize, sy + r2);
+                ctx.lineTo(sx + swatchSize, sy + swatchSize - r2);
+                ctx.quadraticCurveTo(sx + swatchSize, sy + swatchSize, sx + swatchSize - r2, sy + swatchSize);
+                ctx.lineTo(sx + r2, sy + swatchSize);
+                ctx.quadraticCurveTo(sx, sy + swatchSize, sx, sy + swatchSize - r2);
+                ctx.lineTo(sx, sy + r2);
+                ctx.quadraticCurveTo(sx, sy, sx + r2, sy);
+            }
+            ctx.fill();
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // 同步 picker
+            picker.value = hex;
+        }
+
+        // 格式切换
+        formatTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                formatTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentFormat = tab.dataset.fmt;
+                container.querySelector('.cc-hex-field').style.display = currentFormat === 'hex' ? '' : 'none';
+                container.querySelector('.cc-rgb-field').style.display = currentFormat === 'rgb' ? '' : 'none';
+                container.querySelector('.cc-hsl-field').style.display = currentFormat === 'hsl' ? '' : 'none';
+                container.querySelector('.cc-ral-field').style.display = currentFormat === 'ral' ? '' : 'none';
+            });
+        });
+
+        // HEX 输入
+        picker.addEventListener('input', () => { hexInput.value = picker.value; renderCard(); });
+        hexInput.addEventListener('input', () => {
+            if (/^#[0-9A-Fa-f]{6}$/.test(hexInput.value)) { picker.value = hexInput.value; renderCard(); }
+        });
+
+        // RGB 输入
+        ['ccToolR', 'ccToolG', 'ccToolB'].forEach(id => {
+            container.querySelector('#' + id).addEventListener('input', renderCard);
+        });
+
+        // HSL 输入
+        ['ccToolH', 'ccToolS', 'ccToolL'].forEach(id => {
+            container.querySelector('#' + id).addEventListener('input', renderCard);
+        });
+
+        // RAL 输入
+        container.querySelector('#ccToolRal').addEventListener('input', () => {
+            const v = container.querySelector('#ccToolRal').value;
+            const chip = container.querySelector(`.cc-ral-chip[data-ral="${v}"]`);
+            if (chip) {
+                hexInput.value = chip.dataset.hex;
+                picker.value = chip.dataset.hex;
+                nameInput.value = 'RAL ' + chip.dataset.ral;
+                descInput.value = chip.dataset.name;
+                renderCard();
+            }
+        });
+
+        // RAL 预设
+        container.querySelectorAll('.cc-ral-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                container.querySelector('#ccToolRal').value = chip.dataset.ral;
+                hexInput.value = chip.dataset.hex;
+                picker.value = chip.dataset.hex;
+                nameInput.value = 'RAL ' + chip.dataset.ral;
+                descInput.value = chip.dataset.name;
+                renderCard();
+            });
+        });
+
+        // 名称/说明
+        nameInput.addEventListener('input', renderCard);
+        descInput.addEventListener('input', renderCard);
+
+        // 返回
+        container.querySelector('#ccBack').addEventListener('click', () => {
+            this.state = 'home';
+            this.renderToolsHome();
+        });
+
+        // 下载
+        container.querySelector('#ccToolDownload').addEventListener('click', () => {
+            renderCard();
+            const link = document.createElement('a');
+            const name = nameInput.value.replace(/\s+/g, '_') || 'color';
+            link.download = `色卡_${name}_${getCurrentHex()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+
+        renderCard();
     }
 }

@@ -2586,3 +2586,128 @@ body {
         flex: none;
     }
 }
+
+/* ========== 色卡生成工具 ========== */
+.cc-tool {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+}
+.cc-tool-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 4px;
+}
+.cc-tool-subtitle {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin: 0 0 20px;
+}
+.cc-tool-body {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+}
+.cc-tool-preview {
+    flex-shrink: 0;
+}
+.cc-tool-preview canvas {
+    width: 270px;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+.cc-tool-controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.cc-field label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+}
+.cc-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.cc-color-picker {
+    width: 44px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 2px;
+}
+.cc-input {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+}
+.cc-input:focus { border-color: var(--accent); }
+.cc-input-sm { width: 80px; text-align: center; }
+.cc-rgb-row {
+    display: flex;
+    gap: 8px;
+}
+.cc-format-tabs {
+    display: flex;
+    gap: 6px;
+}
+.cc-format-tab {
+    padding: 6px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.cc-format-tab:hover { border-color: var(--accent); color: var(--text); }
+.cc-format-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.cc-ral-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+.cc-ral-chip {
+    padding: 4px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-dim);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.cc-ral-chip:hover { border-color: var(--accent); color: var(--accent); }
+.cc-download-btn {
+    margin-top: 8px;
+    padding: 12px 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+.cc-download-btn:hover { opacity: 0.85; }
+@media (max-width: 600px) {
+    .cc-tool-body { flex-direction: column; }
+    .cc-tool-preview canvas { width: 100%; }
+    .cc-tool { padding: 16px; }
+}
