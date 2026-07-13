@@ -455,9 +455,9 @@ class MemoManager {
                 });
 
                 // 色卡下载
-                const colorCardBtn = div.querySelector('.memo-color-card-btn');
-                if (colorCardBtn) {
-                    colorCardBtn.addEventListener('click', (e) => {
+                const colorCardBtnEl = div.querySelector('.memo-color-card-btn');
+                if (colorCardBtnEl) {
+                    colorCardBtnEl.addEventListener('click', (e) => {
                         e.stopPropagation();
                         MemoManager.openColorCardModal();
                     });
