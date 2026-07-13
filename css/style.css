@@ -1425,7 +1425,7 @@ body {
     border-radius: 8px;
     border: 1px solid var(--border);
     width: 100%;
-    max-width: 480px;
+    max-width: 270px;
     height: auto;
 }
 .memo-colorcard-controls {
@@ -2550,4 +2550,39 @@ body {
     color: var(--text-dim);
     opacity: 0.6;
     margin-left: auto;
+}
+
+/* ========== 移动端色卡全屏 ========== */
+@media (max-width: 600px) {
+    .memo-colorcard-modal.open {
+        align-items: stretch;
+        justify-content: stretch;
+    }
+    .memo-colorcard-panel {
+        width: 100%;
+        max-width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        border: none;
+        display: flex;
+        flex-direction: column;
+    }
+    .memo-colorcard-body {
+        flex-direction: column;
+        padding: 16px;
+        gap: 16px;
+        flex: 1;
+        overflow: auto;
+    }
+    .memo-colorcard-preview {
+        width: 100%;
+    }
+    .memo-colorcard-preview canvas {
+        max-width: 100%;
+        width: 100%;
+    }
+    .memo-colorcard-controls {
+        flex: none;
+    }
 }
