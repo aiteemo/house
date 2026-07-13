@@ -330,14 +330,16 @@ class MemoManager {
                         <div class="memo-desc">${item.desc}</div>
                         ${item.tip ? `<div class="memo-tip">💡 ${item.tip}</div>` : ''}
                         <div class="memo-notes-row">
-                            <input type="text" class="memo-notes-input" data-id="${item.id}" placeholder="备注..." value="${item.notes || ''}">
+                            <textarea class="memo-notes-input" data-id="${item.id}" placeholder="备注..." rows="1">${item.notes || ''}</textarea>
                         </div>
                     </div>
                 `;
 
                 const notesInput = div.querySelector('.memo-notes-input');
+                requestAnimationFrame(() => autoResizeTextarea(notesInput));
                 let notesTimer = null;
                 notesInput.addEventListener('input', () => {
+                    autoResizeTextarea(notesInput);
                     clearTimeout(notesTimer);
                     notesTimer = setTimeout(() => {
                         this.updateNotes(item.id, notesInput.value);
