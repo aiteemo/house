@@ -382,12 +382,14 @@ class MemoManager {
                     </div>
                 ` : '';
 
+                const colorCardBtn = item.id === 'dw_color' ? `<button class="memo-color-card-btn" data-item="${item.id}">🎨 下载色卡</button>` : '';
+
                 div.innerHTML = `
                     <div class="memo-check" data-id="${item.id}">
                         <span class="memo-check-icon">${item.status === 'checked' ? '✓' : ''}</span>
                     </div>
                     <div class="memo-content">
-                        <div class="memo-name">${item.name}</div>
+                        <div class="memo-name">${item.name} ${colorCardBtn}</div>
                         <div class="memo-desc">${item.desc}</div>
                         ${item.tip ? `<div class="memo-tip">💡 ${item.tip}</div>` : ''}
                         <div class="memo-notes-row">
@@ -451,6 +453,15 @@ class MemoManager {
                         MemoManager.openLightbox(thumb.dataset.full);
                     });
                 });
+
+                // 色卡下载
+                const colorCardBtn = div.querySelector('.memo-color-card-btn');
+                if (colorCardBtn) {
+                    colorCardBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        MemoManager.openColorCardModal();
+                    });
+                }
             }
 
             div.querySelector('.memo-check').addEventListener('click', () => {
@@ -763,6 +774,159 @@ class MemoManager {
             lb.classList.remove('open');
             document.body.style.overflow = '';
         }
+    }
+
+    // ========== 色卡下载 ==========
+    static openColorCardModal() {
+        const defaultColor = '#3F3A3A';
+        const defaultName = 'RAL 8019';
+        const defaultCn = '灰棕色 (Grey brown)';
+
+        if (!document.getElementById('memoColorCardModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'memoColorCardModal';
+            modal.className = 'memo-colorcard-modal';
+            modal.innerHTML = `
+                <div class="memo-colorcard-backdrop"></div>
+                <div class="memo-colorcard-panel">
+                    <div class="memo-colorcard-header">
+                        <h3>色卡生成器</h3>
+                        <button class="memo-colorcard-close">×</button>
+                    </div>
+                    <div class="memo-colorcard-body">
+                        <div class="memo-colorcard-preview">
+                            <canvas id="colorCardCanvas" width="480" height="640"></canvas>
+                        </div>
+                        <div class="memo-colorcard-controls">
+                            <label class="memo-colorcard-label">色值 (HEX)</label>
+                            <div class="memo-colorcard-input-row">
+                                <input type="color" id="ccColorPicker" value="${defaultColor}" class="memo-colorcard-picker">
+                                <input type="text" id="ccHexInput" value="${defaultColor}" class="memo-colorcard-hex" maxlength="7">
+                            </div>
+                            <label class="memo-colorcard-label">颜色名称</label>
+                            <input type="text" id="ccNameInput" value="${defaultName}" class="memo-colorcard-text" placeholder="如 RAL 8019">
+                            <label class="memo-colorcard-label">中英文说明</label>
+                            <input type="text" id="ccDescInput" value="${defaultCn}" class="memo-colorcard-text" placeholder="如 灰棕色 (Grey brown)">
+                            <button class="memo-colorcard-download" id="ccDownload">⬇ 下载色卡</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            modal.querySelector('.memo-colorcard-backdrop').addEventListener('click', () => MemoManager.closeColorCardModal());
+            modal.querySelector('.memo-colorcard-close').addEventListener('click', () => MemoManager.closeColorCardModal());
+
+            const picker = modal.querySelector('#ccColorPicker');
+            const hexInput = modal.querySelector('#ccHexInput');
+            const nameInput = modal.querySelector('#ccNameInput');
+            const descInput = modal.querySelector('#ccDescInput');
+
+            const syncAndUpdate = () => MemoManager.renderColorCard(
+                picker.value, hexInput.value, nameInput.value, descInput.value
+            );
+
+            picker.addEventListener('input', () => { hexInput.value = picker.value; syncAndUpdate(); });
+            hexInput.addEventListener('input', () => {
+                if (/^#[0-9A-Fa-f]{6}$/.test(hexInput.value)) {
+                    picker.value = hexInput.value;
+                    syncAndUpdate();
+                }
+            });
+            nameInput.addEventListener('input', syncAndUpdate);
+            descInput.addEventListener('input', syncAndUpdate);
+
+            modal.querySelector('#ccDownload').addEventListener('click', () => {
+                MemoManager.downloadColorCard(hexInput.value, nameInput.value, descInput.value);
+            });
+        }
+
+        document.getElementById('memoColorCardModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+        MemoManager.renderColorCard(defaultColor, defaultColor, defaultName, defaultCn);
+    }
+
+    static closeColorCardModal() {
+        const modal = document.getElementById('memoColorCardModal');
+        if (modal) {
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+    }
+
+    static renderColorCard(color, hex, name, desc) {
+        const canvas = document.getElementById('colorCardCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+
+        // 背景色
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, W, H);
+
+        // 底部白色信息区
+        const infoH = 180;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, H - infoH, W, infoH);
+
+        // 分割线
+        ctx.strokeStyle = '#e0e0e0';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, H - infoH);
+        ctx.lineTo(W, H - infoH);
+        ctx.stroke();
+
+        // 色值大字
+        ctx.fillStyle = '#222222';
+        ctx.font = 'bold 36px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(hex.toUpperCase(), 40, H - infoH + 50);
+
+        // 颜色名称
+        ctx.fillStyle = '#333333';
+        ctx.font = '600 24px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
+        ctx.fillText(name, 40, H - infoH + 90);
+
+        // 中英文说明
+        ctx.fillStyle = '#888888';
+        ctx.font = '18px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
+        ctx.fillText(desc, 40, H - infoH + 125);
+
+        // 右下角色值小方块
+        const swatchSize = 60;
+        const sx = W - 40 - swatchSize;
+        const sy = H - infoH + (infoH - swatchSize) / 2;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        if (ctx.roundRect) {
+            ctx.roundRect(sx, sy, swatchSize, swatchSize, 8);
+        } else {
+            const r = 8;
+            ctx.moveTo(sx + r, sy);
+            ctx.lineTo(sx + swatchSize - r, sy);
+            ctx.quadraticCurveTo(sx + swatchSize, sy, sx + swatchSize, sy + r);
+            ctx.lineTo(sx + swatchSize, sy + swatchSize - r);
+            ctx.quadraticCurveTo(sx + swatchSize, sy + swatchSize, sx + swatchSize - r, sy + swatchSize);
+            ctx.lineTo(sx + r, sy + swatchSize);
+            ctx.quadraticCurveTo(sx, sy + swatchSize, sx, sy + swatchSize - r);
+            ctx.lineTo(sx, sy + r);
+            ctx.quadraticCurveTo(sx, sy, sx + r, sy);
+        }
+        ctx.fill();
+        ctx.strokeStyle = '#e0e0e0';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    static downloadColorCard(hex, name, desc) {
+        const canvas = document.getElementById('colorCardCanvas');
+        if (!canvas) return;
+        MemoManager.renderColorCard(hex, hex, name, desc);
+        const link = document.createElement('a');
+        link.download = `色卡_${name.replace(/\s+/g, '_')}_${hex}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
     }
 }
 

@@ -1340,6 +1340,153 @@ body {
     background: rgba(255,255,255,0.3);
 }
 
+/* ========== 色卡下载 ========== */
+.memo-color-card-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    margin-left: 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--accent);
+    font-size: 12px;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: all 0.15s;
+}
+.memo-color-card-btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+}
+.memo-colorcard-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+.memo-colorcard-modal.open { display: flex; }
+.memo-colorcard-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+}
+.memo-colorcard-panel {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: 820px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow: auto;
+    z-index: 1;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.memo-colorcard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+}
+.memo-colorcard-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text);
+}
+.memo-colorcard-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg);
+    color: var(--text-dim);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+.memo-colorcard-close:hover { background: var(--border); color: var(--text); }
+.memo-colorcard-body {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+}
+.memo-colorcard-preview {
+    flex-shrink: 0;
+}
+.memo-colorcard-preview canvas {
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    width: 320px;
+    height: auto;
+}
+.memo-colorcard-controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.memo-colorcard-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+}
+.memo-colorcard-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.memo-colorcard-picker {
+    width: 44px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 2px;
+}
+.memo-colorcard-hex {
+    flex: 1;
+    padding: 8px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: monospace;
+    outline: none;
+}
+.memo-colorcard-hex:focus { border-color: var(--accent); }
+.memo-colorcard-text {
+    padding: 8px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+}
+.memo-colorcard-text:focus { border-color: var(--accent); }
+.memo-colorcard-download {
+    margin-top: 12px;
+    padding: 10px 20px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+.memo-colorcard-download:hover { opacity: 0.85; }
+
 /* ========== 业主信息可编辑 ========== */
 .memo-editable-desc {
     width: 100%;
