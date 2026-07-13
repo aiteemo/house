@@ -1226,6 +1226,120 @@ body {
     opacity: 0.5;
 }
 
+/* ========== 备忘图片 ========== */
+.memo-images {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+.memo-thumb-wrap {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.memo-thumb-wrap:hover {
+    border-color: var(--accent);
+}
+.memo-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.memo-thumb-del {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+.memo-thumb-wrap:hover .memo-thumb-del {
+    opacity: 1;
+}
+.memo-image-actions {
+    margin-top: 6px;
+}
+.memo-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: var(--bg);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.memo-upload-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ========== Lightbox ========== */
+.memo-lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+.memo-lightbox.open {
+    display: flex;
+}
+.memo-lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+}
+.memo-lightbox-img {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 4px;
+    z-index: 1;
+}
+.memo-lightbox-close {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+.memo-lightbox-close:hover {
+    background: rgba(255,255,255,0.3);
+}
+
 /* ========== 业主信息可编辑 ========== */
 .memo-editable-desc {
     width: 100%;

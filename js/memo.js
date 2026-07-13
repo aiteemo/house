@@ -22,6 +22,7 @@ class MemoManager {
                             if (s.status) item.status = s.status;
                             if (s.notes !== undefined) item.notes = s.notes;
                             if (s.value !== undefined) item.value = s.value;
+                            if (s.images !== undefined) item.images = s.images;
                         }
                     });
                 });
@@ -33,7 +34,12 @@ class MemoManager {
         const state = {};
         this.data.forEach(cat => {
             cat.items.forEach(item => {
-                state[item.id] = { status: item.status, notes: item.notes, value: item.value };
+                state[item.id] = {
+                    status: item.status,
+                    notes: item.notes,
+                    value: item.value,
+                    images: item.images || []
+                };
             });
         });
         localStorage.setItem('renovation_memo', JSON.stringify(state));
@@ -174,6 +180,44 @@ class MemoManager {
         if (!item) return;
         item.desc = desc;
         this.saveState();
+    }
+
+    // ========== 图片管理 ==========
+    async uploadImage(itemId, file) {
+        const item = this.findItem(itemId);
+        if (!item) return;
+        if (!item.images) item.images = [];
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const resp = await fetch('/api/upload', { method: 'POST', body: formData });
+            const data = await resp.json();
+            if (data.ok) {
+                item.images.push({ url: data.url, filename: data.filename, name: file.name });
+                this.saveState();
+                return data.url;
+            }
+        } catch (e) {
+            console.error('Upload failed:', e);
+        }
+        return null;
+    }
+
+    async deleteImage(itemId, filename) {
+        const item = this.findItem(itemId);
+        if (!item || !item.images) return;
+        try {
+            await fetch(`/api/image/${filename}`, { method: 'DELETE' });
+        } catch (e) { /* ignore */ }
+        item.images = item.images.filter(img => img.filename !== filename);
+        this.saveState();
+    }
+
+    getImages(itemId) {
+        const item = this.findItem(itemId);
+        return item ? (item.images || []) : [];
     }
 
     getActiveCategory() {
@@ -321,6 +365,18 @@ class MemoManager {
                 });
             } else {
                 // 其他分类：标准显示
+                const images = item.images || [];
+                const imagesHtml = images.length > 0 ? `
+                    <div class="memo-images">
+                        ${images.map(img => `
+                            <div class="memo-thumb-wrap">
+                                <img class="memo-thumb" src="${img.url}" alt="${img.name || ''}" data-full="${img.url}">
+                                <button class="memo-thumb-del" data-filename="${img.filename}" data-item="${item.id}">×</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : '';
+
                 div.innerHTML = `
                     <div class="memo-check" data-id="${item.id}">
                         <span class="memo-check-icon">${item.status === 'checked' ? '✓' : ''}</span>
@@ -331,6 +387,13 @@ class MemoManager {
                         ${item.tip ? `<div class="memo-tip">💡 ${item.tip}</div>` : ''}
                         <div class="memo-notes-row">
                             <textarea class="memo-notes-input" data-id="${item.id}" placeholder="备注..." rows="1">${item.notes || ''}</textarea>
+                        </div>
+                        ${imagesHtml}
+                        <div class="memo-image-actions">
+                            <label class="memo-upload-btn" data-item="${item.id}">
+                                📷 添加图片
+                                <input type="file" accept="image/*" class="memo-file-input" data-item="${item.id}" hidden>
+                            </label>
                         </div>
                     </div>
                 `;
@@ -344,6 +407,42 @@ class MemoManager {
                     notesTimer = setTimeout(() => {
                         this.updateNotes(item.id, notesInput.value);
                     }, 500);
+                });
+
+                // 图片上传
+                const fileInput = div.querySelector('.memo-file-input');
+                fileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    fileInput.disabled = true;
+                    fileInput.closest('.memo-upload-btn').textContent = '上传中...';
+                    const url = await this.uploadImage(item.id, file);
+                    if (url) {
+                        this.renderItems(container);
+                        this.renderCategoryList(document.getElementById('memoCategoryList'));
+                    } else {
+                        alert('图片上传失败');
+                        fileInput.disabled = false;
+                        fileInput.closest('.memo-upload-btn').innerHTML = '📷 添加图片<input type="file" accept="image/*" class="memo-file-input" data-item="' + item.id + '" hidden>';
+                    }
+                });
+
+                // 图片删除
+                div.querySelectorAll('.memo-thumb-del').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        e.stopPropagation();
+                        if (confirm('确定删除这张图片？')) {
+                            await this.deleteImage(btn.dataset.item, btn.dataset.filename);
+                            this.renderItems(container);
+                        }
+                    });
+                });
+
+                // 图片点击查看
+                div.querySelectorAll('.memo-thumb').forEach(thumb => {
+                    thumb.addEventListener('click', () => {
+                        MemoManager.openLightbox(thumb.dataset.full);
+                    });
                 });
             }
 
@@ -623,6 +722,39 @@ class MemoManager {
                 document.getElementById('currentMemoName').textContent = cat.name;
                 document.getElementById('currentMemoDesc').textContent = cat.desc;
             }
+        }
+    }
+
+    // ========== Lightbox ==========
+    static openLightbox(src) {
+        if (!document.getElementById('memoLightbox')) {
+            const overlay = document.createElement('div');
+            overlay.id = 'memoLightbox';
+            overlay.className = 'memo-lightbox';
+            overlay.innerHTML = `
+                <div class="memo-lightbox-backdrop"></div>
+                <img class="memo-lightbox-img" src="">
+                <button class="memo-lightbox-close">×</button>
+            `;
+            document.body.appendChild(overlay);
+
+            overlay.querySelector('.memo-lightbox-backdrop').addEventListener('click', () => MemoManager.closeLightbox());
+            overlay.querySelector('.memo-lightbox-close').addEventListener('click', () => MemoManager.closeLightbox());
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') MemoManager.closeLightbox();
+            });
+        }
+        const lb = document.getElementById('memoLightbox');
+        lb.querySelector('.memo-lightbox-img').src = src;
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    static closeLightbox() {
+        const lb = document.getElementById('memoLightbox');
+        if (lb) {
+            lb.classList.remove('open');
+            document.body.style.overflow = '';
         }
     }
 }
