@@ -188,6 +188,11 @@ class MemoManager {
         if (!item) return;
         if (!item.images) item.images = [];
 
+        if (location.protocol === 'file:') {
+            alert('请通过服务器访问此页面（python3 server.py），file:// 协议无法上传图片');
+            return null;
+        }
+
         const formData = new FormData();
         formData.append('file', file);
 
@@ -411,19 +416,21 @@ class MemoManager {
 
                 // 图片上传
                 const fileInput = div.querySelector('.memo-file-input');
+                const uploadBtn = div.querySelector('.memo-upload-btn');
                 fileInput.addEventListener('change', async (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
-                    fileInput.disabled = true;
-                    fileInput.closest('.memo-upload-btn').textContent = '上传中...';
+                    uploadBtn.disabled = true;
+                    uploadBtn.textContent = '上传中...';
                     const url = await this.uploadImage(item.id, file);
                     if (url) {
                         this.renderItems(container);
                         this.renderCategoryList(document.getElementById('memoCategoryList'));
                     } else {
-                        alert('图片上传失败');
-                        fileInput.disabled = false;
-                        fileInput.closest('.memo-upload-btn').innerHTML = '📷 添加图片<input type="file" accept="image/*" class="memo-file-input" data-item="' + item.id + '" hidden>';
+                        uploadBtn.disabled = false;
+                        uploadBtn.innerHTML = '📷 添加图片<input type="file" accept="image/*" class="memo-file-input" data-item="' + item.id + '" hidden>';
+                        const newInput = uploadBtn.querySelector('.memo-file-input');
+                        newInput.addEventListener('change', fileInput.onchange);
                     }
                 });
 
