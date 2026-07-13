@@ -1424,7 +1424,8 @@ body {
 .memo-colorcard-preview canvas {
     border-radius: 8px;
     border: 1px solid var(--border);
-    width: 320px;
+    width: 100%;
+    max-width: 480px;
     height: auto;
 }
 .memo-colorcard-controls {

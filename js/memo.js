@@ -795,7 +795,7 @@ class MemoManager {
                     </div>
                     <div class="memo-colorcard-body">
                         <div class="memo-colorcard-preview">
-                            <canvas id="colorCardCanvas" width="480" height="640"></canvas>
+                            <canvas id="colorCardCanvas" width="960" height="540"></canvas>
                         </div>
                         <div class="memo-colorcard-controls">
                             <label class="memo-colorcard-label">色值 (HEX)</label>
@@ -865,7 +865,7 @@ class MemoManager {
         ctx.fillRect(0, 0, W, H);
 
         // 底部白色信息区
-        const infoH = 180;
+        const infoH = 120;
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, H - infoH, W, infoH);
 
@@ -877,24 +877,24 @@ class MemoManager {
         ctx.lineTo(W, H - infoH);
         ctx.stroke();
 
-        // 色值大字
+        // 左侧：色值大字
         ctx.fillStyle = '#222222';
-        ctx.font = 'bold 36px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
+        ctx.font = 'bold 32px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText(hex.toUpperCase(), 40, H - infoH + 50);
+        ctx.fillText(hex.toUpperCase(), 40, H - infoH + 42);
 
         // 颜色名称
         ctx.fillStyle = '#333333';
-        ctx.font = '600 24px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
-        ctx.fillText(name, 40, H - infoH + 90);
+        ctx.font = '600 20px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
+        ctx.fillText(name, 40, H - infoH + 72);
 
         // 中英文说明
         ctx.fillStyle = '#888888';
-        ctx.font = '18px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
-        ctx.fillText(desc, 40, H - infoH + 125);
+        ctx.font = '16px "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';
+        ctx.fillText(desc, 40, H - infoH + 100);
 
-        // 右下角色值小方块
-        const swatchSize = 60;
+        // 右侧色值小方块
+        const swatchSize = 56;
         const sx = W - 40 - swatchSize;
         const sy = H - infoH + (infoH - swatchSize) / 2;
         ctx.fillStyle = color;
