@@ -6,6 +6,7 @@ class MemoManager {
         this.companies = [];
         this.activeCompany = null;
         this.showComparison = false;
+        this.showWindowDiagram = false;
         this.loadState();
         this.loadCompanies();
     }
@@ -280,7 +281,7 @@ class MemoManager {
         this.data.forEach(cat => {
             const stats = this.getCategoryStats(cat.id);
             const li = document.createElement('li');
-            li.className = cat.id === this.activeCategory && !this.showComparison ? 'active' : '';
+            li.className = cat.id === this.activeCategory && !this.showComparison && !this.showWindowDiagram ? 'active' : '';
             li.innerHTML = `
                 <span class="module-icon">${cat.icon}</span>
                 <span>${cat.name}</span>
@@ -289,6 +290,7 @@ class MemoManager {
             li.addEventListener('click', () => {
                 this.activeCategory = cat.id;
                 this.showComparison = false;
+                this.showWindowDiagram = false;
                 this.renderCategoryList(container);
                 this.renderItems(document.getElementById('memoItems'));
                 document.getElementById('currentMemoName').textContent = cat.name;
@@ -296,6 +298,26 @@ class MemoManager {
                 document.getElementById('memoActions').innerHTML = '';
             });
             container.appendChild(li);
+
+            // 窗户方案图解入口（仅门窗分类后面显示）
+            if (cat.id === 'door_window') {
+                const winLi = document.createElement('li');
+                winLi.className = this.showWindowDiagram ? 'active' : '';
+                winLi.innerHTML = `
+                    <span class="module-icon">📐</span>
+                    <span>窗户方案图解</span>
+                `;
+                winLi.addEventListener('click', () => {
+                    this.showWindowDiagram = true;
+                    this.showComparison = false;
+                    this.renderCategoryList(container);
+                    this.renderWindowDiagrams(document.getElementById('memoItems'));
+                    document.getElementById('currentMemoName').textContent = '窗户方案图解';
+                    document.getElementById('currentMemoDesc').textContent = 'C1/C2/C3/C4 四个窗户方案的等比例可视化对比';
+                    document.getElementById('memoActions').innerHTML = '';
+                });
+                container.appendChild(winLi);
+            }
         });
 
         // 公司对比入口
@@ -710,6 +732,198 @@ class MemoManager {
         container.appendChild(table);
     }
 
+    // ========== 窗户方案图解 ==========
+    renderWindowDiagrams(container) {
+        container.innerHTML = '';
+
+        const legend = document.createElement('div');
+        legend.className = 'win-legend';
+        legend.innerHTML = `
+            <span class="win-legend-item"><span class="win-dot" style="background:#2a5a8a;"></span> 固定玻璃</span>
+            <span class="win-legend-item"><span class="win-dot" style="background:#c47a32;"></span> 内开扇</span>
+            <span class="win-legend-item"><span class="win-dot" style="background:var(--border);"></span> 窗框/横梁</span>
+        `;
+        container.appendChild(legend);
+
+        // 客厅窗标题
+        const livingTitle = document.createElement('div');
+        livingTitle.className = 'win-section-title';
+        livingTitle.textContent = '客厅窗（2320 × 2300 mm）';
+        container.appendChild(livingTitle);
+
+        const livingRow = document.createElement('div');
+        livingRow.className = 'win-row';
+        livingRow.appendChild(this.createWindowCard('C1', '六分格传统窗（原有）', '2320宽 × 2300高 · 上下两层 · 纵向三列', this.svgC1(), false));
+        livingRow.appendChild(this.createWindowCard('C3', '大落地全景窗（推荐）', '2320宽 × 2300高 · 左侧保留分格，右侧整块落地', this.svgC3(), true, '视野极佳，大客厅标配。单块玻璃约 3.7㎡，可能需要五层厚或更厚，需与窗商确认。'));
+        container.appendChild(livingRow);
+
+        // 主卧窗标题
+        const bedroomTitle = document.createElement('div');
+        bedroomTitle.className = 'win-section-title';
+        bedroomTitle.textContent = '主卧窗（2500 × 2000 mm，L型转角）';
+        container.appendChild(bedroomTitle);
+
+        const bedroomRow = document.createElement('div');
+        bedroomRow.className = 'win-row';
+        bedroomRow.appendChild(this.createWindowCard('C2', '转角双层分格窗（原有）', '正面1800宽 + 侧面转角700深 × 2000高 · 上下两层', this.svgC2(), false));
+        bedroomRow.appendChild(this.createWindowCard('C4', '全景转角窗（推荐）', '正面1800宽 + 侧面700深 × 2000高 · 仅左侧保留分格，其余整块落地', this.svgC4(), true, '转角处无遮挡全景视野，采光和高级感拉满。'));
+        container.appendChild(bedroomRow);
+    }
+
+    createWindowCard(label, title, spec, svgHtml, recommended, tip) {
+        const div = document.createElement('div');
+        div.className = `win-card${recommended ? ' win-recommended' : ''}`;
+        div.innerHTML = `
+            <div class="win-card-header">
+                <h3>${label} · ${title}</h3>
+                ${recommended ? '<span class="win-badge">★ 推荐</span>' : ''}
+            </div>
+            <p class="win-spec">${spec}</p>
+            <div class="win-svg-wrap">${svgHtml}</div>
+            ${tip ? `<div class="win-tip">💡 ${tip}</div>` : ''}
+        `;
+        return div;
+    }
+
+    svgC1() {
+        return `<svg viewBox="-55 -28 340 285" width="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="232" height="230" fill="none" stroke="#555" stroke-width="2.5"/>
+            <line x1="0" y1="130" x2="232" y2="130" stroke="#555" stroke-width="2.5"/>
+            <line x1="70" y1="0" x2="70" y2="230" stroke="#555" stroke-width="2.5"/>
+            <line x1="162" y1="0" x2="162" y2="230" stroke="#555" stroke-width="2.5"/>
+            <rect x="1.5" y="1.5" width="67" height="127" fill="#c47a32" rx="2" opacity="0.85"/>
+            <text x="35" y="62" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">内开</text>
+            <text x="35" y="76" text-anchor="middle" font-size="8" fill="#fff">70×130</text>
+            <rect x="71.5" y="1.5" width="89" height="127" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="116" y="68" text-anchor="middle" font-size="9" fill="#fff">固定</text>
+            <rect x="163.5" y="1.5" width="67" height="127" fill="#c47a32" rx="2" opacity="0.85"/>
+            <text x="197" y="62" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">内开</text>
+            <text x="197" y="76" text-anchor="middle" font-size="8" fill="#fff">70×130</text>
+            <rect x="1.5" y="131.5" width="67" height="97" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="35" y="183" text-anchor="middle" font-size="9" fill="#fff">固定</text>
+            <rect x="71.5" y="131.5" width="89" height="97" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="116" y="183" text-anchor="middle" font-size="9" fill="#fff">固定</text>
+            <rect x="163.5" y="131.5" width="67" height="97" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="197" y="183" text-anchor="middle" font-size="9" fill="#fff">固定</text>
+            <line x1="0" y1="-12" x2="232" y2="-12" stroke="#666" stroke-width="0.8"/>
+            <line x1="0" y1="-16" x2="0" y2="-8" stroke="#666" stroke-width="0.8"/>
+            <line x1="232" y1="-16" x2="232" y2="-8" stroke="#666" stroke-width="0.8"/>
+            <text x="116" y="-15" text-anchor="middle" font-size="9" fill="#888">2320</text>
+            <line x1="-16" y1="0" x2="-16" y2="230" stroke="#666" stroke-width="0.8"/>
+            <line x1="-20" y1="0" x2="-12" y2="0" stroke="#666" stroke-width="0.8"/>
+            <line x1="-20" y1="230" x2="-12" y2="230" stroke="#666" stroke-width="0.8"/>
+            <text x="-16" y="120" text-anchor="middle" font-size="9" fill="#888" transform="rotate(-90,-16,120)">2300</text>
+            <text x="240" y="68" font-size="8" fill="#666">1300</text>
+            <text x="240" y="183" font-size="8" fill="#666">1000</text>
+            <text x="35" y="246" text-anchor="middle" font-size="8" fill="#666">700</text>
+            <text x="116" y="246" text-anchor="middle" font-size="8" fill="#666">920</text>
+            <text x="197" y="246" text-anchor="middle" font-size="8" fill="#666">700</text>
+        </svg>`;
+    }
+
+    svgC3() {
+        return `<svg viewBox="-55 -28 340 285" width="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="232" height="230" fill="none" stroke="#555" stroke-width="2.5"/>
+            <line x1="70" y1="0" x2="70" y2="230" stroke="#555" stroke-width="2.5"/>
+            <line x1="0" y1="130" x2="70" y2="130" stroke="#555" stroke-width="2.5"/>
+            <rect x="1.5" y="1.5" width="67" height="127" fill="#c47a32" rx="2" opacity="0.85"/>
+            <text x="35" y="62" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">内开</text>
+            <text x="35" y="76" text-anchor="middle" font-size="8" fill="#fff">70×130</text>
+            <rect x="1.5" y="131.5" width="67" height="97" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="35" y="183" text-anchor="middle" font-size="9" fill="#fff">固定</text>
+            <rect x="71.5" y="1.5" width="159" height="227" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="151" y="105" text-anchor="middle" font-size="11" fill="#fff" font-weight="600">固定</text>
+            <text x="151" y="122" text-anchor="middle" font-size="9" fill="#fff">1620 × 2300</text>
+            <text x="151" y="138" text-anchor="middle" font-size="8" fill="#ccc">≈ 3.7㎡</text>
+            <line x1="0" y1="-12" x2="232" y2="-12" stroke="#666" stroke-width="0.8"/>
+            <line x1="0" y1="-16" x2="0" y2="-8" stroke="#666" stroke-width="0.8"/>
+            <line x1="232" y1="-16" x2="232" y2="-8" stroke="#666" stroke-width="0.8"/>
+            <text x="116" y="-15" text-anchor="middle" font-size="9" fill="#888">2320</text>
+            <line x1="-16" y1="0" x2="-16" y2="230" stroke="#666" stroke-width="0.8"/>
+            <line x1="-20" y1="0" x2="-12" y2="0" stroke="#666" stroke-width="0.8"/>
+            <line x1="-20" y1="230" x2="-12" y2="230" stroke="#666" stroke-width="0.8"/>
+            <text x="-16" y="120" text-anchor="middle" font-size="9" fill="#888" transform="rotate(-90,-16,120)">2300</text>
+            <text x="240" y="68" font-size="8" fill="#666">1300</text>
+            <text x="240" y="183" font-size="8" fill="#666">1000</text>
+            <text x="35" y="246" text-anchor="middle" font-size="8" fill="#666">700</text>
+            <text x="151" y="246" text-anchor="middle" font-size="8" fill="#666">1620</text>
+        </svg>`;
+    }
+
+    svgC2() {
+        return `<svg viewBox="-55 -28 340 260" width="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="180" height="200" fill="none" stroke="#555" stroke-width="2.5"/>
+            <rect x="180" y="0" width="70" height="200" fill="none" stroke="#555" stroke-width="2.5"/>
+            <line x1="0" y1="130" x2="250" y2="130" stroke="#555" stroke-width="2.5"/>
+            <line x1="70" y1="0" x2="70" y2="200" stroke="#555" stroke-width="2.5"/>
+            <line x1="180" y1="0" x2="180" y2="200" stroke="#555" stroke-width="2.5"/>
+            <text x="178" y="14" font-size="7" fill="#6c8cff" text-anchor="end">转角</text>
+            <rect x="1.5" y="1.5" width="67" height="127" fill="#c47a32" rx="2" opacity="0.85"/>
+            <text x="35" y="62" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">内开</text>
+            <text x="35" y="76" text-anchor="middle" font-size="8" fill="#fff">70×130</text>
+            <rect x="71.5" y="1.5" width="107" height="127" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="125" y="68" text-anchor="middle" font-size="9" fill="#fff">固定</text>
+            <rect x="1.5" y="131.5" width="67" height="67" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="35" y="168" text-anchor="middle" font-size="9" fill="#fff">固定</text>
+            <rect x="71.5" y="131.5" width="107" height="67" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="125" y="168" text-anchor="middle" font-size="9" fill="#fff">固定</text>
+            <rect x="181.5" y="1.5" width="67" height="127" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="215" y="68" text-anchor="middle" font-size="9" fill="#fff">固定</text>
+            <rect x="181.5" y="131.5" width="67" height="67" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="215" y="168" text-anchor="middle" font-size="9" fill="#fff">固定</text>
+            <line x1="0" y1="-12" x2="250" y2="-12" stroke="#666" stroke-width="0.8"/>
+            <line x1="0" y1="-16" x2="0" y2="-8" stroke="#666" stroke-width="0.8"/>
+            <line x1="250" y1="-16" x2="250" y2="-8" stroke="#666" stroke-width="0.8"/>
+            <text x="125" y="-15" text-anchor="middle" font-size="9" fill="#888">2500</text>
+            <text x="90" y="-26" text-anchor="middle" font-size="8" fill="#666">正面 1800</text>
+            <text x="215" y="-26" text-anchor="middle" font-size="8" fill="#666">侧面 700</text>
+            <line x1="-16" y1="0" x2="-16" y2="200" stroke="#666" stroke-width="0.8"/>
+            <line x1="-20" y1="0" x2="-12" y2="0" stroke="#666" stroke-width="0.8"/>
+            <line x1="-20" y1="200" x2="-12" y2="200" stroke="#666" stroke-width="0.8"/>
+            <text x="-16" y="105" text-anchor="middle" font-size="9" fill="#888" transform="rotate(-90,-16,105)">2000</text>
+            <text x="260" y="68" font-size="8" fill="#666">1300</text>
+            <text x="260" y="168" font-size="8" fill="#666">700</text>
+            <text x="35" y="216" text-anchor="middle" font-size="8" fill="#666">700</text>
+            <text x="125" y="216" text-anchor="middle" font-size="8" fill="#666">1100</text>
+        </svg>`;
+    }
+
+    svgC4() {
+        return `<svg viewBox="-55 -28 340 260" width="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="180" height="200" fill="none" stroke="#555" stroke-width="2.5"/>
+            <rect x="180" y="0" width="70" height="200" fill="none" stroke="#555" stroke-width="2.5"/>
+            <line x1="0" y1="130" x2="70" y2="130" stroke="#555" stroke-width="2.5"/>
+            <line x1="70" y1="0" x2="70" y2="200" stroke="#555" stroke-width="2.5"/>
+            <line x1="180" y1="0" x2="180" y2="200" stroke="#555" stroke-width="2.5"/>
+            <text x="178" y="14" font-size="7" fill="#6c8cff" text-anchor="end">转角</text>
+            <rect x="1.5" y="1.5" width="67" height="127" fill="#c47a32" rx="2" opacity="0.85"/>
+            <text x="35" y="62" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">内开</text>
+            <text x="35" y="76" text-anchor="middle" font-size="8" fill="#fff">70×130</text>
+            <rect x="1.5" y="131.5" width="67" height="67" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="35" y="168" text-anchor="middle" font-size="9" fill="#fff">固定</text>
+            <rect x="71.5" y="1.5" width="107" height="197" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="125" y="92" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">固定</text>
+            <text x="125" y="108" text-anchor="middle" font-size="8" fill="#fff">1100 × 2000</text>
+            <rect x="181.5" y="1.5" width="67" height="197" fill="#2a5a8a" rx="2" opacity="0.7"/>
+            <text x="215" y="92" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">固定</text>
+            <text x="215" y="108" text-anchor="middle" font-size="8" fill="#fff">700 × 2000</text>
+            <line x1="0" y1="-12" x2="250" y2="-12" stroke="#666" stroke-width="0.8"/>
+            <line x1="0" y1="-16" x2="0" y2="-8" stroke="#666" stroke-width="0.8"/>
+            <line x1="250" y1="-16" x2="250" y2="-8" stroke="#666" stroke-width="0.8"/>
+            <text x="125" y="-15" text-anchor="middle" font-size="9" fill="#888">2500</text>
+            <text x="90" y="-26" text-anchor="middle" font-size="8" fill="#666">正面 1800</text>
+            <text x="215" y="-26" text-anchor="middle" font-size="8" fill="#666">侧面 700</text>
+            <line x1="-16" y1="0" x2="-16" y2="200" stroke="#666" stroke-width="0.8"/>
+            <line x1="-20" y1="0" x2="-12" y2="0" stroke="#666" stroke-width="0.8"/>
+            <line x1="-20" y1="200" x2="-12" y2="200" stroke="#666" stroke-width="0.8"/>
+            <text x="-16" y="105" text-anchor="middle" font-size="9" fill="#888" transform="rotate(-90,-16,105)">2000</text>
+            <text x="260" y="68" font-size="8" fill="#666">1300</text>
+            <text x="260" y="168" font-size="8" fill="#666">700</text>
+            <text x="35" y="216" text-anchor="middle" font-size="8" fill="#666">700</text>
+            <text x="125" y="216" text-anchor="middle" font-size="8" fill="#666">1100</text>
+        </svg>`;
+    }
+
     renderProgress(container) {
         if (!container) container = document.getElementById('memoProgress');
         if (!container) return;
@@ -730,11 +944,16 @@ class MemoManager {
             document.getElementById('currentMemoName').textContent = '公司对比';
             document.getElementById('currentMemoDesc').textContent = '记录各装修公司沟通细节，快速对比差异';
             document.getElementById('memoActions').innerHTML = '';
+        } else if (this.showWindowDiagram) {
+            this.renderWindowDiagrams(document.getElementById('memoItems'));
+            document.getElementById('currentMemoName').textContent = '窗户方案图解';
+            document.getElementById('currentMemoDesc').textContent = 'C1/C2/C3/C4 四个窗户方案的等比例可视化对比';
+            document.getElementById('memoActions').innerHTML = '';
         } else {
             this.renderItems(document.getElementById('memoItems'));
         }
         this.renderProgress();
-        if (!this.showComparison) {
+        if (!this.showComparison && !this.showWindowDiagram) {
             const cat = this.getActiveCategory();
             if (cat) {
                 document.getElementById('currentMemoName').textContent = cat.name;
