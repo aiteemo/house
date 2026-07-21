@@ -1,0 +1,49 @@
+{
+    "updatedAt": "2026-07-21T20:58:00Z",
+    "spaces": [
+      {
+        "spaceId": "kitchen",
+        "spaceName": "厨房",
+        "appliances": [
+          {
+            "instanceId": "app_101",
+            "name": "电磁炉/集成灶",
+            "power": 2200,
+            "current": 10.0,
+            "checked": true,
+            "isCustom": false
+          },
+          {
+            "instanceId": "app_102",
+            "name": "微波炉/烤箱",
+            "power": 1500,
+            "current": 6.8,
+            "checked": true,
+            "isCustom": false
+          },
+          {
+            "instanceId": "app_103",
+            "name": "空气炸锅（自定义）",
+            "power": 1400,
+            "current": 6.4,
+            "checked": true,
+            "isCustom": true
+          }
+        ]
+      },
+      {
+        "spaceId": "bathroom",
+        "spaceName": "卫生间",
+        "appliances": [
+          {
+            "instanceId": "app_201",
+            "name": "风暖浴霸",
+            "power": 2500,
+            "current": 11.4,
+            "checked": true,
+            "isCustom": false
+          }
+        ]
+      }
+    ]
+  }

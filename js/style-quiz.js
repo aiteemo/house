@@ -75,6 +75,7 @@ class StyleQuizManager {
         else if (this.state === 'quiz') this.renderQuiz(container);
         else if (this.state === 'result') this.renderResult(container);
         else if (this.state === 'colorcard') this.renderColorCardTool(container);
+        else if (this.state === 'wirecalc') this.renderWireCalc(container);
     }
 
     // ========== 工具首页：APP桌面风格 ==========
@@ -133,6 +134,27 @@ class StyleQuizManager {
                             </svg>
                         </div>
                     </div>
+                    <div class="tool-card" data-tool="wirecalc">
+                        <div class="tool-icon">
+                            <svg viewBox="0 0 64 64" width="48" height="48">
+                                <rect x="4" y="4" width="56" height="56" rx="14" fill="#fb923c" opacity="0.12"/>
+                                <rect x="8" y="8" width="48" height="48" rx="11" fill="none" stroke="#fb923c" stroke-width="2"/>
+                                <path d="M20 32 L28 32 L32 20 L36 44 L40 28 L44 32 L52 32" stroke="#fb923c" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="20" cy="32" r="2" fill="#fb923c"/>
+                                <circle cx="52" cy="32" r="2" fill="#fb923c"/>
+                                <text x="32" y="52" text-anchor="middle" font-size="8" fill="#fb923c" font-weight="bold">㎡</text>
+                            </svg>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-title">电线选型计算器</div>
+                            <div class="tool-desc">勾选家中电器，自动计算各回路推荐电线规格，避免盲目用粗线浪费预算</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -141,6 +163,9 @@ class StyleQuizManager {
                 const tool = card.dataset.tool;
                 if (tool === 'colorcard') {
                     this.state = 'colorcard';
+                    this.renderAll();
+                } else if (tool === 'wirecalc') {
+                    this.state = 'wirecalc';
                     this.renderAll();
                 } else {
                     this.state = 'intro';
@@ -775,5 +800,30 @@ class StyleQuizManager {
         });
 
         renderCard();
+    }
+
+    // ========== 电线选型计算器 ==========
+    renderWireCalc(container) {
+        if (!this._wireCalc) {
+            this._wireCalc = new WireCalculatorManager();
+        }
+        container.innerHTML = `
+            <div class="quiz-container" style="max-width:1100px;">
+                <div class="quiz-back" id="wireCalcBack">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    返回工具箱
+                </div>
+                <div id="wireCalcContent"></div>
+            </div>
+        `;
+
+        this._wireCalc.render(container.querySelector('#wireCalcContent'));
+
+        container.querySelector('#wireCalcBack').addEventListener('click', () => {
+            this.state = 'home';
+            this.renderToolsHome();
+        });
     }
 }
