@@ -1,0 +1,179 @@
+{
+    "meta": {
+      "source_url": "https://fgw.beijing.gov.cn/bmcx/djcx/jzldj/202003/t20200331_1752797.htm",
+      "publish_date": "2025-11-15",
+      "document_basis": [
+        "京发改[2019]1543号（居民阶梯气价）",
+        "京发改〔2025〕1729号（非居民销售价）",
+        "京发改〔2025〕931号（非居民配气价）"
+      ],
+      "desc": "北京市居民管道天然气阶梯价、非居民销售价格、非居民配气价格完整结构化数据，覆盖一般生活、壁挂炉采暖、煤改气采暖、发电、商用供暖、工商业全品类"
+    },
+    "resident_gas": {
+      "title": "北京市居民用管道天然气销售价格表",
+      "price_unit": "元/立方米",
+      "special_non_resident_price": 2.63,
+      "special_non_resident_desc": "学校、养老福利、社区公益性设施等执行居民气价的非居民户（不含集中供热）",
+      "ladder_list": [
+        {
+          "level": 1,
+          "price": 2.61,
+          "usage_range": {
+            "daily_life": {
+              "min": 0,
+              "max": 350,
+              "desc": "一般生活用气（炊事、生活热水）0-350m³(含)"
+            },
+            "wall_hung_boiler_heat": {
+              "min": 0,
+              "max": 1500,
+              "desc": "壁挂炉采暖用气0-1500m³(含)"
+            },
+            "rural_gas_heat": {
+              "min": 0,
+              "max": 2500,
+              "desc": "农村煤改气采暖用气0-2500m³(含)"
+            }
+          }
+        },
+        {
+          "level": 2,
+          "price": 2.83,
+          "usage_range": {
+            "daily_life": {
+              "min": 350,
+              "max": 500,
+              "desc": "一般生活用气350-500m³(含)"
+            },
+            "wall_hung_boiler_heat": {
+              "min": 1500,
+              "max": 2500,
+              "desc": "壁挂炉采暖用气1500-2500m³(含)"
+            },
+            "rural_gas_heat": {
+              "min": 2500,
+              "max": 3000,
+              "desc": "农村煤改气采暖用气2500-3000m³(含)"
+            }
+          }
+        },
+        {
+          "level": 3,
+          "price": 4.23,
+          "usage_range": {
+            "daily_life": {
+              "min": 500,
+              "max": 999999,
+              "desc": "一般生活用气500m³以上"
+            },
+            "wall_hung_boiler_heat": {
+              "min": 2500,
+              "max": 999999,
+              "desc": "壁挂炉采暖用气2500m³以上"
+            },
+            "rural_gas_heat": {
+              "min": 3000,
+              "max": 999999,
+              "desc": "农村煤改气采暖用气3000m³以上"
+            }
+          }
+        }
+      ]
+    },
+    "non_resident_sell_price": {
+      "title": "北京市非居民用管道天然气销售价格表",
+      "price_unit": "元/立方米",
+      "time_period": [
+        {
+          "period": "2025-11-15 ~ 2026-03-15",
+          "price_data": [
+            {
+              "category": "发电用气",
+              "sub_area": null,
+              "price": 2.71
+            },
+            {
+              "category": "供暖、制冷用气",
+              "sub_area": "城六区",
+              "price": 2.89
+            },
+            {
+              "category": "供暖、制冷用气",
+              "sub_area": "其他区域",
+              "price": 2.65
+            },
+            {
+              "category": "工商业用气",
+              "sub_area": "城六区",
+              "price": 3.31
+            },
+            {
+              "category": "工商业用气",
+              "sub_area": "其他区域",
+              "price": 3.07
+            },
+            {
+              "category": "压缩天然气加气母站",
+              "sub_area": "供非居民用气",
+              "price": 2.77
+            }
+          ]
+        },
+        {
+          "period": "2026-03-16 起长期执行",
+          "price_data": [
+            {
+              "category": "发电用气",
+              "sub_area": null,
+              "price": 2.27
+            },
+            {
+              "category": "供暖、制冷用气",
+              "sub_area": "城六区",
+              "price": 2.45
+            },
+            {
+              "category": "供暖、制冷用气",
+              "sub_area": "其他区域",
+              "price": 2.21
+            },
+            {
+              "category": "工商业用气",
+              "sub_area": "城六区",
+              "price": 2.87
+            },
+            {
+              "category": "工商业用气",
+              "sub_area": "其他区域",
+              "price": 2.63
+            },
+            {
+              "category": "压缩天然气加气母站",
+              "sub_area": "供非居民用气",
+              "price": 2.33
+            }
+          ]
+        }
+      ],
+      "special_note": "压缩天然气加气母站供居民用气价格持续执行2.10元/立方米"
+    },
+    "non_resident_distribute_price": {
+      "title": "2025-2027年本市管道天然气非居民用户配气价格表",
+      "price_unit": "元/立方米",
+      "distribute_price_list": [
+        {
+          "category": "发电用气",
+          "price": 0.36
+        },
+        {
+          "category": "供暖、制冷用气",
+          "price": 0.48
+        },
+        {
+          "category": "工商业用气",
+          "price": 0.81
+        }
+      ],
+      "note": "1. 市场化直购气用户按此标准收取配气费；2. 管网供销差率上限1.72%"
+    }
+  }

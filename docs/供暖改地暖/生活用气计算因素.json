@@ -1,0 +1,30 @@
+{
+    "life_gas_estimate": {
+      "base_value": 220,
+      "desc": "基准条件：2人、1卫、正常日常做饭、无零冷水、几乎不用浴缸、壁挂炉统一供应生活热水+炊事；单位m³/年，不含采暖用气",
+      "population_coeff": [
+        {"label": "1人", "coeff": 0.70},
+        {"label": "2人", "coeff": 1.00},
+        {"label": "3人", "coeff": 1.25},
+        {"label": "4人及以上", "coeff": 1.50}
+      ],
+      "cook_coeff": [
+        {"label": "几乎不开火（外卖为主）", "coeff": 0.75},
+        {"label": "正常日常做饭", "coeff": 1.00}
+      ],
+      "bathroom_coeff": [
+        {"label": "1个卫生间", "coeff": 1.00},
+        {"label": "2个及以上卫生间", "coeff": 1.15}
+      ],
+      "tub_coeff": [
+        {"label": "几乎不使用浴缸", "coeff": 1.00},
+        {"label": "偶尔使用浴缸", "coeff": 1.15},
+        {"label": "经常使用浴缸", "coeff": 1.30}
+      ],
+      "recirculation_coeff": [
+        {"label": "无热水零冷水", "coeff": 1.00},
+        {"label": "有零冷水｜仅点动按需开启（节能）", "coeff": 1.15},
+        {"label": "有零冷水｜定时自动循环（舒适）", "coeff": 1.30}
+      ]
+    }
+  }
