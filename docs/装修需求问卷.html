@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>装修需求问卷 - 世华泊郡88㎡</title>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f0f0f0;color:#333;padding:12px;line-height:1.8}
+.page{max-width:800px;margin:0 auto;background:#fff;padding:24px 20px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+h1{font-size:20px;text-align:center;margin-bottom:4px}
+.sub{text-align:center;color:#888;font-size:13px;margin-bottom:24px}
+.sec{margin-bottom:24px}
+.sec-t{font-size:16px;font-weight:700;margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid #1a73e8;color:#1a73e8}
+.f{margin-bottom:14px}
+.f-l{font-size:14px;font-weight:600;color:#555;margin-bottom:6px}
+.f-i{width:100%;padding:10px 12px;background:#f8f9fa;border:1px solid #e0e0e0;border-radius:6px;font-size:14px;line-height:1.6;color:#333;outline:none;font-family:inherit;resize:vertical;min-height:42px}
+.f-i:focus{border-color:#1a73e8;background:#fff}
+.f-i::placeholder{color:#bbb}
+.f-h{font-size:12px;color:#999;margin-top:4px}
+.g{background:#f8f9fa;border-radius:8px;padding:14px;margin-bottom:12px}
+.g-t{font-size:14px;font-weight:600;color:#1a73e8;margin-bottom:10px}
+.ft{text-align:center;margin-top:32px;padding-top:16px;border-top:1px solid #eee;font-size:13px;color:#888}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.o{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;background:#fff;border:1px solid #e0e0e0;border-radius:6px;font-size:13px;cursor:pointer;transition:all .15s;user-select:none}
+.o:hover{border-color:#1a73e8}
+.o.a{border-color:#1a73e8;background:#e8f0fe;color:#1a73e8;font-weight:600}
+.o .d{width:14px;height:14px;border:2px solid #ccc;border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px}
+.o.a .d{border-color:#1a73e8;background:#1a73e8;color:#fff}
+.om{display:flex;flex-wrap:wrap;gap:6px}
+.oi{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:#fff;border:1px solid #e0e0e0;border-radius:14px;font-size:12px;cursor:pointer;transition:all .15s;user-select:none}
+.oi:hover{border-color:#1a73e8}
+.oi.a{border-color:#1a73e8;background:#e8f0fe;color:#1a73e8;font-weight:600}
+#dlBtn{position:fixed;bottom:16px;right:16px;padding:10px 20px;background:#1a73e8;color:#fff;border:none;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(26,115,232,.3);z-index:100}
+#dlBtn:active{opacity:.8}
+@media(min-width:600px){body{padding:24px}.page{padding:32px 40px}}
+</style>
+</head>
+<body>
+<div class="page" id="cap">
+<h1>装修需求问卷</h1>
+<p class="sub">世华泊郡 · 88㎡ · 两室两厅一卫 · 1层</p>
+
+<div class="sec">
+<div class="sec-t">一、房屋资料</div>
+<div class="f"><div class="f-l">房型类别</div><div class="opts"><div class="o a"><span class="d">✓</span> 平层</div><div class="o"><span class="d"></span> 复式/跃层</div><div class="o"><span class="d"></span> 别墅</div><div class="o"><span class="d"></span> 自建</div></div></div>
+<div class="f"><div class="f-l">房屋现在的状态</div><div class="opts"><div class="o a"><span class="d">✓</span> 毛坯</div><div class="o"><span class="d"></span> 老旧</div><div class="o"><span class="d"></span> 精装</div></div></div>
+<div class="f"><div class="f-l">小区名称</div><textarea class="f-i" rows="1">世华泊郡（北京城承物业管理）</textarea></div>
+<div class="f"><div class="f-l">房屋面积</div><textarea class="f-i" rows="1">房本面积 88㎡（套内约61㎡）</textarea></div>
+<div class="f"><div class="f-l">房子使用倾向</div><div class="opts"><div class="o a"><span class="d">✓</span> 第一居所</div><div class="o"><span class="d"></span> 第二居所</div><div class="o"><span class="d"></span> 养老</div></div></div>
+<div class="f"><div class="f-l">本次装修居住时间</div><div class="opts"><div class="o"><span class="d"></span> 5年</div><div class="o"><span class="d"></span> 10年</div><div class="o a"><span class="d">✓</span> 10年以上</div></div></div>
+<div class="f"><div class="f-l">设计费预算</div><div class="opts"><div class="o" onclick="toO(this)"><span class="d"></span> 200元/㎡</div><div class="o" onclick="toO(this)"><span class="d"></span> 260元/㎡</div><div class="o" onclick="toO(this)"><span class="d"></span> 300元/㎡</div><div class="o" onclick="toO(this)"><span class="d"></span> 360元/㎡</div></div></div>
+<div class="f"><div class="f-l">装修预算（含家电软装、到入住状态）</div><textarea class="f-i" rows="1">26万</textarea></div>
+<div class="f"><div class="f-l">期望开工时间</div><textarea class="f-i" rows="1">2026年8月</textarea></div>
+<div class="f"><div class="f-l">希望入住时间</div><textarea class="f-i" rows="1">2027年4月</textarea></div>
+<div class="f"><div class="f-l">常住人员</div><textarea class="f-i" rows="1">2人 + 5只猫</textarea></div>
+<div class="f"><div class="f-l">偶住人员/偶住频率</div><textarea class="f-i" rows="1">节假日偶尔父母过来短住</textarea></div>
+<div class="f"><div class="f-l">喜欢的装修风格（可多选，最好提供图片）</div>
+<div class="om"><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 现代</div><div class="oi" onclick="toM(this)"><span class="d"></span> 轻奢</div><div class="oi" onclick="toM(this)"><span class="d"></span> 极简</div><div class="oi" onclick="toM(this)"><span class="d"></span> 北欧</div><div class="oi" onclick="toM(this)"><span class="d"></span> 奶油</div><div class="oi" onclick="toM(this)"><span class="d"></span> 复古</div><div class="oi" onclick="toM(this)"><span class="d"></span> 法式</div><div class="oi" onclick="toM(this)"><span class="d"></span> 日式</div><div class="oi" onclick="toM(this)"><span class="d"></span> 美式</div></div>
+<textarea class="f-i" rows="2" style="margin-top:6px;">不太强调风格化，喜欢简约设计，但是要有设计感。不喜欢多余累赘线条。温暖、自然、宠物友好。</textarea>
+</div>
+</div>
+
+<div class="sec">
+<div class="sec-t">二、人员生活习惯</div>
+<div class="g"><div class="g-t">先生</div>
+<div class="f"><div class="f-l">职业</div><textarea class="f-i" rows="1">产品经理</textarea></div>
+<div class="f"><div class="f-l">身高</div><textarea class="f-i" rows="1">168cm</textarea></div>
+<div class="f"><div class="f-l">喜好</div><textarea class="f-i" rows="1">羽毛球、摩托车、骑行、收集盲盒娃娃、手工、自驾、拍照、偶尔下厨</textarea></div>
+<div class="f"><div class="f-l">作息时间</div><textarea class="f-i" rows="1">工作日早上10点到岗，晚上七八点下班</textarea></div>
+<div class="f"><div class="f-l">生活习惯</div><textarea class="f-i" rows="2">听歌重度用户，睡觉、洗澡都喜欢听歌，主要负责家里的家务。</textarea></div>
+</div>
+<div class="g"><div class="g-t">女士</div>
+<div class="f"><div class="f-l">职业</div><textarea class="f-i" rows="1">互联网运营</textarea></div>
+<div class="f"><div class="f-l">身高</div><textarea class="f-i" rows="1">158cm</textarea></div>
+<div class="f"><div class="f-l">喜好</div><textarea class="f-i" rows="1">看电视、躺着、吃零食、骑自行车、打羽毛球</textarea></div>
+<div class="f"><div class="f-l">作息时间</div><textarea class="f-i" rows="1">早上10点多到岗，晚上下班很晚，周末偶尔加班</textarea></div>
+<div class="f"><div class="f-l">生活习惯</div><textarea class="f-i" rows="2">喜欢周末躺着看电视，偶尔运动一下，喜欢出去自驾游。</textarea></div>
+</div>
+</div>
+
+<div class="sec">
+<div class="sec-t">三、分区空间详细需求</div>
+
+<div class="g"><div class="g-t">● 玄关</div>
+<div class="f"><div class="f-l">当季常用鞋子多少</div><textarea class="f-i" rows="1">当季常用鞋子 8 双，非季常用鞋子 8 双。</textarea></div>
+<div class="f"><div class="f-l">其他需求</div><textarea class="f-i" rows="2">希望回家之后能快速换鞋，有一个临时收纳鞋、外套的空间。羽毛球装备、摩托车头盔、钥匙。</textarea></div>
+</div>
+
+<div class="g"><div class="g-t">● 客厅</div>
+<div class="f"><div class="f-l">来客频率及类型</div><textarea class="f-i" rows="1">不会经常有客人来，偶尔同事朋友串门。</textarea></div>
+<div class="f"><div class="f-l">泡茶喝咖啡习惯</div>
+<div class="om"><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 偶尔泡茶</div><div class="oi" onclick="toM(this)"><span class="d"></span> 经常泡茶</div><div class="oi" onclick="toM(this)"><span class="d"></span> 不泡茶</div><div class="oi" onclick="toM(this)"><span class="d"></span> 在家喝咖啡</div><div class="oi" onclick="toM(this)"><span class="d"></span> 不需要</div></div>
+</div>
+<div class="f"><div class="f-l">其他</div><textarea class="f-i" rows="3">希望客厅布局灵活一点，不要太传统。不想要电视墙，电视用移动支架。客厅承接功能：偶尔办公、健身、聚会、观景、宠物活动空间。</textarea></div>
+</div>
+
+<div class="g"><div class="g-t">● 餐厅</div>
+<div class="f"><div class="f-l">用餐人数</div><textarea class="f-i" rows="1">固定 2 人，偶尔加访客 4-6 人。</textarea></div>
+<div class="f"><div class="f-l">能否接受餐厨开放结合</div><div class="opts"><div class="o a" onclick="toO(this)"><span class="d">✓</span> 是</div><div class="o" onclick="toO(this)"><span class="d"></span> 否</div></div></div>
+<div class="f"><div class="f-l">希望放置的电器清单</div>
+<div class="om"><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 大冰箱（平嵌，厨房放不下就放餐厅）</div><div class="oi" onclick="toM(this)"><span class="d"></span> 直饮机</div><div class="oi" onclick="toM(this)"><span class="d"></span> 咖啡机</div><div class="oi" onclick="toM(this)"><span class="d"></span> 煮茶机</div></div>
+</div>
+<div class="f"><div class="f-l">餐厅收纳及其他</div><textarea class="f-i" rows="1" placeholder="请填写"></textarea></div>
+</div>
+
+<div class="g"><div class="g-t">● 厨房</div>
+<div class="f"><div class="f-l">厨房使用哪些设备/家具</div>
+<div class="om"><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 大冰箱（平嵌）</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 烟机灶具</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 洗碗机</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 前置</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 净水器</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 垃圾处理器</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 微波炉</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 电饭煲</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 空气炸锅</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 壁挂炉</div></div>
+<textarea class="f-i" rows="1" placeholder="其他设备" style="margin-top:6px;">各种锅具</textarea>
+</div>
+<div class="f"><div class="f-l">其他收纳和需求</div><textarea class="f-i" rows="2">做饭时希望开放式，进出方便；不做饭时希望封闭。不希望猫进入厨房。</textarea></div>
+</div>
+
+<div class="g"><div class="g-t">● 主卧</div>
+<div class="f"><div class="f-l">是否需要独立衣帽间</div><div class="opts"><div class="o" onclick="toO(this)"><span class="d"></span> 需要</div><div class="o a" onclick="toO(this)"><span class="d">✓</span> 无</div><div class="o" onclick="toO(this)"><span class="d"></span> 尽量有</div></div></div>
+<div class="f"><div class="f-l">衣服的收纳情况</div><textarea class="f-i" rows="1">目前使用 4 门衣柜。换季后能快速收纳，衣服尽量挂起来。</textarea></div>
+<div class="f"><div class="f-l">其他</div><textarea class="f-i" rows="1">需配梳妆台（可与衣柜/床头柜一体化）。化妆：卫生间和卧室都有可能。</textarea></div>
+</div>
+
+<div class="g"><div class="g-t">● 卫生间</div>
+<div class="f"><div class="f-l">卫生间使用哪些设备</div>
+<div class="om"><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 智能马桶</div><div class="oi" onclick="toM(this)"><span class="d"></span> 正常马桶</div><div class="oi" onclick="toM(this)"><span class="d"></span> 壁挂马桶</div><div class="oi" onclick="toM(this)"><span class="d"></span> 浴缸</div></div>
+</div>
+<div class="f"><div class="f-l">是否需要干湿分离</div><div class="opts"><div class="o a" onclick="toO(this)"><span class="d">✓</span> 需要</div><div class="o" onclick="toO(this)"><span class="d"></span> 不需要</div></div></div>
+<div class="f"><div class="f-l">在这里化妆吗</div><div class="opts"><div class="o a" onclick="toO(this)"><span class="d">✓</span> 需要</div><div class="o" onclick="toO(this)"><span class="d"></span> 不需要</div></div></div>
+<div class="f-h">暗卫无窗，需强化排风和照明。干湿分离后放置：2台Catlink电动猫砂盆（单机600×580×710mm）、独立洗衣机+烘干机+小内衣洗衣机、扫地机器人基站（自动上下水+插座）。</div>
+</div>
+
+<div class="g"><div class="g-t">● 次卧</div>
+<div class="f"><div class="f-l">功能规划</div><textarea class="f-i" rows="2">多功能复合空间：日常居家办公 + 大容量收纳 + 父母/亲友临时留宿（一房多用）。</textarea></div>
+</div>
+
+<div class="g"><div class="g-t">● 其他空间</div>
+<div class="f"><div class="f-l">阳台</div><textarea class="f-i" rows="1">客厅阳台约2.9㎡。</textarea></div>
+<div class="f"><div class="f-l">工具间/家政空间</div><textarea class="f-i" rows="3">收纳猫砂猫粮等消耗品（猫砂存储三箱约30千克，猫粮约3袋5kg）。洗地机、吸尘器。</textarea></div>
+</div>
+</div>
+
+<div class="sec">
+<div class="sec-t">四、生活个性化需求</div>
+
+<div class="g"><div class="g-t">● 收纳习惯</div>
+<div class="f"><div class="f-l">家里有几个行李箱</div><textarea class="f-i" rows="1">3个：两个20寸，一个28寸。</textarea></div>
+<div class="f"><div class="f-l">有多少藏书/手办/艺术品需要收纳</div><textarea class="f-i" rows="1">有5层书柜。手办主要是小的泡泡玛特之类的。</textarea></div>
+</div>
+
+<div class="g"><div class="g-t">● 饮食习惯</div>
+<div class="f"><div class="f-l">是否经常做饭</div><div class="opts"><div class="o a" onclick="toO(this)"><span class="d">✓</span> 是</div><div class="o" onclick="toO(this)"><span class="d"></span> 否</div></div><div class="f-h">目前不经常做，但希望以后经常做，工作日早餐及周末。</div></div>
+<div class="f"><div class="f-l">是否有吃饭看电视的习惯</div><div class="opts"><div class="o a" onclick="toO(this)"><span class="d">✓</span> 是</div><div class="o" onclick="toO(this)"><span class="d"></span> 无</div></div></div>
+<div class="f"><div class="f-l">对厨房要求</div><textarea class="f-i" rows="2">做饭时希望开放式，进出方便；不做饭时希望封闭。不希望猫进入厨房。</textarea></div>
+<div class="f"><div class="f-l">饮食偏好</div><div class="opts"><div class="o a" onclick="toO(this)"><span class="d">✓</span> 中餐为主</div><div class="o" onclick="toO(this)"><span class="d"></span> 西餐</div></div><div class="f-h">不会太多爆炒。</div></div>
+</div>
+
+<div class="g"><div class="g-t">● 生活习惯</div>
+<div class="f"><div class="f-l">回家是否立刻更换家居服</div><div class="opts"><div class="o a" onclick="toO(this)"><span class="d">✓</span> 是</div><div class="o" onclick="toO(this)"><span class="d"></span> 否</div></div></div>
+<div class="f"><div class="f-l">是否喜欢看电视</div><div class="opts"><div class="o a" onclick="toO(this)"><span class="d">✓</span> 是</div><div class="o" onclick="toO(this)"><span class="d"></span> 否</div></div></div>
+<div class="f"><div class="f-l">养宠物情况及需求</div><textarea class="f-i" rows="2">5只猫，选材需考虑防猫抓（沙发、窗帘材质）。</textarea></div>
+<div class="f"><div class="f-l">是否需要独立工作空间</div><div class="opts"><div class="o" onclick="toO(this)"><span class="d"></span> 是</div><div class="o a" onclick="toO(this)"><span class="d">✓</span> 不是非得必须</div></div></div>
+<div class="f"><div class="f-l">使用哪些健身运动器械</div><textarea class="f-i" rows="1">羽毛球、自行车、Pico VR、Switch。</textarea></div>
+<div class="f"><div class="f-l">对风水的要求</div><div class="opts"><div class="o a" onclick="toO(this)"><span class="d">✓</span> 注重</div><div class="o" onclick="toO(this)"><span class="d"></span> 不注重</div></div><div class="f-h">格局方正尽量不动，可进行拆改挪墙。</div></div>
+</div>
+
+<div class="g"><div class="g-t">● 家用设备</div>
+<div class="f"><div class="f-l">对暖通等设备的需求</div>
+<div class="om"><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 地暖</div><div class="oi" onclick="toM(this)"><span class="d"></span> 暖气片</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 中央空调</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 新风</div><div class="oi" onclick="toM(this)"><span class="d"></span> 壁挂空调</div><div class="oi" onclick="toM(this)"><span class="d"></span> 燃热热水</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 电热水器</div></div>
+<textarea class="f-i" rows="2" style="margin-top:6px;">自购壁挂炉做地暖；小米中央空调+新风模块。层高2.71m需核算净高。</textarea>
+</div>
+<div class="f"><div class="f-l">对智能家居的需求</div>
+<div class="om"><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 窗帘</div><div class="oi a" onclick="toM(this)"><span class="d">✓</span> 灯光</div></div>
+<textarea class="f-i" rows="1" style="margin-top:6px;">米家生态：智能开关、全屋灯光智能、电动窗帘、人在传感器。开关盒须预留零线。</textarea>
+</div>
+<div class="f"><div class="f-l">有哪些必要的娱乐、游戏设备</div><textarea class="f-i" rows="1">Pico VR、Switch、K歌设备。</textarea></div>
+<div class="f"><div class="f-l">是否需要放置钢琴或其他乐器</div><div class="opts"><div class="o" onclick="toO(this)"><span class="d"></span> 钢琴</div><div class="o" onclick="toO(this)"><span class="d"></span> 吉他</div><div class="o" onclick="toO(this)"><span class="d"></span> 其他</div><div class="o a" onclick="toO(this)"><span class="d">✓</span> 无</div></div></div>
+<div class="f"><div class="f-l">是否有原有保留家具打算用在新房</div><div class="opts"><div class="o a" onclick="toO(this)"><span class="d">✓</span> 无</div><div class="o" onclick="toO(this)"><span class="d"></span> 有</div></div><textarea class="f-i" rows="1" style="margin-top:6px;">有部分电器，无家具带入，需全屋家具采购。</textarea></div>
+</div>
+</div>
+
+<div class="sec">
+<div class="sec-t">补充：户型硬伤与特殊考量</div>
+<div class="f"><div class="f-l">户型硬伤</div><textarea class="f-i" rows="3">①入户门对客厅/阳台（穿堂煞）
+②卫生间暗卫无窗
+③主卧至卫生间动线较长</textarea></div>
+<div class="f"><div class="f-l">一层特殊问题</div><textarea class="f-i" rows="4">采光受限·临街噪音/灰尘·窗外行人可视（隐私）·下方为地下室和停车场需评估防潮·同小区空调井已有发霉案例需专项防水</textarea></div>
+<div class="f"><div class="f-l">门窗更换</div><textarea class="f-i" rows="1">外窗全部更换；入户防盗门更换；须按物业交付标准。</textarea></div>
+<div class="f"><div class="f-l">结构拆改</div><textarea class="f-i" rows="1">主卧与餐厅之间、主卧与次卧之间、厨房与客厅等墙体为非承重，可挪墙优化动线。禁止动承重墙。</textarea></div>
+<div class="f"><div class="f-l">监理安排</div><textarea class="f-i" rows="1">自己请第三方监理。</textarea></div>
+</div>
+
+<div class="ft"><p>填写日期：__________ &nbsp; 业主签名：__________</p></div>
+</div>
+
+<button id="dlBtn" onclick="dl()">📸 下载为图片</button>
+<script>
+function toO(el){const g=el.parentElement;g.querySelectorAll('.o').forEach(o=>{o.classList.remove('a');o.querySelector('.d').textContent=''});el.classList.add('a');el.querySelector('.d').textContent='✓'}
+function toM(el){el.classList.toggle('a');el.querySelector('.d').textContent=el.classList.contains('a')?'✓':''}
+function dl(){const b=document.getElementById('dlBtn');b.style.display='none';html2canvas(document.getElementById('cap'),{scale:2,useCORS:true,backgroundColor:'#fff'}).then(c=>{const l=document.createElement('a');l.download='装修需求问卷_世华泊郡88㎡.png';l.href=c.toDataURL('image/png');l.click();b.style.display=''})}
+</script>
+</body>
+</html>

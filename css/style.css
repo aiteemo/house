@@ -3166,6 +3166,145 @@ body {
 .wire-summary-main { background: rgba(74,222,128,0.08); }
 .wire-summary-main .wire-summary-num { color: var(--green); }
 
+/* ========== 供暖助手 ========== */
+.heating-calc { padding: 0 0 40px; }
+.heating-header { margin-bottom: 24px; }
+.heating-title h2 { font-size: 22px; margin-bottom: 4px; }
+.heating-desc { font-size: 14px; color: var(--text-dim); }
+
+.heating-input-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+.heating-input-group { margin-bottom: 16px; }
+.heating-input-group:last-child { margin-bottom: 0; }
+.heating-label { display: block; font-size: 13px; color: var(--text-dim); margin-bottom: 8px; }
+.heating-input {
+    width: 200px;
+    padding: 10px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 600;
+    outline: none;
+}
+.heating-input:focus { border-color: var(--accent); }
+
+.heating-type-label { font-size: 13px; color: var(--text-dim); margin-bottom: 8px; margin-top: 12px; }
+.heating-type-label:first-child { margin-top: 0; }
+.heating-type-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+}
+.heating-type-card {
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.heating-type-card:hover { border-color: var(--accent); }
+.heating-type-card.active {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+}
+.heating-type-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.heating-type-card.active .heating-type-name { color: var(--accent); }
+.heating-type-price { font-size: 15px; font-weight: 700; color: var(--orange); }
+.heating-type-desc { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+.heating-result-section { margin-bottom: 24px; }
+.heating-result-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 12px;
+}
+.heating-result-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+}
+.heating-result-main {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, var(--accent-glow), rgba(108,140,255,0.05));
+}
+.heating-result-pause { border-color: var(--orange); }
+.heating-result-save { border-color: var(--green); }
+.heating-result-label { font-size: 13px; color: var(--text-dim); margin-bottom: 8px; }
+.heating-result-value { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+.heating-result-main .heating-result-value { color: var(--accent); }
+.heating-result-pause .heating-result-value { color: var(--orange); }
+.heating-result-save .heating-result-value { color: var(--green); }
+.heating-result-formula { font-size: 12px; color: var(--text-dim); }
+.heating-result-note {
+    padding: 12px 16px;
+    background: rgba(108,140,255,0.06);
+    border: 1px solid rgba(108,140,255,0.15);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+}
+
+.heating-knowledge-section { margin-bottom: 24px; }
+.heating-knowledge-title { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+.heating-knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+.heating-knowledge-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+}
+.heating-kn-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.heating-kn-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+.heating-ref-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+}
+.heating-ref-title { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+.heating-ref-list { display: flex; flex-direction: column; gap: 8px; }
+.heating-ref-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 13px;
+    transition: all 0.15s;
+}
+.heating-ref-link:hover {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+}
+.heating-ref-icon { font-size: 14px; }
+
+@media (max-width: 700px) {
+    .heating-result-grid { grid-template-columns: 1fr; }
+    .heating-knowledge-grid { grid-template-columns: 1fr; }
+    .heating-type-options { grid-template-columns: 1fr; }
+}
+
 .wire-card-footer {
     padding: 12px 16px;
     border-top: 1px solid var(--border);

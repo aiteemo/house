@@ -76,6 +76,7 @@ class StyleQuizManager {
         else if (this.state === 'result') this.renderResult(container);
         else if (this.state === 'colorcard') this.renderColorCardTool(container);
         else if (this.state === 'wirecalc') this.renderWireCalc(container);
+        else if (this.state === 'heating') this.renderHeating(container);
     }
 
     // ========== 工具首页：APP桌面风格 ==========
@@ -155,6 +156,27 @@ class StyleQuizManager {
                             </svg>
                         </div>
                     </div>
+                    <div class="tool-card" data-tool="heating">
+                        <div class="tool-icon">
+                            <svg viewBox="0 0 64 64" width="48" height="48">
+                                <rect x="4" y="4" width="56" height="56" rx="14" fill="#f87171" opacity="0.12"/>
+                                <rect x="8" y="8" width="48" height="48" rx="11" fill="none" stroke="#f87171" stroke-width="2"/>
+                                <path d="M32 18 C26 18 22 24 22 30 C22 36 26 40 26 44 L38 44 C38 40 42 36 42 30 C42 24 38 18 32 18Z" fill="none" stroke="#f87171" stroke-width="2"/>
+                                <path d="M28 30 Q32 24 36 30" stroke="#f87171" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                                <line x1="32" y1="44" x2="32" y2="50" stroke="#f87171" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="26" y1="50" x2="38" y2="50" stroke="#f87171" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-title">供暖助手</div>
+                            <div class="tool-desc">北京市集中供热费用计算器，一键计算供暖季费用及停供费用</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -166,6 +188,9 @@ class StyleQuizManager {
                     this.renderAll();
                 } else if (tool === 'wirecalc') {
                     this.state = 'wirecalc';
+                    this.renderAll();
+                } else if (tool === 'heating') {
+                    this.state = 'heating';
                     this.renderAll();
                 } else {
                     this.state = 'intro';
@@ -800,6 +825,29 @@ class StyleQuizManager {
         });
 
         renderCard();
+    }
+
+    // ========== 供暖助手 ==========
+    renderHeating(container) {
+        if (!this._heating) {
+            this._heating = new HeatingAssistantManager();
+        }
+        container.innerHTML = `
+            <div class="quiz-container" style="max-width:900px;">
+                <div class="quiz-back" id="heatingBack">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    返回工具箱
+                </div>
+                <div id="heatingContent"></div>
+            </div>
+        `;
+        this._heating.render(container.querySelector('#heatingContent'));
+        container.querySelector('#heatingBack').addEventListener('click', () => {
+            this.state = 'home';
+            this.renderToolsHome();
+        });
     }
 
     // ========== 电线选型计算器 ==========
