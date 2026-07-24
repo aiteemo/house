@@ -3170,8 +3170,9 @@ body {
 .heating-calc-wrap { display: flex; gap: 20px; padding: 0 0 40px; }
 .heating-calc { flex: 1; min-width: 0; }
 
-/* 侧边导航 - flex双栏布局 */
-.heating-side-nav { flex-shrink: 0; width: 130px; position: sticky; top: 80px; align-self: flex-start; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
+/* 侧边导航 - flex双栏布局，放右侧 */
+.heating-side-nav { flex-shrink: 0; width: 130px; position: sticky; top: 80px; align-self: flex-start; display: flex; flex-direction: column; gap: 4px; z-index: 10; order: 2; }
+.heating-calc { order: 1; }
 .hnav-item { display: block; padding: 6px 12px; font-size: 12px; color: var(--text-dim); text-decoration: none; border-radius: 6px; transition: all 0.15s; white-space: nowrap; border-left: 2px solid transparent; }
 .hnav-item:hover { color: var(--text); background: var(--bg-hover); }
 .hnav-item.active { color: var(--accent); background: var(--accent-glow); border-left-color: var(--accent); font-weight: 600; }

@@ -515,17 +515,19 @@ class HeatingAssistantManager {
             card.classList.add('active');
         };
 
-        // 更新集中供暖费用显示条
-        const updateCentralBar = () => {
+        // 更新集中供暖费用 + 对比结果
+        const updateAll = () => {
             const central = this.calcCentral();
             const bar = container.querySelector('#centralResultBar');
-            if (!bar) return;
-            if (central) {
-                bar.innerHTML = `<span>本采暖季费用</span><span class="heating-result-val">¥${central.fee.toFixed(2)}</span><span class="heating-result-formula">${this.area}㎡ × ${central.pricePerUnit}元/㎡</span>`;
-                bar.style.display = '';
-            } else {
-                bar.style.display = 'none';
+            if (bar) {
+                if (central) {
+                    bar.innerHTML = `<span>本采暖季费用</span><span class="heating-result-val">¥${central.fee.toFixed(2)}</span><span class="heating-result-formula">${this.area}㎡ × ${central.pricePerUnit}元/㎡</span>`;
+                    bar.style.display = '';
+                } else {
+                    bar.style.display = 'none';
+                }
             }
+            this.refreshResult(container);
         };
 
         // 集中供暖类型选择
@@ -534,16 +536,20 @@ class HeatingAssistantManager {
                 if (e.target.tagName === 'INPUT') return;
                 selectCard(card);
                 if (card.classList.contains('heating-tcard-custom')) {
+                    // 点击自定义卡片区域，聚焦输入框
                     this.selectedKey = 'custom';
                     const inp = card.querySelector('input');
                     if (inp) setTimeout(() => inp.focus(), 0);
                 } else {
+                    // 点击预设选项，清空自定义价格
                     this.selectedKey = card.dataset.key;
                     this.customPrice = null;
+                    // 清空自定义输入框
+                    const inp = container.querySelector('#hCustomPrice');
+                    if (inp) inp.value = '';
                 }
                 this.saveState();
-                updateCentralBar();
-                this.refreshResult(container);
+                updateAll();
             });
         });
 
@@ -551,6 +557,7 @@ class HeatingAssistantManager {
         const customPriceInput = container.querySelector('#hCustomPrice');
         if (customPriceInput) {
             customPriceInput.addEventListener('focus', () => {
+                // 聚焦时自动切换到自定义卡片
                 const customCard = container.querySelector('.heating-tcard-custom');
                 if (customCard) selectCard(customCard);
                 this.selectedKey = 'custom';
@@ -558,11 +565,10 @@ class HeatingAssistantManager {
             });
             customPriceInput.addEventListener('input', e => {
                 const val = parseFloat(e.target.value);
-                this.customPrice = isNaN(val) ? null : val;
+                this.customPrice = isNaN(val) || val <= 0 ? null : val;
                 this.selectedKey = 'custom';
                 this.saveState();
-                updateCentralBar();
-                this.refreshResult(container);
+                updateAll();
             });
             customPriceInput.addEventListener('click', e => e.stopPropagation());
         }
