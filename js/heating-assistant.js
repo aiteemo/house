@@ -18,6 +18,8 @@ class HeatingAssistantManager {
         this.user_coeff = 1.0;
         this.year_life_gas = 300;
         this.customPrice = null;
+        // 对比口径：heating=刨除生活用气（默认） / household=家庭燃气总账
+        this.compareMode = 'heating';
         this.loadState();
     }
 
@@ -33,6 +35,7 @@ class HeatingAssistantManager {
                 if (d.user_coeff !== undefined) this.user_coeff = d.user_coeff;
                 if (d.year_life_gas) this.year_life_gas = d.year_life_gas;
                 if (d.customPrice !== undefined) this.customPrice = d.customPrice;
+                if (d.compareMode === 'heating' || d.compareMode === 'household') this.compareMode = d.compareMode;
             } catch (e) {}
         }
     }
@@ -45,8 +48,30 @@ class HeatingAssistantManager {
             boiler: this.boiler,
             user_coeff: this.user_coeff,
             year_life_gas: this.year_life_gas,
-            customPrice: this.customPrice
+            customPrice: this.customPrice,
+            compareMode: this.compareMode
         }));
+    }
+
+    /** 北京居民阶梯气价累进计价 */
+    calcLadderCost(volume) {
+        const ladder = HEATING_DATA.gas_ladder;
+        const v = Math.max(0, volume || 0);
+        let cost = 0;
+        let tier = 1;
+        if (v <= ladder[0].upper) {
+            cost = v * ladder[0].price;
+            tier = 1;
+        } else if (v <= ladder[1].upper) {
+            cost = ladder[0].upper * ladder[0].price + (v - ladder[0].upper) * ladder[1].price;
+            tier = 2;
+        } else {
+            cost = ladder[0].upper * ladder[0].price
+                + (ladder[1].upper - ladder[0].upper) * ladder[1].price
+                + (v - ladder[1].upper) * ladder[2].price;
+            tier = 3;
+        }
+        return { cost, tier };
     }
 
     makeKey(opt) {
@@ -100,44 +125,32 @@ class HeatingAssistantManager {
         const daily_real_gas = daily_base_gas * condenser_coeff * temp_comp_coeff * power_coeff * this.user_coeff;
         const season_gas = daily_real_gas * C.heating_season_days;
 
-        // FR05 阶梯气价
+        // FR05 阶梯气价（生活用气参与梯度，抬高采暖用气单价）
         const total_gas = season_gas + this.year_life_gas;
-        let gas_cost = 0;
-        let tier = 1;
-        const ladder = HEATING_DATA.gas_ladder;
-        if (total_gas <= ladder[0].upper) {
-            gas_cost = total_gas * ladder[0].price;
-            tier = 1;
-        } else if (total_gas <= ladder[1].upper) {
-            gas_cost = ladder[0].upper * ladder[0].price + (total_gas - ladder[0].upper) * ladder[1].price;
-            tier = 2;
-        } else {
-            gas_cost = ladder[0].upper * ladder[0].price + (ladder[1].upper - ladder[0].upper) * ladder[1].price + (total_gas - ladder[1].upper) * ladder[2].price;
-            tier = 3;
-        }
+        const { cost: gas_cost, tier } = this.calcLadderCost(total_gas);
+        const { cost: life_gas_cost } = this.calcLadderCost(this.year_life_gas);
+        // 采暖归因燃气费 = 全年总燃气费 − 仅生活用气费用（差额法）
+        const heating_gas_cost = gas_cost - life_gas_cost;
 
         // FR06 固定成本
         const year_depreciation = this.boiler.price / this.boiler.service_life;
         const year_fixed = year_depreciation + this.boiler.maintain_cost;
 
         // FR07 综合总成本
-        const total_cost = gas_cost + year_fixed;
-
-        // 采暖季燃气单独花费
-        let heating_gas_cost = 0;
-        if (season_gas <= ladder[0].upper) {
-            heating_gas_cost = season_gas * ladder[0].price;
-        } else if (season_gas <= ladder[1].upper) {
-            heating_gas_cost = ladder[0].upper * ladder[0].price + (season_gas - ladder[0].upper) * ladder[1].price;
-        } else {
-            heating_gas_cost = ladder[0].upper * ladder[0].price + (ladder[1].upper - ladder[0].upper) * ladder[1].price + (season_gas - ladder[1].upper) * ladder[2].price;
-        }
+        // heating_compare_cost：供暖对比口径（刨除生活用气）
+        // household_total_cost：家庭燃气总账（含生活用气）
+        const heating_compare_cost = heating_gas_cost + year_fixed;
+        const household_total_cost = gas_cost + year_fixed;
 
         return {
             daily_base_gas, daily_real_gas, season_gas, total_gas,
-            tier, gas_cost, year_depreciation, year_fixed, total_cost,
-            heating_gas_cost,
+            tier, gas_cost, life_gas_cost, heating_gas_cost,
+            year_depreciation, year_fixed,
+            heating_compare_cost, household_total_cost,
+            // 兼容旧字段名
+            total_cost: household_total_cost,
             avg_price: total_gas > 0 ? gas_cost / total_gas : 0,
+            heating_avg_price: season_gas > 0 ? heating_gas_cost / season_gas : 0,
             condenser_coeff, temp_comp_coeff, power_coeff
         };
     }
@@ -148,15 +161,19 @@ class HeatingAssistantManager {
         const self = this.calcSelfHeating();
         if (!central || !self) return null;
 
-        const diff = self.total_cost - central.fee;
+        const mode = this.compareMode === 'household' ? 'household' : 'heating';
+        const self_total = mode === 'heating' ? self.heating_compare_cost : self.household_total_cost;
+        const diff = self_total - central.fee;
         let payback_years = null;
         if (diff > 0) {
             payback_years = this.boiler.price / diff;
         }
 
         return {
+            mode,
             central_fee: central.fee,
-            self_total: self.total_cost,
+            self_total,
+            self_gas_part: mode === 'heating' ? self.heating_gas_cost : self.gas_cost,
             diff,
             payback_years,
             self
@@ -316,7 +333,7 @@ class HeatingAssistantManager {
                         <div class="heating-field">
                             <label>全年生活用气（m³） <button class="heating-calc-help" id="hGasHelpBtn">🔢 帮我算</button></label>
                             <input type="number" class="heating-input" id="hLifeGas" value="${this.year_life_gas}" min="0" step="10">
-                            <div class="heating-hint">做饭、日常热水，不含采暖</div>
+                            <div class="heating-hint">做饭、日常热水，不含采暖；参与阶梯计价，默认不计入供暖对比</div>
                         </div>
                     </div>
 
@@ -435,26 +452,39 @@ class HeatingAssistantManager {
         `;
 
         this.bindEvents(container);
+        this.bindCompareMode(container);
     }
 
     renderCompare(c) {
         const s = c.self;
         const tierDesc = ['', '第一档（≤1500m³）', '第二档（1500～2500m³）', '第三档（>2500m³）'];
-        const cheaper = c.diff <= 0;
         const cheaperSelf = c.diff < 0;
         const cheaperCentral = c.diff > 0;
+        const isHeatingMode = c.mode === 'heating';
+        const central = this.calcCentral();
+        const pricePerUnit = central ? central.pricePerUnit : 24;
 
         return `
+            <div class="heating-mode-toggle" id="hCompareMode">
+                <button type="button" class="hmode-btn ${isHeatingMode ? 'active' : ''}" data-mode="heating">供暖对比（刨除生活用气）</button>
+                <button type="button" class="hmode-btn ${!isHeatingMode ? 'active' : ''}" data-mode="household">家庭燃气总账</button>
+            </div>
+            <div class="heating-mode-hint">${isHeatingMode
+                ? '生活用气只参与阶梯计价，不计入对比费用；两边比的是「供暖本身」花了多少钱'
+                : '自采暖侧含全年生活用气+采暖用气；集中供暖侧仍只有供暖费，适合看家庭气费总账，不宜直接比优劣'}</div>
+
             <div class="heating-compare-grid">
                 <div class="heating-cmp-card">
                     <div class="cmp-label">🏢 集中供暖年度费用</div>
                     <div class="cmp-value cmp-central">¥${c.central_fee.toFixed(2)}</div>
-                    <div class="cmp-formula">${this.area}㎡ × ¥${s.season_gas > 0 ? this.calcCentral().pricePerUnit : '24'}/㎡</div>
+                    <div class="cmp-formula">${this.area}㎡ × ¥${pricePerUnit}/㎡</div>
                 </div>
                 <div class="heating-cmp-card">
-                    <div class="cmp-label">🔥 自采暖年度综合费用</div>
+                    <div class="cmp-label">${isHeatingMode ? '🔥 自采暖供暖费用' : '🔥 自采暖家庭总账'}</div>
                     <div class="cmp-value cmp-self">¥${c.self_total.toFixed(2)}</div>
-                    <div class="cmp-formula">燃气 ¥${s.gas_cost.toFixed(2)} + 设备 ¥${s.year_fixed.toFixed(2)}</div>
+                    <div class="cmp-formula">${isHeatingMode
+                        ? `采暖气费 ¥${s.heating_gas_cost.toFixed(2)} + 设备 ¥${s.year_fixed.toFixed(2)}`
+                        : `全年气费 ¥${s.gas_cost.toFixed(2)} + 设备 ¥${s.year_fixed.toFixed(2)}`}</div>
                 </div>
                 <div class="heating-cmp-card ${cheaperSelf ? 'cmp-win' : cheaperCentral ? 'cmp-lose' : ''}">
                     <div class="cmp-label">年度差额</div>
@@ -469,14 +499,16 @@ class HeatingAssistantManager {
                 <div class="heating-detail-card">
                     <div class="dt-title">自采暖明细</div>
                     <div class="dt-row"><span>采暖季耗气量</span><span>${s.season_gas.toFixed(1)} m³</span></div>
+                    <div class="dt-row"><span>全年生活用气</span><span>${this.year_life_gas.toFixed(1)} m³</span></div>
                     <div class="dt-row"><span>全年总耗气量</span><span>${s.total_gas.toFixed(1)} m³</span></div>
                     <div class="dt-row"><span>所处阶梯</span><span>${tierDesc[s.tier]}</span></div>
                     <div class="dt-row"><span>综合气价</span><span>¥${s.avg_price.toFixed(2)}/m³</span></div>
-                    <div class="dt-row"><span>采暖季燃气费</span><span>¥${s.heating_gas_cost.toFixed(2)}</span></div>
-                    <div class="dt-row"><span>年度燃气费</span><span>¥${s.gas_cost.toFixed(2)}</span></div>
+                    <div class="dt-row"><span>生活用气费用（单独计价）</span><span>¥${s.life_gas_cost.toFixed(2)}</span></div>
+                    <div class="dt-row"><span>采暖归因气费（差额法）</span><span>¥${s.heating_gas_cost.toFixed(2)}</span></div>
+                    <div class="dt-row"><span>全年总燃气费</span><span>¥${s.gas_cost.toFixed(2)}</span></div>
                     <div class="dt-row"><span>设备年均折旧</span><span>¥${s.year_depreciation.toFixed(2)}</span></div>
                     <div class="dt-row"><span>年度维保</span><span>¥${this.boiler.maintain_cost}</span></div>
-                    <div class="dt-row dt-total"><span>自采暖年度综合总成本</span><span>¥${c.self_total.toFixed(2)}</span></div>
+                    <div class="dt-row dt-total"><span>${isHeatingMode ? '供暖对比费用' : '家庭总账费用'}</span><span>¥${c.self_total.toFixed(2)}</span></div>
                 </div>
                 <div class="heating-detail-card">
                     <div class="dt-title">修正系数明细</div>
@@ -486,6 +518,7 @@ class HeatingAssistantManager {
                     <div class="dt-row"><span>用户行为系数</span><span>×${this.user_coeff}</span></div>
                     <div class="dt-row"><span>基础日耗气</span><span>${s.daily_base_gas.toFixed(2)} m³/日</span></div>
                     <div class="dt-row"><span>实际日耗气</span><span>${s.daily_real_gas.toFixed(2)} m³/日</span></div>
+                    <div class="dt-row"><span>采暖气费边际均价</span><span>¥${s.heating_avg_price.toFixed(2)}/m³</span></div>
                     ${cheaperCentral ? `
                     <div class="dt-row dt-total" style="color:var(--orange);">
                         <span>静态回本周期</span><span>${c.payback_years.toFixed(1)} 年</span>
@@ -766,6 +799,7 @@ class HeatingAssistantManager {
             section.style.display = '';
             if (contentEl) {
                 contentEl.innerHTML = this.renderCompare(compare);
+                this.bindCompareMode(container);
             }
         } else {
             section.style.display = 'none';
@@ -777,5 +811,20 @@ class HeatingAssistantManager {
             const resultLink = nav.querySelector('a[href="#sec-result"]');
             if (resultLink) resultLink.style.display = compare ? '' : 'none';
         }
+    }
+
+    bindCompareMode(container) {
+        const toggle = container.querySelector('#hCompareMode');
+        if (!toggle) return;
+        toggle.querySelectorAll('.hmode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mode = btn.dataset.mode;
+                if (mode !== 'heating' && mode !== 'household') return;
+                if (this.compareMode === mode) return;
+                this.compareMode = mode;
+                this.saveState();
+                this.refreshResult(container);
+            });
+        });
     }
 }
