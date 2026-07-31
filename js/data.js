@@ -426,6 +426,7 @@ const MEMO_DATA = [
             { id: 'hi_delivery', name: '交付状态', desc: '毛坯交房', tip: '全屋需从零施工，水电暖通均可按需求重新规划', status: 'checked', notes: '' },
             { id: 'hi_window_door', name: '门窗更换', desc: '外窗全部更换；入户防盗门更换；计划封客厅阳台', tip: '外窗须按物业交付标准（颜色/分隔/开启方向）；封阳台保持外立面统一，安装前须物业南门验收', status: 'checked', notes: '' },
             { id: 'hi_structure', name: '结构/拆改', desc: '主卧与餐厅之间、主卧与次卧之间、厨房与客厅等墙体为非承重，可挪墙优化动线', tip: '尽量保持格局方正，尤其卧室；禁止动承重墙/剪力墙/梁柱；拆改须物业审批', status: 'checked', notes: '' },
+            { id: 'hi_drain_pipe', name: '铸铁排水立管包覆', desc: '室内铸铁排水立管严禁用水泥砂浆直接封闭管道与检修口；可选铝合金包管支架（饰面瓷砖可拆卸）、轻体砖砌筑，或成品 L 型预制包管构件', tip: '检修口位置必须单独预留，不得封死，便于后期检修', status: 'checked', notes: '' },
             { id: 'hi_layout_issue', name: '户型硬伤', desc: '①入户门对客厅/阳台（穿堂风/穿堂煞）②卫生间暗卫无窗 ③主卧至卫生间动线较长', tip: '设计时需兼顾风水与实用：玄关缓冲、暗卫加强排风照明、主卧动线优化', status: 'checked', notes: '' },
             { id: 'hi_lighting', name: '一层采光', desc: '1 层采光受限，需通过灯光设计 + 窗户优化提升室内亮度', tip: '地面宜暖色浅色系；家具浅色为主、局部深色点缀；避免大面积深色材质', status: 'checked', notes: '' },
             { id: 'hi_moisture', name: '潮湿风险与投入', desc: '1 层下方为地下室和停车场，需设计师/施工方评估防潮必要投入（防水、地暖、除湿等）', tip: '沟通重点：①是否必须做全案防潮 ②预算与效果平衡 ③地暖铺设本身有一定防潮辅助', status: 'checked', notes: '' },

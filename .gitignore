@@ -1,6 +1,7 @@
 *.pdf
 .kjlconfig.json
 .mimocode/
+.codegraph/
 images/
 业之峰.jpg
 业之峰6月25日报价.xls

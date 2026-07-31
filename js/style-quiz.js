@@ -77,6 +77,7 @@ class StyleQuizManager {
         else if (this.state === 'colorcard') this.renderColorCardTool(container);
         else if (this.state === 'wirecalc') this.renderWireCalc(container);
         else if (this.state === 'heating') this.renderHeating(container);
+        else if (this.state === 'md2img') this.renderMd2Img(container);
     }
 
     // ========== 工具首页：APP桌面风格 ==========
@@ -177,6 +178,28 @@ class StyleQuizManager {
                             </svg>
                         </div>
                     </div>
+                    <div class="tool-card" data-tool="md2img">
+                        <div class="tool-icon">
+                            <svg viewBox="0 0 64 64" width="48" height="48">
+                                <rect x="4" y="4" width="56" height="56" rx="14" fill="#34d399" opacity="0.12"/>
+                                <rect x="8" y="8" width="48" height="48" rx="11" fill="none" stroke="#34d399" stroke-width="2"/>
+                                <rect x="18" y="16" width="28" height="32" rx="4" fill="none" stroke="#34d399" stroke-width="2"/>
+                                <line x1="24" y1="24" x2="40" y2="24" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="24" y1="30" x2="36" y2="30" stroke="#34d399" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+                                <line x1="24" y1="36" x2="38" y2="36" stroke="#34d399" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                                <path d="M34 42 L40 42 L40 48" stroke="#34d399" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-title">Markdown 转图片</div>
+                            <div class="tool-desc">编辑 Markdown，选择风格卡片，实时预览并下载精美 PNG</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -191,6 +214,9 @@ class StyleQuizManager {
                     this.renderAll();
                 } else if (tool === 'heating') {
                     this.state = 'heating';
+                    this.renderAll();
+                } else if (tool === 'md2img') {
+                    this.state = 'md2img';
                     this.renderAll();
                 } else {
                     this.state = 'intro';
@@ -845,6 +871,35 @@ class StyleQuizManager {
         `;
         this._heating.render(container.querySelector('#heatingContent'));
         container.querySelector('#heatingBack').addEventListener('click', () => {
+            this.state = 'home';
+            this.renderToolsHome();
+        });
+    }
+
+    // ========== Markdown 转图片 ==========
+    renderMd2Img(container) {
+        if (this._md2img && typeof this._md2img.destroy === 'function') {
+            this._md2img.destroy();
+        }
+        if (!this._md2img) {
+            this._md2img = new Md2ImgManager();
+        }
+        container.innerHTML = `
+            <div class="quiz-container" style="max-width:1200px;">
+                <div class="quiz-back" id="md2imgBack">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    返回工具箱
+                </div>
+                <div id="md2imgContent"></div>
+            </div>
+        `;
+        this._md2img.render(container.querySelector('#md2imgContent'));
+        container.querySelector('#md2imgBack').addEventListener('click', () => {
+            if (this._md2img && typeof this._md2img.destroy === 'function') {
+                this._md2img.destroy();
+            }
             this.state = 'home';
             this.renderToolsHome();
         });
