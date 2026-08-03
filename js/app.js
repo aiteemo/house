@@ -125,64 +125,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     createFloatingPrompt();
 
-    // ========== 持久化导入导出按钮 ==========
-    function createPersistenceBar() {
-        const bar = document.createElement('div');
-        bar.className = 'persistence-bar';
-        bar.innerHTML = `
-            <div class="persistence-inner">
-                <span class="persistence-label">数据同步</span>
-                <button class="persistence-btn" id="persistenceExport">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <path d="M7 1v8M3 5l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M1 10v2a1 1 0 001 1h10a1 1 0 001-1v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                    导出数据
-                </button>
-                <button class="persistence-btn" id="persistenceImport">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <path d="M7 9V1M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M1 10v2a1 1 0 001 1h10a1 1 0 001-1v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                    导入数据
-                </button>
-                <input type="file" id="persistenceFileInput" accept=".json" style="display:none">
-                <span class="persistence-hint">导出后提交 git，换电脑拉取后导入即可恢复</span>
-            </div>
-        `;
-        document.body.appendChild(bar);
-
-        bar.querySelector('#persistenceExport').addEventListener('click', () => {
-            PersistenceManager.exportToFile();
-            const btn = bar.querySelector('#persistenceExport');
-            btn.classList.add('done');
-            btn.querySelector('svg').nextSibling.textContent = '已导出 ✓';
-            setTimeout(() => {
-                btn.classList.remove('done');
-                btn.querySelector('svg').nextSibling.textContent = '导出数据';
-            }, 2000);
-        });
-
-        bar.querySelector('#persistenceImport').addEventListener('click', () => {
-            bar.querySelector('#persistenceFileInput').click();
-        });
-
-        bar.querySelector('#persistenceFileInput').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            try {
-                await PersistenceManager.importFromFile(file);
-                // 重新加载页面以应用数据
-                location.reload();
-            } catch (err) {
-                alert('导入失败：文件格式不正确');
-            }
-            e.target.value = '';
-        });
-    }
-
-    createPersistenceBar();
-
     // 3D场景（延迟初始化）
     let sceneManager, roomBuilder, furnitureBuilder, lightingManager, airflowManager;
     let sceneInitialized = false;
@@ -276,11 +218,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
         document.getElementById(`panel-${tabName}`).classList.add('active');
 
-        // 浮窗和持久化条只在 tools tab 显示
+        // 浮窗只在 tools tab 显示
         const floatingPrompt = document.querySelector('.floating-prompt');
-        const persistenceBar = document.querySelector('.persistence-bar');
         if (floatingPrompt) floatingPrompt.style.display = tabName === 'tools' ? '' : 'none';
-        if (persistenceBar) persistenceBar.style.display = tabName === 'tools' ? '' : 'none';
 
         if (tabName === 'preview3d') {
             setTimeout(() => initScene(), 50);

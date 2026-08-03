@@ -20,6 +20,8 @@ class HeatingAssistantManager {
         this.customPrice = null;
         // 对比口径：heating=刨除生活用气（默认） / household=家庭燃气总账
         this.compareMode = 'heating';
+        // 改自采暖时是否计入停供基本热费（约 30%），默认开启
+        this.includePauseFee = true;
         this.loadState();
     }
 
@@ -36,6 +38,7 @@ class HeatingAssistantManager {
                 if (d.year_life_gas) this.year_life_gas = d.year_life_gas;
                 if (d.customPrice !== undefined) this.customPrice = d.customPrice;
                 if (d.compareMode === 'heating' || d.compareMode === 'household') this.compareMode = d.compareMode;
+                if (d.includePauseFee !== undefined) this.includePauseFee = !!d.includePauseFee;
             } catch (e) {}
         }
     }
@@ -49,7 +52,8 @@ class HeatingAssistantManager {
             user_coeff: this.user_coeff,
             year_life_gas: this.year_life_gas,
             customPrice: this.customPrice,
-            compareMode: this.compareMode
+            compareMode: this.compareMode,
+            includePauseFee: this.includePauseFee
         }));
     }
 
@@ -162,7 +166,10 @@ class HeatingAssistantManager {
         if (!central || !self) return null;
 
         const mode = this.compareMode === 'household' ? 'household' : 'heating';
-        const self_total = mode === 'heating' ? self.heating_compare_cost : self.household_total_cost;
+        const self_base = mode === 'heating' ? self.heating_compare_cost : self.household_total_cost;
+        const ratio = HEATING_DATA.constants.pause_basic_fee_ratio || 0.3;
+        const pause_basic_fee = this.includePauseFee ? central.fee * ratio : 0;
+        const self_total = self_base + pause_basic_fee;
         const diff = self_total - central.fee;
         let payback_years = null;
         if (diff > 0) {
@@ -172,6 +179,10 @@ class HeatingAssistantManager {
         return {
             mode,
             central_fee: central.fee,
+            self_base,
+            pause_basic_fee,
+            pause_ratio: ratio,
+            includePauseFee: this.includePauseFee,
             self_total,
             self_gas_part: mode === 'heating' ? self.heating_gas_cost : self.gas_cost,
             diff,
@@ -270,17 +281,15 @@ class HeatingAssistantManager {
                 <div class="heating-section" id="sec-self">
                     <div class="heating-section-title">🔥 燃气壁挂炉自采暖</div>
 
-                    <div class="heating-row">
-                        <div class="heating-field">
+                    <div class="heating-form-grid">
+                        <div class="heating-field heating-field-span2">
                             <label>机型快捷选择</label>
                             <select class="heating-select" id="hModel">
                                 <option value="">自定义参数</option>
                                 ${HEATING_DATA.boiler_models.map((m, i) => `<option value="${i}" ${this.boiler.model === m.model_name ? 'selected' : ''}>${m.model_name}</option>`).join('')}
                             </select>
                         </div>
-                    </div>
 
-                    <div class="heating-row">
                         <div class="heating-field">
                             <label>是否全预混冷凝炉</label>
                             <div class="heating-radio-group">
@@ -295,9 +304,7 @@ class HeatingAssistantManager {
                                 <label class="heating-radio ${!this.boiler.has_outdoor_comp ? 'active' : ''}"><input type="radio" name="outdoor" value="0" ${!this.boiler.has_outdoor_comp ? 'checked' : ''}> 否</label>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="heating-row">
                         <div class="heating-field">
                             <label>最小输出功率（kW）</label>
                             <input type="number" class="heating-input" id="hMinPower" value="${this.boiler.min_power}" min="0" step="0.1">
@@ -306,9 +313,7 @@ class HeatingAssistantManager {
                             <label>最大输出功率（kW）</label>
                             <input type="number" class="heating-input" id="hMaxPower" value="${this.boiler.max_power}" min="0" step="0.1">
                         </div>
-                    </div>
 
-                    <div class="heating-row">
                         <div class="heating-field">
                             <label>壁挂炉采购总价（元）</label>
                             <input type="number" class="heating-input" id="hPrice" value="${this.boiler.price}" min="0" step="1">
@@ -317,29 +322,28 @@ class HeatingAssistantManager {
                             <label>计划使用/质保年限</label>
                             <input type="number" class="heating-input" id="hLife" value="${this.boiler.service_life}" min="1" step="1">
                         </div>
+
                         <div class="heating-field">
-                            <label>年度保养费用（元）</label>
+                            <label><span>年度保养费用（元）</span><button type="button" class="heating-calc-help" id="hMaintainHelpBtn">🔢 帮我算</button></label>
                             <input type="number" class="heating-input" id="hMaintain" value="${this.boiler.maintain_cost}" min="0" step="50">
                         </div>
-                    </div>
-
-                    <div class="heating-row">
                         <div class="heating-field">
                             <label>使用模式</label>
                             <select class="heating-select" id="hMode">
                                 ${HEATING_DATA.user_modes.map(m => `<option value="${m.coeff}" ${this.user_coeff === m.coeff ? 'selected' : ''}>${m.label}（${m.coeff}）</option>`).join('')}
                             </select>
                         </div>
-                        <div class="heating-field">
-                            <label>全年生活用气（m³） <button class="heating-calc-help" id="hGasHelpBtn">🔢 帮我算</button></label>
+
+                        <div class="heating-field heating-field-span2">
+                            <label><span>全年生活用气（m³）</span><button type="button" class="heating-calc-help" id="hGasHelpBtn">🔢 帮我算</button></label>
                             <input type="number" class="heating-input" id="hLifeGas" value="${this.year_life_gas}" min="0" step="10">
                             <div class="heating-hint">做饭、日常热水，不含采暖；参与阶梯计价，默认不计入供暖对比</div>
                         </div>
-                    </div>
 
-                    <div class="heating-row" style="margin-top:12px;">
-                        <button class="heating-btn heating-btn-primary" id="hCalcBtn">🔢 计算对比</button>
-                        <button class="heating-btn" id="hResetBtn">↻ 重置参数</button>
+                        <div class="heating-field heating-field-span2 heating-actions">
+                            <button class="heating-btn heating-btn-primary" id="hCalcBtn">🔢 计算对比</button>
+                            <button class="heating-btn" id="hResetBtn">↻ 重置参数</button>
+                        </div>
                     </div>
                 </div>
 
@@ -448,6 +452,48 @@ class HeatingAssistantManager {
                     </div>
                 </div>
             </div>
+
+            <!-- 年度保养费用估算弹窗 -->
+            <div class="heating-gas-modal" id="maintainModal">
+                <div class="hgm-backdrop" id="maintainModalClose"></div>
+                <div class="hgm-panel">
+                    <div class="hgm-header">
+                        <h3>🔢 年度保养费用估算</h3>
+                        <button class="hgm-close" id="maintainModalCloseBtn">×</button>
+                    </div>
+                    <div class="hgm-body">
+                        <div class="hgm-desc" id="maintainHint">
+                            常规炉：周期 2 年 1 保，年均 = 单次价格 ÷ 2<br>
+                            冷凝炉：周期 1 年 1 保，年均 = 单次价格
+                        </div>
+                        <div class="hgm-field">
+                            <label>设备类型</label>
+                            <div class="hgm-opts" data-maintain="type">
+                                ${HEATING_DATA.maintain_estimate.types.map(t =>
+                                    `<div class="hgm-opt" data-id="${t.id}" data-period="${t.period_years}">${t.label}</div>`
+                                ).join('')}
+                            </div>
+                        </div>
+                        <div class="hgm-field">
+                            <label>产地档次</label>
+                            <div class="hgm-opts" data-maintain="origin">
+                                ${HEATING_DATA.maintain_estimate.origins.map((o, i) =>
+                                    `<div class="hgm-opt ${i === 1 ? 'active' : ''}" data-id="${o.id}">${o.label}</div>`
+                                ).join('')}
+                            </div>
+                        </div>
+                        <div class="hgm-result hgm-result-stack">
+                            <div class="hgm-result-main">
+                                <span>年均保养</span>
+                                <span class="hgm-result-val" id="maintainEstimateVal">210</span>
+                                <span>元/年</span>
+                            </div>
+                            <div class="hgm-result-sub" id="maintainEstimateDetail">单次 ¥420 ÷ 2 年 = ¥210/年</div>
+                        </div>
+                        <button class="heating-btn heating-btn-primary hgm-confirm" id="maintainConfirmBtn">确认并填入</button>
+                    </div>
+                </div>
+            </div>
             </div>
         `;
 
@@ -463,15 +509,32 @@ class HeatingAssistantManager {
         const isHeatingMode = c.mode === 'heating';
         const central = this.calcCentral();
         const pricePerUnit = central ? central.pricePerUnit : 24;
+        const pausePct = Math.round((c.pause_ratio || 0.3) * 100);
+        const gasLabel = isHeatingMode ? '采暖气费' : '全年气费';
+        const gasVal = isHeatingMode ? s.heating_gas_cost : s.gas_cost;
+        const formulaLines = [
+            `${gasLabel} ¥${gasVal.toFixed(2)}`,
+            `设备及保养 ¥${s.year_fixed.toFixed(2)}`,
+        ];
+        if (c.includePauseFee) {
+            formulaLines.push(`停供基本热费 ¥${c.pause_basic_fee.toFixed(2)}`);
+        }
 
         return `
             <div class="heating-mode-toggle" id="hCompareMode">
                 <button type="button" class="hmode-btn ${isHeatingMode ? 'active' : ''}" data-mode="heating">供暖对比（刨除生活用气）</button>
                 <button type="button" class="hmode-btn ${!isHeatingMode ? 'active' : ''}" data-mode="household">家庭燃气总账</button>
             </div>
+            <label class="heating-pause-opt">
+                <input type="checkbox" id="hPauseFee" ${c.includePauseFee ? 'checked' : ''}>
+                <span>计入停供基本热费（约 ${pausePct}%）</span>
+            </label>
             <div class="heating-mode-hint">${isHeatingMode
                 ? '生活用气只参与阶梯计价，不计入对比费用；两边比的是「供暖本身」花了多少钱'
-                : '自采暖侧含全年生活用气+采暖用气；集中供暖侧仍只有供暖费，适合看家庭气费总账，不宜直接比优劣'}</div>
+                : '自采暖侧含全年生活用气+采暖用气；集中供暖侧仍只有供暖费，适合看家庭气费总账，不宜直接比优劣'}
+                ${c.includePauseFee
+                    ? `；改自采暖后停供仍需缴基本热费约 ${pausePct}%（¥${c.pause_basic_fee.toFixed(2)}），已加到自采暖侧`
+                    : '；未计入停供基本热费，可打开上方开关纳入对比'}</div>
 
             <div class="heating-compare-grid">
                 <div class="heating-cmp-card">
@@ -482,9 +545,9 @@ class HeatingAssistantManager {
                 <div class="heating-cmp-card">
                     <div class="cmp-label">${isHeatingMode ? '🔥 自采暖供暖费用' : '🔥 自采暖家庭总账'}</div>
                     <div class="cmp-value cmp-self">¥${c.self_total.toFixed(2)}</div>
-                    <div class="cmp-formula">${isHeatingMode
-                        ? `采暖气费 ¥${s.heating_gas_cost.toFixed(2)} + 设备 ¥${s.year_fixed.toFixed(2)}`
-                        : `全年气费 ¥${s.gas_cost.toFixed(2)} + 设备 ¥${s.year_fixed.toFixed(2)}`}</div>
+                    <div class="cmp-formula cmp-formula-stack">${formulaLines.map((line, i) =>
+                        `<div class="cmp-formula-line">${line}${i < formulaLines.length - 1 ? ' +' : ''}</div>`
+                    ).join('')}</div>
                 </div>
                 <div class="heating-cmp-card ${cheaperSelf ? 'cmp-win' : cheaperCentral ? 'cmp-lose' : ''}">
                     <div class="cmp-label">年度差额</div>
@@ -508,6 +571,8 @@ class HeatingAssistantManager {
                     <div class="dt-row"><span>全年总燃气费</span><span>¥${s.gas_cost.toFixed(2)}</span></div>
                     <div class="dt-row"><span>设备年均折旧</span><span>¥${s.year_depreciation.toFixed(2)}</span></div>
                     <div class="dt-row"><span>年度维保</span><span>¥${this.boiler.maintain_cost}</span></div>
+                    <div class="dt-row"><span>口径基础费用</span><span>¥${c.self_base.toFixed(2)}</span></div>
+                    <div class="dt-row"><span>停供基本热费（约 ${pausePct}%）</span><span>${c.includePauseFee ? '¥' + c.pause_basic_fee.toFixed(2) : '未计入'}</span></div>
                     <div class="dt-row dt-total"><span>${isHeatingMode ? '供暖对比费用' : '家庭总账费用'}</span><span>¥${c.self_total.toFixed(2)}</span></div>
                 </div>
                 <div class="heating-detail-card">
@@ -685,8 +750,9 @@ class HeatingAssistantManager {
             }
         });
 
-        // 帮我算 - 生活用气
+        // 帮我算 - 生活用气 / 年度保养
         this.bindGasHelper(container);
+        this.bindMaintainHelper(container);
 
         // 侧边导航
         this.bindSideNav(container);
@@ -747,6 +813,84 @@ class HeatingAssistantManager {
             if (active) result *= parseFloat(active.dataset.coeff);
         });
         valEl.textContent = Math.ceil(result);
+    }
+
+    bindMaintainHelper(container) {
+        const modal = container.querySelector('#maintainModal');
+        const openBtn = container.querySelector('#hMaintainHelpBtn');
+        const closeBtn = container.querySelector('#maintainModalCloseBtn');
+        const backdrop = container.querySelector('#maintainModalClose');
+        const confirmBtn = container.querySelector('#maintainConfirmBtn');
+        const valEl = container.querySelector('#maintainEstimateVal');
+
+        if (!modal || !openBtn) return;
+
+        const syncTypeFromBoiler = () => {
+            const typeGroup = modal.querySelector('.hgm-opts[data-maintain="type"]');
+            if (!typeGroup) return;
+            const wantId = this.boiler.is_condenser ? 'condenser' : 'conventional';
+            typeGroup.querySelectorAll('.hgm-opt').forEach(o => {
+                o.classList.toggle('active', o.dataset.id === wantId);
+            });
+        };
+
+        openBtn.addEventListener('click', e => {
+            e.preventDefault();
+            syncTypeFromBoiler();
+            modal.classList.add('open');
+            this.updateMaintainEstimate(container);
+        });
+
+        const closeModal = () => { modal.classList.remove('open'); };
+        closeBtn.addEventListener('click', closeModal);
+        backdrop.addEventListener('click', closeModal);
+
+        modal.querySelectorAll('.hgm-opts').forEach(group => {
+            group.querySelectorAll('.hgm-opt').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    group.querySelectorAll('.hgm-opt').forEach(o => o.classList.remove('active'));
+                    opt.classList.add('active');
+                    this.updateMaintainEstimate(container);
+                });
+            });
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            const val = parseInt(valEl.textContent, 10) || 0;
+            this.boiler.maintain_cost = val;
+            this.saveState();
+            const input = container.querySelector('#hMaintain');
+            if (input) input.value = val;
+            closeModal();
+            this.refreshResult(container);
+        });
+    }
+
+    updateMaintainEstimate(container) {
+        const modal = container.querySelector('#maintainModal');
+        if (!modal) return;
+        const data = HEATING_DATA.maintain_estimate;
+        const typeOpt = modal.querySelector('.hgm-opts[data-maintain="type"] .hgm-opt.active');
+        const originOpt = modal.querySelector('.hgm-opts[data-maintain="origin"] .hgm-opt.active');
+        const typeId = (typeOpt && typeOpt.dataset.id) || 'conventional';
+        const originId = (originOpt && originOpt.dataset.id) || 'domestic';
+        const typeMeta = data.types.find(t => t.id === typeId) || data.types[0];
+        const period = typeMeta.period_years || 1;
+        const unitPrice = data.prices[`${typeId}_${originId}`] || 0;
+        const annual = Math.round(unitPrice / period);
+
+        const valEl = modal.querySelector('#maintainEstimateVal');
+        const detailEl = modal.querySelector('#maintainEstimateDetail');
+        const hintEl = modal.querySelector('#maintainHint');
+        if (valEl) valEl.textContent = String(annual);
+        if (detailEl) {
+            detailEl.textContent = period > 1
+                ? `单次 ¥${unitPrice} ÷ ${period} 年 = ¥${annual}/年`
+                : `单次 ¥${unitPrice}（年保）= ¥${annual}/年`;
+        }
+        if (hintEl && typeMeta.hint) {
+            hintEl.innerHTML = `常规炉：周期 2 年 1 保，年均 = 单次价格 ÷ 2<br>冷凝炉：周期 1 年 1 保，年均 = 单次价格<br><strong>当前：${typeMeta.label}</strong> — ${typeMeta.hint}`;
+        }
     }
 
     bindSideNav(container) {
@@ -815,16 +959,25 @@ class HeatingAssistantManager {
 
     bindCompareMode(container) {
         const toggle = container.querySelector('#hCompareMode');
-        if (!toggle) return;
-        toggle.querySelectorAll('.hmode-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const mode = btn.dataset.mode;
-                if (mode !== 'heating' && mode !== 'household') return;
-                if (this.compareMode === mode) return;
-                this.compareMode = mode;
+        if (toggle) {
+            toggle.querySelectorAll('.hmode-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const mode = btn.dataset.mode;
+                    if (mode !== 'heating' && mode !== 'household') return;
+                    if (this.compareMode === mode) return;
+                    this.compareMode = mode;
+                    this.saveState();
+                    this.refreshResult(container);
+                });
+            });
+        }
+        const pauseChk = container.querySelector('#hPauseFee');
+        if (pauseChk) {
+            pauseChk.addEventListener('change', () => {
+                this.includePauseFee = pauseChk.checked;
                 this.saveState();
                 this.refreshResult(container);
             });
-        });
+        }
     }
 }

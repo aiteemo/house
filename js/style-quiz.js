@@ -78,6 +78,7 @@ class StyleQuizManager {
         else if (this.state === 'wirecalc') this.renderWireCalc(container);
         else if (this.state === 'heating') this.renderHeating(container);
         else if (this.state === 'md2img') this.renderMd2Img(container);
+        else if (this.state === 'wasteguide') this.renderWasteGuide(container);
     }
 
     // ========== 工具首页：APP桌面风格 ==========
@@ -200,6 +201,27 @@ class StyleQuizManager {
                             </svg>
                         </div>
                     </div>
+                    <div class="tool-card" data-tool="wasteguide">
+                        <div class="tool-icon">
+                            <svg viewBox="0 0 64 64" width="48" height="48">
+                                <rect x="4" y="4" width="56" height="56" rx="14" fill="#60a5fa" opacity="0.12"/>
+                                <rect x="8" y="8" width="48" height="48" rx="11" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                                <path d="M24 22 h16 v28 h-16 z" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                                <path d="M28 28 h8 M28 34 h8 M28 40 h5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
+                                <circle cx="40" cy="42" r="6" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+                                <path d="M40 39 v4 M40 44.5 v0.5" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-title">垃圾清运维权指南</div>
+                            <div class="tool-desc">装修垃圾清运垄断/加价/威胁场景的法规对照，支持下载长图分享</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -217,6 +239,9 @@ class StyleQuizManager {
                     this.renderAll();
                 } else if (tool === 'md2img') {
                     this.state = 'md2img';
+                    this.renderAll();
+                } else if (tool === 'wasteguide') {
+                    this.state = 'wasteguide';
                     this.renderAll();
                 } else {
                     this.state = 'intro';
@@ -871,6 +896,35 @@ class StyleQuizManager {
         `;
         this._heating.render(container.querySelector('#heatingContent'));
         container.querySelector('#heatingBack').addEventListener('click', () => {
+            this.state = 'home';
+            this.renderToolsHome();
+        });
+    }
+
+    // ========== 装修垃圾清运维权指南 ==========
+    renderWasteGuide(container) {
+        if (this._wasteGuide && typeof this._wasteGuide.destroy === 'function') {
+            this._wasteGuide.destroy();
+        }
+        if (!this._wasteGuide) {
+            this._wasteGuide = new WasteGuideManager();
+        }
+        container.innerHTML = `
+            <div class="quiz-container" style="max-width:1100px;">
+                <div class="quiz-back" id="wasteGuideBack">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    返回工具箱
+                </div>
+                <div id="wasteGuideContent"></div>
+            </div>
+        `;
+        this._wasteGuide.render(container.querySelector('#wasteGuideContent'));
+        container.querySelector('#wasteGuideBack').addEventListener('click', () => {
+            if (this._wasteGuide && typeof this._wasteGuide.destroy === 'function') {
+                this._wasteGuide.destroy();
+            }
             this.state = 'home';
             this.renderToolsHome();
         });

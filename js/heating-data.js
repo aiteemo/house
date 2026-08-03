@@ -47,7 +47,9 @@ const HEATING_DATA = {
     hour_per_day: 24,
     gas_heat_equivalent: 10,
     heating_season_days: 120,
-    default_year_life_gas: 300
+    default_year_life_gas: 300,
+    // 停供期间仍需缴纳的基本热费比例（约 30%）
+    pause_basic_fee_ratio: 0.3
   },
 
   // 使用模式选项
@@ -83,5 +85,34 @@ const HEATING_DATA = {
       { label: "有零冷水｜点动按需开启（节能）", coeff: 1.15 },
       { label: "有零冷水｜定时自动循环（舒适）", coeff: 1.30 }
     ]
+  },
+
+  // 年度保养费用估算（年均折算）
+  maintain_estimate: {
+    types: [
+      {
+        id: "conventional",
+        label: "常规炉",
+        period_years: 2,
+        hint: "周期 2 年 1 保，年均保养成本 = 单次价格 ÷ 2"
+      },
+      {
+        id: "condenser",
+        label: "冷凝炉",
+        period_years: 1,
+        hint: "周期 1 年 1 保，年均保养成本 = 单次价格"
+      }
+    ],
+    origins: [
+      { id: "import", label: "进口" },
+      { id: "domestic", label: "国产" }
+    ],
+    // key = `${typeId}_${originId}` → 单次保养价格（元）
+    prices: {
+      conventional_import: 500,
+      conventional_domestic: 420,
+      condenser_import: 650,
+      condenser_domestic: 480
+    }
   }
 };
