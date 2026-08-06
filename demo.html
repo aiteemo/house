@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全景视频 Demo · three-vr-player</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #171a21;
+      --text: #e8eaed;
+      --muted: #9aa0a6;
+      --accent: #5b8cff;
+      --border: #2a2f3a;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+    }
+    .page {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 12px;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px 16px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 650;
+    }
+    .meta { font-size: 13px; color: var(--muted); }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .toolbar label {
+      font-size: 13px;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    select {
+      appearance: none;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 28px 7px 10px;
+      font-size: 13px;
+      background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+                        linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+      background-position: calc(100% - 14px) 55%, calc(100% - 9px) 55%;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+    }
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .stage {
+      flex: 1;
+      min-height: 420px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+    }
+    three-video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>全景视频 Demo</h1>
+      <span class="meta">three-vr-player（MIT）· 本地文件 20260806_172632_697.mp4</span>
+    </header>
+
+    <div class="toolbar">
+      <label>
+        投影模式
+        <select id="projection">
+          <option value="360-mono" selected>360° 单目</option>
+          <option value="360-sbs">360° 左右立体</option>
+          <option value="360-tb">360° 上下立体</option>
+          <option value="180-mono">180° 单目</option>
+          <option value="180-sbs">180° 左右立体</option>
+          <option value="flat-2d">平面 2D</option>
+          <option value="off">关闭投影（原生 video）</option>
+        </select>
+      </label>
+      <span class="hint">鼠标拖拽环视 · 滚轮缩放 · 控件栏可切 VR / 全屏</span>
+    </div>
+
+    <div class="stage">
+      <three-video
+        id="player"
+        src="./20260806_172632_697.mp4"
+        projection="360-mono"
+        controls
+        style="width:100%;height:100%;min-height:420px"
+      ></three-video>
+    </div>
+
+    <p class="hint">
+      请用本地静态服务打开（不要用 file://），例如：
+      <code>python3 -m http.server 8080</code>
+      后访问 <code>http://localhost:8080/demo.html</code>。
+      若画面扭曲，在上方切换投影模式；若黑屏，检查视频是否完整（moov/索引是否写完）。
+    </p>
+  </div>
+
+  <script type="module" src="https://cdn.jsdelivr.net/npm/three-vr-player@0.11.0/dist/three-vr-player.standalone.js"></script>
+  <script type="module">
+    const el = document.getElementById('player');
+    const sel = document.getElementById('projection');
+
+    sel.addEventListener('change', () => {
+      const mode = sel.value;
+      // web component API：属性 + 若暴露方法则同步
+      el.setAttribute('projection', mode);
+      if (typeof el.setProjection === 'function') el.setProjection(mode);
+      if (el.player && typeof el.player.setProjection === 'function') {
+        el.player.setProjection(mode);
+      }
+    });
+
+    el.addEventListener('error', (e) => {
+      console.error('three-vr-player error', e);
+      alert('视频加载失败。请确认用 http 服务打开，且 mp4 文件完整可读。');
+    });
+    el.addEventListener('fallback', () => {
+      console.warn('CORS / texture fallback → 原生 2D 播放');
+    });
+  </script>
+</body>
+</html>
