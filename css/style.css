@@ -3776,3 +3776,205 @@ body {
 .waste-guide-save-actions .waste-guide-btn { flex: 1; }
 
 
+
+/* ========== 装修需求问卷 ========== */
+.rq-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 0;
+}
+.rq-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.rq-toolbar-left h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 4px;
+}
+.rq-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin: 0;
+}
+.rq-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.rq-status {
+    font-size: 12px;
+    color: var(--text-dim);
+    min-width: 48px;
+}
+.rq-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.rq-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.rq-btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 600;
+}
+.rq-btn-primary:hover {
+    opacity: 0.9;
+    color: #fff;
+}
+.rq-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.rq-scroll {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+.rq-page {
+    background: #fff;
+    color: #333;
+    padding: 28px 24px;
+    line-height: 1.8;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.rq-title {
+    font-size: 20px;
+    text-align: center;
+    margin: 0 0 4px;
+    color: #222;
+}
+.rq-sub {
+    text-align: center;
+    color: #888;
+    font-size: 13px;
+    margin: 0 0 24px;
+}
+.rq-sec { margin-bottom: 24px; }
+.rq-sec-t {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #1a73e8;
+    color: #1a73e8;
+}
+.rq-f { margin-bottom: 14px; }
+.rq-f-l {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+}
+.rq-f-i {
+    width: 100%;
+    padding: 10px 12px;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 42px;
+    box-sizing: border-box;
+}
+.rq-f-i:focus {
+    border-color: #1a73e8;
+    background: #fff;
+}
+.rq-f-i::placeholder { color: #bbb; }
+.rq-g {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+.rq-g-t {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a73e8;
+    margin-bottom: 10px;
+}
+.rq-opts, .rq-om {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.rq-om { gap: 6px; }
+.rq-o, .rq-oi {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+}
+.rq-oi {
+    padding: 5px 10px;
+    border-radius: 14px;
+    font-size: 12px;
+}
+.rq-o:hover, .rq-oi:hover { border-color: #1a73e8; }
+.rq-o.a, .rq-oi.a {
+    border-color: #1a73e8;
+    background: #e8f0fe;
+    color: #1a73e8;
+    font-weight: 600;
+}
+.rq-d {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    box-sizing: border-box;
+}
+.rq-o.a .rq-d, .rq-oi.a .rq-d {
+    border-color: #1a73e8;
+    background: #1a73e8;
+    color: #fff;
+}
+.rq-hint {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+    line-height: 1.6;
+}
+.rq-ft {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+    font-size: 13px;
+    color: #888;
+}
+@media (min-width: 600px) {
+    .rq-page { padding: 32px 40px; }
+}

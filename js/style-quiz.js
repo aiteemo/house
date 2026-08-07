@@ -79,6 +79,7 @@ class StyleQuizManager {
         else if (this.state === 'heating') this.renderHeating(container);
         else if (this.state === 'md2img') this.renderMd2Img(container);
         else if (this.state === 'wasteguide') this.renderWasteGuide(container);
+        else if (this.state === 'questionnaire') this.renderQuestionnaire(container);
     }
 
     // ========== 工具首页：APP桌面风格 ==========
@@ -222,6 +223,29 @@ class StyleQuizManager {
                             </svg>
                         </div>
                     </div>
+                    <div class="tool-card" data-tool="questionnaire">
+                        <div class="tool-icon">
+                            <svg viewBox="0 0 64 64" width="48" height="48">
+                                <rect x="4" y="4" width="56" height="56" rx="14" fill="#fbbf24" opacity="0.12"/>
+                                <rect x="8" y="8" width="48" height="48" rx="11" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                                <rect x="18" y="16" width="28" height="34" rx="3" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                                <line x1="22" y1="24" x2="42" y2="24" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="22" y1="30" x2="38" y2="30" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+                                <line x1="22" y1="36" x2="40" y2="36" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                                <circle cx="24" cy="42" r="2" fill="#f59e0b"/>
+                                <line x1="30" y1="42" x2="40" y2="42" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="tool-info">
+                            <div class="tool-title">装修需求问卷</div>
+                            <div class="tool-desc">房屋资料、生活习惯、分区需求一站填写，自动本地保存，可下载发给设计师</div>
+                        </div>
+                        <div class="tool-arrow">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -242,6 +266,9 @@ class StyleQuizManager {
                     this.renderAll();
                 } else if (tool === 'wasteguide') {
                     this.state = 'wasteguide';
+                    this.renderAll();
+                } else if (tool === 'questionnaire') {
+                    this.state = 'questionnaire';
                     this.renderAll();
                 } else {
                     this.state = 'intro';
@@ -896,6 +923,33 @@ class StyleQuizManager {
         `;
         this._heating.render(container.querySelector('#heatingContent'));
         container.querySelector('#heatingBack').addEventListener('click', () => {
+            this.state = 'home';
+            this.renderToolsHome();
+        });
+    }
+
+    // ========== 装修需求问卷 ==========
+    renderQuestionnaire(container) {
+        if (!this._questionnaire) {
+            this._questionnaire = new ReqQuestionnaireManager();
+        }
+        container.innerHTML = `
+            <div class="quiz-container" style="max-width:900px;">
+                <div class="quiz-back" id="questionnaireBack">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    返回工具箱
+                </div>
+                <div id="questionnaireContent"></div>
+            </div>
+        `;
+        this._questionnaire.render(container.querySelector('#questionnaireContent'));
+        container.querySelector('#questionnaireBack').addEventListener('click', () => {
+            if (this._questionnaire) {
+                clearTimeout(this._questionnaire._saveTimer);
+                this._questionnaire.saveState();
+            }
             this.state = 'home';
             this.renderToolsHome();
         });

@@ -8,6 +8,7 @@ const PersistenceManager = {
         memo: 'renovation_memo',
         companies: 'renovation_companies',
         pitfalls: 'renovation_pitfalls',
+        questionnaire: 'renovation_questionnaire',
     },
     FILE_PATH: 'user-data.json',
     _loaded: false,
