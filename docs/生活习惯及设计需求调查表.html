@@ -80,6 +80,7 @@ h1{font-size:17px;text-align:center;line-height:1.3;margin:2px 0;font-weight:700
 .capturing .o.a::before,.capturing .oi.a::before,
 .capturing .o.a::after,.capturing .oi.a::after{content:none !important;display:none !important;background:none !important}
 .capturing .o.a,.capturing .oi.a{border:1.5px solid currentColor;background:transparent}
+.o.capture-on,.oi.capture-on{opacity:1 !important}
 .capturing .ta.capture-mirror,.capturing .inp.capture-mirror{box-shadow:none;outline:none}
 .o.o-yes.a,.oi.o-yes.a{
   color:#3f6a55;
@@ -1246,6 +1247,8 @@ function flattenSelectedChips(scope, win){
     el.style.border = '1.5px solid ' + cs.color;
     el.style.fontWeight = cs.fontWeight;
     el.style.fontSize = cs.fontSize;
+    el.style.setProperty('opacity', '1', 'important');
+    el.classList.add('capture-on');
     el.classList.remove('a');
   });
 }
