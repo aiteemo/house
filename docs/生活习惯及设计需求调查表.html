@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>生活习惯及设计需求调查表</title>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --c:#1a73e8;
+  --bg:#f0f1f3;
+  --line:#ececec;
+  --label:#9aa0a6;
+  --text:#1a1a1a;
+  --text-soft:#5f6368;
+  --fill:#f7f8fa;
+}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);padding:10px 10px 72px;line-height:1.4}
+.shell{max-width:1040px;margin:0 auto;display:block}
+.toc{
+  display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  padding:2px 0 10px;margin:0 0 4px;scrollbar-width:none;
+  position:sticky;top:0;z-index:15;background:linear-gradient(var(--bg) 72%,transparent);
+}
+.toc::-webkit-scrollbar{display:none}
+.toc-a{
+  flex:0 0 auto;max-width:10em;padding:5px 10px;border-radius:999px;
+  background:#fff;border:1px solid #e6e6e6;color:var(--text-soft);
+  font-size:11px;line-height:1.2;text-decoration:none;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;
+}
+.toc-a:hover,.toc-a.on{border-color:#c5d7f7;background:#eef4ff;color:#174ea6}
+.page{max-width:820px;margin:0 auto;background:#fff;padding:16px 12px 24px;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.brand{display:flex;justify-content:space-between;align-items:flex-end;gap:8px;margin-bottom:8px}
+.brand-l{font-size:10px;color:var(--label);letter-spacing:.04em}
+.brand-l b{display:block;color:var(--text-soft);font-size:11px;font-weight:600;letter-spacing:0}
+h1{font-size:17px;text-align:center;line-height:1.3;margin:2px 0;font-weight:700;color:var(--text)}
+.en{text-align:center;font-size:9px;color:#c0c4cc;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.tag{text-align:center;font-size:11px;color:var(--text-soft);margin-bottom:8px}
+.note{font-size:11px;color:var(--label);background:var(--fill);border-radius:6px;padding:7px 10px;margin-bottom:12px;line-height:1.5}
+.sec{margin-bottom:14px;scroll-margin-top:52px}
+.sec-t{
+  font-size:12px;font-weight:600;margin-bottom:6px;padding:0 0 4px;
+  color:var(--text-soft);border-bottom:1px solid var(--line);letter-spacing:.02em;
+}
+.g{background:transparent;border:none;border-radius:0;padding:2px 0 6px;margin-bottom:4px}
+.g + .g{border-top:1px dashed #f0f0f0;padding-top:8px;margin-top:4px}
+.g-t{font-size:11px;font-weight:500;color:var(--label);margin-bottom:6px}
+.row{display:grid;grid-template-columns:1fr;gap:2px;margin-bottom:8px;align-content:start}
+.row:last-child{margin-bottom:0}
+.lab{font-size:11px;font-weight:400;color:var(--label);line-height:1.45;min-height:1.45em}
+.pair{display:grid;grid-template-columns:1fr;gap:8px;align-items:start}
+.opts{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.o,.oi{
+  position:relative;
+  display:inline-flex;align-items:center;gap:3px;padding:4px 10px;
+  background:transparent;border:none;border-radius:3px;
+  font-size:12px;color:#b0b5bd;cursor:pointer;user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:color .15s,background .15s,opacity .15s;
+}
+.oi{border-radius:6px;padding:4px 11px}
+.o:hover,.oi:hover{color:var(--text-soft);background:#f5f6f8}
+.o.a,.oi.a{
+  color:#174ea6;font-weight:600;font-size:13px;
+  border-radius:8px;
+  background:rgba(23,78,166,.06);
+  overflow:visible;
+  isolation:isolate;
+}
+.ot{position:relative;z-index:1}
+.o.a::before,.oi.a::before{
+  content:"";position:absolute;inset:-2px;pointer-events:none;z-index:0;
+  background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 56' preserveAspectRatio='none'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M15 5.2C62 1.4 138 8.1 185 4.6C195 7.2 197.4 18 196.8 28C197.6 39.5 193 50.6 184 52.4C136 55.8 64 50.2 16 53.1C6.2 50.8 2.8 39 3.4 28C2.6 16.2 7.4 7.1 15 5.2Z M16.8 8.4C62 5.2 138 10.8 183.2 8C191.4 10.2 193.6 18.8 193.2 28C193.8 37.8 189.8 47.2 182.4 48.8C136 51.8 64 47.2 17.6 49.6C8.8 47.6 6.4 37.6 6.8 28C6.2 17.8 10 10 16.8 8.4Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 56' preserveAspectRatio='none'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M15 5.2C62 1.4 138 8.1 185 4.6C195 7.2 197.4 18 196.8 28C197.6 39.5 193 50.6 184 52.4C136 55.8 64 50.2 16 53.1C6.2 50.8 2.8 39 3.4 28C2.6 16.2 7.4 7.1 15 5.2Z M16.8 8.4C62 5.2 138 10.8 183.2 8C191.4 10.2 193.6 18.8 193.2 28C193.8 37.8 189.8 47.2 182.4 48.8C136 51.8 64 47.2 17.6 49.6C8.8 47.6 6.4 37.6 6.8 28C6.2 17.8 10 10 16.8 8.4Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+.o.a::after,.oi.a::after{content:none;display:none}
+.capturing .o.a::before,.capturing .oi.a::before,
+.capturing .o.a::after,.capturing .oi.a::after{content:none !important;display:none !important;background:none !important}
+.capturing .o.a,.capturing .oi.a{border:1.5px solid currentColor;background:transparent}
+.capturing .ta.capture-mirror,.capturing .inp.capture-mirror{box-shadow:none;outline:none}
+.o.o-yes.a,.oi.o-yes.a{
+  color:#3f6a55;
+  background:rgba(63,106,85,.08);
+}
+.o.o-no.a,.oi.o-no.a{
+  color:#6a5a54;
+  background:rgba(106,90,84,.08);
+}
+.o.o-opt.a,.oi.o-opt.a{
+  color:#6a5e3a;
+  background:rgba(106,94,58,.08);
+}
+.opts-answered .o:not(.a),.opts-answered .oi:not(.a){opacity:.35}
+.d{display:none}
+.inp,.ta{
+  width:100%;padding:5px 0 6px;background:transparent;
+  border:none;border-bottom:1px solid #eee;border-radius:0;
+  font-size:14px;line-height:1.5;color:var(--text);font-weight:500;
+  outline:none;font-family:inherit;
+}
+.ta{resize:none;overflow:hidden;min-height:48px;border:1px solid #eee;border-radius:6px;padding:8px 10px;background:var(--fill)}
+.inp:focus{border-bottom-color:var(--c)}
+.ta:focus{border-color:var(--c);background:#fff}
+.inp::placeholder,.ta::placeholder{color:#d0d3d8;font-weight:400;font-size:13px}
+.inp.has-val,.ta.has-val{color:var(--text);font-weight:600}
+.ta.has-val{background:#fff;border-color:#e3e5e8}
+.inp:not(.has-val),.ta:not(.has-val){font-weight:400;color:var(--text-soft)}
+/* 截图镜像：避免 html2canvas 裁切表单控件文字 */
+.capture-mirror{
+  white-space:pre-wrap;word-break:break-word;overflow:visible;
+  box-sizing:border-box;min-height:0;
+}
+.inp.capture-mirror{
+  padding:5px 0 8px;border:none;border-bottom:1px solid #eee;
+  font-size:14px;line-height:1.55;font-weight:600;color:var(--text);
+}
+.ta.capture-mirror{
+  padding:8px 10px 10px;border:1px solid #e3e5e8;border-radius:6px;
+  background:#fff;font-size:14px;line-height:1.55;font-weight:600;color:var(--text);
+}
+.inp.capture-mirror:empty,.ta.capture-mirror:empty{font-weight:400;color:#d0d3d8}
+.inp.capture-mirror:empty::before,.ta.capture-mirror:empty::before{content:attr(data-ph);color:#d0d3d8;font-weight:400}
+.rem{display:flex;align-items:flex-start;gap:6px;min-width:0}
+.rem > span{font-size:10px;color:#c0c4cc;flex-shrink:0;padding-top:7px}
+.rem .inp{flex:1;min-width:0;font-size:13px;font-weight:500}
+.rem .inp.has-val{font-weight:600;color:var(--text)}
+.row.yn .opts{margin:1px 0}
+.ft{text-align:center;margin-top:16px;padding-top:8px;border-top:1px solid #eee;font-size:10px;color:#c0c4cc}
+.bar{position:fixed;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid #eee;z-index:20}
+.bar button{flex:1 1 calc(50% - 6px);min-width:0;height:38px;border:none;border-radius:18px;font-size:12px;font-weight:600;cursor:pointer}
+.bar .bar-status{flex:1 1 100%;height:auto;padding:2px 0 0;background:transparent;color:var(--label);font-size:11px;font-weight:500;cursor:default}
+#exportBtn,#importBtn,#resetBtn{background:#f1f3f4;color:#3c4043}
+#dlBtn{background:var(--c);color:#fff}
+#dlBtn:disabled,#exportBtn:disabled,#importBtn:disabled,#resetBtn:disabled{opacity:.6}
+#importFile{display:none}
+@media(min-width:960px){
+  body{padding:20px 20px 80px}
+  .shell{display:grid;grid-template-columns:168px minmax(0,1fr);gap:18px;align-items:start}
+  .toc{
+    display:flex;flex-direction:column;gap:2px;overflow:visible;
+    position:sticky;top:16px;max-height:calc(100vh - 100px);overflow-y:auto;
+    padding:0;margin:0;background:transparent;
+  }
+  .toc-a{
+    max-width:none;border-radius:8px;padding:7px 10px;white-space:normal;
+    line-height:1.35;border-color:transparent;background:transparent;
+  }
+  .toc-a:hover,.toc-a.on{background:#fff;border-color:#e6e6e6;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .page{padding:24px 28px 32px;margin:0;max-width:none}
+  .sec{scroll-margin-top:20px}
+  h1{font-size:19px}
+  .pair-2{grid-template-columns:1fr 1fr;column-gap:16px;row-gap:8px}
+  .pair-3{grid-template-columns:1fr 1fr 1fr;column-gap:14px;row-gap:8px}
+  /* 双列标签等高，输入框基线对齐（略放宽，避免字被裁） */
+  .pair-2 .lab,.pair-3 .lab{
+    height:1.7em;min-height:1.7em;line-height:1.7em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .pair-2 .row,.pair-3 .row{margin-bottom:0;gap:4px}
+  .yn{grid-template-columns:minmax(0,1.15fr) auto minmax(140px,1.1fr);align-items:start;gap:8px 12px}
+  .yn .lab{padding-top:5px;height:auto;white-space:normal}
+  .bar button{flex:1 1 0;font-size:13px;height:40px}
+  .bar .bar-status{flex:0 0 auto;padding:0 8px;align-self:center}
+}
+@media(min-width:640px) and (max-width:959px){
+  body{padding:20px 20px 80px}
+  .page{padding:24px 28px 32px}
+  h1{font-size:19px}
+  .pair-2{grid-template-columns:1fr 1fr;column-gap:16px;row-gap:8px}
+  .pair-3{grid-template-columns:1fr 1fr 1fr;column-gap:14px;row-gap:8px}
+  .pair-2 .lab,.pair-3 .lab{
+    height:1.7em;min-height:1.7em;line-height:1.7em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .pair-2 .row,.pair-3 .row{margin-bottom:0;gap:4px}
+  .yn{grid-template-columns:minmax(0,1.15fr) auto minmax(140px,1.1fr);align-items:start;gap:8px 12px}
+  .yn .lab{padding-top:5px;height:auto;white-space:normal}
+  .bar button{flex:1 1 0;font-size:13px;height:40px}
+  .bar .bar-status{flex:0 0 auto;padding:0 8px;align-self:center}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="toc" id="toc" aria-label="章节导航"></nav>
+<div class="page" id="cap">
+  <div class="brand">
+    <div class="brand-l"><b>MO HOME Space Design Studio</b>默弘空间设计工作室</div>
+    <div class="brand-l" style="text-align:right">以人为本</div>
+  </div>
+  <h1>生活习惯及设计需求调查表</h1>
+  <p class="en">Living Habits and Design Requirements Questionnaire</p>
+  <p class="tag">洞察生活习惯，打造更舒适的居家生活</p>
+  <p class="note">表格填写说明：以下内容对我们设计工作的开展非常重要，请尽量详细填写，以便设计师更多考虑到针对您家庭的个性化需求。</p>
+  <div id="form"></div>
+  <div class="ft">MO HOME Space Design Studio · 默弘空间设计工作室</div>
+</div>
+</div>
+<div class="bar" id="bar">
+  <button type="button" class="bar-status" id="saveTip" tabindex="-1">已自动保存</button>
+  <button type="button" id="exportBtn">导出 JSON</button>
+  <button type="button" id="importBtn">导入 JSON</button>
+  <button type="button" id="resetBtn">恢复默认</button>
+  <button type="button" id="dlBtn">下载为图片</button>
+  <input type="file" id="importFile" accept="application/json,.json,text/plain">
+</div>
+<script>
+const KEY = 'mohong_survey_v1';
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* 默认填写内容（来自 2026-08-17 导出 v3）；写死在 HTML 中，分享出去也会显示。localStorage 非空修改仍优先覆盖 */
+const PREFILL = {
+  p_name: "世华泊郡",
+  p_addr: "朝阳区水岸中街19号院13号楼1层1单元103",
+  p_barea: "88㎡（房本约 88.45㎡）",
+  p_uarea: "套内约 61㎡",
+  p_layout: "两室一厅一卫",
+  p_use: "第一居所 / 自住",
+  p_struct: "是",
+  p_struct_note: "格局方正",
+  p_floor: "1层；净层高约 2.71～2.72m。下方为地下室和停车场，需防潮。同户型发现有阳台空调井入口位置发霉",
+  p_people: "2人 + 5只猫",
+  p_max: "4–6人（节假日父母/亲友短住）",
+  p_family: [
+    "与伴侣同居"
+  ],
+  p_pet: "是",
+  p_pet_note: "防猫抓（沙发、窗帘）。不希望猫进入厨房。",
+  p_first: "是",
+  p_years: "10年以上",
+  p_when: "计划 2026年8月开工，2027年4月入住",
+  p_look: "毛坯交付",
+  p_type: "平层",
+  p_equip: "毛坯，无既有装修设备",
+  p_keep: "否",
+  p_keep_note: "有部分电器，无家具带入，需全屋家具采购。",
+  b_total: "35～36万",
+  b_desc: "前期把控预算，后面慢慢添置。",
+  d_style: [
+    "极简",
+    "现代",
+    "原木",
+    "侘寂",
+    "日式",
+    "宋式美学",
+    "托斯卡纳",
+    "阿尔托"
+  ],
+  d_style_note: "不太强调风格化，喜欢简约但有设计感，不喜欢多余累赘线条。温暖、自然、宠物友好。不喜欢特别花的吊顶。",
+  d_env: "暖色",
+  d_light: "暖色",
+  d_soft: [
+    "撞色",
+    "暖色"
+  ],
+  d_rooms: [
+    "主人房",
+    "厨房",
+    "餐厅",
+    "储物间",
+    "主卫",
+    "多功能房"
+  ],
+  d_rooms_note: "次卧做多功能：日常办公 + 大容量收纳 + 父母/亲友临时留宿。客厅承接偶尔办公、健身、聚会、观景、宠物活动。",
+  d_hate: "1. 一层整体采光不好以及需防潮\n2. 噪音问题：临街 + 地铁\n3. 次卧采光差，目前仅有一个小窗\n4. 卫生间暗卫无窗\n\n非必须解决：\n5. 入户门对客厅/阳台（穿堂煞）\n6. 主卧至卫生间动线较长（洗漱）",
+  d_care: "一层：采光受限、临街噪音/灰尘、窗外行人可视（隐私）、楼下地下室/停车场防潮、同小区空调井有发霉案例需加强防潮。",
+  d_feng: "是",
+  d_dream: "简约有设计感、温暖自然、宠物友好；客厅布局灵活不要太传统；不要电视墙，电视用移动支架。",
+  m1_role: "先生 / 男主人",
+  m1_stay: "第一居所常住",
+  m1_job: "产品 + 野路子程序员",
+  m1_skill: "做手工、写代码",
+  m1_sport: "羽毛球、摩托车、骑行",
+  m1_collect: "盲盒、娃娃、杯子",
+  m1_cook: "喜欢，但是偶尔下厨",
+  m1_music: "国风、欧美流行、轻音乐、民谣、说唱",
+  m1_habit: "身高 168cm；工作早10晚七，摩托车出行；主要负责家里家务。",
+  m2_role: "女士 / 女主人",
+  m2_stay: "第一居所常住",
+  m2_job: "互联网运营/风控安全",
+  m2_sport: "骑自行车、打羽毛球",
+  m2_habit: "身高 158cm。早上 10 点多到岗，晚上下班很晚，周末偶尔加班。喜欢周末躺着看电视、吃零食，偶尔运动，喜欢出去自驾游。化妆：卫生间和卧室都有可能。",
+  m_extra: "节假日偶尔父母过来短住，走次卧/多功能房。无其他常住人员。",
+  s_ac: [
+    "中央空调"
+  ],
+  s_fresh: [
+    "主要空间新风系统"
+  ],
+  s_heat: [
+    "地暖",
+    "集中供暖"
+  ],
+  s_water: [
+    "前置净水",
+    "软水机",
+    "末端直饮机"
+  ],
+  s_hot: [
+    "壁挂炉",
+    "小循环系统",
+    "燃气炉"
+  ],
+  s_smart: [
+    "智能开关",
+    "电动窗帘",
+    "无线智能（稳定性一般，电路敷设成本低，适合平层）",
+    "无线智能（稳定性一般，成本低，适合平层）"
+  ],
+  s_dust: [
+    "扫地机器人"
+  ],
+  s_kit: [
+    "洗碗机",
+    "暗嵌冰箱"
+  ],
+  s_clean: [
+    "洗衣机",
+    "烘干机",
+    "内衣专用洗衣机"
+  ],
+  s_other: "1、洗地机；2、拖牛电动垃圾桶；3、小米1拖3中央空调（3个空气智能面板，3D人感面板） + 新风模块；4、客厅、餐厅、厨房、卫生间、主卧、次卧、玄关过道、储藏间人体传感器；",
+  s_net_note: "米家生态，后期有家用nas需求",
+  a_win: "是",
+  a_win_note: "外窗全部更换，须按物业交付标准",
+  a_door: "是",
+  a_door_note: "和邻居统一外开、到顶",
+  a_tv: [
+    "电视"
+  ],
+  a_tv_note: "不要电视墙，电视用移动支架。有吃饭看电视习惯。另有 Pico VR、Switch、K歌设备。",
+  a_housekeep: [
+    "卫生间",
+    "家政区"
+  ],
+  a_housekeep_note: "暗卫干湿分离后：洗衣烘干、猫砂盆、扫地机基站。另需家政收纳猫砂猫粮（砂约30kg、粮约3袋5kg）、洗地机、吸尘器。",
+  a_book: [
+    "客厅",
+    "书房"
+  ],
+  a_book_note: "现有 5 层书柜；次卧兼办公/阅读。",
+  a_curtain_note: "电动；需考虑防猫抓。",
+  e_bench: "是",
+  e_bench_note: "希望回家能快速换鞋。",
+  e_out: "是",
+  e_out_note: "摩托车头盔、钥匙、手套、围巾、香水等",
+  e_cab: [
+    "退鞋区",
+    "单鞋区",
+    "行李箱",
+    "挂衣区",
+    "长靴区",
+    "灯带照明",
+    "小抽屉",
+    "伞筒"
+  ],
+  e_cab_note: "当季常用鞋 8 双。临时收纳鞋、外套、钥匙。行李箱 3 个（两个20寸、一个28寸）。",
+  lv_cine: "否",
+  lv_cine_note: "目前不需要，但是希望预留走线",
+  lv_tea: "是",
+  lv_tea_note: "偶尔，计划在主卧或者客厅",
+  lv_inst: "否",
+  lv_play: "否",
+  lv_guest: [
+    "偶尔的聚会",
+    "家庭聚会"
+  ],
+  lv_guest_note: "不常有客人，偶尔同事朋友串门。",
+  lv_act: [
+    "看电视",
+    "聊天",
+    "打游戏",
+    "运动",
+    "读书"
+  ],
+  lv_act_note: "偶尔办公、健身、聚会、观景、宠物活动。Pico VR / Switch游戏；K歌；",
+  lv_store: "运动类：瑜伽垫、瑜伽砖、泡沫滚筒、哑铃 / 小重量器械、筋膜枪等物品的存储；\n电子数码：遥控器、Pad、Mac、Pico、Switch、游戏手柄、K歌麦克风；\n配件：各种数据线、充电头、适配器；\n药品类：应急物品存储；\n影音：马歇尔音箱、小爱音像、耳机。",
+  lv_furn: "电视移动支架、落地灯、相片墙、电子相框\n3人沙发 + 单人沙发/躺椅 + 地毯，或者模块沙发\n不需要茶几，选可移动边几\n",
+  dn_socket_note: "火锅之类的",
+  dn_fridge: [
+    "否"
+  ],
+  dn_fridge_note: "计划平嵌大冰箱；厨房放不下则放餐厅。",
+  dn_meal: [
+    "一日一餐"
+  ],
+  dn_meal_note: "目前不经常做，希望以后工作日早餐及周末经常做。最大用餐约 4–6 人。",
+  dn_app: "若厨房放不下，可放餐厅：冰箱、电饭锅、微波炉",
+  k_cook: "是",
+  k_cook_note: "目前不经常做，希望以后经常做（工作日早餐及周末）。中餐为主，不会太多爆炒。",
+  k_trash: "是",
+  k_trash_note: "垃圾处理器。",
+  k_fridge_in: "是",
+  k_fridge_in_note: "平嵌大冰箱；厨房放不下就放餐厅。",
+  k_open: "开放式",
+  k_who: "1人",
+  k_fridge: [
+    "内嵌冰箱"
+  ],
+  k_app: [
+    "微波炉",
+    "电饭锅",
+    "洗碗机"
+  ],
+  k_app_note: "另有空气炸锅、各种锅具。壁挂炉在厨房。",
+  k_store: "做饭时希望开放、进出方便；不做饭时希望能封闭。不希望猫进入厨房。",
+  mb_dress: "是",
+  mb_dress_note: "梳妆台可与衣柜/床头柜一体化。化妆：卫生间和卧室都有可能。",
+  mb_cloth: [
+    "挂衣"
+  ],
+  mb_cloth_note: "目前 4 门衣柜。换季后能快速收纳，衣服尽量挂起来。无独立衣帽间。",
+  mb_store: "目前 4 门衣柜。换季后收纳，衣服挂起来。",
+  ch_bunk: "否",
+  ch_bunk_note: "无儿童常住。次卧按多功能房使用。",
+  ch_store: "见「多功能房 / 次卧」。",
+  el_split_note: "无长辈常住；节假日父母短住，安排在次卧/多功能房。",
+  el_store: "临时留宿即可，不单独做长辈房。",
+  st_desk: "是",
+  st_desk_note: "次卧兼居家办公、书房",
+  st_mix: [
+    "临时客房"
+  ],
+  st_store: "大容量收纳 + 办公。",
+  st_furn: "书桌、书柜（现有 5 层书柜量级）。",
+  mf_fun: "否",
+  mf_fun_note: "Pico VR、Switch、K歌。偶尔健身（羽毛球拍、自行车、Pico）。",
+  mf_bed: [
+    "沙发床",
+    "墨菲床"
+  ],
+  mf_bed_note: "父母/亲友临时留宿。",
+  mf_store: "次卧：日常居家办公 + 大容量收纳 + 临时留宿（一房多用）。",
+  mf_furn: "办公桌、34寸显示器、NAS等网络设备、收纳柜、可留宿的床具（沙发床等）。",
+  ba_fresh: "是",
+  ba_fresh_note: "暗卫无窗，需强化排风和照明。",
+  ba_sep: [
+    "是"
+  ],
+  ba_tub: [
+    "否"
+  ],
+  ba_wc: [
+    "轻智能马桶"
+  ],
+  ba_store: "2台 Catlink 电动猫砂盆（单机 600×580×710mm）+ 它医生新风\n独立洗衣机 + 烘干机 （目前看好的是松下的，到时候看空间是否更换为一体机）+ 内衣洗衣机（备选）\n扫地机器人基站（自动上下水+插座）\n卫生间需化妆收纳（吹风机架及插座）、电动牙刷充电口",
+  bl_close: "是",
+  bl_close_note: "物业要求不得改开启方向和分割方案",
+  bl_other: "窗外邻居会遛狗，需兼顾采光与隐私\n窗外需要配摄像头，需预留电源",
+  all_more: "我们查的防潮加强手段，不知是否管用，到时候看大家给的建议：\n基层水泥加入：马贝SP700\n美巢800高强奶水腻子\n阳台和空调井附近涂防水\n无机涂料：透气性，潮气能散出来\n",
+  p_client: "冷易珊",
+  p_phone: "18510249173",
+  b_design: "26400",
+  b_build: "25万",
+  b_furn: "3万",
+  b_dev: "家电6.8万",
+  d_like: "小区环境好\n有树景，能在床上晒太阳\n猫咪足够空间跑酷",
+  m1_name: "陈先生",
+  m1_phone: "18510249173",
+  m1_born: "云南大理",
+  m1_blood: "O型",
+  m1_birthday: "1995.04.30",
+  m1_age: "31",
+  m1_star: "金牛",
+  m1_faith: "佛祖心中留",
+  m1_color: "黄色、灰色、酒红",
+  m1_work: "宅家做手工",
+  m1_rest: "哈尼个旧",
+  m1_lux: "无",
+  b_garden: "可以考虑盆景之类",
+  m1_ghost: "不",
+  m1_holiday: "周末喜欢去露营，长假喜欢去自驾",
+  m1_perfume: "无特定品牌，喜欢木质、柑橘调",
+  m1_place: "露天茶馆",
+  m1_cloth: "SAWONG、MUJI、迪卡侬",
+  m1_car: "萤火虫、Mini Cooper、Smart #1#2",
+  m1_nature: "都喜欢",
+  m1_country: "中国、印尼",
+  m1_drink: "仅米酒",
+  m1_shop: "一般",
+  m1_party: "喜欢和熟人聚会",
+  m1_tea: "喜欢",
+  m1_toy: "没玩具，瓷器、沉香手串？",
+  m1_read: "还行",
+  m1_cigar: "不喜欢🫸 且不抽烟",
+  m1_lamp: "柔和、温暖",
+  m2_name: "冷易珊",
+  m2_phone: "18202806695",
+  m2_born: "黑龙江绥化",
+  m2_age: "33",
+  m2_birthday: "1992.11.24",
+  m2_cigar: "不喜欢🫸 且不抽烟",
+  m2_star: "射手座",
+  m2_faith: "财神",
+  m2_holiday: "周末喜欢去露营，长假喜欢去自驾",
+  a_humid_note: "还有空气净化器",
+  a_sec_note: "水、燃气安防联动。",
+  a_doorstyle_note: "谷仓门",
+  a_shape_note: "阳台弧角处理",
+  e_open_note: "和邻居统一外开、到顶",
+  lv_floor_req_note: "隐形踢脚线",
+  dn_bar_note: "看位置，非必须",
+  dn_table_note: "优先圆桌",
+  dn_store: "1、茶叶、咖啡、冲饮杯具；\n2、猫粮、零食等；\n3、食品、干货、零食等储备；",
+  s_net: [
+    "全屋MESH组网"
+  ],
+  s_garden: [
+    "盆栽"
+  ],
+  a_fan: "是",
+  a_radiator: "是",
+  a_humid: "是",
+  a_sec: "是",
+  a_night: [
+    "起夜灯",
+    "地脚灯"
+  ],
+  a_clock: [
+    "否"
+  ],
+  a_doorstyle: [
+    "隐形门",
+    "幽灵门",
+    "无边框门"
+  ],
+  a_stone: [
+    "莱姆石",
+    "洞石"
+  ],
+  e_open: "是",
+  e_mirror: "是",
+  lv_floor_req: "是",
+  lv_fp: "否",
+  lv_mat: "地砖",
+  el_split: "否",
+  el_tv: "否",
+  el_alarm: "否",
+  el_water: "否",
+  k_hood: "顶吸",
+  k_spice: [
+    "碗碟拉篮"
+  ],
+  k_sink: "单盆",
+  k_basin: "台下盆",
+  k_cab: [
+    "多层板"
+  ],
+  k_mat: "地砖",
+  a_curtain: [
+    "梦幻帘",
+    "纱帘"
+  ],
+  a_shape: [
+    "石膏板造型"
+  ],
+  dn_bar: "非必须",
+  dn_socket: "是",
+  dn_table: "圆桌",
+  dn_cab: [
+    "餐边柜"
+  ],
+  dn_mat: "地砖",
+  b_main: "",
+  b_deco: "",
+  b_ext: "",
+  m1_must: "",
+  m2_blood: "B型",
+  m2_color: "暖一点，安静一点可以配合少量跳色",
+  m2_ghost: "信算命",
+  m2_perfume: "不喜欢，讨厌太香的味道",
+  m2_place: "无，看过很多设计，还是最喜欢能让我有钱的地方",
+  m2_cloth: "无，我好看所以我天天瞎穿",
+  m2_skill: "唱歌",
+  m2_music: "喜欢热烈的音乐",
+  m2_work: "钱多的",
+  m2_rest: "京兆尹，到现在也没吃上，所以一直惦记",
+  m2_lux: "不买，除非送人",
+  m2_car: "萤火虫，日式kcar，老头乐，喜欢方方的",
+  m2_nature: "在巴厘岛住了千一晚上的别墅酒店，那几天很开心",
+  m2_country: "中国，喜欢宋式美学",
+  m2_collect: "",
+  m2_drink: "醪糟汤圆",
+  m2_shop: "一般，有时候网购会囤一些消耗品",
+  m2_party: "还行",
+  m2_tea: "还行",
+  m2_cook: "非常喜欢吃",
+  m2_toy: "有点小玩偶",
+  m2_read: "还行",
+  m2_lamp: "",
+  m2_must: "",
+  a_fan_note: "",
+  a_radiator_note: "",
+  a_glass_note: "",
+  a_paint_note: "",
+  a_wall_note: "",
+  e_mirror_note: "",
+  lv_inst_note: "",
+  lv_play_note: "",
+  lv_fp_note: "",
+  lv_tv_note: "",
+  dn_furn: "餐桌（圆形优先）* 1\n外摆常用椅子 2～4\n非常用椅子堆叠收纳",
+  k_strip_note: "",
+  k_drain_note: "",
+  k_island_note: "看空间允许情况，非必须",
+  k_west_note: "",
+  k_split_note: "",
+  k_h_note: "高台：齐平窗台；低台：80cm",
+  k_fridge_note: "目前看好的是东芝大白桃法式冰箱：0.2cm高容全嵌、长600*宽693*高1910；另一款长600*宽833*高1910",
+  k_cool_note: "",
+  k_spice_note: "",
+  k_cab_note: "",
+  mb_safe_note: "",
+  mb_split_note: "内衣需要分开，其他可以混",
+  mb_uv_note: "",
+  mb_mirror_note: "",
+  mb_iron_note: "",
+  mb_dim_note: "",
+  mb_mini_note: "",
+  mb_floorc_note: "",
+  mb_wallc_note: "",
+  mb_app: "看门是柜子还是帘子，如果是帘子需要预留电动",
+  mb_furn: "1个床头柜\n待定：茶吧机、床尾柜 \n飘窗垫+矮炕几：满足日常晒太阳以及偶尔喝茶",
+  ch_wall_note: "",
+  ch_desk_note: "",
+  ch_toy_note: "",
+  ch_play_note: "",
+  ch_tone_note: "",
+  el_tv_note: "",
+  el_alarm_note: "",
+  el_water_note: "",
+  el_desk_note: "",
+  el_wheel_note: "",
+  el_tone_note: "",
+  el_care_note: "",
+  el_furn: "",
+  st_net_note: "",
+  st_rec_note: "",
+  st_off_note: "",
+  st_mix_note: "",
+  mf_tv_note: "",
+  ba_towel_note: "干净毛巾收纳柜/篮/架（10条），洗澡顺手拿",
+  ba_alarm_note: "",
+  ba_bidet_note: "",
+  ba_old_note: "",
+  ba_baby_note: "",
+  ba_tub_note: "",
+  ba_wc_note: "",
+  ba_drain_note: "不要挡水条，我希望洗地机能无痛进去清理",
+  bl_cab_note: "看需求，非必须",
+  bl_dry_note: "隐形晾衣架",
+  bl_plant_note: "",
+  bl_pet_note: "不用封闭的，顶天立地式的即可",
+  pic_note: "",
+  bl_dry: "是",
+  bl_cab: "非必须",
+  bl_pet: "是",
+  k_strip: "是",
+  k_drain: "是",
+  k_island: "非必须",
+  k_split: "是",
+  k_west: "否",
+  k_cool: [
+    "否"
+  ],
+  mb_safe: "否",
+  mb_split: "是",
+  mb_uv: "否",
+  mb_mirror: "是",
+  mb_iron: "是",
+  mb_dim: "否",
+  mb_mini: "否",
+  mb_tv: [
+    "否"
+  ],
+  mb_mat: "地砖",
+  mb_floorc: "浅色系",
+  mb_wallc: "暖色系",
+  ch_wall: "否",
+  ch_desk: "否",
+  ch_toy: "否",
+  ch_play: "否",
+  el_desk: "否",
+  el_wheel: "否",
+  st_net: "是",
+  st_rec: "否",
+  st_off: [
+    "打印机"
+  ],
+  mf_tv: "否",
+  ba_towel: "否",
+  ba_alarm: "否",
+  ba_bidet: "是",
+  ba_old: "否",
+  ba_baby: "否",
+  ba_heat: [
+    "冷暖风机"
+  ],
+  ba_basin: "台下盆",
+  ba_drain: "长条式"
+};
+function isEmpty(v){
+  return v == null || v === '' || (Array.isArray(v) && v.length === 0);
+}
+function normalizeSaved(saved){
+  // 软装由单选改为多选：旧字符串自动转成数组，避免刷新丢失
+  if (typeof saved.d_soft === 'string' && saved.d_soft) {
+    saved.d_soft = [saved.d_soft];
+  }
+  return saved;
+}
+function clonePrefill(){
+  return JSON.parse(JSON.stringify(PREFILL));
+}
+function loadData(){
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e) { saved = {}; }
+  saved = normalizeSaved(saved);
+  const out = clonePrefill();
+  Object.keys(saved).forEach(k => { if (!isEmpty(saved[k])) out[k] = saved[k]; });
+  return out;
+}
+let data = loadData();
+localStorage.setItem(KEY, JSON.stringify(data));
+
+const yn = ['是','否'];
+const floor = ['强化地板','实木地板','地砖','微水泥'];
+const tone = ['冷色','暖色','中性色调'];
+
+const SCHEMA = [
+  { t:'项目详情', id:'p', blocks:[{ title:'项目信息', fields:[
+    {type:'pair', cols:'pair-2', items:[
+      {type:'text', k:'p_name', l:'项目名称'},
+      {type:'text', k:'p_addr', l:'项目地址'},
+      {type:'text', k:'p_client', l:'客户姓名'},
+      {type:'text', k:'p_phone', l:'联系电话'},
+    ]},
+    {type:'pair', cols:'pair-3', items:[
+      {type:'text', k:'p_barea', l:'建筑面积'},
+      {type:'text', k:'p_uarea', l:'使用面积'},
+      {type:'text', k:'p_layout', l:'户型'},
+    ]},
+    {type:'pair', cols:'pair-2', items:[
+      {type:'text', k:'p_use', l:'房屋用途'},
+      {type:'ynr', k:'p_struct', l:'是否需要结构改造'},
+    ]},
+    {type:'text', k:'p_floor', l:'楼层情况'},
+    {type:'pair', cols:'pair-2', items:[
+      {type:'text', k:'p_people', l:'常驻人口数量'},
+      {type:'text', k:'p_max', l:'同时容纳最大人数'},
+    ]},
+    {type:'multi', k:'p_family', l:'家庭成员构成', opts:['独居','与伴侣同居','与长辈同居','与子女同居']},
+    {type:'ynr', k:'p_pet', l:'是否有宠物', ph:'宠物种类/数量'},
+    {type:'single', k:'p_first', l:'是否作为第一居所', opts:yn},
+    {type:'pair', cols:'pair-2', items:[
+      {type:'text', k:'p_years', l:'居住时间'},
+      {type:'text', k:'p_when', l:'计划装修时间'},
+    ]},
+    {type:'text', k:'p_look', l:'房屋外观风格'},
+    {type:'single', k:'p_type', l:'建筑类别', opts:['平层','复式','Loft','别墅']},
+    {type:'text', k:'p_equip', l:'项目已有设备'},
+    {type:'ynr', k:'p_keep', l:'是否有需要保留的家具', ph:'请填写具体尺寸'},
+  ]}]},
+  { t:'项目整体装修预算', id:'b', blocks:[{ title:'预算拆分', fields:[
+    {type:'ta', k:'b_total', l:'装修总预算（设计、施工、主材、设备、家具配饰、改扩建等）'},
+    {type:'pair', cols:'pair-3', items:[
+      {type:'text', k:'b_design', l:'设计预算'},
+      {type:'text', k:'b_build', l:'施工预算'},
+      {type:'text', k:'b_main', l:'主材预算'},
+      {type:'text', k:'b_dev', l:'设备预算'},
+      {type:'text', k:'b_furn', l:'家具预算'},
+      {type:'text', k:'b_deco', l:'配饰预算'},
+      {type:'text', k:'b_ext', l:'改扩建'},
+      {type:'text', k:'b_garden', l:'园林预算'},
+    ]},
+    {type:'ta', k:'b_desc', l:'对预算的描述'},
+  ]}]},
+  { t:'项目设计需求', id:'d', blocks:[{ title:'风格与功能', fields:[
+    {type:'multi', k:'d_style', l:'喜欢的设计风格', opts:['现代','轻奢','极简','北欧','中式','美式','新中式','意式','法式','奶油','原木','中古','工业','日式','侘寂','宋式美学','托斯卡纳','阿尔托']},
+    {type:'text', k:'d_style_note', l:'风格备注'},
+    {type:'single', k:'d_env', l:'整体环境色彩', opts:['冷色','暖色','中性色','高纯度色彩','个性专属色']},
+    {type:'single', k:'d_light', l:'灯光', opts:['冷色','暖色','中性色']},
+    {type:'multi', k:'d_soft', l:'软装', opts:['冷色','暖色','中性色','撞色']},
+    {type:'multi', k:'d_rooms', l:'功能区需求', opts:['主人房','男孩房','女孩房','长辈房','客房','厨房','餐厅','保姆房','储物间','书房','主卫','客卫','多功能房']},
+    {type:'text', k:'d_rooms_note', l:'功能区备注'},
+    {type:'ta', k:'d_like', l:'现居住居所最满意的地方'},
+    {type:'ta', k:'d_hate', l:'现居住居所最不满意的地方'},
+    {type:'ta', k:'d_care', l:'在装修过程中比较关注的问题'},
+    {type:'single', k:'d_feng', l:'是否关注风水', opts:yn},
+    {type:'ta', k:'d_dream', l:'简单描述一下你理想中家的样子'},
+  ]}]},
+  { t:'常住成员设计需求咨询表', id:'m', repeat:2, extra:true, blocks:[{ title:'个人信息', fields:[
+    {type:'pair', cols:'pair-2', items:[
+      {type:'text', k:'name', l:'客户姓名'},
+      {type:'text', k:'phone', l:'联系电话'},
+      {type:'text', k:'born', l:'出生地'},
+      {type:'text', k:'blood', l:'血型'},
+      {type:'text', k:'age', l:'年龄'},
+      {type:'text', k:'birthday', l:'出生日期（精确到年月日时分）'},
+      {type:'text', k:'role', l:'常住人员类别'},
+      {type:'text', k:'stay', l:'居住时间'},
+      {type:'text', k:'star', l:'星座'},
+      {type:'text', k:'faith', l:'宗教信仰'},
+      {type:'text', k:'job', l:'职业'},
+      {type:'text', k:'holiday', l:'假期'},
+    ]},
+  ]},{ title:'个性化信息', fields:[
+    {type:'pair', cols:'pair-2', items:[
+      {type:'text', k:'color', l:'色彩偏好'},
+      {type:'text', k:'ghost', l:'是否相信鬼神'},
+      {type:'text', k:'perfume', l:'喜欢的香水品牌'},
+      {type:'text', k:'place', l:'最满意的场所'},
+      {type:'text', k:'cloth', l:'喜欢的服装品牌'},
+      {type:'text', k:'skill', l:'最擅长的技能'},
+      {type:'text', k:'music', l:'喜欢的音乐类型'},
+      {type:'text', k:'sport', l:'最喜欢的运动'},
+      {type:'text', k:'work', l:'最理想的工作'},
+      {type:'text', k:'rest', l:'最喜欢的餐厅'},
+      {type:'text', k:'lux', l:'喜欢的奢侈品'},
+      {type:'text', k:'car', l:'最喜欢的车'},
+      {type:'text', k:'nature', l:'喜欢乡村还是海边'},
+      {type:'text', k:'country', l:'最喜欢的国家'},
+      {type:'text', k:'collect', l:'是否有收藏品'},
+      {type:'text', k:'drink', l:'是否喜欢饮酒'},
+      {type:'text', k:'shop', l:'是否喜欢购物'},
+      {type:'text', k:'party', l:'是否喜欢聚会'},
+      {type:'text', k:'tea', l:'是否喜欢喝茶'},
+      {type:'text', k:'cook', l:'是否喜欢做饭'},
+      {type:'text', k:'toy', l:'最喜欢的玩具'},
+      {type:'text', k:'read', l:'是否喜欢阅读'},
+      {type:'text', k:'lamp', l:'最喜欢的灯光形式'},
+      {type:'text', k:'cigar', l:'是否喜欢雪茄'},
+    ]},
+    {type:'ta', k:'must', l:'有哪些必需品'},
+    {type:'ta', k:'habit', l:'描述一下自己的生活习惯及作息时间'},
+  ]}]},
+  { t:'舒适家居系统及部分机电、主材功能需求', id:'s', blocks:[{ title:'系统配置', fields:[
+    {type:'multi', k:'s_ac', l:'空调系统', opts:['中央空调','分体式空调（风管机、壁挂式、柜机）','否']},
+    {type:'multi', k:'s_fresh', l:'新风系统', opts:['全房新风系统','主要空间新风系统','否']},
+    {type:'multi', k:'s_heat', l:'供暖系统', opts:['地暖','壁挂炉散热器','真火壁炉','冷暖空调','集中供暖','否']},
+    {type:'multi', k:'s_water', l:'净水系统', opts:['前置净水','中央净水','软水机','末端直饮机','管线机','否']},
+    {type:'multi', k:'s_hot', l:'热水系统', opts:['大循环系统','小循环系统','燃气炉','壁挂炉','空气能','太阳能','电加热']},
+    {type:'multi', k:'s_smart', l:'智能家居', opts:['安防系统','背景音','智能开关','智能调光','电动窗帘','有线智能（稳定性好，造价高，适合别墅）','无线智能（稳定性一般，成本低，适合平层）']},
+    {type:'multi', k:'s_dust', l:'除尘系统', opts:['中央除尘','扫地机器人','否']},
+    {type:'multi', k:'s_net', l:'网络系统', opts:['全屋贴墙无线AP','全屋吸顶无线AP','全屋MESH组网','不需要']},
+    {type:'text', k:'s_net_note', l:'网络备注'},
+    {type:'multi', k:'s_garden', l:'园林系统', opts:['筑山','叠石','理水','植被','盆栽']},
+    {type:'multi', k:'s_life', l:'个性化品质生活系统', opts:['桑拿','高温瑜伽','酒窖','室内、外游泳池','室内电梯','斯诺克','棋牌室','影音室','健身房','室内保龄球','室内高尔夫','否']},
+    {type:'multi', k:'s_kit', l:'厨房嵌入式电器（需提前确认）', opts:['洗碗机','蒸烤箱','消毒柜','暗嵌冰箱','集成灶']},
+    {type:'multi', k:'s_bath', l:'暗嵌式洁具（需提前确认）', opts:['暗嵌式花洒','暗嵌式龙头','壁挂式马桶']},
+    {type:'multi', k:'s_clean', l:'清洁类电器', opts:['洗衣机','烘干机','洗烘一体机','儿童洗衣机','内衣专用洗衣机','洗鞋机']},
+    {type:'ta', k:'s_other', l:'其他特殊要求或补充说明'},
+  ]}]},
+  { t:'各空间 · 基本需求', id:'a', blocks:[{ title:'全屋基础', fields:[
+    {type:'ynr', k:'a_win', l:'家里的外窗是否更换？'},
+    {type:'ynr', k:'a_door', l:'家里入户门是否更换？'},
+    {type:'ynr', k:'a_fan', l:'是否考虑不使用空调时，风扇的位置和使用情况？'},
+    {type:'ynr', k:'a_radiator', l:'是否考虑不使用地暖时，暖气的位置和使用情况？'},
+    {type:'ynr', k:'a_humid', l:'是否需要加湿器或者除湿器的位置？'},
+    {type:'ynr', k:'a_sec', l:'是否需要安防监控系统（非法闯入、烟雾、火灾等自动报警、监控）？'},
+    {type:'multi', k:'a_tv', l:'是否考虑安装投影、电视？', opts:['投影仪','电视','否']},
+    {type:'text', k:'a_tv_note', l:'投影/电视备注'},
+    {type:'multi', k:'a_housekeep', l:'家政间、洗衣区希望安排在哪个区域？', opts:['餐厨区','卫生间','家政区','阳台']},
+    {type:'multi', k:'a_night', l:'家里是否要考虑地脚灯或者起夜灯？', opts:['地脚灯','起夜灯','否']},
+    {type:'multi', k:'a_clock', l:'家里的钟表或挂历放在哪个区域？', opts:['餐厅','客厅','过道','否']},
+    {type:'multi', k:'a_book', l:'是否需要有专门放书和阅读的地方？', opts:['客厅','书房','卧室','儿童房']},
+    {type:'text', k:'a_book_note', l:'阅读区备注'},
+    {type:'multi', k:'a_curtain', l:'家里考虑的窗帘形式？', opts:['斑马帘','香格里拉帘','蜂巢帘','梦幻帘','罗马帘','卷帘','百叶','麻草帘','布帘','纱帘']},
+    {type:'text', k:'a_curtain_note', l:'窗帘备注'},
+    {type:'multi', k:'a_doorstyle', l:'特殊门', opts:['隐形门','口袋门','无边框门','幽灵门']},
+    {type:'text', k:'a_doorstyle_note', l:'特殊门备注'},
+    {type:'multi', k:'a_glass', l:'艺术玻璃', opts:['长虹','锤目纹','水波纹','海棠纹','方格纹']},
+    {type:'text', k:'a_glass_note', l:'艺术玻璃备注'},
+    {type:'multi', k:'a_stone', l:'特殊石材', opts:['大理石','石英石','花岗岩','莱姆石','水磨石','洞石','奢石','文化石']},
+    {type:'multi', k:'a_paint', l:'艺术涂料', opts:['微水泥','灰泥','艺术漆']},
+    {type:'text', k:'a_paint_note', l:'艺术涂料备注'},
+    {type:'multi', k:'a_wall', l:'特殊墙面', opts:['壁布','壁纸','海基布']},
+    {type:'text', k:'a_wall_note', l:'特殊墙面备注'},
+    {type:'multi', k:'a_shape', l:'特殊造型', opts:['造型门洞','石膏板造型','造型门板']},
+    {type:'text', k:'a_shape_note', l:'特殊造型备注'},
+  ]}]},
+  { t:'入户玄关及门厅', id:'e', blocks:[{ fields:[
+    {type:'ynr', k:'e_open', l:'大门的开启方向和尺寸是否有要求？'},
+    {type:'ynr', k:'e_bench', l:'是否需要换鞋凳？'},
+    {type:'ynr', k:'e_mirror', l:'是否需要配置玄关镜？'},
+    {type:'ynr', k:'e_out', l:'是否需要摆放户外设备？'},
+    {type:'multi', k:'e_cab', l:'入户鞋柜或玄关柜需要满足哪些功能？（请在备注写数量）', opts:['退鞋区','单鞋区','长靴区','行李箱','挂衣区','伞筒','小抽屉','消毒功能','灯带照明']},
+    {type:'ta', k:'e_cab_note', l:'功能数量及其他备注'},
+  ]}]},
+  { t:'客厅', id:'lv', blocks:[{ fields:[
+    {type:'ynr', k:'lv_cine', l:'是否需要家庭影院及音响设备？'},
+    {type:'ynr', k:'lv_tea', l:'是否有喝功夫茶习惯，在哪里喝茶？'},
+    {type:'ynr', k:'lv_floor_req', l:'地面材质及踢脚线样式是否有要求？'},
+    {type:'ynr', k:'lv_inst', l:'是否摆放大型乐器？'},
+    {type:'ynr', k:'lv_play', l:'是否需要专门的儿童游戏区？'},
+    {type:'ynr', k:'lv_fp', l:'是否需要装饰壁炉？'},
+    {type:'multi', k:'lv_tv', l:'对于客厅展示柜/电视柜的形式考虑？', opts:['柜门','玻璃门','开放格']},
+    {type:'text', k:'lv_tv_note', l:'展示柜备注'},
+    {type:'single', k:'lv_mat', l:'地面的材质？', opts:floor},
+    {type:'multi', k:'lv_guest', l:'平常有什么样的会客需求？', opts:['家庭聚会','偶尔的聚会','商务接待','邻居来访','无']},
+    {type:'multi', k:'lv_act', l:'您及家人平时此空间的主要活动？', opts:['看电视','聊天','读书','打游戏','运动']},
+    {type:'text', k:'lv_act_note', l:'活动备注'},
+    {type:'ta', k:'lv_store', l:'客厅区域需要储存什么样的物品及数量'},
+    {type:'ta', k:'lv_furn', l:'客厅区域需要什么样的家具及数量'},
+  ]}]},
+  { t:'餐厅', id:'dn', blocks:[{ fields:[
+    {type:'ynr', k:'dn_socket', l:'餐桌周围是否需要专用大功率插座？'},
+    {type:'ynr', k:'dn_bar', l:'是否需要吧台（给水、排水是否预留）？'},
+    {type:'multi', k:'dn_fridge', l:'是否配备小冰箱或冰柜？', opts:['小冰箱','冰柜','否']},
+    {type:'single', k:'dn_table', l:'餐桌是圆桌还是方桌？', opts:['圆桌','方桌']},
+    {type:'text', k:'dn_table_note', l:'餐桌备注'},
+    {type:'multi', k:'dn_cab', l:'餐厅是否要酒柜或者餐边柜？', opts:['酒柜','餐边柜','否']},
+    {type:'single', k:'dn_mat', l:'地面的材质？', opts:floor},
+    {type:'multi', k:'dn_meal', l:'每天的用餐频率？', opts:['一日一餐','一日两餐','一日三餐','一日多餐']},
+    {type:'text', k:'dn_meal_note', l:'最大用餐人数 / 备注'},
+    {type:'ta', k:'dn_store', l:'餐厅区域需要储存什么样的物品及数量'},
+    {type:'ta', k:'dn_app', l:'餐厅区域需要什么样的电器及数量'},
+    {type:'ta', k:'dn_furn', l:'餐厅区域需要什么样的家具及数量'},
+  ]}]},
+  { t:'厨房', id:'k', blocks:[{ fields:[
+    {type:'ynr', k:'k_cook', l:'是否经常在家做饭？'},
+    {type:'ynr', k:'k_trash', l:'是否需要垃圾处理器或垃圾分类箱？'},
+    {type:'ynr', k:'k_strip', l:'厨房除了天花的灯以外是否要考虑橱柜灯带？'},
+    {type:'ynr', k:'k_drain', l:'厨房是否需要地漏？'},
+    {type:'ynr', k:'k_island', l:'厨房是否需要岛台？'},
+    {type:'ynr', k:'k_west', l:'是否需要西厨区域？西厨是否需要设置水槽？'},
+    {type:'ynr', k:'k_fridge_in', l:'冰箱是否放在厨房？'},
+    {type:'ynr', k:'k_split', l:'是否需要做错层台面？'},
+    {type:'single', k:'k_h', l:'台面高度有什么要求？', opts:['标准','偏高','偏矮']},
+    {type:'text', k:'k_h_note', l:'台面高度备注'},
+    {type:'multi', k:'k_fridge', l:'冰箱选用的具体形式？', opts:['单门','双门','多个冰箱','内嵌冰箱']},
+    {type:'text', k:'k_fridge_note', l:'冰箱备注'},
+    {type:'multi', k:'k_cool', l:'是否考虑厨房空调或者凉霸？', opts:['空调','凉霸','否']},
+    {type:'text', k:'k_cool_note', l:'厨房空调/凉霸备注'},
+    {type:'single', k:'k_who', l:'通常会有几个人同台操作？', opts:['1人','2人','3人','多人']},
+    {type:'single', k:'k_open', l:'厨房要开放式还是封闭式？', opts:['开放式','封闭式']},
+    {type:'single', k:'k_hood', l:'油烟机用顶吸、侧吸、集成灶？', opts:['顶吸','侧吸','集成灶']},
+    {type:'multi', k:'k_spice', l:'调味品的位置在哪？', opts:['碗碟拉篮','壁挂式调味架']},
+    {type:'text', k:'k_spice_note', l:'调味区备注'},
+    {type:'single', k:'k_sink', l:'水槽用单盆还是双盆？', opts:['单盆','双盆']},
+    {type:'single', k:'k_basin', l:'是否对台盆方式有要求？', opts:['台下盆','台中盆','台上盆']},
+    {type:'multi', k:'k_cab', l:'橱柜考虑什么材质？', opts:['颗粒板','多层板','不锈钢','石材']},
+    {type:'text', k:'k_cab_note', l:'橱柜材质备注'},
+    {type:'single', k:'k_mat', l:'地面的材质？', opts:floor},
+    {type:'multi', k:'k_app', l:'厨房区域需要什么样的电器及数量？', opts:['蒸箱','烤箱','蒸烤一体机','微波炉','电饭锅','榨汁机','洗碗机','消毒碗柜']},
+    {type:'ta', k:'k_app_note', l:'电器数量及其他需求说明'},
+    {type:'ta', k:'k_store', l:'厨房区域需要储存什么样的物品及数量或其他需求说明'},
+  ]}]},
+  { t:'主卧及衣帽间', id:'mb', blocks:[{ fields:[
+    {type:'ynr', k:'mb_dress', l:'是否需要梳妆台？'},
+    {type:'ynr', k:'mb_safe', l:'是否考虑保险柜的位置？'},
+    {type:'ynr', k:'mb_split', l:'男女衣柜是否分开？'},
+    {type:'ynr', k:'mb_uv', l:'衣柜内是否安置杀菌除霉设备？'},
+    {type:'ynr', k:'mb_mirror', l:'是否考虑穿衣镜安置位置？'},
+    {type:'ynr', k:'mb_iron', l:'是否考虑熨烫衣服位置（预留插座）？'},
+    {type:'ynr', k:'mb_dim', l:'灯光设计方面是否有调光需求？'},
+    {type:'ynr', k:'mb_mini', l:'是否需要小冰箱（如面膜、化妆品、红酒等）？'},
+    {type:'multi', k:'mb_tv', l:'主卧是否需要电视或投影？', opts:['电视','投影','否']},
+    {type:'single', k:'mb_mat', l:'地面的材质？', opts:floor},
+    {type:'single', k:'mb_floorc', l:'地面的颜色如何考虑？', opts:['深色系','浅色系','灰色系']},
+    {type:'text', k:'mb_floorc_note', l:'地面颜色备注'},
+    {type:'single', k:'mb_wallc', l:'墙面的颜色如何考虑？', opts:['冷色系','暖色系']},
+    {type:'text', k:'mb_wallc_note', l:'墙面颜色备注'},
+    {type:'multi', k:'mb_cloth', l:'日常收纳挂衣多还是叠衣多？主要叠衣的方式？', opts:['挂衣','叠衣','平叠','卷叠']},
+    {type:'text', k:'mb_cloth_note', l:'收纳备注'},
+    {type:'ta', k:'mb_store', l:'主卧及衣帽间需要储存什么样的物品及数量'},
+    {type:'ta', k:'mb_app', l:'主卧及衣帽间需要什么样的电器及数量'},
+    {type:'ta', k:'mb_furn', l:'主卧及衣帽间需要什么样的家具及数量'},
+  ]}]},
+  { t:'儿童房', id:'ch', blocks:[{ fields:[
+    {type:'ynr', k:'ch_bunk', l:'是否需要高低床？'},
+    {type:'ynr', k:'ch_wall', l:'墙面是否要做涂鸦墙或者磁性白板墙？'},
+    {type:'ynr', k:'ch_desk', l:'书桌是否有尺寸要求？'},
+    {type:'ynr', k:'ch_toy', l:'是否需要玩具收纳柜？'},
+    {type:'ynr', k:'ch_play', l:'是否预留亲子玩耍区？'},
+    {type:'single', k:'ch_tone', l:'整体色调选择？', opts:tone},
+    {type:'text', k:'ch_tone_note', l:'色调备注'},
+    {type:'ta', k:'ch_store', l:'儿童房需要储存什么样的物品及数量或其他需求说明'},
+  ]}]},
+  { t:'长辈房', id:'el', blocks:[{ fields:[
+    {type:'ynr', k:'el_split', l:'长辈是否分床睡？'},
+    {type:'ynr', k:'el_tv', l:'老人是否需要电视？'},
+    {type:'ynr', k:'el_alarm', l:'是否需要紧急报警及对讲设备？'},
+    {type:'ynr', k:'el_water', l:'是否需要考虑饮水的位置？'},
+    {type:'ynr', k:'el_desk', l:'是否需要书桌/书柜？'},
+    {type:'ynr', k:'el_wheel', l:'老人是否需要用轮椅/无障碍设施？'},
+    {type:'single', k:'el_tone', l:'整体色调选择？', opts:tone},
+    {type:'text', k:'el_tone_note', l:'色调备注'},
+    {type:'multi', k:'el_care', l:'是否需要针对老人特别设计？', opts:['护理设备','沙发和床的高度','助力扶手','卫生间防护','门槛和地面水平']},
+    {type:'text', k:'el_care_note', l:'适老化备注'},
+    {type:'ta', k:'el_store', l:'长辈房需要储存什么样的物品及数量'},
+    {type:'ta', k:'el_furn', l:'长辈房需要什么样的电器、家具及数量'},
+  ]}]},
+  { t:'书房', id:'st', blocks:[{ fields:[
+    {type:'ynr', k:'st_desk', l:'是否需要放置专用写字书台，书桌的尺寸要求？'},
+    {type:'ynr', k:'st_net', l:'网络设备是否集中放在书房？'},
+    {type:'ynr', k:'st_rec', l:'是否在书房做直播、录音等，是否需要专业隔音？'},
+    {type:'multi', k:'st_off', l:'是否需要打印机、碎纸机等办公设备？', opts:['打印机','碎纸机']},
+    {type:'text', k:'st_off_note', l:'办公设备备注'},
+    {type:'multi', k:'st_mix', l:'书房是否要兼做茶室、休闲区、临时客房使用？', opts:['茶室','休闲区','临时客房']},
+    {type:'text', k:'st_mix_note', l:'兼用备注'},
+    {type:'ta', k:'st_store', l:'书房需要储存什么样的物品及数量'},
+    {type:'ta', k:'st_furn', l:'书房需要什么样的电器、家具及数量'},
+  ]}]},
+  { t:'多功能房', id:'mf', blocks:[{ fields:[
+    {type:'ynr', k:'mf_tv', l:'是否需要电视或者投影？'},
+    {type:'ynr', k:'mf_fun', l:'是否需要娱乐设备？'},
+    {type:'multi', k:'mf_bed', l:'是否需要榻榻米、沙发床、墨菲床、折叠床？', opts:['榻榻米','沙发床','墨菲床','折叠床']},
+    {type:'ta', k:'mf_store', l:'多功能房需要储存什么样的物品及数量'},
+    {type:'ta', k:'mf_furn', l:'多功能房需要什么样的电器、家具及数量或其他需求说明'},
+  ]}]},
+  { t:'卫生间', id:'ba', blocks:[{ fields:[
+    {type:'ynr', k:'ba_fresh', l:'卫生间是否使用新风系统？'},
+    {type:'ynr', k:'ba_towel', l:'是否需要电热毛巾架？'},
+    {type:'ynr', k:'ba_alarm', l:'是否需要紧急报警及对讲设备？'},
+    {type:'ynr', k:'ba_bidet', l:'马桶旁是否需要手持喷枪和插座？'},
+    {type:'ynr', k:'ba_old', l:'老人使用的洗手间，是否需要防护和无障碍设施？'},
+    {type:'ynr', k:'ba_baby', l:'是否要考虑家庭有小宝贝，给小朋友洗澡的位置？'},
+    {type:'multi', k:'ba_sep', l:'卫生间是否做干湿分离，分离形式？', opts:['是','否','三分离','四分离']},
+    {type:'multi', k:'ba_tub', l:'是否需要浴缸，浴缸安置位置和形式？', opts:['是','否','主卫','次卫','砌筑式','独立式']},
+    {type:'text', k:'ba_tub_note', l:'浴缸备注'},
+    {type:'multi', k:'ba_wc', l:'是否需要智能马桶、小便斗或壁挂马桶？', opts:['轻智能马桶','全智能马桶','小便斗','壁挂马桶']},
+    {type:'text', k:'ba_wc_note', l:'马桶备注'},
+    {type:'multi', k:'ba_heat', l:'是否需要浴霸或冷暖风机？', opts:['浴霸','冷暖风机','暖风机']},
+    {type:'single', k:'ba_basin', l:'是否对台盆安装方式有要求？', opts:['台下盆','台中盆','台上盆']},
+    {type:'single', k:'ba_drain', l:'是否对地漏的形式有要求？', opts:['常规款','隐形式','长条式']},
+    {type:'text', k:'ba_drain_note', l:'地漏备注'},
+    {type:'ta', k:'ba_store', l:'卫生间区域需要储存什么样的物品及数量或其他需求说明'},
+  ]}]},
+  { t:'生活阳台、休闲阳台', id:'bl', blocks:[{ fields:[
+    {type:'ynr', k:'bl_close', l:'是否需要封闭阳台？是否加装防护网？'},
+    {type:'ynr', k:'bl_cab', l:'是否配置储物柜？'},
+    {type:'ynr', k:'bl_dry', l:'是否配置晾衣架？隐形、明装、折叠衣架？'},
+    {type:'ynr', k:'bl_plant', l:'是否需要水景、盆栽？'},
+    {type:'ynr', k:'bl_pet', l:'是否要安置宠物屋？'},
+    {type:'ta', k:'bl_other', l:'阳台区域其他功能需求说明'},
+    {type:'ta', k:'all_more', l:'其他需要补充的项目'},
+  ]}]},
+  { t:'参考图片说明', id:'pic', blocks:[{ fields:[
+    {type:'ta', k:'pic_note', l:'请提供给设计师一些你喜欢的图片，建议每张图片标注喜欢的点（色彩搭配、家具款式等）。可在此处写下图片说明或链接。', rows:4},
+  ]}]},
+];
+
+function val(k, def=''){ return data[k] != null ? data[k] : def; }
+function save(){ localStorage.setItem(KEY, JSON.stringify(data)); const t=$('#saveTip'); if(t) t.textContent='已自动保存'; }
+function filledCls(v){ return isEmpty(v) ? '' : ' has-val'; }
+function optsCls(on){ return on ? ' opts opts-answered' : ' opts'; }
+function ynTone(opt){
+  if (opt === '是') return ' o-yes';
+  if (opt === '否') return ' o-no';
+  if (opt === '非必须') return ' o-opt';
+  return '';
+}
+function chip(kind, k, opt, on, extra){
+  const cls = kind==='multi' ? 'oi' : 'o';
+  const cycle = extra && extra.cycle ? ` data-cycle="${extra.cycle}"` : '';
+  let tip = '';
+  if (opt === '是') tip = ' title="再点一次变为非必须"';
+  else if (opt === '非必须') tip = ' title="再点一次变回是"';
+  return `<span class="${cls}${ynTone(opt)}${on?' a':''}" data-k="${esc(k)}" data-kind="${kind}" data-v="${esc(opt)}"${cycle}${tip}><span class="ot">${esc(opt)}</span></span>`;
+}
+function fieldHTML(f, prefix=''){
+  const k = prefix + f.k;
+  if (f.type==='pair') {
+    return `<div class="pair ${f.cols||''}">${f.items.map(it=>fieldHTML(it, prefix)).join('')}</div>`;
+  }
+  if (f.type==='text') {
+    return `<div class="row"><div class="lab">${esc(f.l)}</div><input class="inp${filledCls(val(k))}" data-k="${esc(k)}" value="${esc(val(k))}" placeholder="请填写"></div>`;
+  }
+  if (f.type==='ta') {
+    return `<div class="row"><div class="lab">${esc(f.l)}</div><textarea class="ta${filledCls(val(k))}" data-k="${esc(k)}" rows="${f.rows||2}" placeholder="请填写">${esc(val(k))}</textarea></div>`;
+  }
+  if (f.type==='single' || f.type==='multi') {
+    const cur = f.type==='multi' ? (Array.isArray(val(k,[]))?val(k,[]):[]) : val(k);
+    const answered = f.type==='multi' ? cur.length>0 : !isEmpty(cur);
+    const chips = f.opts.map(o => chip(f.type, k, o, f.type==='multi' ? cur.includes(o) : cur===o)).join('');
+    return `<div class="row"><div class="lab">${esc(f.l)}</div><div class="${optsCls(answered).trim()}">${chips}</div></div>`;
+  }
+  if (f.type==='ynr') {
+    const cur = val(k);
+    const rk = k + '_note';
+    const yesV = cur === '非必须' ? '非必须' : '是';
+    const chips = chip('single', k, yesV, cur==='是' || cur==='非必须', {cycle:'yn'})
+      + chip('single', k, '否', cur==='否', {cycle:'yn'});
+    return `<div class="row yn"><div class="lab">${esc(f.l)}</div><div class="${optsCls(!isEmpty(cur)).trim()}">${chips}</div><div class="rem"><span>备注</span><input class="inp${filledCls(val(rk))}" data-k="${esc(rk)}" value="${esc(val(rk))}" placeholder="${esc(f.ph||'选填')}"></div></div>`;
+  }
+  return '';
+}
+
+function render(){
+  const root = $('#form');
+  let html = '';
+  SCHEMA.forEach(sec => {
+    const n = sec.repeat || 1;
+    for (let i=0;i<n;i++){
+      const prefix = sec.repeat ? `${sec.id}${i+1}_` : '';
+      const title = sec.repeat ? `${sec.t}（成员${i+1}）` : sec.t;
+      const sid = sec.repeat ? `sec-${sec.id}-${i+1}` : `sec-${sec.id}`;
+      html += `<div class="sec" id="${sid}"><div class="sec-t">${esc(title)}</div>`;
+      (sec.blocks||[]).forEach(b => {
+        html += `<div class="g">`;
+        if (b.title) html += `<div class="g-t">${esc(b.title)}</div>`;
+        html += (b.fields||[]).map(f => fieldHTML(f, prefix)).join('');
+        html += `</div>`;
+      });
+      html += `</div>`;
+    }
+    if (sec.extra) {
+      html += `<div class="sec" id="sec-m-extra"><div class="sec-t">另外常住人员信息说明</div><div class="g">${fieldHTML({type:'ta', k:'m_extra', l:'如有更多常住成员，请在此补充姓名、关系、作息与特殊需求', rows:3})}</div></div>`;
+    }
+  });
+  root.innerHTML = html;
+  buildNav();
+  requestAnimationFrame(() => autosizeAll());
+}
+
+function navLabel(title){
+  return title
+    .replace(/^各空间 · /, '')
+    .replace(/^舒适家居系统及部分机电、主材功能需求$/, '机电主材')
+    .replace(/^常住成员设计需求咨询表（成员/, '成员')
+    .replace(/^项目整体装修预算$/, '装修预算')
+    .replace(/^项目设计需求$/, '设计需求')
+    .replace(/^另外常住人员信息说明$/, '其他成员')
+    .replace(/^参考图片说明$/, '参考图片')
+    .replace(/^生活阳台、休闲阳台$/, '阳台')
+    .replace(/^入户玄关及门厅$/, '玄关');
+}
+
+function buildNav(){
+  const toc = $('#toc');
+  if (!toc) return;
+  const links = [...document.querySelectorAll('#form .sec[id]')].map(sec => {
+    const title = (sec.querySelector('.sec-t') || {}).textContent || sec.id;
+    const label = navLabel(title);
+    return `<a class="toc-a" href="#${sec.id}" data-sec="${sec.id}" title="${esc(title)}">${esc(label)}</a>`;
+  });
+  toc.innerHTML = links.join('');
+}
+
+function bindNav(){
+  const toc = $('#toc');
+  if (!toc || toc.dataset.bound) return;
+  toc.dataset.bound = '1';
+  toc.addEventListener('click', e => {
+    const a = e.target.closest('a.toc-a');
+    if (!a) return;
+    e.preventDefault();
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.replaceState(null, '', '#' + id);
+    setActiveNav(id);
+  });
+  const secs = () => [...document.querySelectorAll('#form .sec[id]')];
+  const onScroll = () => {
+    const list = secs();
+    if (!list.length) return;
+    const y = window.scrollY + 80;
+    let cur = list[0].id;
+    for (const s of list) {
+      if (s.offsetTop <= y) cur = s.id;
+    }
+    setActiveNav(cur);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+function setActiveNav(id){
+  document.querySelectorAll('.toc-a').forEach(a => {
+    a.classList.toggle('on', a.dataset.sec === id);
+  });
+}
+
+function autosizeTa(ta){
+  if (!ta) return;
+  ta.style.height = 'auto';
+  ta.style.height = Math.max(ta.scrollHeight, 48) + 'px';
+}
+function autosizeAll(root=document){
+  root.querySelectorAll('textarea.ta').forEach(autosizeTa);
+}
+
+function bind(){
+  const markFilled = el => el.classList.toggle('has-val', !isEmpty(el.value));
+  const markOpts = wrap => wrap.classList.toggle('opts-answered', !!wrap.querySelector('.a'));
+  document.addEventListener('input', e => {
+    const el = e.target.closest('[data-k]');
+    if (!el || el.dataset.kind) return;
+    data[el.dataset.k] = el.value;
+    markFilled(el);
+    if (el.tagName === 'TEXTAREA') autosizeTa(el);
+    save();
+  });
+  document.addEventListener('click', e => {
+    const el = e.target.closest('[data-kind]');
+    if (!el) return;
+    const {k, kind, v} = el.dataset;
+    if (kind==='single') {
+      const wrap = el.parentElement;
+      const setYesChip = (chipEl, next) => {
+        chipEl.dataset.v = next;
+        const label = chipEl.querySelector('.ot') || chipEl;
+        label.textContent = next;
+        chipEl.classList.toggle('o-yes', next === '是');
+        chipEl.classList.toggle('o-opt', next === '非必须');
+        chipEl.title = next === '是' ? '再点一次变为非必须' : '再点一次变回是';
+      };
+      if (el.dataset.cycle === 'yn' && (v === '是' || v === '非必须')) {
+        const next = data[k] === '是' ? '非必须' : '是';
+        data[k] = next;
+        setYesChip(el, next);
+        wrap.querySelectorAll('[data-kind="single"]').forEach(n => n.classList.toggle('a', n === el));
+      } else {
+        data[k] = v;
+        wrap.querySelectorAll('[data-kind="single"]').forEach(n => {
+          if (n.dataset.cycle === 'yn' && (n.dataset.v === '非必须' || n.classList.contains('o-opt'))) {
+            setYesChip(n, '是');
+          }
+          n.classList.toggle('a', n.dataset.v === v);
+        });
+      }
+    } else {
+      const arr = Array.isArray(data[k]) ? data[k].slice() : [];
+      const i = arr.indexOf(v);
+      if (i>=0) arr.splice(i,1); else arr.push(v);
+      data[k] = arr;
+      el.classList.toggle('a');
+    }
+    markOpts(el.parentElement);
+    save();
+  });
+}
+
+function flattenSelectedChips(scope, win){
+  scope.querySelectorAll('.o.a, .oi.a').forEach(el => {
+    const cs = win.getComputedStyle(el);
+    el.style.color = cs.color;
+    el.style.backgroundColor = cs.backgroundColor;
+    el.style.border = '1.5px solid ' + cs.color;
+    el.style.fontWeight = cs.fontWeight;
+    el.style.fontSize = cs.fontSize;
+    el.classList.remove('a');
+  });
+}
+
+async function download(){
+  const btn = $('#dlBtn'), bar = $('#bar'), root = $('#cap');
+  btn.disabled = true; btn.textContent = '生成中…';
+  bar.style.visibility = 'hidden';
+  try {
+    autosizeAll(root);
+    root.querySelectorAll('textarea.ta').forEach(ta => {
+      ta.style.overflow = 'hidden';
+    });
+    root.classList.add('capturing');
+    flattenSelectedChips(root, window);
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    const canvas = await html2canvas(root, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#fff',
+      windowWidth: Math.max(document.documentElement.scrollWidth, 800),
+      onclone: (doc) => {
+        const cloneRoot = doc.getElementById('cap');
+        if (!cloneRoot) return;
+        cloneRoot.classList.add('capturing');
+        flattenSelectedChips(cloneRoot, doc.defaultView || window);
+        cloneRoot.querySelectorAll('input.inp, textarea.ta').forEach(el => {
+          const mirror = doc.createElement('div');
+          const isTa = el.tagName === 'TEXTAREA';
+          mirror.className = el.className + ' capture-mirror';
+          mirror.textContent = el.value || '';
+          if (!el.value) mirror.setAttribute('data-ph', el.getAttribute('placeholder') || '');
+          if (isTa) {
+            mirror.style.minHeight = Math.max(el.offsetHeight, 48) + 'px';
+          }
+          el.parentNode.replaceChild(mirror, el);
+        });
+      },
+    });
+    const a = document.createElement('a');
+    a.download = '生活习惯及设计需求调查表.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  } catch (err) {
+    alert('下载失败：' + (err.message||err));
+  } finally {
+    root.classList.remove('capturing');
+    render();
+    bar.style.visibility = '';
+    btn.disabled = false; btn.textContent = '下载为图片';
+  }
+}
+
+render();
+bind();
+bindNav();
+$('#dlBtn').addEventListener('click', download);
+$('#exportBtn').addEventListener('click', exportJson);
+$('#importBtn').addEventListener('click', () => $('#importFile').click());
+$('#resetBtn').addEventListener('click', resetToDefault);
+$('#importFile').addEventListener('change', e => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if (file) importJsonFile(file);
+});
+
+function syncFromDom(){
+  document.querySelectorAll('#form [data-k]:not([data-kind])').forEach(el => {
+    data[el.dataset.k] = el.value;
+  });
+}
+
+function exportPayload(){
+  syncFromDom();
+  return {
+    _meta: {
+      app: 'mohong_survey',
+      version: 1,
+      key: KEY,
+      exportedAt: new Date().toISOString(),
+      title: '生活习惯及设计需求调查表',
+    },
+    data: JSON.parse(JSON.stringify(data)),
+  };
+}
+
+function resetToDefault(){
+  if (!confirm('将清除本机修改，恢复为页面内置的默认填写？')) return;
+  data = clonePrefill();
+  localStorage.setItem(KEY, JSON.stringify(data));
+  render();
+  setStatus('已恢复默认');
+}
+
+function setStatus(text){
+  const t = $('#saveTip');
+  if (t) t.textContent = text;
+}
+
+function exportJson(){
+  try {
+    const payload = exportPayload();
+    // 先确保本机缓存与导出一致，避免丢最新编辑
+    localStorage.setItem(KEY, JSON.stringify(payload.data));
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0,10);
+    a.download = `生活习惯及设计需求调查表_${stamp}.json`;
+    a.href = URL.createObjectURL(blob);
+    a.click();
+    URL.revokeObjectURL(a.href);
+    setStatus('已导出 JSON');
+    setTimeout(() => setStatus('已自动保存'), 2000);
+  } catch (err) {
+    alert('导出失败：' + (err.message || err));
+  }
+}
+
+function normalizeImport(raw){
+  if (!raw || typeof raw !== 'object') throw new Error('不是有效的 JSON 对象');
+  // 支持两种格式：{ data: {...} } 或直接是字段对象
+  if (raw.data && typeof raw.data === 'object' && !Array.isArray(raw.data)) return raw.data;
+  if (raw._meta && raw.data) return raw.data;
+  // 直接是字段表
+  const keys = Object.keys(raw).filter(k => !k.startsWith('_'));
+  if (keys.length === 0) throw new Error('JSON 里没有可导入的填写字段');
+  return raw;
+}
+
+function applyImportedData(incoming){
+  incoming = normalizeSaved(Object.assign({}, incoming));
+  // 以 PREFILL 为底，再覆盖导入内容；保留本机已有、导入里为空的项，避免误清空
+  const next = Object.assign({}, PREFILL);
+  Object.keys(incoming).forEach(k => {
+    if (k.startsWith('_')) return;
+    if (!isEmpty(incoming[k])) next[k] = incoming[k];
+  });
+  // 对本机已有非空、导入为空的字段：保留本机值
+  Object.keys(data).forEach(k => {
+    if (!isEmpty(data[k]) && isEmpty(incoming[k])) next[k] = data[k];
+  });
+  data = next;
+  localStorage.setItem(KEY, JSON.stringify(data));
+  render();
+  setStatus('已导入并保存');
+  setTimeout(() => setStatus('已自动保存'), 2500);
+}
+
+function importJsonFile(file){
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(String(reader.result || ''));
+      const incoming = normalizeImport(parsed);
+      const filled = Object.keys(incoming).filter(k => !k.startsWith('_') && !isEmpty(incoming[k])).length;
+      if (!confirm(`将导入 ${filled} 个已填字段。\n\n不会清空你本机已有、但导入文件里为空的内容。\n是否继续？`)) return;
+      applyImportedData(incoming);
+    } catch (err) {
+      alert('导入失败：' + (err.message || err));
+    }
+  };
+  reader.onerror = () => alert('读取文件失败');
+  reader.readAsText(file, 'utf-8');
+}
+</script>
+</body>
+</html>
