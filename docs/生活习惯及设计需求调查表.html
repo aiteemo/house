@@ -277,7 +277,7 @@ const KEY = 'mohong_survey_v1';
 const $ = (s, r=document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-/* 默认填写内容（来自 2026-08-17 导出 v4）；写死在 HTML 中，分享出去也会显示。localStorage 非空修改仍优先覆盖 */
+/* 默认填写内容（来自 2026-08-17 导出 v4 + 补充需求）；写死在 HTML 中，分享出去也会显示。localStorage 非空修改仍优先覆盖 */
 const PREFILL = {
   p_name: "世华泊郡",
   p_addr: "朝阳区水岸中街19号院13号楼1层1单元103",
@@ -315,7 +315,7 @@ const PREFILL = {
     "托斯卡纳",
     "阿尔托"
   ],
-  d_style_note: "不太强调风格化，喜欢简约但有设计感，不喜欢多余累赘线条。温暖、自然、宠物友好。不喜欢特别花的吊顶。",
+  d_style_note: "不太强调风格化，喜欢简约但有设计感，不喜欢多余累赘线条。温暖、自然、宠物友好。不喜欢特别花的吊顶。配色可更有趣一些（撞色/点缀即可）。",
   d_env: "暖色",
   d_light: "暖色",
   d_soft: [
@@ -334,7 +334,7 @@ const PREFILL = {
   d_hate: "1. 一层整体采光不好以及需防潮\n2. 噪音问题：临街 + 地铁\n3. 次卧采光差，目前仅有一个小窗\n4. 卫生间暗卫无窗\n\n非必须解决：\n5. 入户门对客厅/阳台（穿堂煞）\n6. 主卧至卫生间动线较长（洗漱）",
   d_care: "一层：采光受限、临街噪音/灰尘、窗外行人可视（隐私）、楼下地下室/停车场防潮、同小区空调井有发霉案例需加强防潮。",
   d_feng: "是",
-  d_dream: "简约有设计感、温暖自然、宠物友好；客厅布局灵活不要太传统；不要电视墙，电视用移动支架。",
+  d_dream: "简约有设计感、温暖自然、宠物友好；客厅布局灵活不要太传统；不要电视墙，电视用移动支架。空间配色希望更有意思一点；想要一个小灯箱。",
   m1_role: "先生 / 男主人",
   m1_stay: "第一居所常住",
   m1_job: "产品 + 野路子程序员",
@@ -402,7 +402,7 @@ const PREFILL = {
     "卫生间",
     "家政区"
   ],
-  a_housekeep_note: "暗卫干湿分离后：洗衣烘干、猫砂盆、扫地机基站。另需家政收纳猫砂猫粮（砂约30kg、粮约3袋5kg）、洗地机、吸尘器。",
+  a_housekeep_note: "暗卫干湿分离后：洗衣烘干、猫砂盆、扫地机基站。另需家政收纳猫砂猫粮（砂约 30kg、粮约 3 袋 5kg）、洗地机、吸尘器。可能会大量囤积猫砂，需放在干燥、易腾挪的位置。",
   a_book: [
     "客厅",
     "书房"
@@ -443,8 +443,8 @@ const PREFILL = {
     "读书"
   ],
   lv_act_note: "偶尔办公、健身、聚会、观景、宠物活动。Pico VR / Switch游戏；K歌；",
-  lv_store: "运动类：瑜伽垫、瑜伽砖、泡沫滚筒、哑铃 / 小重量器械、筋膜枪等物品的存储；\n电子数码：遥控器、Pad、Mac、Pico、Switch、游戏手柄、K歌麦克风；\n配件：各种数据线、充电头、适配器；\n药品类：应急物品存储；\n影音：马歇尔音箱、小爱音像、耳机。",
-  lv_furn: "电视移动支架、落地灯、相片墙、电子相框\n3人沙发 + 单人沙发/躺椅 + 地毯，或者模块沙发\n不需要茶几，选可移动边几\n",
+  lv_store: "运动类：瑜伽垫、瑜伽砖、泡沫滚筒、哑铃 / 小重量器械、筋膜枪等物品的存储；\n电子数码：遥控器、Pad、Mac、Pico、Switch、游戏手柄、K歌麦克风；\n配件：各种数据线、充电头、适配器；\n药品类：应急物品存储；\n影音：马歇尔音箱、小爱音箱、耳机。",
+  lv_furn: "电视移动支架、落地灯、相片墙、电子相框\n希望有一个小灯箱（气氛/趣味配色）\n3 人沙发 + 单人沙发/躺椅 + 地毯，或者模块沙发\n不需要茶几，选可移动边几",
   dn_socket_note: "火锅之类的",
   dn_fridge: [
     "否"
@@ -471,8 +471,8 @@ const PREFILL = {
     "电饭锅",
     "洗碗机"
   ],
-  k_app_note: "另有空气炸锅、各种锅具。壁挂炉在厨房。",
-  k_store: "做饭时希望开放、进出方便；不做饭时希望能封闭。不希望猫进入厨房。",
+  k_app_note: "另有空气炸锅、各种锅具。壁挂炉在厨房。小家电较多，橱柜/电器区希望高利用率且方便日常使用。",
+  k_store: "做饭时希望开放、进出方便；不做饭时希望能封闭。不希望猫进入厨房。小家电较多，希望储物利用率高，同时取用方便。",
   mb_dress: "是",
   mb_dress_note: "梳妆台可与衣柜/床头柜一体化。化妆：卫生间和卧室都有可能。",
   mb_cloth: [
@@ -483,7 +483,7 @@ const PREFILL = {
   ch_bunk: "否",
   ch_bunk_note: "无儿童常住。次卧按多功能房使用。",
   ch_store: "见「多功能房 / 次卧」。",
-  el_split_note: "无长辈常住；节假日父母短住，安排在次卧/多功能房。",
+  el_split_note: "无长辈常住；节假日父母短住（最长可能三四周），安排在次卧/多功能房，需一点储物。",
   el_store: "临时留宿即可，不单独做长辈房。",
   st_desk: "是",
   st_desk_note: "次卧兼居家办公、书房",
@@ -498,9 +498,9 @@ const PREFILL = {
     "沙发床",
     "墨菲床"
   ],
-  mf_bed_note: "父母/亲友临时留宿。",
-  mf_store: "次卧：日常居家办公 + 大容量收纳 + 临时留宿（一房多用）。",
-  mf_furn: "办公桌、34寸显示器、NAS等网络设备、收纳柜、可留宿的床具（沙发床等）。",
+  mf_bed_note: "父母/亲友临时留宿；最长可能住三四周，需要一点储物空间（客人自用，或我们自己的物品也可能放一部分在次卧）。",
+  mf_store: "次卧：日常居家办公 + 大容量收纳 + 临时留宿（一房多用）。父母短住最长约三四周，需预留少量储物；日常也可能把部分自用物品放在次卧。",
+  mf_furn: "办公桌、34 寸显示器、NAS 等网络设备、收纳柜、可留宿的床具（沙发床等）。收纳柜需兼顾短住储物与自用物品收纳。",
   ba_fresh: "是",
   ba_fresh_note: "暗卫无窗，需强化排风和照明。",
   ba_sep: [
@@ -512,11 +512,11 @@ const PREFILL = {
   ba_wc: [
     "轻智能马桶"
   ],
-  ba_store: "2台 Catlink 电动猫砂盆（单机 600×580×710mm）+ 它医生新风\n独立洗衣机 + 烘干机 （目前看好的是松下的，到时候看空间是否更换为一体机）+ 内衣洗衣机（备选）\n扫地机器人基站（自动上下水+插座）\n卫生间需化妆收纳（吹风机架及插座）、电动牙刷充电口",
+  ba_store: "2台 Catlink 电动猫砂盆（单机 600×580×710mm）+ 它医生新风\n独立洗衣机 + 烘干机（目前看好的是松下的，到时候看空间是否更换为一体机）+ 内衣洗衣机（备选）\n扫地机器人基站（自动上下水+插座）\n卫生间需化妆收纳（吹风机架及插座）、电动牙刷充电口\n猫砂可能大量囤积，需干燥、易腾挪的收纳位（可与家政区统筹）",
   bl_close: "是",
   bl_close_note: "物业要求不得改开启方向和分割方案",
   bl_other: "窗外邻居会遛狗，需兼顾采光与隐私\n窗外需要配摄像头，需预留电源",
-  all_more: "我们自己查到的防潮加强手段，不知是否管用，到时候看大家给的建议：\n基层水泥加入：马贝SP700\n美巢800高强奶水腻子\n阳台和空调井附近涂防水\n无机涂料：透气性，潮气能散出来\n",
+  all_more: "我们自己查到的防潮加强手段，不知是否管用，到时候看大家给的建议：\n基层水泥加入：马贝SP700\n美巢 800 高强耐水腻子\n阳台和空调井附近涂防水\n无机涂料：透气性，潮气能散出来\n",
   p_client: "冷易珊",
   p_phone: "18510249173",
   b_design: "26400",
@@ -689,7 +689,7 @@ const PREFILL = {
   mb_floorc_note: "",
   mb_wallc_note: "",
   mb_app: "看门是柜子还是帘子，如果是帘子需要预留电动",
-  mb_furn: "1个床头柜\n待定：茶吧机、床尾柜 \n飘窗垫+矮炕几：满足日常晒太阳以及偶尔喝茶",
+  mb_furn: "床：喜欢薄床头，不喜欢厚床头；保留未来改成智能床的可能性。\n1 个床头柜\n待定：茶吧机、床尾柜\n飘窗垫 + 矮炕几：满足日常晒太阳以及偶尔喝茶",
   ch_wall_note: "",
   ch_desk_note: "",
   ch_toy_note: "",
@@ -715,7 +715,7 @@ const PREFILL = {
   ba_baby_note: "",
   ba_tub_note: "",
   ba_wc_note: "",
-  ba_drain_note: "不要挡水条，我希望洗地机能无痛进去清理",
+  ba_drain_note: "不要挡水条，希望洗地机能无痛进入清理。淋浴区下水侧希望好打理。",
   bl_cab_note: "看需求，非必须",
   bl_dry_note: "隐形晾衣架",
   bl_plant_note: "",
@@ -1369,6 +1369,7 @@ function setFilledOnly(on){
 }
 
 function flattenSelectedChips(scope, win){
+  // 保留 .a：仅显示已填 会把没有 .a 的选项 display:none，截图时若去掉 .a 会丢答案
   scope.querySelectorAll('.o.a, .oi.a').forEach(el => {
     const cs = win.getComputedStyle(el);
     el.style.color = cs.color;
@@ -1378,7 +1379,6 @@ function flattenSelectedChips(scope, win){
     el.style.fontSize = cs.fontSize;
     el.style.setProperty('opacity', '1', 'important');
     el.classList.add('capture-on');
-    el.classList.remove('a');
   });
 }
 
@@ -1413,6 +1413,7 @@ async function download(){
         const cloneRoot = doc.getElementById('cap');
         if (!cloneRoot) return;
         cloneRoot.classList.add('capturing');
+        if (filledOnly) doc.body.classList.add('filled-only');
         flattenSelectedChips(cloneRoot, doc.defaultView || window);
         cloneRoot.querySelectorAll('input.inp, textarea.ta').forEach(el => {
           const mirror = doc.createElement('div');
