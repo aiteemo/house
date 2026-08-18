@@ -1896,10 +1896,29 @@ body {
 }
 
 /* ========== 窗户方案图解 ========== */
+.win-spec-banner {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+}
+.win-spec-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+.win-spec-meta {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.55;
+}
 .win-legend {
     display: flex;
     gap: 20px;
     justify-content: center;
+    flex-wrap: wrap;
     margin-bottom: 20px;
     font-size: 13px;
     color: var(--text-dim);
@@ -1925,7 +1944,7 @@ body {
 }
 .win-row {
     display: flex;
-    gap: 20px;
+    gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
     margin-bottom: 12px;
@@ -1934,8 +1953,8 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 20px;
-    width: 440px;
+    padding: 18px;
+    width: 400px;
     max-width: 100%;
 }
 .win-card.win-recommended {
@@ -1947,11 +1966,21 @@ body {
     align-items: center;
     gap: 8px;
     margin-bottom: 4px;
+    flex-wrap: wrap;
 }
 .win-card-header h3 {
     font-size: 15px;
     font-weight: 600;
     margin: 0;
+}
+.win-room-tag {
+    background: rgba(108, 140, 255, 0.12);
+    color: #6c8cff;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    white-space: nowrap;
 }
 .win-badge {
     background: var(--accent);

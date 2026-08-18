@@ -167,21 +167,29 @@ h1{font-size:20px;text-align:center;line-height:1.4;margin:0 0 8px;font-weight:7
 #dlBtn{background:var(--c);color:#fff}
 #dlBtn:disabled,#exportBtn:disabled,#importBtn:disabled,#resetBtn:disabled,#filterBtn:disabled{opacity:.6}
 #filterBtn.on{background:#e8f0fe;color:#174ea6}
+#filterBtn.on-empty{background:#f3eee8;color:#6a5e3a}
 #importFile{display:none}
-/* 仅显示已填：用 display:none 收拢占位 */
-body.filled-only .o:not(.a),
-body.filled-only .oi:not(.a){display:none !important}
-body.filled-only .row.is-empty,
-body.filled-only .pair.is-empty,
-body.filled-only .g.is-empty,
-body.filled-only .sec.is-empty,
-body.filled-only .rem.is-empty{display:none !important}
-body.filled-only .g{border-top:none;padding-top:2px;margin-top:0}
-body.filled-only .g:not(.is-empty) ~ .g:not(.is-empty){border-top:1px dashed #f0f0f0;padding-top:8px;margin-top:4px}
-body.filled-only .opts-answered .o:not(.a),
-body.filled-only .opts-answered .oi:not(.a){opacity:1}
-body.filled-only .row.yn:has(.rem.is-empty),
-body.filled-only .row.yn:not(:has(.rem)){
+/* 显示已填 / 显示未填：display:none 收拢占位 */
+body.filter-filled .o:not(.a),
+body.filter-filled .oi:not(.a){display:none !important}
+body.filter-filled .row.is-empty,
+body.filter-filled .pair.is-empty,
+body.filter-filled .g.is-empty,
+body.filter-filled .sec.is-empty,
+body.filter-filled .rem.is-empty{display:none !important}
+body.filter-empty .row:not(.is-empty),
+body.filter-empty .pair.is-full,
+body.filter-empty .g.is-full,
+body.filter-empty .sec.is-full,
+body.filter-empty .rem:not(.is-empty){display:none !important}
+body.filter-filled .g,
+body.filter-empty .g{border-top:none;padding-top:2px;margin-top:0}
+body.filter-filled .g:not(.is-empty) ~ .g:not(.is-empty),
+body.filter-empty .g:not(.is-full) ~ .g:not(.is-full){border-top:1px dashed #f0f0f0;padding-top:8px;margin-top:4px}
+body.filter-filled .opts-answered .o:not(.a),
+body.filter-filled .opts-answered .oi:not(.a){opacity:1}
+body.filter-filled .row.yn:has(.rem.is-empty),
+body.filter-filled .row.yn:not(:has(.rem)){
   grid-template-columns:minmax(0,1fr) auto;
 }
 @media(min-width:960px){
@@ -259,7 +267,7 @@ body.filled-only .row.yn:not(:has(.rem)){
     <button type="button" id="exportBtn">导出 JSON</button>
     <button type="button" id="importBtn">导入 JSON</button>
     <button type="button" id="resetBtn">恢复默认</button>
-    <button type="button" id="filterBtn">仅显示已填</button>
+    <button type="button" id="filterBtn">显示全部</button>
     <button type="button" id="dlBtn">下载为图片</button>
     <input type="file" id="importFile" accept="application/json,.json,text/plain">
   </div>
@@ -1182,7 +1190,7 @@ function render(){
   buildNav();
   requestAnimationFrame(() => {
     autosizeAll();
-    if (filledOnly) applyFilledOnly();
+    if (viewFilter !== 'all') applyViewFilter();
   });
 }
 
@@ -1265,7 +1273,7 @@ function bind(){
     markFilled(el);
     if (el.tagName === 'TEXTAREA') autosizeTa(el);
     save();
-    if (filledOnly) applyFilledOnly();
+    if (viewFilter !== 'all') applyViewFilter();
   });
   document.addEventListener('click', e => {
     const el = e.target.closest('[data-kind]');
@@ -1304,24 +1312,29 @@ function bind(){
     }
     markOpts(el.parentElement);
     save();
-    if (filledOnly) applyFilledOnly();
+    if (viewFilter !== 'all') applyViewFilter();
   });
 }
 
-let filledOnly = false;
+const FILTER_CYCLE = ['all', 'filled', 'empty'];
+const FILTER_LABEL = { all: '显示全部', filled: '显示已填', empty: '显示未填' };
+let viewFilter = 'all';
 
-function clearFilledOnlyMarks(root){
-  root.querySelectorAll('.is-empty').forEach(el => el.classList.remove('is-empty'));
+function clearFilterMarks(root){
+  (root || document).querySelectorAll('.is-empty, .is-full').forEach(el => {
+    el.classList.remove('is-empty', 'is-full');
+  });
 }
 
-function applyFilledOnly(){
+function applyViewFilter(){
   const form = $('#form');
   if (!form) return;
-  clearFilledOnlyMarks(form);
+  clearFilterMarks(form);
 
   form.querySelectorAll('.rem').forEach(rem => {
     const inp = rem.querySelector('input.inp, textarea.ta');
     rem.classList.toggle('is-empty', !inp || isEmpty(inp.value));
+    rem.classList.toggle('is-full', !!(inp && !isEmpty(inp.value)));
   });
 
   form.querySelectorAll('.row').forEach(row => {
@@ -1329,43 +1342,57 @@ function applyFilledOnly(){
     const fields = [...row.querySelectorAll('input.inp, textarea.ta')].filter(el => !el.closest('.rem'));
     const hasField = fields.some(el => !isEmpty(el.value));
     const remFilled = !!row.querySelector('.rem:not(.is-empty)');
-    row.classList.toggle('is-empty', !(hasSel || hasField || remFilled));
+    const filled = hasSel || hasField || remFilled;
+    row.classList.toggle('is-empty', !filled);
+    row.classList.toggle('is-full', filled);
   });
+
+  const markBox = (el, kids) => {
+    const empty = kids.length > 0 && kids.every(k => k.classList.contains('is-empty'));
+    const full = kids.length > 0 && kids.every(k => k.classList.contains('is-full'));
+    el.classList.toggle('is-empty', empty);
+    el.classList.toggle('is-full', full);
+  };
 
   form.querySelectorAll('.pair').forEach(pair => {
-    const rows = [...pair.querySelectorAll(':scope > .row')];
-    pair.classList.toggle('is-empty', rows.length > 0 && rows.every(r => r.classList.contains('is-empty')));
+    markBox(pair, [...pair.querySelectorAll(':scope > .row')]);
   });
-
   form.querySelectorAll('.g').forEach(g => {
-    const kids = [...g.querySelectorAll(':scope > .row, :scope > .pair')];
-    g.classList.toggle('is-empty', kids.length > 0 && kids.every(k => k.classList.contains('is-empty')));
+    markBox(g, [...g.querySelectorAll(':scope > .row, :scope > .pair')]);
   });
-
   form.querySelectorAll('.sec').forEach(sec => {
-    const groups = [...sec.querySelectorAll(':scope > .g')];
-    sec.classList.toggle('is-empty', groups.length > 0 && groups.every(g => g.classList.contains('is-empty')));
+    markBox(sec, [...sec.querySelectorAll(':scope > .g')]);
   });
 
   document.querySelectorAll('.toc-a').forEach(a => {
     const sec = document.getElementById(a.dataset.sec || '');
-    a.style.display = (sec && sec.classList.contains('is-empty')) ? 'none' : '';
+    if (!sec || viewFilter === 'all') { a.style.display = ''; return; }
+    const hide = viewFilter === 'filled' ? sec.classList.contains('is-empty') : sec.classList.contains('is-full');
+    a.style.display = hide ? 'none' : '';
   });
 }
 
-function setFilledOnly(on){
-  filledOnly = !!on;
-  document.body.classList.toggle('filled-only', filledOnly);
+function setViewFilter(mode){
+  viewFilter = FILTER_CYCLE.includes(mode) ? mode : 'all';
+  document.body.classList.remove('filter-all', 'filter-filled', 'filter-empty', 'filled-only');
+  document.body.classList.add('filter-' + viewFilter);
   const btn = $('#filterBtn');
   if (btn) {
-    btn.classList.toggle('on', filledOnly);
-    btn.textContent = filledOnly ? '显示全部' : '仅显示已填';
+    btn.textContent = FILTER_LABEL[viewFilter];
+    btn.classList.toggle('on', viewFilter === 'filled');
+    btn.classList.toggle('on-empty', viewFilter === 'empty');
   }
-  if (filledOnly) applyFilledOnly();
-  else {
-    clearFilledOnlyMarks($('#form') || document);
+  if (viewFilter === 'all') {
+    clearFilterMarks($('#form') || document);
     document.querySelectorAll('.toc-a').forEach(a => { a.style.display = ''; });
+  } else {
+    applyViewFilter();
   }
+}
+
+function cycleViewFilter(){
+  const i = FILTER_CYCLE.indexOf(viewFilter);
+  setViewFilter(FILTER_CYCLE[(i + 1) % FILTER_CYCLE.length]);
 }
 
 function flattenSelectedChips(scope, win){
@@ -1413,7 +1440,7 @@ async function download(){
         const cloneRoot = doc.getElementById('cap');
         if (!cloneRoot) return;
         cloneRoot.classList.add('capturing');
-        if (filledOnly) doc.body.classList.add('filled-only');
+        if (viewFilter !== 'all') doc.body.classList.add('filter-' + viewFilter);
         flattenSelectedChips(cloneRoot, doc.defaultView || window);
         cloneRoot.querySelectorAll('input.inp, textarea.ta').forEach(el => {
           const mirror = doc.createElement('div');
@@ -1461,7 +1488,7 @@ $('#dlBtn').addEventListener('click', download);
 $('#exportBtn').addEventListener('click', exportJson);
 $('#importBtn').addEventListener('click', () => $('#importFile').click());
 $('#resetBtn').addEventListener('click', resetToDefault);
-$('#filterBtn').addEventListener('click', () => setFilledOnly(!filledOnly));
+$('#filterBtn').addEventListener('click', cycleViewFilter);
 $('#importFile').addEventListener('change', e => {
   const file = e.target.files && e.target.files[0];
   e.target.value = '';
