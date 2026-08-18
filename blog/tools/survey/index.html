@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>生活习惯及设计需求调查表</title>
+<title>生活习惯及设计需求调查表 · AiTeemo</title>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -170,12 +170,61 @@ h1{font-size:20px;text-align:center;line-height:1.4;margin:0 0 8px;font-weight:7
   color:var(--label);font-size:11px;font-weight:500;cursor:default;text-align:left;
   white-space:normal;line-height:1.35;
 }
-#exportBtn,#importBtn,#resetBtn,#filterBtn{background:#f1f3f4;color:#3c4043}
+#exportBtn,#importBtn,#resetBtn,#clearBtn,#filterBtn{background:#f1f3f4;color:#3c4043}
+#clearBtn{background:#f6eee9;color:#8a4b35}
 #dlBtn{background:var(--c);color:#fff}
-#dlBtn:disabled,#exportBtn:disabled,#importBtn:disabled,#resetBtn:disabled,#filterBtn:disabled{opacity:.6}
+#dlBtn:disabled,#exportBtn:disabled,#importBtn:disabled,#resetBtn:disabled,#clearBtn:disabled,#filterBtn:disabled{opacity:.6}
 #filterBtn.on{background:#e8f0fe;color:#174ea6}
 #filterBtn.on-empty{background:#f3eee8;color:#6a5e3a}
 #importFile{display:none}
+/* AiTeemo confirm dialog */
+.ate-dialog{
+  position:fixed;inset:0;z-index:120;
+  display:none;align-items:center;justify-content:center;
+  padding:20px;
+  background:rgba(11,12,14,.72);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.ate-dialog.open{display:flex}
+.ate-dialog-panel{
+  width:min(400px,100%);
+  background:#161820;color:#e8e2d6;
+  border:1px solid rgba(232,226,214,.14);
+  border-radius:16px;padding:28px 26px 22px;
+  box-shadow:0 24px 64px rgba(0,0,0,.45);
+  transform:translateY(6px);opacity:0;
+  transition:transform .28s cubic-bezier(.22,1,.36,1),opacity .28s ease;
+}
+.ate-dialog.open .ate-dialog-panel{transform:none;opacity:1}
+.ate-dialog-kicker{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:#c4a574;margin-bottom:12px;
+}
+.ate-dialog-title{
+  font-size:20px;font-weight:500;letter-spacing:.02em;
+  line-height:1.35;margin:0 0 10px;color:#e8e2d6;
+}
+.ate-dialog-msg{
+  font-size:13px;color:#9a9488;line-height:1.65;margin:0 0 24px;
+}
+.ate-dialog-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.ate-dialog-btn{
+  appearance:none;border:none;cursor:pointer;
+  padding:10px 18px;border-radius:999px;
+  font-size:12px;font-weight:600;letter-spacing:.06em;
+  transition:transform .2s ease,filter .2s,background .2s,border-color .2s,color .2s;
+}
+.ate-dialog-btn:hover{transform:translateY(-1px)}
+.ate-dialog-btn.cancel{
+  background:transparent;color:#e8e2d6;
+  border:1px solid rgba(232,226,214,.2);
+}
+.ate-dialog-btn.cancel:hover{border-color:#c4a574;color:#c4a574}
+.ate-dialog-btn.ok{background:#c4a574;color:#0b0c0e}
+.ate-dialog-btn.ok:hover{filter:brightness(1.06)}
+.ate-dialog-btn.danger{background:#c4785c;color:#0b0c0e}
+.ate-dialog-btn.danger:hover{filter:brightness(1.06)}
 /* 显示已填 / 显示未填：display:none 收拢占位 */
 body.filter-filled .o:not(.a),
 body.filter-filled .oi:not(.a){display:none !important}
@@ -230,8 +279,7 @@ body.filter-filled .row.yn:not(:has(.rem)){
   .pair-2 .row,.pair-3 .row{margin-bottom:0;gap:4px}
   .yn{grid-template-columns:minmax(0,1.15fr) auto minmax(140px,1.1fr);align-items:start;gap:8px 12px}
   .yn .lab{padding-top:5px;height:auto;white-space:normal}
-  .bar button{flex:1 1 0;font-size:13px;height:40px}
-  .bar .bar-status{flex:0 0 auto;padding:0 8px;align-self:center}
+  .bar button{font-size:13px;height:40px}
 }
 @media(min-width:640px) and (max-width:959px){
   body{padding:20px 20px 28px}
@@ -248,12 +296,51 @@ body.filter-filled .row.yn:not(:has(.rem)){
   .pair-2 .row,.pair-3 .row{margin-bottom:0;gap:4px}
   .yn{grid-template-columns:minmax(0,1.15fr) auto minmax(140px,1.1fr);align-items:start;gap:8px 12px}
   .yn .lab{padding-top:5px;height:auto;white-space:normal}
-  .bar button{flex:1 1 0;font-size:13px;height:40px}
-  .bar .bar-status{flex:0 0 auto;padding:0 8px;align-self:center}
+  .bar button{font-size:13px;height:40px}
 }
+
+/* AiTeemo tool shell */
+.ate-bar{
+  position:sticky;top:0;z-index:40;
+  background:#0b0c0e;color:#e8e2d6;
+  border-bottom:1px solid rgba(232,226,214,.12);
+  margin:0 -10px 12px;padding:10px 14px;
+}
+.ate-bar-inner{
+  max-width:1040px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.ate-brand{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;letter-spacing:.04em;color:#e8e2d6;text-decoration:none}
+.ate-brand .ai{color:#9a9488;font-weight:400}
+.ate-brand .teemo{color:#e8e2d6;font-weight:600}
+.ate-brand:hover .teemo{color:#c4a574}
+.ate-note{font-size:11px;color:#9a9488;line-height:1.45;max-width:42em}
+.ate-links{display:flex;gap:10px;align-items:center}
+.ate-links a{
+  font-size:11px;color:#c4a574;text-decoration:none;letter-spacing:.04em;
+  border:1px solid rgba(196,165,116,.35);padding:5px 10px;border-radius:999px;
+}
+.ate-links a:hover{background:rgba(196,165,116,.14)}
+@media(min-width:768px){
+  .ate-bar{margin:0 -20px 16px;padding:12px 20px}
+}
+body .toc{top:52px}
+
 </style>
 </head>
 <body>
+<div class="ate-bar">
+  <div class="ate-bar-inner">
+    <div>
+      <a class="ate-brand" href="../../index.html"><span class="ai">Ai</span><span class="teemo">Teemo</span></a>
+      <p class="ate-note">可体验工具 · 演示预填已脱敏（姓名/电话/地址为假数据）。填写内容默认仅存本机。AiTeemo「把实践做成可点开即用页面」示例。</p>
+    </div>
+    <div class="ate-links">
+      <a href="../../tools/index.html">工具索引</a>
+      <a href="../../index.html">返回首页</a>
+    </div>
+  </div>
+</div>
 <div class="shell">
 <nav class="toc" id="toc" aria-label="章节导航"></nav>
 <div class="page" id="cap">
@@ -274,6 +361,7 @@ body.filter-filled .row.yn:not(:has(.rem)){
     <button type="button" id="exportBtn">导出 JSON</button>
     <button type="button" id="importBtn">导入 JSON</button>
     <button type="button" id="resetBtn">恢复默认</button>
+    <button type="button" id="clearBtn">清空</button>
     <button type="button" id="filterBtn">显示全部</button>
     <button type="button" id="dlBtn">下载为图片</button>
     <input type="file" id="importFile" accept="application/json,.json,text/plain">
@@ -287,15 +375,26 @@ body.filter-filled .row.yn:not(:has(.rem)){
     </svg>
   </button>
 </div>
+<div class="ate-dialog" id="ateDialog" role="dialog" aria-modal="true" aria-labelledby="ateDialogTitle" aria-describedby="ateDialogMsg" hidden>
+  <div class="ate-dialog-panel">
+    <p class="ate-dialog-kicker" id="ateDialogKicker">Confirm</p>
+    <h2 class="ate-dialog-title" id="ateDialogTitle">确认</h2>
+    <p class="ate-dialog-msg" id="ateDialogMsg"></p>
+    <div class="ate-dialog-actions">
+      <button type="button" class="ate-dialog-btn cancel" id="ateDialogCancel">取消</button>
+      <button type="button" class="ate-dialog-btn ok" id="ateDialogOk">确认</button>
+    </div>
+  </div>
+</div>
 <script>
-const KEY = 'mohong_survey_v1';
+const KEY = 'aiteemo_survey_demo_v1';
 const $ = (s, r=document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-/* 默认填写内容（来自 2026-08-17 导出 v4 + 补充需求）；写死在 HTML 中，分享出去也会显示。localStorage 非空修改仍优先覆盖 */
+/* 对外演示预填：姓名/电话/地址等已换成假数据。独立 KEY，避免带出本机真实填写 */
 const PREFILL = {
-  p_name: "世华泊郡",
-  p_addr: "朝阳区水岸中街19号院13号楼1层1单元103",
+  p_name: "青禾里（演示）",
+  p_addr: "朝阳区示例路 88 号院 3 号楼 2 单元 201",
   p_barea: "88㎡（房本约 88.45㎡）",
   p_uarea: "套内约 61㎡",
   p_layout: "两室一厅一卫",
@@ -532,47 +631,47 @@ const PREFILL = {
   bl_close_note: "物业要求不得改开启方向和分割方案",
   bl_other: "窗外邻居会遛狗，需兼顾采光与隐私\n窗外需要配摄像头，需预留电源",
   all_more: "我们自己查到的防潮加强手段，不知是否管用，到时候看大家给的建议：\n基层水泥加入：马贝SP700\n美巢 800 高强耐水腻子\n阳台和空调井附近涂防水\n无机涂料：透气性，潮气能散出来\n",
-  p_client: "冷易珊",
-  p_phone: "185****9173",
+  p_client: "林婉清",
+  p_phone: "13800138000",
   b_design: "26400",
   b_build: "25万",
   b_furn: "3万",
   b_dev: "家电6.8万",
   d_like: "小区环境好\n有树景，能在床上晒太阳\n猫咪足够空间跑酷",
-  m1_name: "陈先生",
-  m1_phone: "185****9173",
-  m1_born: "云南大理",
+  m1_name: "周先生",
+  m1_phone: "13800138000",
+  m1_born: "云南昆明",
   m1_blood: "O型",
-  m1_birthday: "1995.04.30",
+  m1_birthday: "1994.06.18",
   m1_age: "31",
-  m1_star: "金牛",
+  m1_star: "双子",
   m1_faith: "佛祖心中留",
   m1_color: "黄色、灰色、酒红",
   m1_work: "宅家做手工",
-  m1_rest: "哈尼个旧",
+  m1_rest: "周末咖啡店",
   m1_lux: "无",
   b_garden: "可以考虑盆景之类",
   m1_ghost: "不",
   m1_holiday: "周末喜欢去露营，长假喜欢去自驾",
   m1_perfume: "无特定品牌，喜欢木质、柑橘调",
   m1_place: "露天茶馆",
-  m1_cloth: "SAWONG、MUJI、迪卡侬",
-  m1_car: "萤火虫、Mini Cooper、Smart #1#2",
+  m1_cloth: "MUJI、优衣库、迪卡侬",
+  m1_car: "小型纯电、Mini 风格代步车",
   m1_nature: "都喜欢",
-  m1_country: "中国、印尼",
+  m1_country: "中国、日本",
   m1_drink: "仅米酒",
   m1_shop: "一般",
   m1_party: "喜欢和熟人聚会",
   m1_tea: "喜欢",
-  m1_toy: "没玩具，瓷器、沉香手串？",
+  m1_toy: "没玩具，瓷器、手串之类",
   m1_read: "还行",
-  m1_cigar: "不喜欢🫸 且不抽烟",
+  m1_cigar: "不喜欢 且不抽烟",
   m1_lamp: "柔和、温暖",
-  m2_name: "冷易珊",
-  m2_phone: "185****9173",
-  m2_born: "黑龙江绥化",
+  m2_name: "林婉清",
+  m2_phone: "13900139000",
+  m2_born: "黑龙江哈尔滨",
   m2_age: "33",
-  m2_birthday: "1992.11.24",
+  m2_birthday: "1993.09.12",
   m2_cigar: "不喜欢🫸 且不抽烟",
   m2_star: "射手座",
   m2_faith: "财神",
@@ -660,7 +759,7 @@ const PREFILL = {
   m2_work: "钱多的",
   m2_rest: "京兆尹，到现在也没吃上，所以一直惦记",
   m2_lux: "不买，除非送人",
-  m2_car: "萤火虫，日式kcar，老头乐，喜欢方方的",
+  m2_car: "小型纯电、日式小车、方正造型代步车",
   m2_nature: "在巴厘岛住了千一晚上的别墅酒店，那几天很开心",
   m2_country: "中国，喜欢宋式美学",
   m2_collect: "",
@@ -1489,12 +1588,16 @@ document.addEventListener('click', e => {
   setBarOpen(false);
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') setBarOpen(false);
+  if (e.key !== 'Escape') return;
+  const dlg = $('#ateDialog');
+  if (dlg && dlg.classList.contains('open')) return; // 由 ateConfirm 自行关闭
+  setBarOpen(false);
 });
 $('#dlBtn').addEventListener('click', download);
 $('#exportBtn').addEventListener('click', exportJson);
 $('#importBtn').addEventListener('click', () => $('#importFile').click());
 $('#resetBtn').addEventListener('click', resetToDefault);
+$('#clearBtn').addEventListener('click', clearFilled);
 $('#filterBtn').addEventListener('click', cycleViewFilter);
 $('#importFile').addEventListener('change', e => {
   const file = e.target.files && e.target.files[0];
@@ -1512,7 +1615,7 @@ function exportPayload(){
   syncFromDom();
   return {
     _meta: {
-      app: 'mohong_survey',
+      app: 'aiteemo_survey_demo',
       version: 1,
       key: KEY,
       exportedAt: new Date().toISOString(),
@@ -1522,12 +1625,105 @@ function exportPayload(){
   };
 }
 
-function resetToDefault(){
-  if (!confirm('将清除本机修改，恢复为页面内置的默认填写？')) return;
+function cloneBlank(){
+  const out = {};
+  const keys = new Set([...Object.keys(PREFILL), ...Object.keys(data)]);
+  keys.forEach(k => {
+    const sample = Object.prototype.hasOwnProperty.call(PREFILL, k) ? PREFILL[k] : data[k];
+    out[k] = Array.isArray(sample) ? [] : '';
+  });
+  return out;
+}
+
+function ateConfirm({
+  title = '确认',
+  message = '',
+  confirmText = '确认',
+  cancelText = '取消',
+  danger = false,
+  kicker = 'Confirm',
+  hideCancel = false,
+} = {}){
+  const root = $('#ateDialog');
+  const titleEl = $('#ateDialogTitle');
+  const msgEl = $('#ateDialogMsg');
+  const okBtn = $('#ateDialogOk');
+  const cancelBtn = $('#ateDialogCancel');
+  const kickerEl = $('#ateDialogKicker');
+  if (!root || !titleEl || !msgEl || !okBtn || !cancelBtn) {
+    return Promise.resolve(window.confirm(message || title));
+  }
+  return new Promise(resolve => {
+    let settled = false;
+    const finish = (ok) => {
+      if (settled) return;
+      settled = true;
+      root.classList.remove('open');
+      root.hidden = true;
+      cancelBtn.hidden = false;
+      document.removeEventListener('keydown', onKey, true);
+      root.removeEventListener('click', onBackdrop);
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+      resolve(ok);
+    };
+    const onOk = () => finish(true);
+    const onCancel = () => finish(false);
+    const onBackdrop = (e) => { if (e.target === root) finish(false); };
+    const onKey = (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+      else if (e.key === 'Enter') { e.preventDefault(); finish(true); }
+    };
+
+    titleEl.textContent = title;
+    msgEl.textContent = message;
+    if (kickerEl) kickerEl.textContent = kicker;
+    okBtn.textContent = confirmText;
+    cancelBtn.textContent = cancelText;
+    cancelBtn.hidden = !!hideCancel;
+    okBtn.classList.toggle('danger', !!danger);
+    okBtn.classList.toggle('ok', !danger);
+    root.hidden = false;
+    root.classList.add('open');
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+    root.addEventListener('click', onBackdrop);
+    document.addEventListener('keydown', onKey, true);
+    requestAnimationFrame(() => (danger && !hideCancel ? cancelBtn : okBtn).focus());
+  });
+}
+
+async function resetToDefault(){
+  const ok = await ateConfirm({
+    kicker: 'Restore',
+    title: '恢复为默认填写？',
+    message: '将清除本机修改，恢复为页面内置的演示预填内容。',
+    confirmText: '恢复默认',
+    cancelText: '取消',
+  });
+  if (!ok) return;
   data = clonePrefill();
   localStorage.setItem(KEY, JSON.stringify(data));
   render();
   setStatus('已恢复默认');
+  setTimeout(() => setStatus('已自动保存'), 2000);
+}
+
+async function clearFilled(){
+  const ok = await ateConfirm({
+    kicker: 'Clear',
+    title: '清空已填写内容？',
+    message: '将清除本页全部填写（含本机自动保存），变为空白问卷。此操作不可撤销。若要演示预填，可再点「恢复默认」。',
+    confirmText: '确认清空',
+    cancelText: '取消',
+    danger: true,
+  });
+  if (!ok) return;
+  data = cloneBlank();
+  localStorage.setItem(KEY, JSON.stringify(data));
+  render();
+  setStatus('已清空');
+  setTimeout(() => setStatus('已自动保存'), 2000);
 }
 
 function setStatus(text){
@@ -1550,7 +1746,13 @@ function exportJson(){
     setStatus('已导出 JSON');
     setTimeout(() => setStatus('已自动保存'), 2000);
   } catch (err) {
-    alert('导出失败：' + (err.message || err));
+    ateConfirm({
+      kicker: 'Error',
+      title: '导出失败',
+      message: String(err.message || err),
+      confirmText: '知道了',
+      hideCancel: true,
+    });
   }
 }
 
@@ -1586,18 +1788,39 @@ function applyImportedData(incoming){
 
 function importJsonFile(file){
   const reader = new FileReader();
-  reader.onload = () => {
+  reader.onload = async () => {
     try {
       const parsed = JSON.parse(String(reader.result || ''));
       const incoming = normalizeImport(parsed);
       const filled = Object.keys(incoming).filter(k => !k.startsWith('_') && !isEmpty(incoming[k])).length;
-      if (!confirm(`将导入 ${filled} 个已填字段。\n\n不会清空你本机已有、但导入文件里为空的内容。\n是否继续？`)) return;
+      const ok = await ateConfirm({
+        kicker: 'Import',
+        title: `导入 ${filled} 个已填字段？`,
+        message: '不会清空你本机已有、但导入文件里为空的内容。',
+        confirmText: '确认导入',
+        cancelText: '取消',
+      });
+      if (!ok) return;
       applyImportedData(incoming);
     } catch (err) {
-      alert('导入失败：' + (err.message || err));
+      await ateConfirm({
+        kicker: 'Error',
+        title: '导入失败',
+        message: String(err.message || err),
+        confirmText: '知道了',
+        hideCancel: true,
+      });
     }
   };
-  reader.onerror = () => alert('读取文件失败');
+  reader.onerror = () => {
+    ateConfirm({
+      kicker: 'Error',
+      title: '读取文件失败',
+      message: '请重试选择 JSON 文件。',
+      confirmText: '知道了',
+      hideCancel: true,
+    });
+  };
   reader.readAsText(file, 'utf-8');
 }
 </script>

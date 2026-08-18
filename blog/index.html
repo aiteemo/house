@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AiTeemo — 把 AI 用进真实生活</title>
+  <meta name="description" content="AiTeemo：AI 在工作与生活中的实践笔记。可体验的结构化工具，从装修调研问卷开始。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/blog.css">
+</head>
+<body>
+  <div id="cursor-glow" aria-hidden="true"></div>
+
+  <header class="site-nav">
+    <div class="wrap">
+      <a class="logo" href="index.html" aria-label="AiTeemo 首页">
+        <span class="ai">Ai</span><span class="teemo">Teemo</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="打开菜单" aria-expanded="false"><span></span></button>
+      <ul class="nav-links">
+        <li><a href="#practice">实践</a></li>
+        <li><a href="#tools">工具</a></li>
+        <li><a href="#about">关于</a></li>
+        <li><a href="posts/index.html">全部文章</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="hero-kicker reveal">Practice over prompts</p>
+        <h1 class="hero-title reveal">把 AI 用进<br><em>真实生活</em></h1>
+        <p class="hero-lead reveal">
+          AiTeemo 记录 AI 在工作与生活中的落地做法——不是概念演示，而是可复用的流程、问卷与小工具。
+          第一站从装修需求调研开始，欢迎直接体验。
+        </p>
+        <div class="hero-actions reveal">
+          <a class="btn btn-primary" href="#tools">试用工具</a>
+          <a class="btn btn-ghost" href="#practice">读实践笔记</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="practice">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-label">Notes</p>
+            <h2 class="section-title">实践精选</h2>
+          </div>
+          <a class="section-more" href="posts/index.html">全部文章 →</a>
+        </div>
+        <div class="card-grid">
+          <a class="card reveal" href="posts/ai-in-renovation.html">
+            <p class="card-meta">2026 · 生活</p>
+            <h3 class="card-title">用 AI 做装修调研：从杂乱聊天到结构化问卷</h3>
+            <p class="card-desc">把业主习惯、空间约束与设计师沟通点压进一张可填写的调查表，本地保存、可导出，还能直接发给设计方。</p>
+            <span class="card-link">阅读全文</span>
+          </a>
+          <a class="card reveal" href="posts/static-tools-as-practice.html">
+            <p class="card-meta">2026 · 工作</p>
+            <h3 class="card-title">把实践做成静态页：让别人也能点开即用</h3>
+            <p class="card-desc">博客不只是文字。把可运行的小工具拆成二级页，读者能立刻验证你的方法是否靠谱。</p>
+            <span class="card-link">阅读全文</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tools">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-label">Playground</p>
+            <h2 class="section-title">可体验工具</h2>
+          </div>
+          <a class="section-more" href="tools/index.html">工具索引 →</a>
+        </div>
+        <div class="tool-grid">
+          <a class="tool-card reveal" href="tools/survey/index.html">
+            <span class="tool-badge live">可体验</span>
+            <h3 class="tool-name">生活习惯及设计需求调查表</h3>
+            <p class="tool-desc">结构化装修问卷：多选、是/否/非必须、自动保存与长图导出。默弘场景下的 AI 协作成品。</p>
+            <span class="tool-cta">打开体验 →</span>
+          </a>
+          <div class="tool-card is-soon reveal" aria-disabled="true">
+            <span class="tool-badge soon">筹备中</span>
+            <h3 class="tool-name">装修风格助手</h3>
+            <p class="tool-desc">答题推荐风格方向，后续从装修助手拆出独立页。</p>
+          </div>
+          <div class="tool-card is-soon reveal" aria-disabled="true">
+            <span class="tool-badge soon">筹备中</span>
+            <h3 class="tool-name">电线选型计算器</h3>
+            <p class="tool-desc">按电器负荷给出回路线径建议，后续上线。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="wrap">
+        <p class="section-label reveal">About</p>
+        <div class="about-block">
+          <p class="about-quote reveal">少谈模型，多谈场景。</p>
+          <div class="about-body reveal">
+            <p>AiTeemo 关注一件事：AI 怎样真正嵌进工作与生活流程——调研、决策、交付、复盘。</p>
+            <p>本站与仓库里的「装修助手」主站相互独立。这里放的是提炼后的实践与可分享工具；主站仍是完整规划环境。</p>
+            <p>第一版工具先上线调查表，其余会陆续拆成静态二级页。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© AiTeemo · Practice over prompts</span>
+      <span>静态站 · 无账号 · 工具数据默认仅存本机</span>
+    </div>
+  </footer>
+
+  <script src="js/blog.js"></script>
+</body>
+</html>
