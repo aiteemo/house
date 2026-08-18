@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>电线选型计算器 · AiTeemo</title>
+  <meta name="description" content="按空间电器负荷给出回路线径与空开建议。计算仅在本机完成。">
+  <link rel="stylesheet" href="../_shared/tools.css">
+  <link rel="stylesheet" href="../_shared/shell.css">
+</head>
+<body class="ate-tool">
+  <div class="ate-bar">
+    <div class="ate-bar-inner">
+      <div>
+        <a class="ate-brand" href="../../index.html"><span class="ai">Ai</span><span class="teemo">Teemo</span></a>
+        <p class="ate-note">可体验工具 · 演示脱敏版。预填与示例为通用模板，非真实业主；数据默认仅存本机。</p>
+      </div>
+      <div class="ate-links">
+        <a href="../index.html">工具索引</a>
+        <a href="../../index.html">返回首页</a>
+      </div>
+    </div>
+  </div>
+  <div id="panel-tools"></div>
+  <script>
+    window.AITEEMO_TOOL = 'wirecalc';
+    window.AITEEMO_TOOLS_HOME = "../index.html";
+    
+  </script>
+  <script src="../_shared/js/wire-calc-data.js"></script>
+  <script src="../_shared/js/wire-calc-presets.js"></script>
+  <script src="../_shared/js/wire-calculator.js"></script>
+  <script src="../_shared/js/style-quiz.js"></script>
+  <script src="../_shared/boot.js"></script>
+</body>
+</html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>示例小区装修垃圾清运维权与法律解答（演示）</title>
+    <style>
+        :root {
+            --primary-color: #1e40af;
+            --primary-light: #eff6ff;
+            --accent-color: #dc2626;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --bg-gray: #f9fafb;
+            --border-color: #e5e7eb;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            background-color: var(--bg-gray);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            padding: 30px;
+        }
+
+        header {
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            margin: 30px 0 15px;
+            padding-left: 12px;
+            border-left: 4px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .qa-card {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .qa-card:hover {
+            box-shadow: var(--card-shadow);
+        }
+
+        .qa-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .qa-title span {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .qa-answer {
+            color: var(--text-main);
+            font-size: 0.98rem;
+        }
+
+        .highlight-box {
+            background-color: #fef2f2;
+            border-left: 4px solid var(--accent-color);
+            padding: 12px 16px;
+            margin-top: 10px;
+            border-radius: 0 6px 6px 0;
+            color: #991b1b;
+            font-size: 0.92rem;
+        }
+
+        .ref-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ref-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .ref-list li:last-child {
+            border-bottom: none;
+        }
+
+        .ref-list .ref-title {
+            font-weight: 600;
+            color: #111827;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .ref-list a {
+            color: var(--primary-color);
+            word-break: break-all;
+            font-size: 0.88rem;
+        }
+
+        .legal-box {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary-color);
+            padding: 12px 16px;
+            margin-top: 10px;
+            border-radius: 0 6px 6px 0;
+            color: #1e3a8a;
+            font-size: 0.92rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.92rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f3f4f6;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: bold;
+        }
+
+        .badge-fg { background-color: #dbeafe; color: #1e40af; } /* 地方法规 */
+        .badge-gzao { background-color: #e0e7ff; color: #3730a3; } /* 政府规章 */
+        .badge-wj { background-color: #f3e8ff; color: #6b21a8; } /* 规范性文件 */
+        .badge-pt { background-color: #ecfdf5; color: #065f46; } /* 平台/标准 */
+
+        .hierarchy-box {
+            background: #fffbebf5;
+            border: 1px solid #fde68a;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .hierarchy-title {
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 8px 0;
+        }
+
+        li {
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            h1 { font-size: 1.4rem; }
+            th, td { padding: 8px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>示例小区装修垃圾清运维权与法规解答（演示）</h1>
+        <div class="subtitle">针对小区垃圾清运垄断、违规加价、态度恶劣等问题的权威法律分析与政策对照</div>
+    </header>
+
+    <!-- 第一部分：核心问题解答 -->
+    <div class="section-title">一、核心诉求与法律争议分析</div>
+
+    <div class="qa-card">
+        <div class="qa-title"><span>1</span>装修垃圾清运需要具备什么资质、备案与证书？</div>
+        <div class="qa-answer">
+            合规的装修垃圾清运企业及车辆需要具备以下条件：
+            <ul>
+                <li><strong>企业资质：</strong>具备营业执照，经营范围包含建筑垃圾/装修垃圾清运或城市生活垃圾经营性清运服务。</li>
+                <li><strong>运输许可与备案：</strong>在城市管理部门取得《建筑垃圾处置（运输）许可证》或完成<b>建筑垃圾运输企业/车辆备案</b>。</li>
+                <li><strong>车辆合规：</strong>运输车辆须为密闭式运输车，安装GPS定位，且已录入官方监管平台。</li>
+                <li><strong>平台可查：</strong>企业的资质与车辆信息必须能在<b>《北京市建筑垃圾管理与服务平台》</b>查验到。</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="qa-title"><span>2</span>平台查到的其他/附近小区清运企业，能否来本小区清运？物业有权阻止吗？</div>
+        <div class="qa-answer">
+            <strong>【结论】完全可以清运，物业无权非法阻止！</strong>
+            <ul>
+                <li>只要企业在<b>《北京市建筑垃圾管理与服务平台》</b>有正规备案，就具备在北京市行政区域内合法从事建筑垃圾清运的资质。</li>
+                <li><b>业主对清运服务具备自主选择权。</b>物业服务企业只是小区秩序的维护者，无权设立市场准入门槛。</li>
+                <li><b>物业的合法职责界限：</b>物业有权核验进场车辆资质、要求交纳履约保证金（如有）、遵守小区出入与限重规则，<b>但不得以“非指定单位”为由拒绝合规企业和车辆进场</b>。</li>
+            </ul>
+            <div class="legal-box">
+                <b>维权依据：</b>《民法典》物业服务合同章节明确物业职责为管理与服务，限制合规第三方清运车辆进入属于超越职权、侵害业主共有权利和自主选择权的行为。
+            </div>
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="qa-title"><span>3</span>物业只允许 1 家清运公司进入，是否构成垄断？</div>
+        <div class="qa-answer">
+            <strong>【结论】极大概率构成违法强迫交易、排除竞争及非法垄断。</strong>
+            <ul>
+                <li><b>排除公平竞争：</b>物业通过独家指定清运公司并阻碍其他合规企业进入，破坏了市场公平竞争机制。</li>
+                <li><b>侵犯消费者权益：</b>违反《消费者权益保护法》第九条规定，剥夺了业主自主选择商品或服务的权利。</li>
+                <li><b>可能涉及利益输送：</b>物业独家引进且纵容其违规加价，可能涉嫌非法利益输送或强迫交易行为。</li>
+            </ul>
+            <div class="highlight-box">
+                <b>处置途径：</b>可向<b>市监管局（12315）</b>举报物业与清运公司涉嫌滥用市场地位/不正当竞争，向<b>住建委/街道办</b>举报物业履职违规。
+            </div>
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="qa-title"><span>4</span>这家公司态度蛮横、任意加价、甚至辱骂威胁业主，是否违法？</div>
+        <div class="qa-answer">
+            <strong>【结论】严重违法！涉及多项行政与刑事法律追责。</strong>
+            <ul>
+                <li><b>乱加价行为：</b>违反《价格法》及《消费者权益保护法》，属于明码标价之外收取未标明费用、强迫高价交易，市场监管部门可处以没收违法所得及罚款。</li>
+                <li><b>辱骂恐吓业主：</b>违反《治安管理处罚法》42条（公然侮辱他人或捏造事实诽谤他人、威胁他人人身安全）。如果说出“没钱别装修”并进行恐吓，公安机关可对其处以拘留和罚款。</li>
+                <li><b>黑恶霸业线索：</b>此类“垄断小区装修清运、强买强卖、恐吓威胁业主”的行为，属于典型的<b>“市霸”、“业霸”</b>治理重点，可直接向公安部门扫黑办举报。</li>
+            </ul>
+            <div class="highlight-box">
+                <b>维权建议：</b>保留录音、录像、微信聊天记录、加价收据等证据，立即拨打 <b>110 报警</b>（针对恐吓威胁）及 <b>12345 市长热线</b>（针对物业与违规清运）。
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二部分：官方文件解析与效力层级 -->
+    <div class="section-title">二、涉案官方文件解析与法律效力层级</div>
+
+    <div class="hierarchy-box">
+        <div class="hierarchy-title">⚖️ 法律效力与解释权最高原则：</div>
+        <ul>
+            <li><b>最高法律效力：</b>地方性法规（人大通过） ＞ 市政府规章（市长令） ＞ 部门规范性文件（委局发布）。</li>
+            <li><b>最高解释权：</b>《条例》的解释权属于<b>北京市人大常委会</b>；政府规章解释权属于<b>北京市人民政府</b>；具体业务执行与操作解释权属于<b>北京市城市管理委员会</b>及<b>市发改委</b>。</li>
+        </ul>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 28%;">文件名称 / 链接</th>
+                <th style="width: 18%;">文件性质与效力</th>
+                <th style="width: 54%;">对本案的核心解答与实用维权价值</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <b>《北京市生活垃圾管理条例》</b><br>
+                    <a href="https://www.beijing.gov.cn/zhengce/dfxfg/202009/t20200929_2102701.html" target="_blank">查看原文</a>
+                </td>
+                <td><span class="badge badge-fg">地方性法规</span><br>(市人大常委会)</td>
+                <td>
+                    <b>【最高法定依据】</b><br>
+                    明确了装修垃圾分类、投放与清运的法定责任。明确业主支付清运费，物业设立指定堆放场所；要求产生单位和个人将装修垃圾交由<b>具备资质的企业</b>清运，但<b>从未授权物业指定独家经营企业</b>。
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>《北京市建筑垃圾处置管理规定》</b><br>
+                    <a href="https://www.beijing.gov.cn/gongkai/zfxxgk/zc/gz/202504/t20250424_4073688.html" target="_blank">查看原文</a>
+                </td>
+                <td><span class="badge badge-gzao">政府规章</span><br>(北京市人民政府令)</td>
+                <td>
+                    <b>【处置与准入全过程监管】</b><br>
+                    解答了建筑垃圾（含装修垃圾）从产生、运输到消纳的全流程管理要求，明确了运输企业资质审批、备案要求及违规处置（如乱倾倒、无证运输）的惩罚标准。
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>《北京市建筑垃圾运输企业监督管理办法》</b><br>
+                    <a href="https://cgj.beijing.gov.cn/ztzl/ljfl/ckzl/202412/t20241206_3959082.html" target="_blank">查看原文</a>
+                </td>
+                <td><span class="badge badge-wj">规范性文件</span><br>(市城管委等部门)</td>
+                <td>
+                    <b>【运输企业合规监管】</b><br>
+                    解答了什么样的清运公司才是合规的。规定了运输企业必须具备的车辆设施、考核机制、黑名单及退出机制。如该清运公司有威胁加价行为，可向城管委举报扣分甚至吊销资质。
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>北京市建筑垃圾管理与服务平台</b><br>
+                    <a href="http://ztxn.capcloud.com.cn:8080/dist/#/gdBaListJz2" target="_blank">访问平台</a>
+                </td>
+                <td><span class="badge badge-pt">官方服务平台</span><br>(市城管委官方)</td>
+                <td>
+                    <b>【资质查验权威工具】</b><br>
+                    <b>业主维权的武器库！</b>用于核实清运公司是否具备正规备案。只要在该平台能查到的企业，均属于合规清运企业，物业无权以“不在本小区备案”为由拒绝进场。
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>《环卫收费标准》</b><br>
+                    <a href="https://fgw.beijing.gov.cn/bmcx/djcx/jzldj/202003/t20200331_1752795.htm" target="_blank">查看原文</a>
+                </td>
+                <td><span class="badge badge-pt">价格指导文件</span><br>(市发改委)</td>
+                <td>
+                    <b>【防止乱加价准绳】</b><br>
+                    解答了垃圾清运费用的基准价格与计费标准，防止清运公司坐地起价、乱收费。
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>《关于进一步加强施工工地和建筑垃圾运输车辆治理工作的通告》</b><br>
+                    <a href="https://cgj.beijing.gov.cn/xxgk/2024zcwj/202405/t20240524_3693412.html" target="_blank">查看原文</a>
+                </td>
+                <td><span class="badge badge-wj">多部门联合通告</span><br>(城管/公安/交通等)</td>
+                <td>
+                    <b>【联合执法与打击依据】</b><br>
+                    解答了多部门联合打击非法运输、黑车清运、强揽工程等违法犯罪行为的执法依据，可配合公安部门打击黑恶清运势力。
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>市城管委答复「居民住宅装修是否要办“渣土消纳证”？」</b><br>
+                    <a href="https://csglw.beijing.gov.cn/hudong/xinxiang/csglw/sindex/bjah-index-dept!detail.action?originalId=AH24081310152" target="_blank">查看原文</a>
+                </td>
+                <td><span class="badge badge-pt">官方政务答复</span><br>(市城管委信访答复)</td>
+                <td>
+                    <b>【个人装修手续简化依据】</b><br>
+                    明确解答：<b>居民散装装修零星垃圾不需要个人去办理庞杂的“渣土消纳证”</b>，只需交给有资质的清运企业，由企业或物业统一进行处置备案。
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>京管发〔2022〕25号《关于调整建筑垃圾备案办理程序的通知》</b><br>
+                    <a href="https://www.beijing.gov.cn/zhengce/zhengcefagui/202302/t20230214_2916851.html" target="_blank">查看原文</a>
+                </td>
+                <td><span class="badge badge-wj">部门行政通知</span><br>(市城管委)</td>
+                <td>
+                    <b>【备案流程行政规范】</b><br>
+                    解答了清运企业和项目备案的线上化简化流程，证明符合条件的清运企业可快速完成跨区或小区服务备案。
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box" style="margin-top: 30px;">
+        <b>💡 业主实操维权步骤建议（演示）：</b>
+        <ol style="padding-left: 20px; margin-top: 8px;">
+            <li><b>搜集证据：</b>对清运人员的辱骂、恐吓、随意加价进行录音录像，保留付款凭证。</li>
+            <li><b>查询备选：</b>在《北京市建筑垃圾管理与服务平台》上寻找附近正规、报价合理合规的企业并签订合同。</li>
+            <li><b>书面质询物业：</b>向物业提交拟引入的合规企业资质，要求物业允许进场，并告知若阻拦将向住建局及市场监管局举报其联合垄断与超越职权。</li>
+            <li><b>多渠道联动举报：</b>
+                <ul>
+                    <li>治安恐吓/强买强卖：拨打 <b>110</b> 报警；</li>
+                    <li>物业垄断/违规阻止进场：拨打 <b>12345</b> 转接住建委及街道办事处房管科；</li>
+                    <li>乱加价/排除竞争：拨打 <b>12315</b> 向市场监管局举报；</li>
+                    <li>无证经营/违规运输：向城管执法部门（综合行政执法队）举报。</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="section-title">三、引用来源</div>
+    <ol class="ref-list" style="list-style: decimal; padding-left: 22px;">
+        <li>
+            <span class="ref-title">《北京市建筑垃圾处置管理规定》</span>
+            <a href="https://www.beijing.gov.cn/gongkai/zfxxgk/zc/gz/202504/t20250424_4073688.html" target="_blank" rel="noopener">https://www.beijing.gov.cn/gongkai/zfxxgk/zc/gz/202504/t20250424_4073688.html</a>
+        </li>
+        <li>
+            <span class="ref-title">《北京市生活垃圾管理条例》</span>
+            <a href="https://www.beijing.gov.cn/zhengce/dfxfg/202009/t20200929_2102701.html" target="_blank" rel="noopener">https://www.beijing.gov.cn/zhengce/dfxfg/202009/t20200929_2102701.html</a>
+        </li>
+        <li>
+            <span class="ref-title">《北京市建筑垃圾运输企业监督管理办法》</span>
+            <a href="https://cgj.beijing.gov.cn/ztzl/ljfl/ckzl/202412/t20241206_3959082.html" target="_blank" rel="noopener">https://cgj.beijing.gov.cn/ztzl/ljfl/ckzl/202412/t20241206_3959082.html</a>
+        </li>
+        <li>
+            <span class="ref-title">北京市建筑垃圾管理与服务平台</span>
+            <a href="http://ztxn.capcloud.com.cn:8080/dist/#/gdBaListJz2" target="_blank" rel="noopener">http://ztxn.capcloud.com.cn:8080/dist/#/gdBaListJz2</a>
+        </li>
+        <li>
+            <span class="ref-title">《环卫收费标准》</span>
+            <a href="https://fgw.beijing.gov.cn/bmcx/djcx/jzldj/202003/t20200331_1752795.htm" target="_blank" rel="noopener">https://fgw.beijing.gov.cn/bmcx/djcx/jzldj/202003/t20200331_1752795.htm</a>
+        </li>
+        <li>
+            <span class="ref-title">《关于进一步加强施工工地和建筑垃圾运输车辆治理工作的通告》（2021年9月1日）</span>
+            <a href="https://cgj.beijing.gov.cn/xxgk/2024zcwj/202405/t20240524_3693412.html" target="_blank" rel="noopener">https://cgj.beijing.gov.cn/xxgk/2024zcwj/202405/t20240524_3693412.html</a>
+        </li>
+        <li>
+            <span class="ref-title">市城市管理委答复「居民普通住宅装修是否要办理“渣土消纳证”？」</span>
+            <a href="https://csglw.beijing.gov.cn/hudong/xinxiang/csglw/sindex/bjah-index-dept!detail.action?originalId=AH24081310152" target="_blank" rel="noopener">https://csglw.beijing.gov.cn/hudong/xinxiang/csglw/sindex/bjah-index-dept!detail.action?originalId=AH24081310152</a>
+        </li>
+        <li>
+            <span class="ref-title">北京市城市管理委员会关于调整建筑垃圾备案办理程序的通知｜京管发〔2022〕25号｜2023年1月1日起实施</span>
+            <a href="https://www.beijing.gov.cn/zhengce/zhengcefagui/202302/t20230214_2916851.html" target="_blank" rel="noopener">https://www.beijing.gov.cn/zhengce/zhengcefagui/202302/t20230214_2916851.html</a>
+        </li>
+    </ol>
+</div>
+
+</body>
+</html>

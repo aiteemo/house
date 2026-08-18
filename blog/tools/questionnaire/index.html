@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>装修需求问卷 · AiTeemo</title>
+  <meta name="description" content="房屋资料、生活习惯与分区需求一站填写，自动本地保存，可下载发给设计师。">
+  <link rel="stylesheet" href="../_shared/tools.css">
+  <link rel="stylesheet" href="../_shared/shell.css">
+</head>
+<body class="ate-tool">
+  <div class="ate-bar">
+    <div class="ate-bar-inner">
+      <div>
+        <a class="ate-brand" href="../../index.html"><span class="ai">Ai</span><span class="teemo">Teemo</span></a>
+        <p class="ate-note">可体验工具 · 演示脱敏版。预填与示例为通用模板，非真实业主；数据默认仅存本机。</p>
+      </div>
+      <div class="ate-links">
+        <a href="../index.html">工具索引</a>
+        <a href="../../index.html">返回首页</a>
+      </div>
+    </div>
+  </div>
+  <div id="panel-tools"></div>
+  <script>
+    window.AITEEMO_TOOL = 'questionnaire';
+    window.AITEEMO_TOOLS_HOME = "../index.html";
+    
+  </script>
+  <script src="../_shared/js/req-questionnaire-data.js"></script>
+  <script src="../_shared/js/req-questionnaire.js"></script>
+  <script src="../_shared/js/style-quiz.js"></script>
+  <script src="../_shared/boot.js"></script>
+</body>
+</html>

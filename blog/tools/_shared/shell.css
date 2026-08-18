@@ -1,0 +1,74 @@
+/* AiTeemo tool page chrome */
+html, body { min-height: 100%; }
+body.ate-tool {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg, #0f1117);
+  color: var(--text, #e4e6f0);
+  min-height: 100vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+.ate-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: #0b0c0e;
+  color: #e8e2d6;
+  border-bottom: 1px solid rgba(232, 226, 214, 0.12);
+  padding: 10px 14px;
+  flex-shrink: 0;
+}
+.ate-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ate-brand {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: #e8e2d6;
+  text-decoration: none;
+}
+.ate-brand .ai { color: #9a9488; font-weight: 400; }
+.ate-brand .teemo { color: #e8e2d6; font-weight: 600; }
+.ate-brand:hover .teemo { color: #c4a574; }
+.ate-note {
+  font-size: 11px;
+  color: #9a9488;
+  line-height: 1.45;
+  max-width: 42em;
+  margin: 4px 0 0;
+}
+.ate-links { display: flex; gap: 10px; align-items: center; }
+.ate-links a {
+  font-size: 11px;
+  color: #c4a574;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(196, 165, 116, 0.35);
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+.ate-links a:hover { background: rgba(196, 165, 116, 0.14); }
+@media (min-width: 768px) {
+  .ate-bar { padding: 12px 20px; }
+}
+
+#panel-tools {
+  flex: 1;
+  overflow: auto;
+  padding: 8px 16px 48px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+#panel-tools .quiz-back { color: #c4a574; }
+#panel-tools .quiz-back:hover { color: #e8e2d6; }
