@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/blog.css">
+  <link rel="stylesheet" href="../css/blog.css?v=20260825c">
 </head>
 <body>
   <div id="cursor-glow" aria-hidden="true"></div>
@@ -33,6 +33,25 @@
 
   <article class="wrap article reveal">
     <p>装修前期最耗人的，往往不是审美，而是信息散落：微信里聊过、口头说过、表格里漏过。设计师再专业，也难在碎片对话里还原你的真实生活。</p>
+    <h2>背景：为什么不用 Word</h2>
+    <p>传统 Word 文档，不适合过程协作、知识沉淀和多人共创，版本管理更是硬伤。</p>
+    <ul>
+      <li>不能多人同时编辑，文件只能来回转发</li>
+      <li>多人修改合并麻烦，内容格式容易丢失</li>
+      <li>版本杂乱无章，旧内容很难找回</li>
+      <li>总踩格式地狱——内容稍微一变，排版直接崩掉</li>
+    </ul>
+
+    <div class="compare-open" id="compare-open" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="compare-modal">
+      <span class="compare-open__icon" aria-hidden="true">⇄</span>
+      <span class="compare-open__copy">
+        <span class="compare-open__title">Word 文档 vs 在线调查表</span>
+        <span class="compare-open__hint">点击弹层放大对比 · 图片按需加载</span>
+      </span>
+    </div>
+    <p class="compare-open__cap">左：传统 Word 表格勾选；右：网页点选、自动保存与导出。</p>
+
+    <p>面对这些痛点，我用 vibe coding 做了一版在线需求调查表：把「要问什么」先结构化，再落成一张能填、能存、能分享的网页问卷。</p>
     <h2>做法</h2>
     <p>用 AI 协助把「要问什么」先结构化：常住成员、作息、收纳、厨卫习惯、风格偏好、机电约束……再落成一张可点选、可备注、可本地保存的网页问卷。</p>
     <ul>
@@ -45,12 +64,127 @@
     <p>AiTeemo 想证明的是：AI 的价值可以体现在「帮你把场景做成别人也能用的工具」，而不只是一段漂亮的回答。</p>
   </article>
 
+  <!-- 静态弹层：默认不加载图片，打开后再赋 src -->
+  <div id="compare-modal" class="compare-modal" hidden aria-hidden="true">
+    <div class="compare-modal__backdrop" data-compare-close></div>
+    <div class="compare-modal__panel" role="dialog" aria-modal="true" aria-labelledby="compare-modal-title">
+      <div class="compare-modal__head">
+        <h2 class="compare-modal__title" id="compare-modal-title">填写方式对比</h2>
+        <button type="button" class="compare-modal__close" data-compare-close aria-label="关闭">×</button>
+      </div>
+      <div class="compare-modal__tabs">
+        <button type="button" class="compare-modal__tab is-active" data-compare-view="both">并排对比</button>
+        <button type="button" class="compare-modal__tab" data-compare-view="word">Word 文档</button>
+        <button type="button" class="compare-modal__tab" data-compare-view="tool">在线调查表</button>
+      </div>
+      <div class="compare-modal__stage">
+        <div class="compare-modal__grid" data-compare-grid>
+          <div class="compare-modal__pane" data-compare-pane="word">
+            <p class="compare-modal__pane-label">Word 文档</p>
+            <div class="compare-modal__frame">
+              <img data-src="../images/word-sample.jpg" alt="Word 文档填写示例" width="1600" height="1200">
+            </div>
+          </div>
+          <div class="compare-modal__pane" data-compare-pane="tool">
+            <p class="compare-modal__pane-label">在线调查表</p>
+            <div class="compare-modal__frame">
+              <img data-src="../images/tool-demo.jpg" alt="在线调查表填写示例" width="1600" height="1200">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="wrap">
       <span>© AiTeemo</span>
       <a href="static-tools-as-practice.html">下一篇 →</a>
     </div>
   </footer>
-  <script src="../js/blog.js"></script>
+  <script src="../js/blog.js?v=20260825c"></script>
+  <script>
+    (function () {
+      var openEl = document.getElementById('compare-open');
+      var modal = document.getElementById('compare-modal');
+      if (!openEl || !modal) return;
+
+      var grid = modal.querySelector('[data-compare-grid]');
+      var tabs = modal.querySelectorAll('[data-compare-view]');
+      var panes = modal.querySelectorAll('[data-compare-pane]');
+      var loaded = false;
+
+      function loadImages() {
+        if (loaded) return;
+        var imgs = modal.querySelectorAll('img[data-src]');
+        for (var i = 0; i < imgs.length; i++) {
+          var img = imgs[i];
+          if (!img.getAttribute('src')) {
+            img.setAttribute('src', img.getAttribute('data-src'));
+          }
+        }
+        loaded = true;
+      }
+
+      function setView(view) {
+        if (grid) grid.setAttribute('data-view', view);
+        for (var i = 0; i < panes.length; i++) {
+          var key = panes[i].getAttribute('data-compare-pane');
+          var hide = view !== 'both' && view !== key;
+          if (hide) panes[i].classList.add('is-hidden');
+          else panes[i].classList.remove('is-hidden');
+        }
+        for (var j = 0; j < tabs.length; j++) {
+          var on = tabs[j].getAttribute('data-compare-view') === view;
+          if (on) tabs[j].classList.add('is-active');
+          else tabs[j].classList.remove('is-active');
+        }
+      }
+
+      function openModal() {
+        modal.hidden = false;
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        loadImages();
+        setView('both');
+        var closeBtn = modal.querySelector('.compare-modal__close');
+        if (closeBtn) closeBtn.focus();
+      }
+
+      function closeModal() {
+        modal.classList.remove('is-open');
+        modal.hidden = true;
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        openEl.focus();
+      }
+
+      openEl.addEventListener('click', openModal);
+      openEl.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal();
+        }
+      });
+
+      var closers = modal.querySelectorAll('[data-compare-close]');
+      for (var c = 0; c < closers.length; c++) {
+        closers[c].addEventListener('click', closeModal);
+      }
+
+      for (var t = 0; t < tabs.length; t++) {
+        (function (tab) {
+          tab.addEventListener('click', function () {
+            setView(tab.getAttribute('data-compare-view'));
+          });
+        })(tabs[t]);
+      }
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+      });
+    })();
+  </script>
 </body>
 </html>
