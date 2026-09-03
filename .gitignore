@@ -1,9 +1,11 @@
 *.pdf
+.DS_Store
 .kjlconfig.json
 .mimocode/
 .codegraph/
 images/
 blog/mp3/
+设计方案/
 业之峰.jpg
 业之峰6月25日报价.xls
 业之峰6月25日新报价.csv
