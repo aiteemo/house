@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/blog.css?v=20260826a">
+  <link rel="stylesheet" href="../css/blog.css?v=20260903b">
 </head>
 <body>
   <div id="cursor-glow" aria-hidden="true"></div>
@@ -25,9 +25,13 @@
   <section class="page-hero">
     <div class="wrap">
       <a class="back-link" href="index.html">← 实践笔记</a>
-      <p class="section-label">2026 · 生活</p>
+      <p class="section-label">2026</p>
       <h1>用 AI 做装修调研：从杂乱聊天到结构化问卷</h1>
       <p class="lead">把业主习惯、空间约束与设计师沟通点压进一张可填写的调查表。</p>
+      <p class="tag-row">
+        <a class="tag-chip" href="index.html?tag=%E8%A3%85%E4%BF%AE">装修</a>
+        <a class="tag-chip" href="index.html?tag=%E7%94%9F%E6%B4%BB">生活</a>
+      </p>
     </div>
   </section>
 
@@ -51,17 +55,76 @@
     </div>
     <p class="compare-open__cap">左：传统 Word 表格勾选；右：网页点选、自动保存与导出。</p>
 
-    <p>面对这些痛点，我用 vibe coding 做了一版在线需求调查表：把「要问什么」先结构化，再落成一张能填、能存、能分享的网页问卷。</p>
-    <h2>做法</h2>
-    <p>用 AI 协助把「要问什么」先结构化：常住成员、作息、收纳、厨卫习惯、风格偏好、机电约束……再落成一张可点选、可备注、可本地保存的网页问卷。</p>
-    <ul>
-      <li>是 / 否 / 非必须：表达「想要但不硬刚」</li>
-      <li>自动保存：填写中断也不丢</li>
-      <li>导出与长图：方便发给设计方</li>
+    <p>面对这些痛点，我用 vibe coding 做了一版在线需求调查表：把装修前要交代清楚的事，收成一张好填、不会丢、方便发给设计师的网页问卷。</p>
+
+    <h2>这版调查表好在哪</h2>
+    <p class="article-lead-in">不用 Word，打开网页就能用——下面五点，是从实际填写体验里提炼出来的。</p>
+    <ol class="article-highlights">
+      <li>
+        <strong>打开就能填</strong>
+        <span>不用装软件，不用来回传文件，手机、电脑都能用。</span>
+      </li>
+      <li>
+        <strong>点选为主，少打字</strong>
+        <span>很多题点一下就行，比 Word 里勾方框省事，也不容易把排版弄乱。</span>
+      </li>
+      <li>
+        <strong>填到一半也不会丢</strong>
+        <span>关掉页面再打开，之前填的还在，不用从头来。</span>
+      </li>
+      <li>
+        <strong>一张表问全装修要问的事</strong>
+        <span>从项目信息、预算、风格，到厨房、卫生间、客厅……各房间需求，都在一张表里。</span>
+      </li>
+      <li>
+        <strong>填完能导出长图</strong>
+        <span>直接发给设计师，不用再把 Word 转 PDF，也不用担心对方打开格式变了。</span>
+      </li>
+    </ol>
+
+    <h2>几个特别好用的功能</h2>
+    <ul class="article-features">
+      <li>
+        <span class="article-features__name">是 / 否 / 非必须</span>
+        <span class="article-features__desc">不只「要」或「不要」，还能说「想要，但不是硬性要求」，设计师更好把握。</span>
+      </li>
+      <li>
+        <span class="article-features__name">每道题可以写备注</span>
+        <span class="article-features__desc">勾了「要」还能补充细节，比如「要洗碗机，但厨房很小，看能不能嵌入」。</span>
+      </li>
+      <li>
+        <span class="article-features__name">按家庭成员分别填</span>
+        <span class="article-features__desc">两口子习惯不同，可以分开写作息、爱好，设计更贴人。</span>
+      </li>
+      <li>
+        <span class="article-features__name">章节目录，随时跳转</span>
+        <span class="article-features__desc">问卷很长，点目录就能跳到「厨房」「卫生间」，不用一直往下滚。</span>
+      </li>
+      <li>
+        <span class="article-features__name">只看已填 / 只看未填</span>
+        <span class="article-features__desc">填到一半想知道还差什么，一键筛出来，不用自己找。</span>
+      </li>
+      <li>
+        <span class="article-features__name">导出与导入备份</span>
+        <span class="article-features__desc">换设备，或者夫妻两人分开填，都可以存成文件再合并。</span>
+      </li>
+      <li>
+        <span class="article-features__name">恢复示例 / 清空重来</span>
+        <span class="article-features__desc">第一次不知道填什么，有演示样例参考；想重新填也可以一键清空。</span>
+      </li>
     </ul>
-    <h2>可体验</h2>
-    <p>这不是示意图，而是同一套问卷的公开体验版：<a href="../tools/survey/index.html">生活习惯及设计需求调查表</a>。</p>
-    <p>AiTeemo 想证明的是：AI 的价值可以体现在「帮你把场景做成别人也能用的工具」，而不只是一段漂亮的回答。</p>
+
+    <div class="article-cta reveal">
+      <p class="article-cta__label">可体验</p>
+      <p class="article-cta__title">生活习惯及设计需求调查表</p>
+      <p class="article-cta__desc">演示版已脱敏，填写内容只保存在你的浏览器里。打开即可体验，填完可导出长图发给设计方。</p>
+      <a class="btn btn-primary article-cta__btn" href="../tools/survey/index.html">打开体验 →</a>
+    </div>
+
+    <p class="article-tags">
+      <a class="tag-chip" href="index.html?tag=%E8%A3%85%E4%BF%AE">#装修</a>
+      <a class="tag-chip" href="index.html?tag=%E7%94%9F%E6%B4%BB">#生活</a>
+    </p>
   </article>
 
   <!-- 静态弹层：默认不加载图片，打开后再赋 src -->
@@ -102,7 +165,7 @@
       <a href="static-tools-as-practice.html">下一篇 →</a>
     </div>
   </footer>
-  <script src="../js/blog.js?v=20260825c"></script>
+  <script src="../js/blog.js?v=20260903b"></script>
   <script>
     (function () {
       var openEl = document.getElementById('compare-open');

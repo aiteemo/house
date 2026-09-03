@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/blog.css">
+  <link rel="stylesheet" href="../css/blog.css?v=20260903c">
 </head>
 <body>
   <div id="cursor-glow" aria-hidden="true"></div>
@@ -30,20 +30,40 @@
       <p class="section-label">Notes</p>
       <h1>实践笔记</h1>
       <p class="lead">少谈模型，多谈场景。这里记录可复用的流程与可体验的成品。</p>
+      <div class="tag-filter tag-row" data-tag-filter aria-label="按标签筛选"></div>
     </div>
   </section>
 
-  <div class="wrap post-list">
-    <a class="post-row reveal" href="ai-in-renovation.html">
-      <span class="post-row-date">2026-08</span>
-      <span class="post-row-title">用 AI 做装修调研：从杂乱聊天到结构化问卷</span>
-      <span class="post-row-tag">生活</span>
-    </a>
-    <a class="post-row reveal" href="static-tools-as-practice.html">
-      <span class="post-row-date">2026-08</span>
-      <span class="post-row-title">把实践做成静态页：让别人也能点开即用</span>
-      <span class="post-row-tag">工作</span>
-    </a>
+  <div class="wrap post-list" data-post-list>
+    <article class="post-row reveal" data-tags="装修">
+      <a class="post-row-main" href="ai-renovation-bonsai.html">
+        <span class="post-row-date">2026-09</span>
+        <span class="post-row-title">AI帮我装修第2弹之盆景</span>
+      </a>
+      <span class="post-row-tags">
+        <a class="tag-chip" href="?tag=%E8%A3%85%E4%BF%AE">装修</a>
+      </span>
+    </article>
+    <article class="post-row reveal" data-tags="装修,生活">
+      <a class="post-row-main" href="ai-in-renovation.html">
+        <span class="post-row-date">2026-08</span>
+        <span class="post-row-title">用 AI 做装修调研：从杂乱聊天到结构化问卷</span>
+      </a>
+      <span class="post-row-tags">
+        <a class="tag-chip" href="?tag=%E8%A3%85%E4%BF%AE">装修</a>
+        <a class="tag-chip" href="?tag=%E7%94%9F%E6%B4%BB">生活</a>
+      </span>
+    </article>
+    <article class="post-row reveal" data-tags="工作">
+      <a class="post-row-main" href="static-tools-as-practice.html">
+        <span class="post-row-date">2026-08</span>
+        <span class="post-row-title">把实践做成静态页：让别人也能点开即用</span>
+      </a>
+      <span class="post-row-tags">
+        <a class="tag-chip" href="?tag=%E5%B7%A5%E4%BD%9C">工作</a>
+      </span>
+    </article>
+    <p class="tag-empty" data-tag-empty hidden>这个标签下还没有文章。</p>
   </div>
 
   <footer class="site-footer">
@@ -52,6 +72,6 @@
       <a href="../tools/index.html">试用工具 →</a>
     </div>
   </footer>
-  <script src="../js/blog.js"></script>
+  <script src="../js/blog.js?v=20260903c"></script>
 </body>
 </html>
