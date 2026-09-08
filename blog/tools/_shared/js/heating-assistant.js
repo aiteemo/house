@@ -328,6 +328,7 @@ class HeatingAssistantManager {
         const pause = c.includePauseFee ? c.pause_basic_fee : 0;
         const life = Math.max(0, this.year_life_gas || 0);
         const maintain = Math.max(0, this.boiler.maintain_cost || 0);
+        const lifeCost = this.calcLadderCost(life).cost;
 
         let horizon;
         if (c.upgrade && c.upgrade.payback != null && c.upgrade.payback > 0) {
@@ -343,69 +344,82 @@ class HeatingAssistantManager {
         for (let y = 0; y <= horizon; y++) years.push(y);
 
         const centralAnnual = c.central_fee;
-        const selfGasAnnual = isHeatingMode ? s.heating_gas_cost : s.gas_cost;
-        const selfAnnual = selfGasAnnual + maintain + pause;
-        const selfCapex = Math.max(0, this.boiler.price || 0);
-        const selfName = this.boiler.model
-            ? `自采暖 · ${this.boiler.model} ¥${selfCapex.toLocaleString('zh-CN')}`
-            : `自采暖 · 当前方案 ¥${selfCapex.toLocaleString('zh-CN')}`;
-
         const centralSeries = years.map(y => Math.round(y * centralAnnual));
-        const selfSeries = years.map(y => Math.round(selfCapex + y * selfAnnual));
-
         const series = [
-            { key: 'central', name: '市政集中供暖', color: '#60a5fa', data: centralSeries, area: true },
-            { key: 'self', name: selfName, color: '#fbbf24', data: selfSeries, area: false }
+            { key: 'central', name: '市政集中供暖', color: '#60a5fa', data: centralSeries, area: true }
         ];
 
-        let upgradeAnnual = null;
+        let noteParts = [];
+        let markPaybackYear = null;
+
         if (c.upgrade) {
-            let seasonUp;
-            let maintainUp = maintain;
-            const key = this.upgrade.compareKey;
-            if (key !== '' && key !== 'custom' && HEATING_DATA.boiler_models[key]) {
-                const m = HEATING_DATA.boiler_models[key];
-                seasonUp = this.calcSeasonGasForBoiler(m);
-                maintainUp = m.annual_maintain_cost;
-            } else {
-                seasonUp = c.upgrade.V0 * (1 - c.upgrade.eta);
-            }
-            const lifeCost = this.calcLadderCost(life).cost;
+            // 与回本 B 同一口径：黄=基准炉，绿=升级炉（交汇年 ≈ 回本 B）
+            const baseCapex = Math.max(0, c.upgrade.pBase || 0);
+            const upCapex = Math.max(0, c.upgrade.pUp || 0);
+
+            const seasonBase = c.upgrade.V0;
+            const totalBase = this.calcLadderCost(life + seasonBase).cost;
+            const gasBase = isHeatingMode ? (totalBase - lifeCost) : totalBase;
+            // 维保/停供两边取相同，交汇年才与回本 B（只含气费 ΔC）对齐
+            const opexExtra = maintain + pause;
+            const baseAnnual = gasBase + opexExtra;
+
+            const seasonUp = c.upgrade.V0 * (1 - c.upgrade.eta);
             const totalUp = this.calcLadderCost(life + seasonUp).cost;
-            const upgradeGas = isHeatingMode ? (totalUp - lifeCost) : totalUp;
-            upgradeAnnual = upgradeGas + maintainUp + pause;
-            const upgradeCapex = Math.max(0, c.upgrade.pUp || 0);
-            const upName = `自采暖 · ${c.upgrade.compareName} ¥${upgradeCapex.toLocaleString('zh-CN')}`;
-            series.push({
-                key: 'upgrade',
-                name: upName,
-                color: '#4ade80',
-                data: years.map(y => Math.round(upgradeCapex + y * upgradeAnnual)),
-                area: false
-            });
+            const gasUp = isHeatingMode ? (totalUp - lifeCost) : totalUp;
+            const upAnnual = gasUp + opexExtra;
+
+            const baseName = c.upgrade.baseFree
+                ? `基准炉（精装自带/旧炉，购炉按 ¥0）`
+                : `基准炉（普通二级能效）¥${baseCapex.toLocaleString('zh-CN')}`;
+            const upName = `升级炉 · ${c.upgrade.compareName} ¥${upCapex.toLocaleString('zh-CN')}`;
+
+            series.push(
+                { key: 'base', name: baseName, color: '#fbbf24', data: years.map(y => Math.round(baseCapex + y * baseAnnual)), area: false },
+                { key: 'upgrade', name: upName, color: '#4ade80', data: years.map(y => Math.round(upCapex + y * upAnnual)), area: false }
+            );
+
+            if (c.upgrade.payback != null && c.upgrade.payback > 0) {
+                markPaybackYear = Math.round(c.upgrade.payback * 10) / 10;
+            }
+
+            noteParts = [
+                `回本 B 口径：黄线=基准炉（购炉 ¥${baseCapex.toFixed(0)}，年采暖气费 ¥${gasBase.toFixed(2)}），绿线=升级炉（购炉 ¥${upCapex.toFixed(0)}，年采暖气费 ¥${gasUp.toFixed(2)}）`,
+                `年维保与停供基本热费两边相同（各 ¥${opexExtra.toFixed(0)}），不影响交汇`
+            ];
+            noteParts.push(`黄/绿交汇年 ≈ 升级回本周期 B（${c.upgrade.paybackLabel}）`);
+        } else {
+            // 未选对比机型：集中 vs 当前自采暖
+            const selfGasAnnual = isHeatingMode ? s.heating_gas_cost : s.gas_cost;
+            const selfAnnual = selfGasAnnual + maintain + pause;
+            const selfCapex = Math.max(0, this.boiler.price || 0);
+            const selfName = this.boiler.model
+                ? `自采暖 · ${this.boiler.model} ¥${selfCapex.toLocaleString('zh-CN')}`
+                : `自采暖 · 当前方案 ¥${selfCapex.toLocaleString('zh-CN')}`;
+            const selfSeries = years.map(y => Math.round(selfCapex + y * selfAnnual));
+            series.push({ key: 'self', name: selfName, color: '#fbbf24', data: selfSeries, area: false });
+
+            noteParts = [
+                `自采暖曲线含初次购炉成本、每年${isHeatingMode ? '采暖气费' : '燃气总费'}（¥${selfGasAnnual.toFixed(2)}）`,
+                `年维保（¥${maintain.toFixed(0)}）`
+            ];
+            if (c.includePauseFee) noteParts.push(`停供基本热费（¥${pause.toFixed(0)}）`);
         }
 
-        const noteParts = [
-            `自采暖曲线含初次购炉成本、每年${isHeatingMode ? '采暖气费' : '燃气总费'}（当前方案 ¥${selfGasAnnual.toFixed(2)}）`,
-            `年维保（¥${maintain.toFixed(0)}）`
-        ];
-        if (c.includePauseFee) noteParts.push(`停供基本热费（¥${pause.toFixed(0)}）`);
-        if (c.upgrade && upgradeAnnual != null) {
-            noteParts.push(`对比机型年运行费约 ¥${upgradeAnnual.toFixed(2)}`);
-        }
-
+        const last = series[series.length - 1];
         return {
             horizon,
             years,
             series,
-            note: '注：' + noteParts.join('、') + '。不含设备折旧重复计入。',
+            markPaybackYear,
+            note: '注：' + noteParts.join('；') + '。',
             summaries: c.upgrade ? [
                 { label: `集中供暖 ${horizon}年总成本`, value: '¥' + centralSeries[horizon].toLocaleString('zh-CN') },
-                { label: `${c.upgrade.compareName} ${horizon}年总成本`, value: '¥' + series[2].data[horizon].toLocaleString('zh-CN') },
+                { label: `${c.upgrade.compareName} ${horizon}年总成本`, value: '¥' + last.data[horizon].toLocaleString('zh-CN') },
                 { label: '升级回本周期 (B)', value: c.upgrade.paybackLabel }
             ] : [
                 { label: `集中供暖 ${horizon}年总成本`, value: '¥' + centralSeries[horizon].toLocaleString('zh-CN') },
-                { label: `自采暖 ${horizon}年总成本`, value: '¥' + selfSeries[horizon].toLocaleString('zh-CN') },
+                { label: `自采暖 ${horizon}年总成本`, value: '¥' + last.data[horizon].toLocaleString('zh-CN') },
                 { label: '回本周期 (A)', value: c.payback_years != null ? c.payback_years.toFixed(1) + ' 年' : '不适用' }
             ]
         };
@@ -482,7 +496,17 @@ class HeatingAssistantManager {
                 showSymbol: false,
                 lineStyle: { width: 2.5 },
                 areaStyle: s.area ? { opacity: 0.12 } : undefined,
-                data: s.data
+                data: s.data,
+                markLine: (s.key === 'upgrade' && t.markPaybackYear != null) ? {
+                    symbol: 'none',
+                    label: {
+                        formatter: '回本 B ≈ ' + t.markPaybackYear + ' 年',
+                        color: '#fbbf24',
+                        fontSize: 11
+                    },
+                    lineStyle: { type: 'dashed', color: 'rgba(251,191,36,0.7)' },
+                    data: [{ xAxis: String(Math.min(t.horizon, Math.round(t.markPaybackYear))) }]
+                } : undefined
             }))
         });
         if (!this._trendResizeBound) {
