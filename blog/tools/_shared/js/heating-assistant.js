@@ -22,6 +22,15 @@ class HeatingAssistantManager {
         this.compareMode = 'heating';
         // 改自采暖时是否计入停供基本热费（约 30%），默认开启
         this.includePauseFee = true;
+        // 设备升级选型分析（可选）：基准炉 vs 升级炉
+        this.upgrade = {
+            compareKey: '',      // '' 未启用 | 机型下标 | 'custom'
+            basePrice: 3500,
+            upgradePrice: 7000,
+            baseFree: false,     // 精装自带/旧炉拆换 → 基准价按 0
+            saveRate: 0.3,       // 节能率 η
+            lifeYears: 10
+        };
         this.loadState();
     }
 
@@ -39,6 +48,7 @@ class HeatingAssistantManager {
                 if (d.customPrice !== undefined) this.customPrice = d.customPrice;
                 if (d.compareMode === 'heating' || d.compareMode === 'household') this.compareMode = d.compareMode;
                 if (d.includePauseFee !== undefined) this.includePauseFee = !!d.includePauseFee;
+                if (d.upgrade) Object.assign(this.upgrade, d.upgrade);
             } catch (e) {}
         }
     }
@@ -53,29 +63,40 @@ class HeatingAssistantManager {
             year_life_gas: this.year_life_gas,
             customPrice: this.customPrice,
             compareMode: this.compareMode,
-            includePauseFee: this.includePauseFee
+            includePauseFee: this.includePauseFee,
+            upgrade: this.upgrade
         }));
     }
 
-    /** 北京居民阶梯气价累进计价 */
+    /** 北京居民阶梯气价累进计价（含分档明细，便于核对） */
     calcLadderCost(volume) {
         const ladder = HEATING_DATA.gas_ladder;
         const v = Math.max(0, volume || 0);
+        const steps = [];
         let cost = 0;
         let tier = 1;
-        if (v <= ladder[0].upper) {
-            cost = v * ladder[0].price;
-            tier = 1;
-        } else if (v <= ladder[1].upper) {
-            cost = ladder[0].upper * ladder[0].price + (v - ladder[0].upper) * ladder[1].price;
-            tier = 2;
-        } else {
-            cost = ladder[0].upper * ladder[0].price
-                + (ladder[1].upper - ladder[0].upper) * ladder[1].price
-                + (v - ladder[1].upper) * ladder[2].price;
-            tier = 3;
+        let prevUpper = 0;
+        let remaining = v;
+
+        for (let i = 0; i < ladder.length; i++) {
+            const band = ladder[i];
+            const bandCap = band.upper - prevUpper;
+            const take = Math.min(remaining, Math.max(0, bandCap));
+            if (v === 0 && i === 0) {
+                steps.push({ level: band.level, desc: band.desc, volume: 0, price: band.price, subtotal: 0 });
+                break;
+            }
+            if (take > 0) {
+                const subtotal = take * band.price;
+                steps.push({ level: band.level, desc: band.desc, volume: take, price: band.price, subtotal });
+                cost += subtotal;
+                remaining -= take;
+                tier = band.level;
+            }
+            prevUpper = band.upper;
+            if (remaining <= 0) break;
         }
-        return { cost, tier };
+        return { cost, tier, steps };
     }
 
     makeKey(opt) {
@@ -121,9 +142,17 @@ class HeatingAssistantManager {
         const condenser_coeff = this.boiler.is_condenser ? 0.7 : 1.0;
         const temp_comp_coeff = this.boiler.has_outdoor_comp ? 0.9 : 1.0;
         let power_coeff = 1.0;
-        if (this.boiler.min_power <= 3.1) power_coeff = 0.95;
-        else if (this.boiler.min_power <= 3.8) power_coeff = 1.0;
-        else power_coeff = 1.05;
+        let power_coeff_rule = '最小功率 > 3.8kW → ×1.05';
+        if (this.boiler.min_power <= 3.1) {
+            power_coeff = 0.95;
+            power_coeff_rule = '最小功率 ≤ 3.1kW → ×0.95';
+        } else if (this.boiler.min_power <= 3.8) {
+            power_coeff = 1.0;
+            power_coeff_rule = '3.1kW < 最小功率 ≤ 3.8kW → ×1.0';
+        } else {
+            power_coeff = 1.05;
+            power_coeff_rule = '最小功率 > 3.8kW → ×1.05';
+        }
 
         // FR04 实际耗气量
         const daily_real_gas = daily_base_gas * condenser_coeff * temp_comp_coeff * power_coeff * this.user_coeff;
@@ -131,8 +160,11 @@ class HeatingAssistantManager {
 
         // FR05 阶梯气价（生活用气参与梯度，抬高采暖用气单价）
         const total_gas = season_gas + this.year_life_gas;
-        const { cost: gas_cost, tier } = this.calcLadderCost(total_gas);
-        const { cost: life_gas_cost } = this.calcLadderCost(this.year_life_gas);
+        const ladder_total = this.calcLadderCost(total_gas);
+        const ladder_life = this.calcLadderCost(this.year_life_gas);
+        const gas_cost = ladder_total.cost;
+        const tier = ladder_total.tier;
+        const life_gas_cost = ladder_life.cost;
         // 采暖归因燃气费 = 全年总燃气费 − 仅生活用气费用（差额法）
         const heating_gas_cost = gas_cost - life_gas_cost;
 
@@ -147,15 +179,23 @@ class HeatingAssistantManager {
         const household_total_cost = gas_cost + year_fixed;
 
         return {
-            daily_base_gas, daily_real_gas, season_gas, total_gas,
+            paving_area: area,
+            daily_base_kwh, daily_base_gas, daily_real_gas, season_gas, total_gas,
             tier, gas_cost, life_gas_cost, heating_gas_cost,
+            ladder_total, ladder_life,
             year_depreciation, year_fixed,
             heating_compare_cost, household_total_cost,
             // 兼容旧字段名
             total_cost: household_total_cost,
             avg_price: total_gas > 0 ? gas_cost / total_gas : 0,
             heating_avg_price: season_gas > 0 ? heating_gas_cost / season_gas : 0,
-            condenser_coeff, temp_comp_coeff, power_coeff
+            condenser_coeff, temp_comp_coeff, power_coeff, power_coeff_rule,
+            constants: {
+                base_heat_load: C.base_heat_load,
+                hour_per_day: C.hour_per_day,
+                gas_heat_equivalent: C.gas_heat_equivalent,
+                heating_season_days: C.heating_season_days
+            }
         };
     }
 
@@ -170,11 +210,16 @@ class HeatingAssistantManager {
         const ratio = HEATING_DATA.constants.pause_basic_fee_ratio || 0.3;
         const pause_basic_fee = this.includePauseFee ? central.fee * ratio : 0;
         const self_total = self_base + pause_basic_fee;
+        // diff：自采暖 − 集中；>0 表示自采暖更贵
         const diff = self_total - central.fee;
+        // annual_saving：集中 − 自采暖；>0 表示自采暖每年更省，才可谈回本
+        const annual_saving = central.fee - self_total;
         let payback_years = null;
-        if (diff > 0) {
-            payback_years = this.boiler.price / diff;
+        if (annual_saving > 0) {
+            payback_years = this.boiler.price / annual_saving;
         }
+
+        const upgrade = this.calcUpgradeAnalysis();
 
         return {
             mode,
@@ -186,9 +231,266 @@ class HeatingAssistantManager {
             self_total,
             self_gas_part: mode === 'heating' ? self.heating_gas_cost : self.gas_cost,
             diff,
+            annual_saving,
             payback_years,
+            upgrade,
             self
         };
+    }
+
+    /** 普通二级能效炉采暖季耗气（基准 V0，不含冷凝/温补节能） */
+    calcOrdinarySeasonGas() {
+        const C = HEATING_DATA.constants;
+        const area = this.pavingArea;
+        if (area <= 0) return 0;
+        const daily_base_kwh = area * C.base_heat_load * C.hour_per_day;
+        const daily_base_gas = daily_base_kwh / C.gas_heat_equivalent;
+        let power_coeff = 1.0;
+        if (this.boiler.min_power <= 3.1) power_coeff = 0.95;
+        else if (this.boiler.min_power <= 3.8) power_coeff = 1.0;
+        else power_coeff = 1.05;
+        return daily_base_gas * power_coeff * this.user_coeff * C.heating_season_days;
+    }
+
+    /** 设备升级选型：基准炉 → 升级炉 的增量回本 */
+    calcUpgradeAnalysis() {
+        const u = this.upgrade;
+        if (!u.compareKey) return null;
+
+        const V0 = this.calcOrdinarySeasonGas();
+        const eta = Math.min(0.9, Math.max(0, Number(u.saveRate) || 0));
+        const dV = V0 * eta;
+        const life = Math.max(0, this.year_life_gas || 0);
+        const costBase = this.calcLadderCost(life + V0).cost;
+        const costUp = this.calcLadderCost(life + V0 - dV).cost;
+        const dC = costBase - costUp;
+
+        const pBase = u.baseFree ? 0 : Math.max(0, Number(u.basePrice) || 0);
+        const pUp = Math.max(0, Number(u.upgradePrice) || 0);
+        const dP = pUp - pBase;
+        const years = Math.max(1, Number(u.lifeYears) || 10);
+
+        let payback = null;
+        let paybackLabel = '不适用';
+        if (dC > 0 && dP > 0) {
+            payback = dP / dC;
+            paybackLabel = payback.toFixed(1) + ' 年';
+        } else if (dC > 0 && dP <= 0) {
+            payback = 0;
+            paybackLabel = '即时（无增量投资）';
+        } else if (dC <= 0) {
+            paybackLabel = '不适用（无节气收益）';
+        }
+
+        const netLife = dC * years - dP;
+        const recommend = payback != null && payback > 0 && payback <= years;
+
+        let compareName = '自定义升级炉';
+        if (u.compareKey !== 'custom' && u.compareKey !== '') {
+            const m = HEATING_DATA.boiler_models[u.compareKey];
+            if (m) compareName = m.model_name;
+        }
+
+        return {
+            enabled: true,
+            compareName,
+            V0, eta, dV,
+            life_gas: life,
+            cost_base_gas: costBase,
+            cost_upgrade_gas: costUp,
+            dC, dP, pBase, pUp,
+            years, payback, paybackLabel, netLife, recommend,
+            baseFree: !!u.baseFree
+        };
+    }
+
+    /** 按指定壁挂炉参数估算采暖季耗气 */
+    calcSeasonGasForBoiler(boiler) {
+        const C = HEATING_DATA.constants;
+        const area = this.pavingArea;
+        if (area <= 0) return 0;
+        const daily_base_kwh = area * C.base_heat_load * C.hour_per_day;
+        const daily_base_gas = daily_base_kwh / C.gas_heat_equivalent;
+        const condenser_coeff = boiler.is_condenser ? 0.7 : 1.0;
+        const temp_comp_coeff = boiler.has_outdoor_comp ? 0.9 : 1.0;
+        let power_coeff = 1.0;
+        const minP = boiler.min_power;
+        if (minP <= 3.1) power_coeff = 0.95;
+        else if (minP <= 3.8) power_coeff = 1.0;
+        else power_coeff = 1.05;
+        return daily_base_gas * condenser_coeff * temp_comp_coeff * power_coeff * this.user_coeff * C.heating_season_days;
+    }
+
+    /** 累计花费趋势：年限与各方案序列 */
+    buildCostTrendData(c) {
+        const s = c.self;
+        const isHeatingMode = c.mode === 'heating';
+        const pause = c.includePauseFee ? c.pause_basic_fee : 0;
+        const life = Math.max(0, this.year_life_gas || 0);
+        const maintain = Math.max(0, this.boiler.maintain_cost || 0);
+
+        let horizon;
+        if (c.upgrade && c.upgrade.payback != null && c.upgrade.payback > 0) {
+            horizon = Math.ceil(c.upgrade.payback) + 1;
+        } else if (c.upgrade) {
+            horizon = Math.max(2, Math.ceil(c.upgrade.years || 10) + 1);
+        } else {
+            horizon = Math.max(2, Math.ceil(this.boiler.service_life || 8) + 1);
+        }
+        horizon = Math.min(40, Math.max(2, horizon));
+
+        const years = [];
+        for (let y = 0; y <= horizon; y++) years.push(y);
+
+        const centralAnnual = c.central_fee;
+        const selfGasAnnual = isHeatingMode ? s.heating_gas_cost : s.gas_cost;
+        const selfAnnual = selfGasAnnual + maintain + pause;
+        const selfCapex = Math.max(0, this.boiler.price || 0);
+        const selfName = this.boiler.model
+            ? `自采暖 · ${this.boiler.model} ¥${selfCapex.toLocaleString('zh-CN')}`
+            : `自采暖 · 当前方案 ¥${selfCapex.toLocaleString('zh-CN')}`;
+
+        const centralSeries = years.map(y => Math.round(y * centralAnnual));
+        const selfSeries = years.map(y => Math.round(selfCapex + y * selfAnnual));
+
+        const series = [
+            { key: 'central', name: '市政集中供暖', color: '#60a5fa', data: centralSeries, area: true },
+            { key: 'self', name: selfName, color: '#fbbf24', data: selfSeries, area: false }
+        ];
+
+        let upgradeAnnual = null;
+        if (c.upgrade) {
+            let seasonUp;
+            let maintainUp = maintain;
+            const key = this.upgrade.compareKey;
+            if (key !== '' && key !== 'custom' && HEATING_DATA.boiler_models[key]) {
+                const m = HEATING_DATA.boiler_models[key];
+                seasonUp = this.calcSeasonGasForBoiler(m);
+                maintainUp = m.annual_maintain_cost;
+            } else {
+                seasonUp = c.upgrade.V0 * (1 - c.upgrade.eta);
+            }
+            const lifeCost = this.calcLadderCost(life).cost;
+            const totalUp = this.calcLadderCost(life + seasonUp).cost;
+            const upgradeGas = isHeatingMode ? (totalUp - lifeCost) : totalUp;
+            upgradeAnnual = upgradeGas + maintainUp + pause;
+            const upgradeCapex = Math.max(0, c.upgrade.pUp || 0);
+            const upName = `自采暖 · ${c.upgrade.compareName} ¥${upgradeCapex.toLocaleString('zh-CN')}`;
+            series.push({
+                key: 'upgrade',
+                name: upName,
+                color: '#4ade80',
+                data: years.map(y => Math.round(upgradeCapex + y * upgradeAnnual)),
+                area: false
+            });
+        }
+
+        const noteParts = [
+            `自采暖曲线含初次购炉成本、每年${isHeatingMode ? '采暖气费' : '燃气总费'}（当前方案 ¥${selfGasAnnual.toFixed(2)}）`,
+            `年维保（¥${maintain.toFixed(0)}）`
+        ];
+        if (c.includePauseFee) noteParts.push(`停供基本热费（¥${pause.toFixed(0)}）`);
+        if (c.upgrade && upgradeAnnual != null) {
+            noteParts.push(`对比机型年运行费约 ¥${upgradeAnnual.toFixed(2)}`);
+        }
+
+        return {
+            horizon,
+            years,
+            series,
+            note: '注：' + noteParts.join('、') + '。不含设备折旧重复计入。',
+            summaries: c.upgrade ? [
+                { label: `集中供暖 ${horizon}年总成本`, value: '¥' + centralSeries[horizon].toLocaleString('zh-CN') },
+                { label: `${c.upgrade.compareName} ${horizon}年总成本`, value: '¥' + series[2].data[horizon].toLocaleString('zh-CN') },
+                { label: '升级回本周期 (B)', value: c.upgrade.paybackLabel }
+            ] : [
+                { label: `集中供暖 ${horizon}年总成本`, value: '¥' + centralSeries[horizon].toLocaleString('zh-CN') },
+                { label: `自采暖 ${horizon}年总成本`, value: '¥' + selfSeries[horizon].toLocaleString('zh-CN') },
+                { label: '回本周期 (A)', value: c.payback_years != null ? c.payback_years.toFixed(1) + ' 年' : '不适用' }
+            ]
+        };
+    }
+
+    renderCostTrendBlock(c) {
+        const t = this.buildCostTrendData(c);
+        return `
+            <div class="heating-trend" data-horizon="${t.horizon}">
+                <div class="heating-section-title" style="margin-top:8px;">📈 累计总支出趋势（${t.horizon} 年）</div>
+                <div class="heating-trend-summary">
+                    ${t.summaries.map(s => `
+                        <div class="trend-sum-card">
+                            <div class="trend-sum-label">${s.label}</div>
+                            <div class="trend-sum-value">${s.value}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="heating-trend-chart" id="heatingTrendChart" style="width:100%;height:360px;"></div>
+                <p class="heating-trend-note">${t.note}</p>
+            </div>
+        `;
+    }
+
+    mountCostTrendChart(container, c) {
+        const el = container.querySelector('#heatingTrendChart');
+        if (!el) return;
+        if (typeof echarts === 'undefined') {
+            el.innerHTML = '<div class="heating-trend-fallback">图表库未加载，请检查 echarts 脚本。</div>';
+            return;
+        }
+        const t = this.buildCostTrendData(c);
+        if (this._trendChart) {
+            try { this._trendChart.dispose(); } catch (e) {}
+            this._trendChart = null;
+        }
+        const chart = echarts.init(el);
+        this._trendChart = chart;
+        chart.setOption({
+            color: t.series.map(s => s.color),
+            tooltip: {
+                trigger: 'axis',
+                valueFormatter: v => '¥' + Number(v).toLocaleString('zh-CN')
+            },
+            legend: {
+                bottom: 0,
+                textStyle: { color: '#94a3b8', fontSize: 11 },
+                type: 'scroll'
+            },
+            grid: { left: 52, right: 20, top: 28, bottom: 56 },
+            xAxis: {
+                type: 'category',
+                name: '年份',
+                nameTextStyle: { color: '#64748b' },
+                data: t.years,
+                boundaryGap: false,
+                axisLabel: { color: '#94a3b8' },
+                axisLine: { lineStyle: { color: '#334155' } }
+            },
+            yAxis: {
+                type: 'value',
+                name: '累计总支出 (元)',
+                nameTextStyle: { color: '#64748b', fontSize: 11 },
+                axisLabel: {
+                    color: '#94a3b8',
+                    formatter: v => (v >= 1000 ? (v / 1000) + 'K' : v)
+                },
+                splitLine: { lineStyle: { color: 'rgba(148,163,184,0.15)', type: 'dashed' } }
+            },
+            series: t.series.map(s => ({
+                name: s.name,
+                type: 'line',
+                smooth: false,
+                showSymbol: false,
+                lineStyle: { width: 2.5 },
+                areaStyle: s.area ? { opacity: 0.12 } : undefined,
+                data: s.data
+            }))
+        });
+        if (!this._trendResizeBound) {
+            this._trendResizeBound = () => {
+                if (this._trendChart) this._trendChart.resize();
+            };
+            window.addEventListener('resize', this._trendResizeBound);
+        }
     }
 
     // ========== 渲染 ==========
@@ -282,13 +584,48 @@ class HeatingAssistantManager {
                     <div class="heating-section-title">🔥 燃气壁挂炉自采暖</div>
 
                     <div class="heating-form-grid">
-                        <div class="heating-field heating-field-span2">
+                        <div class="heating-field">
                             <label>机型快捷选择</label>
                             <select class="heating-select" id="hModel">
                                 <option value="">自定义参数</option>
                                 ${HEATING_DATA.boiler_models.map((m, i) => `<option value="${i}" ${this.boiler.model === m.model_name ? 'selected' : ''}>${m.model_name}</option>`).join('')}
                             </select>
                         </div>
+                        <div class="heating-field">
+                            <label>对比机型选择<span class="heating-optional">非必选</span></label>
+                            <select class="heating-select" id="hCompareModel">
+                                <option value="" ${this.upgrade.compareKey === '' ? 'selected' : ''}>不对比</option>
+                                ${HEATING_DATA.boiler_models.map((m, i) => `<option value="${i}" ${String(this.upgrade.compareKey) === String(i) ? 'selected' : ''}>${m.model_name}</option>`).join('')}
+                                <option value="custom" ${this.upgrade.compareKey === 'custom' ? 'selected' : ''}>自定义升级参数</option>
+                            </select>
+                            <div class="heating-hint">选择后可计算不同机型之间的升级回本周期</div>
+                        </div>
+
+                        ${this.upgrade.compareKey !== '' ? `
+                        <div class="heating-field">
+                            <label>基准炉价格（元）</label>
+                            <input type="number" class="heating-input" id="hUpBasePrice" value="${this.upgrade.baseFree ? 0 : this.upgrade.basePrice}" min="0" step="100" ${this.upgrade.baseFree ? 'disabled' : ''}>
+                            <label class="heating-inline-check">
+                                <input type="checkbox" id="hUpBaseFree" ${this.upgrade.baseFree ? 'checked' : ''}>
+                                <span>精装自带 / 旧炉拆换（基准价按 0）</span>
+                            </label>
+                        </div>
+                        <div class="heating-field">
+                            <label>升级炉价格（元）</label>
+                            <input type="number" class="heating-input" id="hUpPrice" value="${this.upgrade.upgradePrice}" min="0" step="100">
+                            <div class="heating-hint">拟购高效机型采购价</div>
+                        </div>
+                        <div class="heating-field">
+                            <label>设备节能率 η</label>
+                            <input type="number" class="heating-input" id="hUpSaveRate" value="${Math.round(this.upgrade.saveRate * 100)}" min="0" max="90" step="5">
+                            <div class="heating-hint">相对普通炉少耗气的比例，默认 30%</div>
+                        </div>
+                        <div class="heating-field">
+                            <label>生命周期（年）</label>
+                            <input type="number" class="heating-input" id="hUpLifeYears" value="${this.upgrade.lifeYears}" min="1" max="30" step="1">
+                            <div class="heating-hint">用于计算全周期净收益，默认 10 年</div>
+                        </div>
+                        ` : ''}
 
                         <div class="heating-field">
                             <label>是否全预混冷凝炉</label>
@@ -499,6 +836,131 @@ class HeatingAssistantManager {
 
         this.bindEvents(container);
         this.bindCompareMode(container);
+        const compareAfter = this.calcCompare();
+        if (compareAfter) this.mountCostTrendChart(container, compareAfter);
+    }
+
+    formatLadderSteps(ladderResult) {
+        if (!ladderResult || !ladderResult.steps || !ladderResult.steps.length) return '<div class="hf-plug">无耗气</div>';
+        return ladderResult.steps.map(step =>
+            `<div class="hf-plug">第${step.level}档 ${step.desc}：${step.volume.toFixed(2)} m³ × ¥${step.price}/m³ = ¥${step.subtotal.toFixed(2)}</div>`
+        ).join('');
+    }
+
+    renderFormulaReview(c) {
+        const s = c.self;
+        const C = s.constants;
+        const isHeatingMode = c.mode === 'heating';
+        const central = this.calcCentral();
+        const pricePerUnit = central ? central.pricePerUnit : 0;
+        const pausePct = Math.round((c.pause_ratio || 0.3) * 100);
+        const modeLabel = isHeatingMode ? '供暖对比口径（刨除生活用气）' : '家庭燃气总账';
+
+        return `
+            <details class="heating-formula-review">
+                <summary class="hf-summary">🧮 核心公式与计算过程（可核对）</summary>
+                <div class="hf-body">
+                    <p class="hf-intro">下面按计算顺序展开：左侧是公式，右侧是当前参数代入后的过程。改上方输入后会实时刷新。</p>
+
+                    <div class="hf-step">
+                        <div class="hf-step-title">① 集中供暖费用</div>
+                        <div class="hf-eq">费用 = 房本建筑面积 × 单价</div>
+                        <div class="hf-plug">${this.area} ㎡ × ¥${pricePerUnit}/㎡·季 = <strong>¥${c.central_fee.toFixed(2)}</strong></div>
+                    </div>
+
+                    <div class="hf-step">
+                        <div class="hf-step-title">② 基础热负荷 → 日基础耗气</div>
+                        <div class="hf-eq">日基础热负荷(kWh) = 地暖铺设面积 × 基础热指标 × 日运行小时</div>
+                        <div class="hf-plug">${s.paving_area} ㎡ × ${C.base_heat_load} kW/㎡ × ${C.hour_per_day} h = <strong>${s.daily_base_kwh.toFixed(2)} kWh/日</strong></div>
+                        <div class="hf-eq">日基础耗气(m³) = 日基础热负荷 ÷ 气热当量</div>
+                        <div class="hf-plug">${s.daily_base_kwh.toFixed(2)} ÷ ${C.gas_heat_equivalent} kWh/m³ = <strong>${s.daily_base_gas.toFixed(4)} m³/日</strong></div>
+                        <div class="hf-note">常量：基础热指标 ${C.base_heat_load}、气热当量 ${C.gas_heat_equivalent}（约 1m³ 气 ≈ ${C.gas_heat_equivalent} kWh）</div>
+                    </div>
+
+                    <div class="hf-step">
+                        <div class="hf-step-title">③ 修正系数 → 日实际耗气</div>
+                        <div class="hf-eq">日实际耗气 = 日基础耗气 × 冷凝炉系数 × 室外温补系数 × 功率适配系数 × 使用模式系数</div>
+                        <div class="hf-plug">冷凝炉：${this.boiler.is_condenser ? '是 → ×0.7' : '否 → ×1.0'}（当前 ×${s.condenser_coeff}）</div>
+                        <div class="hf-plug">室外温度补偿：${this.boiler.has_outdoor_comp ? '是 → ×0.9' : '否 → ×1.0'}（当前 ×${s.temp_comp_coeff}）</div>
+                        <div class="hf-plug">功率适配：最小功率 ${this.boiler.min_power} kW，规则「${s.power_coeff_rule}」（当前 ×${s.power_coeff}）</div>
+                        <div class="hf-plug">使用模式系数：×${this.user_coeff}</div>
+                        <div class="hf-plug">${s.daily_base_gas.toFixed(4)} × ${s.condenser_coeff} × ${s.temp_comp_coeff} × ${s.power_coeff} × ${this.user_coeff} = <strong>${s.daily_real_gas.toFixed(4)} m³/日</strong></div>
+                    </div>
+
+                    <div class="hf-step">
+                        <div class="hf-step-title">④ 采暖季耗气量</div>
+                        <div class="hf-eq">采暖季耗气 = 日实际耗气 × 采暖季天数</div>
+                        <div class="hf-plug">${s.daily_real_gas.toFixed(4)} × ${C.heating_season_days} 天 = <strong>${s.season_gas.toFixed(2)} m³</strong></div>
+                    </div>
+
+                    <div class="hf-step">
+                        <div class="hf-step-title">⑤ 阶梯气价（生活用气参与梯度）</div>
+                        <div class="hf-eq">全年总耗气 = 采暖季耗气 + 全年生活用气</div>
+                        <div class="hf-plug">${s.season_gas.toFixed(2)} + ${this.year_life_gas.toFixed(2)} = <strong>${s.total_gas.toFixed(2)} m³</strong></div>
+                        <div class="hf-eq">全年总燃气费 = 阶梯累进计价(总耗气)</div>
+                        ${this.formatLadderSteps(s.ladder_total)}
+                        <div class="hf-plug">合计全年总燃气费 = <strong>¥${s.gas_cost.toFixed(2)}</strong></div>
+                        <div class="hf-eq">仅生活用气费用 = 阶梯累进计价(生活用气)</div>
+                        ${this.formatLadderSteps(s.ladder_life)}
+                        <div class="hf-plug">合计生活用气费用 = <strong>¥${s.life_gas_cost.toFixed(2)}</strong></div>
+                        <div class="hf-eq">采暖归因气费（差额法）= 全年总燃气费 − 仅生活用气费用</div>
+                        <div class="hf-plug">¥${s.gas_cost.toFixed(2)} − ¥${s.life_gas_cost.toFixed(2)} = <strong>¥${s.heating_gas_cost.toFixed(2)}</strong></div>
+                        <div class="hf-note">差额法含义：生活用气先占低价档，采暖用气落在更高档，把「被抬高的那部分」算进采暖气费。</div>
+                    </div>
+
+                    <div class="hf-step">
+                        <div class="hf-step-title">⑥ 设备固定成本（年化）</div>
+                        <div class="hf-eq">年均折旧 = 壁挂炉采购总价 ÷ 计划使用年限</div>
+                        <div class="hf-plug">¥${this.boiler.price} ÷ ${this.boiler.service_life} 年 = <strong>¥${s.year_depreciation.toFixed(2)}</strong></div>
+                        <div class="hf-eq">年固定成本 = 年均折旧 + 年度保养</div>
+                        <div class="hf-plug">¥${s.year_depreciation.toFixed(2)} + ¥${this.boiler.maintain_cost} = <strong>¥${s.year_fixed.toFixed(2)}</strong></div>
+                    </div>
+
+                    <div class="hf-step">
+                        <div class="hf-step-title">⑦ 自采暖口径费用（当前：${modeLabel}）</div>
+                        ${isHeatingMode ? `
+                        <div class="hf-eq">供暖对比基础费用 = 采暖归因气费 + 年固定成本</div>
+                        <div class="hf-plug">¥${s.heating_gas_cost.toFixed(2)} + ¥${s.year_fixed.toFixed(2)} = <strong>¥${s.heating_compare_cost.toFixed(2)}</strong></div>
+                        ` : `
+                        <div class="hf-eq">家庭总账基础费用 = 全年总燃气费 + 年固定成本</div>
+                        <div class="hf-plug">¥${s.gas_cost.toFixed(2)} + ¥${s.year_fixed.toFixed(2)} = <strong>¥${s.household_total_cost.toFixed(2)}</strong></div>
+                        `}
+                        <div class="hf-eq">停供基本热费 = 集中供暖费用 × ${pausePct}%${c.includePauseFee ? '' : '（当前未计入）'}</div>
+                        <div class="hf-plug">¥${c.central_fee.toFixed(2)} × ${c.pause_ratio} = <strong>${c.includePauseFee ? '¥' + c.pause_basic_fee.toFixed(2) : '¥0.00（开关关闭）'}</strong></div>
+                        <div class="hf-eq">自采暖侧对比费用 = 口径基础费用 + 停供基本热费</div>
+                        <div class="hf-plug">¥${c.self_base.toFixed(2)} + ¥${c.pause_basic_fee.toFixed(2)} = <strong>¥${c.self_total.toFixed(2)}</strong></div>
+                    </div>
+
+                    <div class="hf-step hf-step-final">
+                        <div class="hf-step-title">⑧ 回本 A：自采暖 vs 集中供暖</div>
+                        <div class="hf-eq">年节约 = 集中供暖 − 自采暖对比费用</div>
+                        <div class="hf-plug">¥${c.central_fee.toFixed(2)} − ¥${c.self_total.toFixed(2)} = <strong>${c.annual_saving >= 0 ? '' : '-'}¥${Math.abs(c.annual_saving).toFixed(2)}</strong></div>
+                        <div class="hf-eq">回本 A = 壁挂炉价格 ÷ 年节约（仅当自采暖更省）</div>
+                        ${c.payback_years != null ? `
+                        <div class="hf-plug">¥${this.boiler.price} ÷ ¥${c.annual_saving.toFixed(2)} = <strong>${c.payback_years.toFixed(1)} 年</strong></div>
+                        ` : `
+                        <div class="hf-plug"><strong>不适用</strong>${c.annual_saving < 0 ? '（相对集中供暖为消费升级，无节约可摊）' : '（持平）'}</div>
+                        `}
+                    </div>
+
+                    ${c.upgrade ? `
+                    <div class="hf-step hf-step-final">
+                        <div class="hf-step-title">⑨ 回本 B：机型升级（${c.upgrade.compareName} vs 基准炉）</div>
+                        <div class="hf-eq">基准采暖耗气 V0（普通炉）= ${c.upgrade.V0.toFixed(2)} m³</div>
+                        <div class="hf-eq">节气量 ΔV = V0 × η = ${c.upgrade.V0.toFixed(2)} × ${c.upgrade.eta} = ${c.upgrade.dV.toFixed(2)} m³</div>
+                        <div class="hf-eq">年节约气费 ΔC = 阶梯(生活+V0) − 阶梯(生活+V0−ΔV)</div>
+                        <div class="hf-plug">¥${c.upgrade.cost_base_gas.toFixed(2)} − ¥${c.upgrade.cost_upgrade_gas.toFixed(2)} = <strong>¥${c.upgrade.dC.toFixed(2)}</strong></div>
+                        <div class="hf-eq">增量投资 ΔP = 升级炉价 − 基准炉价${c.upgrade.baseFree ? '（精装自带按 0）' : ''}</div>
+                        <div class="hf-plug">¥${c.upgrade.pUp.toFixed(0)} − ¥${c.upgrade.pBase.toFixed(0)} = <strong>¥${c.upgrade.dP.toFixed(2)}</strong></div>
+                        <div class="hf-eq">回本 B = ΔP ÷ ΔC（仅当有增量投资且有节气收益）</div>
+                        <div class="hf-plug"><strong>${c.upgrade.paybackLabel}</strong>${c.upgrade.recommend ? ' · 推荐升级（≤生命周期）' : (c.upgrade.payback != null && c.upgrade.payback > c.upgrade.years ? ' · 回收期较长' : '')}</div>
+                        <div class="hf-eq">${c.upgrade.years} 年净收益 = ΔC×${c.upgrade.years} − ΔP</div>
+                        <div class="hf-plug">¥${c.upgrade.dC.toFixed(2)} × ${c.upgrade.years} − ¥${c.upgrade.dP.toFixed(2)} = <strong>¥${c.upgrade.netLife.toFixed(2)}</strong></div>
+                    </div>
+                    ` : ''}
+                </div>
+            </details>
+        `;
     }
 
     renderCompare(c) {
@@ -558,6 +1020,36 @@ class HeatingAssistantManager {
                 </div>
             </div>
 
+            <div class="heating-payback-row">
+                <div class="pb-chip" title="自采暖相对市政集中供暖：壁挂炉采购价 ÷ 每年相对集中供暖省下的钱">
+                    <span class="pb-key">回本 A</span>
+                    <span class="pb-val">${c.payback_years != null ? c.payback_years.toFixed(1) + ' 年' : '不适用'}</span>
+                    <span class="pb-sub">vs 集中供暖</span>
+                </div>
+                ${c.upgrade ? `
+                <div class="pb-chip ${c.upgrade.recommend ? 'pb-chip-rec' : ''}" title="升级炉相对基准炉：增量投资 ΔP ÷ 每年节约气费 ΔC；悬停查看含义">
+                    <span class="pb-key">回本 B</span>
+                    <span class="pb-val">${c.upgrade.paybackLabel}</span>
+                    <span class="pb-sub">机型升级 · ${c.upgrade.compareName}</span>
+                </div>
+                <div class="pb-chip" title="${c.upgrade.years} 年节约气费累计 − 增量投资">
+                    <span class="pb-key">${c.upgrade.years}年净收益</span>
+                    <span class="pb-val">¥${c.upgrade.netLife.toFixed(0)}</span>
+                    <span class="pb-sub">ΔC×${c.upgrade.years} − ΔP</span>
+                </div>
+                ` : `
+                <div class="pb-chip pb-chip-muted" title="在「对比机型选择」中选一个机型后，可计算升级炉相对基准炉的回本">
+                    <span class="pb-key">回本 B</span>
+                    <span class="pb-val">未启用</span>
+                    <span class="pb-sub">选对比机型后计算</span>
+                </div>
+                `}
+            </div>
+
+            ${this.renderCostTrendBlock(c)}
+
+            ${this.renderFormulaReview(c)}
+
             <div class="heating-detail-grid">
                 <div class="heating-detail-card">
                     <div class="dt-title">自采暖明细</div>
@@ -584,9 +1076,28 @@ class HeatingAssistantManager {
                     <div class="dt-row"><span>基础日耗气</span><span>${s.daily_base_gas.toFixed(2)} m³/日</span></div>
                     <div class="dt-row"><span>实际日耗气</span><span>${s.daily_real_gas.toFixed(2)} m³/日</span></div>
                     <div class="dt-row"><span>采暖气费边际均价</span><span>¥${s.heating_avg_price.toFixed(2)}/m³</span></div>
-                    ${cheaperCentral ? `
                     <div class="dt-row dt-total" style="color:var(--orange);">
-                        <span>静态回本周期</span><span>${c.payback_years.toFixed(1)} 年</span>
+                        <span title="自采暖相对市政集中供暖的静态回本">回本 A · vs 集中</span>
+                        <span>${c.payback_years != null
+                            ? c.payback_years.toFixed(1) + ' 年'
+                            : (cheaperCentral ? '不适用' : '不适用')}</span>
+                    </div>
+                    ${c.upgrade ? `
+                    <div class="dt-row dt-total" style="color:var(--orange);">
+                        <span title="升级炉相对基准炉的增量投资回本">回本 B · 机型升级</span>
+                        <span>${c.upgrade.paybackLabel}</span>
+                    </div>
+                    <div class="dt-row">
+                        <span>升级增量投资 ΔP</span>
+                        <span>¥${c.upgrade.dP.toFixed(0)}</span>
+                    </div>
+                    <div class="dt-row">
+                        <span>每年节约气费 ΔC</span>
+                        <span>¥${c.upgrade.dC.toFixed(2)}</span>
+                    </div>
+                    <div class="dt-row">
+                        <span>${c.upgrade.years} 年净收益</span>
+                        <span>¥${c.upgrade.netLife.toFixed(0)}</span>
                     </div>
                     ` : ''}
                 </div>
@@ -689,6 +1200,64 @@ class HeatingAssistantManager {
             }
         });
 
+        // 对比机型（设备升级选型）
+        const compareSel = container.querySelector('#hCompareModel');
+        if (compareSel) {
+            compareSel.addEventListener('change', e => {
+                const key = e.target.value;
+                this.upgrade.compareKey = key;
+                if (key !== '' && key !== 'custom') {
+                    const m = HEATING_DATA.boiler_models[key];
+                    if (m) {
+                        this.upgrade.upgradePrice = m.boiler_price_ref;
+                        this.upgrade.saveRate = m.is_condenser ? 0.3 : 0.2;
+                    }
+                }
+                this.saveState();
+                this.render(container);
+            });
+        }
+        const upBase = container.querySelector('#hUpBasePrice');
+        if (upBase) {
+            upBase.addEventListener('input', e => {
+                this.upgrade.basePrice = parseFloat(e.target.value) || 0;
+                this.saveState();
+                this.refreshResult(container);
+            });
+        }
+        const upFree = container.querySelector('#hUpBaseFree');
+        if (upFree) {
+            upFree.addEventListener('change', e => {
+                this.upgrade.baseFree = e.target.checked;
+                this.saveState();
+                this.render(container);
+            });
+        }
+        const upPrice = container.querySelector('#hUpPrice');
+        if (upPrice) {
+            upPrice.addEventListener('input', e => {
+                this.upgrade.upgradePrice = parseFloat(e.target.value) || 0;
+                this.saveState();
+                this.refreshResult(container);
+            });
+        }
+        const upRate = container.querySelector('#hUpSaveRate');
+        if (upRate) {
+            upRate.addEventListener('input', e => {
+                this.upgrade.saveRate = (parseFloat(e.target.value) || 0) / 100;
+                this.saveState();
+                this.refreshResult(container);
+            });
+        }
+        const upYears = container.querySelector('#hUpLifeYears');
+        if (upYears) {
+            upYears.addEventListener('input', e => {
+                this.upgrade.lifeYears = parseInt(e.target.value, 10) || 10;
+                this.saveState();
+                this.refreshResult(container);
+            });
+        }
+
         // 冷凝炉/室外补偿
         container.querySelectorAll('input[name="condenser"]').forEach(r => {
             r.addEventListener('change', e => {
@@ -745,6 +1314,10 @@ class HeatingAssistantManager {
                 this.user_coeff = 1.0;
                 this.year_life_gas = 300;
                 this.customPrice = null;
+                this.upgrade = {
+                    compareKey: '', basePrice: 3500, upgradePrice: 7000,
+                    baseFree: false, saveRate: 0.3, lifeYears: 10
+                };
                 this.saveState();
                 this.render(container);
             }
@@ -944,10 +1517,15 @@ class HeatingAssistantManager {
             if (contentEl) {
                 contentEl.innerHTML = this.renderCompare(compare);
                 this.bindCompareMode(container);
+                this.mountCostTrendChart(container, compare);
             }
         } else {
             section.style.display = 'none';
             if (contentEl) contentEl.innerHTML = '';
+            if (this._trendChart) {
+                try { this._trendChart.dispose(); } catch (e) {}
+                this._trendChart = null;
+            }
         }
         // 更新导航显示
         const nav = document.getElementById('heatingNav');
