@@ -409,6 +409,18 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   flex-wrap: wrap;
 }
 .site-footer a:hover { color: var(--accent); }
+.post-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  justify-content: flex-end;
+  text-align: right;
+}
+.post-nav a {
+  color: var(--ink-muted);
+  max-width: min(320px, 100%);
+}
+.post-nav a:hover { color: var(--accent); }
 
 /* —— Reveal —— */
 .reveal {

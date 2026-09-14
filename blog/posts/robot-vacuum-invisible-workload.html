@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>扫地机器人「隐形工作量」调查报告 · AiTeemo</title>
+  <meta name="description" content="全自动背后的维护日历：基站、上下水、集尘与三种拖布技术的真实人工介入成本。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+:root{
+  --bg:#f5f1ea;
+  --bg-card:#fffdf8;
+  --ink:#2b2620;
+  --ink-soft:#5c544a;
+  --ink-mute:#8a8175;
+  --line:#e0d8cb;
+  --accent:#c8492d;
+  --accent-soft:#e8765a;
+  --warn:#d4881f;
+  --good:#4a7c59;
+  --bad:#b8392e;
+  --shadow:0 2px 12px rgba(60,45,20,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.7;
+  font-size:15px;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ===== HERO ===== */
+.hero{
+  padding:80px 0 60px;
+  border-bottom:3px double var(--line);
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;
+  top:-100px;right:-100px;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(200,73,45,.08),transparent 70%);
+}
+.hero-tag{
+  display:inline-block;
+  font-size:12px;
+  letter-spacing:3px;
+  color:var(--accent);
+  border:1px solid var(--accent);
+  padding:4px 14px;
+  border-radius:2px;
+  margin-bottom:24px;
+  font-weight:500;
+}
+.hero h1{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(32px,5vw,52px);
+  font-weight:900;
+  line-height:1.25;
+  margin-bottom:20px;
+  color:var(--ink);
+}
+.hero h1 em{
+  font-style:normal;
+  color:var(--accent);
+  position:relative;
+}
+.hero h1 em::after{
+  content:'';
+  position:absolute;
+  left:0;bottom:4px;
+  width:100%;height:8px;
+  background:rgba(200,73,45,.18);
+  z-index:-1;
+}
+.hero-sub{
+  font-size:17px;
+  color:var(--ink-soft);
+  max-width:680px;
+  margin-bottom:36px;
+}
+.hero-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  max-width:720px;
+}
+.hero-stat{
+  border-left:3px solid var(--accent);
+  padding-left:16px;
+}
+.hero-stat .num{
+  font-family:'Noto Serif SC',serif;
+  font-size:32px;
+  font-weight:700;
+  color:var(--ink);
+  line-height:1.1;
+}
+.hero-stat .lbl{
+  font-size:13px;
+  color:var(--ink-mute);
+  margin-top:4px;
+}
+
+/* ===== SECTION ===== */
+section{padding:64px 0;border-bottom:1px solid var(--line)}
+.sec-head{margin-bottom:40px}
+.sec-num{
+  font-family:'Noto Serif SC',serif;
+  font-size:13px;
+  color:var(--accent);
+  letter-spacing:2px;
+  font-weight:600;
+}
+.sec-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(24px,3.5vw,34px);
+  font-weight:700;
+  margin-top:8px;
+  color:var(--ink);
+}
+.sec-desc{
+  color:var(--ink-soft);
+  margin-top:12px;
+  max-width:720px;
+  font-size:15px;
+}
+
+/* ===== 数据图表区 ===== */
+.chart-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+.chart-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:24px;
+  box-shadow:var(--shadow);
+}
+.chart-card h3{
+  font-size:16px;
+  font-weight:600;
+  margin-bottom:4px;
+  color:var(--ink);
+}
+.chart-card .chart-sub{
+  font-size:12px;
+  color:var(--ink-mute);
+  margin-bottom:16px;
+}
+.chart-box{width:100%;height:320px}
+
+/* ===== 功能陷阱卡片 ===== */
+.trap-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+}
+.trap-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:28px;
+  box-shadow:var(--shadow);
+  position:relative;
+  transition:transform .2s;
+}
+.trap-card:hover{transform:translateY(-2px)}
+.trap-card .trap-icon{
+  width:44px;height:44px;
+  border-radius:6px;
+  background:rgba(200,73,45,.1);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+}
+.trap-card .trap-icon svg{width:24px;height:24px;stroke:var(--accent);fill:none;stroke-width:1.8}
+.trap-card h3{
+  font-size:18px;
+  font-weight:600;
+  margin-bottom:6px;
+  color:var(--ink);
+}
+.trap-card .promise{
+  font-size:13px;
+  color:var(--good);
+  margin-bottom:14px;
+  padding:6px 12px;
+  background:rgba(74,124,89,.08);
+  border-radius:3px;
+  display:inline-block;
+}
+.trap-card .promise::before{content:'宣传承诺：';font-weight:500}
+.trap-card .reality-label{
+  font-size:12px;
+  color:var(--bad);
+  font-weight:600;
+  letter-spacing:1px;
+  margin-bottom:8px;
+}
+.trap-card ul{
+  list-style:none;
+  padding:0;
+}
+.trap-card ul li{
+  font-size:14px;
+  color:var(--ink-soft);
+  padding:5px 0 5px 18px;
+  position:relative;
+  line-height:1.6;
+}
+.trap-card ul li::before{
+  content:'';
+  position:absolute;
+  left:0;top:13px;
+  width:6px;height:6px;
+  background:var(--accent-soft);
+  border-radius:50%;
+}
+.trap-card .workload-tag{
+  display:inline-block;
+  margin-top:14px;
+  font-size:12px;
+  padding:3px 10px;
+  border-radius:2px;
+  font-weight:500;
+}
+.workload-high{background:rgba(184,57,46,.1);color:var(--bad)}
+.workload-mid{background:rgba(212,136,31,.12);color:var(--warn)}
+.workload-low{background:rgba(74,124,89,.1);color:var(--good)}
+
+/* ===== 维护时间轴 ===== */
+.timeline-wrap{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:36px;
+  box-shadow:var(--shadow);
+}
+.timeline{
+  display:grid;
+  grid-template-columns:120px 40px 1fr;
+  gap:0;
+  position:relative;
+}
+.tl-row{
+  display:contents;
+}
+.tl-when{
+  font-family:'Noto Serif SC',serif;
+  font-size:15px;
+  font-weight:600;
+  color:var(--accent);
+  padding:14px 16px 14px 0;
+  text-align:right;
+  border-right:2px solid var(--line);
+  position:relative;
+}
+.tl-dot{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding-top:18px;
+  position:relative;
+}
+.tl-dot::before{
+  content:'';
+  width:12px;height:12px;
+  border-radius:50%;
+  background:var(--bg-card);
+  border:3px solid var(--accent);
+  z-index:2;
+}
+.tl-content{
+  padding:12px 0 12px 20px;
+}
+.tl-content h4{
+  font-size:15px;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:4px;
+}
+.tl-content p{
+  font-size:13.5px;
+  color:var(--ink-soft);
+  line-height:1.6;
+}
+.tl-content .time-cost{
+  display:inline-block;
+  font-size:12px;
+  color:var(--warn);
+  background:rgba(212,136,31,.1);
+  padding:2px 8px;
+  border-radius:2px;
+  margin-top:6px;
+}
+
+/* ===== 拖布对比 ===== */
+.mop-compare{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  margin-bottom:32px;
+}
+.mop-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:28px;
+  box-shadow:var(--shadow);
+  position:relative;
+}
+.mop-card.featured{
+  border-top:4px solid var(--accent);
+}
+.mop-card .mop-type{
+  font-size:12px;
+  letter-spacing:2px;
+  color:var(--ink-mute);
+  font-weight:500;
+}
+.mop-card h3{
+  font-family:'Noto Serif SC',serif;
+  font-size:22px;
+  font-weight:700;
+  margin:6px 0 4px;
+  color:var(--ink);
+}
+.mop-card .mop-principle{
+  font-size:13px;
+  color:var(--ink-soft);
+  margin-bottom:18px;
+  padding-bottom:16px;
+  border-bottom:1px dashed var(--line);
+  line-height:1.6;
+}
+.mop-card .pros,.mop-card .cons{
+  margin-bottom:14px;
+}
+.mop-card .pros h5,.mop-card .cons h5{
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:6px;
+}
+.mop-card .pros h5{color:var(--good)}
+.mop-card .cons h5{color:var(--bad)}
+.mop-card .pros ul,.mop-card .cons ul{
+  list-style:none;
+  padding:0;
+}
+.mop-card .pros li,.mop-card .cons li{
+  font-size:13px;
+  padding:3px 0 3px 14px;
+  position:relative;
+  color:var(--ink-soft);
+  line-height:1.55;
+}
+.mop-card .pros li::before{
+  content:'+';
+  position:absolute;left:0;
+  color:var(--good);
+  font-weight:700;
+}
+.mop-card .cons li::before{
+  content:'-';
+  position:absolute;left:0;
+  color:var(--bad);
+  font-weight:700;
+}
+.mop-card .mop-fit{
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px dashed var(--line);
+  font-size:13px;
+  color:var(--ink-soft);
+}
+.mop-card .mop-fit strong{
+  color:var(--ink);
+  font-weight:600;
+}
+
+/* 对比表格 */
+.compare-table-wrap{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.compare-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13.5px;
+}
+.compare-table th{
+  background:var(--ink);
+  color:var(--bg-card);
+  padding:14px 16px;
+  text-align:left;
+  font-weight:500;
+  font-size:13px;
+  letter-spacing:1px;
+}
+.compare-table th:first-child{width:160px}
+.compare-table td{
+  padding:12px 16px;
+  border-bottom:1px solid var(--line);
+  color:var(--ink-soft);
+  vertical-align:top;
+}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table tr:nth-child(even) td{background:rgba(245,241,234,.5)}
+.compare-table td:first-child{
+  font-weight:600;
+  color:var(--ink);
+  background:transparent !important;
+}
+.rating{
+  display:inline-flex;
+  gap:2px;
+}
+.rating span{
+  width:10px;height:10px;
+  border-radius:2px;
+  background:var(--line);
+}
+.rating span.on{background:var(--accent)}
+
+/* ===== 总结 ===== */
+.summary-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+.sum-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:32px;
+  box-shadow:var(--shadow);
+}
+.sum-card h3{
+  font-family:'Noto Serif SC',serif;
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.sum-card h3 .badge{
+  width:32px;height:32px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+  font-family:'Noto Serif SC',serif;
+}
+.sum-card.dont h3 .badge{background:rgba(184,57,46,.12);color:var(--bad)}
+.sum-card.do h3 .badge{background:rgba(74,124,89,.12);color:var(--good)}
+.sum-card ol{
+  padding-left:20px;
+}
+.sum-card ol li{
+  font-size:14px;
+  color:var(--ink-soft);
+  margin-bottom:10px;
+  line-height:1.65;
+}
+.sum-card ol li strong{color:var(--ink)}
+
+/* footer */
+footer{
+  padding:40px 0;
+  text-align:center;
+  font-size:12px;
+  color:var(--ink-mute);
+}
+footer .src{
+  margin-top:8px;
+  font-size:11px;
+  opacity:.8;
+}
+
+/* 响应式 */
+@media(max-width:860px){
+  .chart-grid,.trap-grid,.summary-grid{grid-template-columns:1fr}
+  .mop-compare{grid-template-columns:1fr}
+  .hero-stats{grid-template-columns:1fr;gap:16px}
+  .timeline{grid-template-columns:90px 30px 1fr}
+  .tl-when{font-size:13px}
+}
+
+/* AiTeemo shell — scoped */
+.aiteemo-bar{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(253,251,246,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(50,40,20,.1);
+  font-family:'Noto Sans SC',-apple-system,sans-serif;
+}
+.aiteemo-bar .ab-inner{
+  max-width:1140px;margin:0 auto;padding:12px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.aiteemo-bar a{text-decoration:none;color:#23201b}
+.aiteemo-bar .ab-logo{font-weight:700;letter-spacing:.02em;font-size:15px}
+.aiteemo-bar .ab-logo .ai{color:#b8432a}
+.aiteemo-bar .ab-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px}
+.aiteemo-bar .ab-back{color:#555048}
+.aiteemo-bar .ab-back:hover{color:#b8432a}
+.aiteemo-bar .ab-tag{
+  display:inline-block;padding:2px 10px;border:1px solid #b8432a;color:#b8432a;
+  border-radius:2px;font-size:12px;letter-spacing:.08em;
+}
+.aiteemo-bar .ab-tag:hover{background:rgba(184,67,42,.08)}
+.aiteemo-foot{
+  max-width:1140px;margin:0 auto;padding:40px 24px 56px;
+  border-top:1px solid rgba(50,40,20,.1);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-family:'Noto Sans SC',-apple-system,sans-serif;font-size:13px;color:#8a8378;
+}
+.aiteemo-foot a{color:#b8432a;text-decoration:none}
+.aiteemo-foot a:hover{text-decoration:underline}
+
+</style>
+</head>
+<body>
+
+<nav class="aiteemo-bar" aria-label="站点导航">
+  <div class="ab-inner">
+    <a class="ab-logo" href="../index.html"><span class="ai">Ai</span>Teemo</a>
+    <div class="ab-meta">
+      <a class="ab-back" href="index.html">← 实践笔记</a>
+      <a class="ab-tag" href="index.html?tag=%E8%A3%85%E4%BF%AE">装修</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ==================== HERO ==================== -->
+<header class="hero">
+  <div class="wrap">
+    <span class="hero-tag">CONSUMER RESEARCH · 2026</span>
+    <h1>扫地机器人的<em>「隐形工作量」</em><br>调查报告</h1>
+    <p class="hero-sub">
+      当"全自动""免手洗""解放双手"成为营销标配，我们花了几千块买回来的，到底是一个清洁管家，还是一个需要反复伺候的"主子"？本报告梳理了扫地机器人各类"新技术"背后被刻意淡化的维护成本，并深度对比圆盘、滚筒、履带三种拖布技术的真实差异。
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">6+</div>
+        <div class="lbl">项"全自动"功能仍需手动维护</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">40%</div>
+        <div class="lbl">基站3个月不洗，拖布清洗效率下降</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">3天</div>
+        <div class="lbl">污水箱遗忘上限，超时即发臭</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ==================== 数据总览 ==================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">01 / DATA OVERVIEW</div>
+      <h2 class="sec-title">维护工作量全景：你以为省了时间，其实只是换了种累法</h2>
+      <p class="sec-desc">
+        扫地机器人把"每天弯腰拖地"变成了"每天伺候机器"。以下数据综合自什么值得买、新浪科技、太平洋科技及大量真实用户反馈，反映典型家庭的维护频率与单次耗时。
+      </p>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h3>各维护项的频率与单次耗时</h3>
+        <div class="chart-sub">柱高=单次耗时（分钟），标签=建议频率</div>
+        <div id="chart-workload" class="chart-box"></div>
+      </div>
+      <div class="chart-card">
+        <h3>"全自动"功能的实际人工介入率</h3>
+        <div class="chart-sub">宣传"免维护" vs 实际仍需手动操作的比例</div>
+        <div id="chart-intervene" class="chart-box"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 新技术陷阱 ==================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">02 / HIDDEN COSTS</div>
+      <h2 class="sec-title">六大"新技术"陷阱：看似升级，实则把活转给了你</h2>
+      <p class="sec-desc">
+        每一项旗舰功能的宣传页都在强调"解放双手"，但拆开来看，它们解决的往往只是最表层的一环，把更脏、更繁琐的维护留给了用户。
+      </p>
+    </div>
+    <div class="trap-grid">
+
+      <!-- 陷阱1：自动洗拖布基站 -->
+      <div class="trap-card">
+        <div class="trap-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10" stroke-linecap="round"/></svg>
+        </div>
+        <h3>自动洗拖布基站</h3>
+        <span class="promise">拖布自动清洗，从此不用手洗</span>
+        <div class="reality-label">REALITY · 实际情况</div>
+        <ul>
+          <li>基站底盘每周需手动抠毛发和碎屑，否则发霉长味</li>
+          <li>污水箱3天不倒，夏天味道"比下水道还难闻"</li>
+          <li>3个月不清理底盘，拖布清洗效率下降超40%</li>
+          <li>水路管道、滤网、密封圈仍需定期手动刷洗</li>
+          <li>拖布"洗干净了也很脏"，烘不干时第二天发臭</li>
+        </ul>
+        <span class="workload-tag workload-high">隐形工作量：高</span>
+      </div>
+
+      <!-- 陷阱2：自动上下水 -->
+      <div class="trap-card">
+        <div class="trap-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2v6m0 0l-3-3m3 3l3-3M5 12h14v8H5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>自动上下水</h3>
+        <span class="promise">零干预运行，数月免维护</span>
+        <div class="reality-label">REALITY · 实际情况</div>
+        <ul>
+          <li>安装门槛极高：基站3米内必须同时有冷水管+地漏+三孔电源</li>
+          <li>排水口高度差限制严苛（科沃斯≤30cm，石头建议≤15cm），否则倒灌</li>
+          <li>已装修房屋改造动辄上千元，还可能破坏原有装修</li>
+          <li>位置固定后无法移动；换机时新机型尺寸不兼容，预埋管路直接作废</li>
+          <li>传感器被灰尘遮挡即建图失败、定位漂移，上下水形同虚设</li>
+          <li>内部水滤仍需3-6个月更换，硬水地区更频繁</li>
+        </ul>
+        <span class="workload-tag workload-high">隐形工作量：高（含安装成本）</span>
+      </div>
+
+      <!-- 陷阱3：AI避障/视觉识别 -->
+      <div class="trap-card">
+        <div class="trap-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>AI避障 / 视觉识别</h3>
+        <span class="promise">毫米级避障，智能识别150+物体</span>
+        <div class="reality-label">REALITY · 实际情况</div>
+        <ul>
+          <li>仍会把拖鞋、袜子、数据线推得满屋跑，"越扫越乱"</li>
+          <li>宠物避障不可靠：有用户家猫尾巴被卷入拖行近10分钟</li>
+          <li>低矮床底/沙发底环境下导航失灵、丢地图，需弯腰伸手捞机器</li>
+          <li>传感器窗口需定期擦拭，灰尘遮挡即建图失败、回不了基站</li>
+          <li>识别到粪便时官方明确"无法100%识别"，一旦碾压全屋遭殃</li>
+        </ul>
+        <span class="workload-tag workload-mid">隐形工作量：中</span>
+      </div>
+
+      <!-- 陷阱4：自动集尘 -->
+      <div class="trap-card">
+        <div class="trap-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 8h16l-2 12H6L4 8z" stroke-linejoin="round"/><path d="M8 8V5a4 4 0 018 0v3" stroke-linecap="round"/></svg>
+        </div>
+        <h3>自动集尘</h3>
+        <span class="promise">90天免倒垃圾，尘袋密封不脏手</span>
+        <div class="reality-label">REALITY · 实际情况</div>
+        <ul>
+          <li>尘袋2-3个月必须换，耗材持续花钱（原厂袋单价不低）</li>
+          <li>HEPA滤网半年一换，不换则吸力衰减、出风带灰</li>
+          <li>集尘口和风道仍需定期清理，毛发缠绕会导致集尘失败</li>
+          <li>尘袋满了不及时换，机器反复集尘反而更吵更费电</li>
+        </ul>
+        <span class="workload-tag workload-mid">隐形工作量：中</span>
+      </div>
+
+      <!-- 陷阱5：热风烘干 -->
+      <div class="trap-card">
+        <div class="trap-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3v3m0 12v3m9-9h-3M6 12H3m13.5-6.5l-2 2m-7 7l-2 2m11 0l-2-2m-7-7l-2-2" stroke-linecap="round"/><circle cx="12" cy="12" r="4"/></svg>
+        </div>
+        <h3>热风烘干 / 高温煮洗</h3>
+        <span class="promise">75℃热水洗+45℃烘干，拖布无菌无异味</span>
+        <div class="reality-label">REALITY · 实际情况</div>
+        <ul>
+          <li>拖布表面烘干了，但基站内部凹槽、滚轮仍潮湿，照样发霉</li>
+          <li>履带式拖布有一面被包在机身内部，"洗不干净烘不透，用久了滂臭"</li>
+          <li>高温煮洗加速拖布纤维老化，更换频率比预期高</li>
+          <li>烘干功耗大，每次运行电费和时间成本被忽略</li>
+        </ul>
+        <span class="workload-tag workload-mid">隐形工作量：中</span>
+      </div>
+
+      <!-- 陷阱6：语音/视频/大屏 -->
+      <div class="trap-card">
+        <div class="trap-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8m-4-4v4" stroke-linecap="round"/></svg>
+        </div>
+        <h3>语音助手 / 视频通话 / 触控大屏</h3>
+        <span class="promise">智能管家，语音操控，远程看家</span>
+        <div class="reality-label">REALITY · 实际情况</div>
+        <ul>
+          <li>99%的场景下用户直接用APP或按键，语音唤醒率低、指令识别差</li>
+          <li>视频通话功能几乎无人使用，却带来隐私泄露顾虑（摄像头在家中移动）</li>
+          <li>大屏变成广告推送位，"半夜起来喝水屏幕突然亮起来放广告"</li>
+          <li>为这些功能多付的溢价，通常在500-1500元，实际使用率极低</li>
+        </ul>
+        <span class="workload-tag workload-low">隐形工作量：低（但溢价高、鸡肋）</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 维护日历 ==================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">03 / MAINTENANCE CALENDAR</div>
+      <h2 class="sec-title">一台扫地机器人的全年维护日历</h2>
+      <p class="sec-desc">
+        以下为典型带基站扫拖机器人的维护节奏。所谓"解放双手"，本质是把每天30分钟的拖地，拆成了从每天到每半年不等的、更碎片化的伺候任务。
+      </p>
+    </div>
+    <div class="timeline-wrap">
+      <div class="timeline">
+        <div class="tl-row">
+          <div class="tl-when">每天</div>
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>倒污水箱 + 加清水</h4>
+            <p>使用拖地功能后必须当日处理，污水隔夜即开始滋生异味，夏天尤其明显。忘记倒3天以上，味道"比下水道还难闻"。</p>
+            <span class="time-cost">单次约 3-5 分钟</span>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-when">每周</div>
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>清理主刷 / 边刷 / 传感器 / 清洗盘</h4>
+            <p>滚刷上的长发和宠物毛需用剪刀清理（即使有防缠绕设计，一个月左右仍会堆积）；边刷缠绕毛发会导致边角清洁失效；传感器窗口积灰会引发建图失败和迷路；基站清洗盘要抠出毛发和碎屑。</p>
+            <span class="time-cost">单次约 10-15 分钟</span>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-when">每月</div>
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>清洗滤网 + 检查轮子 + 深度擦拭基站</h4>
+            <p>HEPA滤网需取出清理（部分可水洗）；驱动轮和万向轮检查是否有毛发缠绕；基站内部凹槽、滚轮、密封圈用湿布彻底擦拭，防止油膜和泥垢堆积。</p>
+            <span class="time-cost">单次约 15-20 分钟</span>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-when">每 2-3 月</div>
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>更换尘袋 + 整机深度清洁</h4>
+            <p>集尘袋达到容量上限必须更换（不换则集尘失效、机器反复空转）；拆下所有可拆卸部件，用软刷清理灰尘，湿布擦拭机身和基站内部，特别注意充电触点。</p>
+            <span class="time-cost">单次约 20-30 分钟</span>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-when">每 3-6 月</div>
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>更换上下水滤网 + 拖布耗材检查</h4>
+            <p>自动上下水版本的进水过滤器需定期更换（硬水地区3个月，软水地区6个月），否则水压下降、清洗无力；拖布纤维出现脱落或弹性下降时需更换原厂配件。</p>
+            <span class="time-cost">单次约 10 分钟 + 耗材费</span>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-when">每 6 月</div>
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>更换 HEPA 滤网 + 水路除垢</h4>
+            <p>HEPA滤网达到使用寿命必须更换（不可永久水洗），否则出风带二次污染；带上下水的机型需对水路进行除垢清洗，防止管道内部结垢影响流量。</p>
+            <span class="time-cost">单次约 15 分钟 + 耗材费</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 拖布技术对比 ==================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">04 / MOP TECHNOLOGY</div>
+      <h2 class="sec-title">三种拖布技术深度对比：圆盘 / 滚筒 / 履带</h2>
+      <p class="sec-desc">
+        拖布结构是决定清洁力、水渍、维护量和适配场景的核心。没有绝对的好与坏，但选错了结构，日常维护量会成倍增加。以下综合2025-2026年主流机型实测与用户反馈。
+      </p>
+    </div>
+
+    <!-- 雷达图 -->
+    <div class="chart-card" style="margin-bottom:32px">
+      <h3>三种拖布结构六维能力对比</h3>
+      <div class="chart-sub">评分基于多品牌实测与用户反馈综合，满分5分</div>
+      <div id="chart-radar" class="chart-box" style="height:380px"></div>
+    </div>
+
+    <!-- 三张卡片 -->
+    <div class="mop-compare">
+      <!-- 圆盘 -->
+      <div class="mop-card">
+        <div class="mop-type">TYPE 01 · 主流旗舰</div>
+        <h3>双圆盘旋转式</h3>
+        <div class="mop-principle">两块圆形拖布向下施压 + 高速对旋摩擦，模拟人手反复搓地动作。代表机型：追觅、石头、科沃斯旗舰款、大疆ROMO。</div>
+        <div class="pros">
+          <h5>优势</h5>
+          <ul>
+            <li>技术最成熟，故障率低，结构简单</li>
+            <li>拆洗方便，一拉就下来，维护成本低</li>
+            <li>搭配外摆机械臂可极致贴墙角，边角覆盖率高</li>
+            <li>拖布不易藏污、不易缠毛发</li>
+            <li>支持智能抬拖布，不会打湿地毯</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h5>短板</h5>
+          <ul>
+            <li>对地压强不足，干结污渍、重油污清洁力偏弱</li>
+            <li>大户型或多污渍场景可能出现"以脏拖脏"</li>
+            <li>部分机型拖完有可见水痕</li>
+          </ul>
+        </div>
+        <div class="mop-fit"><strong>适合：</strong>小户型/中等户型、日常轻度清洁、已有洗地机做深度清洁、低矮家具不多、养宠物家庭</div>
+      </div>
+
+      <!-- 滚筒 -->
+      <div class="mop-card featured">
+        <div class="mop-type">TYPE 02 · 2026新趋势</div>
+        <h3>活水滚筒式</h3>
+        <div class="mop-principle">滚筒线接触地面，机身重量集中施压，配合实时活水自清洁并同步回收污水。代表机型：科沃斯T80S/T90系列。</div>
+        <div class="pros">
+          <h5>优势</h5>
+          <ul>
+            <li>对地压强最高（约履带4倍、圆盘16倍），顽固污渍清洁力最强</li>
+            <li>实时自清洁+污水回收，从根本上避免"以脏拖脏"</li>
+            <li>控湿能力强，触地面积小，拖完基本不留水渍</li>
+            <li>对木地板、柔光砖等敏感地面更友好</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h5>短板</h5>
+          <ul>
+            <li>2026年新兴技术，长期可靠性和故障率尚待验证</li>
+            <li>结构相对复杂，维修成本可能较高</li>
+            <li>贴边能力不如圆盘+机械臂组合</li>
+            <li>价格普遍偏高，机型选择较少</li>
+          </ul>
+        </div>
+        <div class="mop-fit"><strong>适合：</strong>大户型、重污渍家庭（厨房油污/孩子辅食）、对清洁力要求高、柔光砖/木地板用户</div>
+      </div>
+
+      <!-- 履带 -->
+      <div class="mop-card">
+        <div class="mop-type">TYPE 03 · 争议最大</div>
+        <h3>履带式</h3>
+        <div class="mop-principle">整片柔性宽带拖布大面积平铺接触地面，往复式湿拖，支持活水循环。代表机型：云鲸逍遥系列、Mova Z5 Pro。</div>
+        <div class="pros">
+          <h5>优势</h5>
+          <ul>
+            <li>接触面积大，覆盖连贯无分段痕迹</li>
+            <li>机身可做得更纤薄，适合钻进低矮沙发底/床底</li>
+            <li>活水清洗版本对厨房重油污有一定效果</li>
+            <li>拖地时水渍较小（部分机型）</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h5>短板</h5>
+          <ul>
+            <li>压力分布不均（两端大中间小），中间残留水痕，柔光砖阳光下明显</li>
+            <li>结构复杂（双滚轴+拼接部），故障率高，维护成本高</li>
+            <li>污渍易藏进布料缝隙，污水反复对蹭，越拖越脏</li>
+            <li>拆装清理繁琐，"拆半天拆不下来"；有一面包在机身内洗不干净烘不透，用久发臭</li>
+            <li>履带缝隙卡灰尘毛絮会造成异响</li>
+            <li>缠头发问题突出，贴边能力差，墙角天然盲区</li>
+            <li>耗水耗电，价格偏贵</li>
+          </ul>
+        </div>
+        <div class="mop-fit"><strong>适合：</strong>极简户型（杂物少）、低矮家具特别多、能接受高频维护的用户</div>
+      </div>
+    </div>
+
+    <!-- 对比表格 -->
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>对比维度</th>
+            <th>双圆盘旋转</th>
+            <th>活水滚筒</th>
+            <th>履带式</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>清洁力（顽固污渍）</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span> 中等</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span> 最强</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span> 较强</td>
+          </tr>
+          <tr>
+            <td>水渍控制</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span> 一般</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span> 最优</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span> 较好（但中间留痕）</td>
+          </tr>
+          <tr>
+            <td>贴边/边角清洁</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span> 最优（配机械臂）</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span> 一般</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span></span><span></span><span></span></span> 较差</td>
+          </tr>
+          <tr>
+            <td>毛发缠绕抗性</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span> 较好</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span> 较好</td>
+            <td><span class="rating"><span class="on"></span><span></span><span></span><span></span><span></span></span> 差（易缠发）</td>
+          </tr>
+          <tr>
+            <td>日常维护难度</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span> 低（拆洗方便）</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span> 中等</td>
+            <td><span class="rating"><span class="on"></span><span></span><span></span><span></span><span></span></span> 高（拆装难、易藏污发臭）</td>
+          </tr>
+          <tr>
+            <td>技术成熟度</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span> 最高</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span></span><span></span><span></span></span> 待验证（2026新方案）</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span> 中等</td>
+          </tr>
+          <tr>
+            <td>纤薄/低矮家具通行</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span> 一般</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></span> 一般</td>
+            <td><span class="rating"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span> 最优</td>
+          </tr>
+          <tr>
+            <td>综合维护成本</td>
+            <td>低</td>
+            <td>中（耗材+潜在维修）</td>
+            <td>高（耗水耗电+耗材+维修）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 总结建议 ==================== -->
+<section style="border-bottom:none">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">05 / CONCLUSION</div>
+      <h2 class="sec-title">写在最后：怎么选才不被"新技术"绑架</h2>
+      <p class="sec-desc">
+        扫地机器人不是智商税，但"为用不上的功能付费"和"选错拖布结构"确实是。以下是基于本报告的实操建议。
+      </p>
+    </div>
+    <div class="summary-grid">
+      <div class="sum-card dont">
+        <h3><span class="badge">!</span>别做的事</h3>
+        <ol>
+          <li><strong>别为"全自动上下水"强行改造装修。</strong>已装修房屋如果基站附近3米内没有冷水+地漏+电源，改造费动辄上千，且位置锁死、换机即作废。水箱版每周加一次水，远比改造省心。</li>
+          <li><strong>别迷信"AI避障"能替代收拾地面。</strong>再贵的机型也会推拖鞋、缠电线，扫地前收拾地面这一步省不掉。有小孩/宠物的家庭尤其如此。</li>
+          <li><strong>别为语音/视频/大屏多花钱。</strong>这些功能实际使用率极低，却带来广告推送和隐私顾虑，溢价500-1500元完全不值。</li>
+          <li><strong>别选履带式除非你家特别极简。</strong>履带式维护量最大、最易藏污发臭、拆装最麻烦，仅适合低矮家具极多且能接受高频清理的用户。</li>
+          <li><strong>别指望它替代深度清洁。</strong>顽固污渍、墙角、踢脚线、桌椅腿间，最终还是得自己动手。定位是"日常保洁员"，不是"清洁工"。</li>
+        </ol>
+      </div>
+      <div class="sum-card do">
+        <h3><span class="badge">✓</span>该做的事</h3>
+        <ol>
+          <li><strong>优先选双圆盘结构。</strong>技术最成熟、维护最简单、拆洗最方便，搭配外摆机械臂贴边效果最好，是绝大多数家庭的均衡之选。</li>
+          <li><strong>重污渍/大户型考虑活水滚筒。</strong>2026年新方案，清洁力和控湿最强，但建议等上市一年后再入手，观察故障率。</li>
+          <li><strong>把"维护便利性"列入核心选购指标。</strong>买之前查：拖布是否一拉即下？基站底盘是否好拆洗？滚刷是否免工具拆卸？这些比吸力参数重要得多。</li>
+          <li><strong>接受"每周15分钟"的维护现实。</strong>任何扫地机器人都需要定期清理滚刷、传感器和基站底盘，提前建立这个心理预期，就不会觉得被坑。</li>
+          <li><strong>有条件就配一台洗地机做深度清洁。</strong>扫地机器人负责日常浮灰维护，洗地机负责每周深度清洁，两者组合才是真正的"解放双手"。</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>扫地机器人「隐形工作量」调查报告 · 基于2025-2026年公开评测与用户反馈整理</p>
+    <p class="src">数据来源：什么值得买、新浪科技、太平洋科技、抖音真实用户测评、各品牌官方技术文档</p>
+  </div>
+</footer>
+
+<script>
+// ===== 图表1：维护工作量频率与耗时 =====
+(function(){
+  var chart = echarts.init(document.getElementById('chart-workload'));
+  chart.setOption({
+    tooltip:{
+      trigger:'axis',
+      axisPointer:{type:'shadow'},
+      formatter:function(p){
+        var d = p[0];
+        return d.name + '<br/>单次耗时：约 ' + d.value + ' 分钟<br/>频率：' + d.data.freq;
+      }
+    },
+    grid:{left:90,right:30,top:20,bottom:30},
+    xAxis:{
+      type:'value',
+      name:'单次耗时（分钟）',
+      nameTextStyle:{fontSize:11,color:'#8a8175'},
+      axisLine:{lineStyle:{color:'#e0d8cb'}},
+      axisLabel:{color:'#8a8175',fontSize:11},
+      splitLine:{lineStyle:{color:'#eee6d8',type:'dashed'}}
+    },
+    yAxis:{
+      type:'category',
+      data:['更换HEPA滤网','整机深度清洁','每月基站擦拭','每周滚刷/传感器','倒污水/加清水','更换上下水滤网'],
+      axisLine:{lineStyle:{color:'#e0d8cb'}},
+      axisLabel:{color:'#5c544a',fontSize:12}
+    },
+    series:[{
+      type:'bar',
+      barWidth:18,
+      data:[
+        {value:15,freq:'每6个月',itemStyle:{color:'#d4881f'}},
+        {value:25,freq:'每2-3个月',itemStyle:{color:'#c8492d'}},
+        {value:18,freq:'每月',itemStyle:{color:'#c8492d'}},
+        {value:12,freq:'每周',itemStyle:{color:'#e8765a'}},
+        {value:4,freq:'每天',itemStyle:{color:'#4a7c59'}},
+        {value:10,freq:'每3-6个月',itemStyle:{color:'#d4881f'}}
+      ],
+      label:{
+        show:true,
+        position:'right',
+        formatter:'{c} min',
+        fontSize:11,
+        color:'#5c544a'
+      },
+      itemStyle:{borderRadius:[0,3,3,0]}
+    }]
+  });
+  window.addEventListener('resize',function(){chart.resize()});
+})();
+
+// ===== 图表2：全自动功能实际人工介入率 =====
+(function(){
+  var chart = echarts.init(document.getElementById('chart-intervene'));
+  chart.setOption({
+    tooltip:{
+      trigger:'axis',
+      axisPointer:{type:'shadow'},
+      formatter:function(p){
+        return p[0].name + '<br/>仍需人工介入：' + p[0].value + '%';
+      }
+    },
+    grid:{left:100,right:40,top:20,bottom:30},
+    xAxis:{
+      type:'value',
+      max:100,
+      name:'人工介入比例（%）',
+      nameTextStyle:{fontSize:11,color:'#8a8175'},
+      axisLine:{lineStyle:{color:'#e0d8cb'}},
+      axisLabel:{color:'#8a8175',fontSize:11,formatter:'{value}%'},
+      splitLine:{lineStyle:{color:'#eee6d8',type:'dashed'}}
+    },
+    yAxis:{
+      type:'category',
+      data:['语音/视频/大屏','自动集尘','热风烘干','AI避障/视觉','自动上下水','自动洗拖布基站'],
+      axisLine:{lineStyle:{color:'#e0d8cb'}},
+      axisLabel:{color:'#5c544a',fontSize:12}
+    },
+    series:[{
+      type:'bar',
+      barWidth:20,
+      data:[
+        {value:15,itemStyle:{color:'#4a7c59'}},
+        {value:55,itemStyle:{color:'#d4881f'}},
+        {value:60,itemStyle:{color:'#d4881f'}},
+        {value:70,itemStyle:{color:'#e8765a'}},
+        {value:80,itemStyle:{color:'#c8492d'}},
+        {value:90,itemStyle:{color:'#b8392e'}}
+      ],
+      label:{
+        show:true,
+        position:'right',
+        formatter:'{c}%',
+        fontSize:12,
+        fontWeight:600,
+        color:'#2b2620'
+      },
+      itemStyle:{borderRadius:[0,3,3,0]}
+    }]
+  });
+  window.addEventListener('resize',function(){chart.resize()});
+})();
+
+// ===== 图表3：三种拖布结构雷达图 =====
+(function(){
+  var chart = echarts.init(document.getElementById('chart-radar'));
+  chart.setOption({
+    tooltip:{},
+    legend:{
+      data:['双圆盘旋转','活水滚筒','履带式'],
+      bottom:0,
+      textStyle:{fontSize:13,color:'#5c544a'},
+      itemWidth:14,
+      itemHeight:8
+    },
+    radar:{
+      indicator:[
+        {name:'清洁力',max:5},
+        {name:'水渍控制',max:5},
+        {name:'贴边清洁',max:5},
+        {name:'抗毛发缠绕',max:5},
+        {name:'维护便利性',max:5},
+        {name:'技术成熟度',max:5}
+      ],
+      center:['50%','48%'],
+      radius:'62%',
+      axisName:{
+        color:'#2b2620',
+        fontSize:13,
+        fontWeight:500
+      },
+      splitArea:{
+        areaStyle:{
+          color:['rgba(200,73,45,.02)','rgba(200,73,45,.05)','rgba(200,73,45,.02)','rgba(200,73,45,.05)','rgba(200,73,45,.02)']
+        }
+      },
+      axisLine:{lineStyle:{color:'#e0d8cb'}},
+      splitLine:{lineStyle:{color:'#e0d8cb'}}
+    },
+    series:[{
+      type:'radar',
+      data:[
+        {
+          value:[3,3,5,4,4,5],
+          name:'双圆盘旋转',
+          lineStyle:{color:'#4a7c59',width:2},
+          itemStyle:{color:'#4a7c59'},
+          areaStyle:{color:'rgba(74,124,89,.15)'}
+        },
+        {
+          value:[5,5,3,4,3,2],
+          name:'活水滚筒',
+          lineStyle:{color:'#c8492d',width:2},
+          itemStyle:{color:'#c8492d'},
+          areaStyle:{color:'rgba(200,73,45,.15)'}
+        },
+        {
+          value:[4,4,2,1,1,3],
+          name:'履带式',
+          lineStyle:{color:'#d4881f',width:2},
+          itemStyle:{color:'#d4881f'},
+          areaStyle:{color:'rgba(212,136,31,.15)'}
+        }
+      ]
+    }]
+  });
+  window.addEventListener('resize',function(){chart.resize()});
+})();
+</script>
+
+
+<footer class="aiteemo-foot">
+  <span>© AiTeemo · 标签 <a href="index.html?tag=%E8%A3%85%E4%BF%AE">#装修</a></span>
+  <nav class="post-nav" aria-label="相邻文章" style="display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:flex-end;text-align:right">
+    <a href="robot-vacuum-comparison-dashboard.html">← 上一篇 · 横评数据可视化</a>
+    <a href="robot-vacuum-industry-2026.html">下一篇 · 行业发展与技术迭代 →</a>
+  </nav>
+</footer>
+
+</body>
+</html>

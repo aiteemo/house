@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国扫地机器人行业发展与技术迭代调研报告 · AiTeemo</title>
+  <meta name="description" content="从全球格局、六大厂商基因到四代技术演进：梳理中国扫地机器人行业到 2026 年的发展与迭代脉络。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+:root{
+  --bg:#f4f0e8;
+  --bg-card:#fdfbf6;
+  --ink:#23201b;
+  --ink-soft:#555048;
+  --ink-mute:#8a8378;
+  --line:#ddd4c5;
+  --accent:#b8432a;
+  --accent-soft:#e07856;
+  --blue:#2d5f7c;
+  --blue-soft:#5a8fa8;
+  --green:#4a7c59;
+  --gold:#c4923a;
+  --purple:#6b4c7a;
+  --shadow:0 2px 14px rgba(50,40,20,.07);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.7;
+  font-size:15px;
+}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+
+/* ===== HERO ===== */
+.hero{
+  padding:80px 0 56px;
+  border-bottom:3px double var(--line);
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;
+  top:-120px;right:-80px;
+  width:480px;height:480px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(184,67,42,.07),transparent 70%);
+}
+.hero-tag{
+  display:inline-block;
+  font-size:12px;
+  letter-spacing:3px;
+  color:var(--accent);
+  border:1px solid var(--accent);
+  padding:4px 14px;
+  border-radius:2px;
+  margin-bottom:24px;
+  font-weight:500;
+}
+.hero h1{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(30px,4.5vw,48px);
+  font-weight:900;
+  line-height:1.3;
+  margin-bottom:18px;
+  color:var(--ink);
+}
+.hero h1 em{
+  font-style:normal;
+  color:var(--accent);
+  position:relative;
+}
+.hero h1 em::after{
+  content:'';
+  position:absolute;
+  left:0;bottom:4px;
+  width:100%;height:8px;
+  background:rgba(184,67,42,.16);
+  z-index:-1;
+}
+.hero-sub{
+  font-size:16px;
+  color:var(--ink-soft);
+  max-width:720px;
+  margin-bottom:36px;
+}
+.hero-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  max-width:900px;
+}
+.hero-stat{
+  border-left:3px solid var(--accent);
+  padding-left:14px;
+}
+.hero-stat .num{
+  font-family:'Noto Serif SC',serif;
+  font-size:28px;
+  font-weight:700;
+  color:var(--ink);
+  line-height:1.1;
+}
+.hero-stat .lbl{
+  font-size:12.5px;
+  color:var(--ink-mute);
+  margin-top:4px;
+  line-height:1.4;
+}
+
+/* ===== SECTION ===== */
+section{padding:60px 0;border-bottom:1px solid var(--line)}
+.sec-head{margin-bottom:36px}
+.sec-num{
+  font-family:'Noto Serif SC',serif;
+  font-size:12px;
+  color:var(--accent);
+  letter-spacing:2px;
+  font-weight:600;
+}
+.sec-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(22px,3.2vw,32px);
+  font-weight:700;
+  margin-top:8px;
+  color:var(--ink);
+}
+.sec-desc{
+  color:var(--ink-soft);
+  margin-top:12px;
+  max-width:760px;
+  font-size:14.5px;
+}
+
+/* ===== 图表卡片 ===== */
+.chart-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+.chart-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:24px;
+  box-shadow:var(--shadow);
+}
+.chart-card h3{
+  font-size:15.5px;
+  font-weight:600;
+  margin-bottom:4px;
+  color:var(--ink);
+}
+.chart-card .chart-sub{
+  font-size:12px;
+  color:var(--ink-mute);
+  margin-bottom:14px;
+}
+.chart-box{width:100%;height:320px}
+.chart-box.tall{height:380px}
+
+/* ===== 品牌时间轴 ===== */
+.timeline-brand{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:32px 28px;
+  box-shadow:var(--shadow);
+  overflow-x:auto;
+}
+.tb-header{
+  display:grid;
+  grid-template-columns:100px repeat(6,1fr);
+  gap:0;
+  margin-bottom:0;
+  min-width:900px;
+}
+.tb-header .tb-year{
+  font-family:'Noto Serif SC',serif;
+  font-size:13px;
+  font-weight:700;
+  color:var(--accent);
+  text-align:center;
+  padding:10px 4px;
+  border-bottom:2px solid var(--accent);
+}
+.tb-header .tb-label{
+  font-size:12px;
+  color:var(--ink-mute);
+  padding:10px 8px;
+  border-bottom:2px solid var(--line);
+  display:flex;
+  align-items:center;
+}
+.tb-row{
+  display:grid;
+  grid-template-columns:100px repeat(6,1fr);
+  min-width:900px;
+  border-bottom:1px solid var(--line);
+}
+.tb-row:last-child{border-bottom:none}
+.tb-brand{
+  display:flex;
+  align-items:center;
+  padding:12px 8px;
+  font-weight:600;
+  font-size:13.5px;
+  color:var(--ink);
+  border-right:1px solid var(--line);
+}
+.tb-brand .dot{
+  width:8px;height:8px;
+  border-radius:50%;
+  margin-right:8px;
+  flex-shrink:0;
+}
+.tb-cell{
+  padding:10px 8px;
+  font-size:11.5px;
+  color:var(--ink-soft);
+  line-height:1.5;
+  border-right:1px solid rgba(221,212,197,.5);
+  position:relative;
+  min-height:60px;
+}
+.tb-cell:last-child{border-right:none}
+.tb-cell .event{
+  display:block;
+  padding:4px 6px;
+  margin-bottom:4px;
+  border-radius:3px;
+  font-size:11px;
+  line-height:1.4;
+}
+.tb-cell .event.milestone{
+  background:rgba(184,67,42,.08);
+  color:var(--accent);
+  font-weight:500;
+  border-left:2px solid var(--accent);
+}
+.tb-cell .event.normal{
+  background:rgba(45,95,124,.06);
+  color:var(--blue);
+  border-left:2px solid var(--blue-soft);
+}
+
+/* ===== 品牌卡片 ===== */
+.brand-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.brand-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:24px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.brand-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:4px;
+}
+.brand-card.c1::before{background:var(--accent)}
+.brand-card.c2::before{background:var(--blue)}
+.brand-card.c3::before{background:var(--green)}
+.brand-card.c4::before{background:var(--gold)}
+.brand-card.c5::before{background:var(--purple)}
+.brand-card.c6::before{background:#7a6b4c}
+.brand-card .bc-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:14px;
+}
+.brand-card h3{
+  font-family:'Noto Serif SC',serif;
+  font-size:20px;
+  font-weight:700;
+  color:var(--ink);
+}
+.brand-card .bc-found{
+  font-size:11px;
+  color:var(--ink-mute);
+  margin-top:2px;
+}
+.brand-card .bc-share{
+  text-align:right;
+}
+.brand-card .bc-share .pct{
+  font-family:'Noto Serif SC',serif;
+  font-size:22px;
+  font-weight:700;
+  color:var(--accent);
+  line-height:1;
+}
+.brand-card .bc-share .pct-lbl{
+  font-size:10.5px;
+  color:var(--ink-mute);
+  margin-top:2px;
+}
+.brand-card .bc-section{
+  margin-bottom:12px;
+}
+.brand-card .bc-section h5{
+  font-size:11px;
+  font-weight:600;
+  color:var(--ink-mute);
+  letter-spacing:1px;
+  margin-bottom:5px;
+  text-transform:uppercase;
+}
+.brand-card .bc-section p{
+  font-size:13px;
+  color:var(--ink-soft);
+  line-height:1.6;
+}
+.brand-card .bc-models{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+}
+.brand-card .bc-models span{
+  font-size:11px;
+  padding:3px 8px;
+  background:rgba(45,95,124,.07);
+  color:var(--blue);
+  border-radius:2px;
+}
+
+/* ===== 技术演进四阶段 ===== */
+.evo-steps{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  margin-bottom:32px;
+}
+.evo-step{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  padding:24px 20px;
+  position:relative;
+}
+.evo-step:not(:last-child){border-right:none}
+.evo-step:first-child{border-radius:6px 0 0 6px}
+.evo-step:last-child{border-radius:0 6px 6px 0}
+.evo-step .es-gen{
+  font-family:'Noto Serif SC',serif;
+  font-size:13px;
+  font-weight:700;
+  color:var(--accent);
+  margin-bottom:6px;
+}
+.evo-step .es-era{
+  font-size:11px;
+  color:var(--ink-mute);
+  margin-bottom:12px;
+}
+.evo-step h4{
+  font-family:'Noto Serif SC',serif;
+  font-size:17px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:10px;
+}
+.evo-step ul{
+  list-style:none;
+  padding:0;
+}
+.evo-step ul li{
+  font-size:12.5px;
+  color:var(--ink-soft);
+  padding:3px 0 3px 12px;
+  position:relative;
+  line-height:1.55;
+}
+.evo-step ul li::before{
+  content:'';
+  position:absolute;
+  left:0;top:9px;
+  width:5px;height:5px;
+  background:var(--accent-soft);
+  border-radius:50%;
+}
+.evo-step .es-rep{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px dashed var(--line);
+  font-size:11.5px;
+  color:var(--ink-mute);
+}
+.evo-step .es-rep strong{color:var(--blue);font-weight:500}
+
+/* ===== 技术模块演进 ===== */
+.module-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+.module-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:24px;
+  box-shadow:var(--shadow);
+}
+.module-card h3{
+  font-size:16px;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.module-card h3 .mc-icon{
+  width:28px;height:28px;
+  border-radius:4px;
+  background:rgba(184,67,42,.08);
+  display:flex;align-items:center;justify-content:center;
+}
+.module-card h3 .mc-icon svg{width:16px;height:16px;stroke:var(--accent);fill:none;stroke-width:1.8}
+.module-card .mc-row{
+  display:grid;
+  grid-template-columns:70px 1fr;
+  gap:10px;
+  padding:8px 0;
+  border-bottom:1px dashed var(--line);
+  font-size:13px;
+}
+.module-card .mc-row:last-child{border-bottom:none}
+.module-card .mc-row .mc-stage{
+  font-weight:600;
+  color:var(--accent);
+  font-size:12px;
+  padding-top:2px;
+}
+.module-card .mc-row .mc-detail{
+  color:var(--ink-soft);
+  line-height:1.55;
+}
+
+/* ===== 前沿趋势 ===== */
+.trend-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+.trend-card{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:24px;
+  box-shadow:var(--shadow);
+}
+.trend-card .tc-tag{
+  display:inline-block;
+  font-size:10.5px;
+  padding:2px 8px;
+  border-radius:2px;
+  font-weight:500;
+  margin-bottom:10px;
+}
+.tc-tag.hot{background:rgba(184,67,42,.1);color:var(--accent)}
+.tc-tag.concept{background:rgba(107,76,122,.1);color:var(--purple)}
+.tc-tag.ready{background:rgba(74,124,89,.1);color:var(--green)}
+.trend-card h3{
+  font-size:16px;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:8px;
+}
+.trend-card p{
+  font-size:13px;
+  color:var(--ink-soft);
+  line-height:1.65;
+  margin-bottom:8px;
+}
+.trend-card .tc-brands{
+  font-size:11.5px;
+  color:var(--ink-mute);
+  padding-top:8px;
+  border-top:1px dashed var(--line);
+}
+.trend-card .tc-brands strong{color:var(--blue)}
+
+/* ===== 黑猫客诉表 ===== */
+.complaint-table-wrap{
+  overflow-x:auto;
+  margin-top:20px;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  box-shadow:var(--shadow);
+}
+.complaint-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+  min-width:720px;
+}
+.complaint-table th,
+.complaint-table td{
+  padding:12px 14px;
+  text-align:left;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+  line-height:1.55;
+}
+.complaint-table th{
+  font-size:12px;
+  font-weight:600;
+  color:var(--ink-mute);
+  letter-spacing:.04em;
+  background:rgba(50,40,20,.03);
+  white-space:nowrap;
+}
+.complaint-table tr:last-child td{border-bottom:none}
+.complaint-table td.num{
+  font-family:'Noto Serif SC',serif;
+  font-weight:600;
+  white-space:nowrap;
+  color:var(--ink);
+}
+.complaint-table td.rate-hi{color:var(--green);font-weight:600}
+.complaint-table td.rate-mid{color:var(--blue);font-weight:600}
+.complaint-table td.rate-lo{color:var(--accent);font-weight:600}
+.complaint-table .brand-name{font-weight:600;color:var(--ink);white-space:nowrap}
+.complaint-table .reason{color:var(--ink-soft);font-size:12.5px}
+.complaint-caveat{
+  margin-top:16px;
+  padding:14px 16px;
+  border-left:3px solid var(--gold);
+  background:rgba(196,146,58,.08);
+  border-radius:0 4px 4px 0;
+  font-size:13px;
+  color:var(--ink-soft);
+  line-height:1.65;
+}
+.complaint-caveat strong{color:var(--ink);font-weight:600}
+
+/* ===== 总结 ===== */
+.outlook-box{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:32px;
+  box-shadow:var(--shadow);
+}
+.outlook-box h3{
+  font-family:'Noto Serif SC',serif;
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:16px;
+  color:var(--ink);
+}
+.outlook-box ol{
+  padding-left:20px;
+}
+.outlook-box ol li{
+  font-size:14px;
+  color:var(--ink-soft);
+  margin-bottom:12px;
+  line-height:1.7;
+}
+.outlook-box ol li strong{color:var(--ink)}
+
+footer{
+  padding:36px 0;
+  text-align:center;
+  font-size:12px;
+  color:var(--ink-mute);
+}
+footer .src{margin-top:6px;font-size:11px;opacity:.8}
+
+@media(max-width:900px){
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .chart-grid,.module-grid,.trend-grid{grid-template-columns:1fr}
+  .brand-grid{grid-template-columns:1fr}
+  .evo-steps{grid-template-columns:1fr 1fr}
+  .evo-step:not(:last-child){border-right:1px solid var(--line)}
+  .evo-step:nth-child(2){border-right:none;border-radius:0 6px 6px 0}
+  .evo-step:nth-child(3){border-radius:6px 0 0 6px;border-top:none}
+  .evo-step:nth-child(4){border-top:none;border-radius:0 6px 6px 0}
+}
+
+/* AiTeemo shell — scoped */
+.aiteemo-bar{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(253,251,246,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(50,40,20,.1);
+  font-family:'Noto Sans SC',-apple-system,sans-serif;
+}
+.aiteemo-bar .ab-inner{
+  max-width:1140px;margin:0 auto;padding:12px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.aiteemo-bar a{text-decoration:none;color:#23201b}
+.aiteemo-bar .ab-logo{font-weight:700;letter-spacing:.02em;font-size:15px}
+.aiteemo-bar .ab-logo .ai{color:#b8432a}
+.aiteemo-bar .ab-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px}
+.aiteemo-bar .ab-back{color:#555048}
+.aiteemo-bar .ab-back:hover{color:#b8432a}
+.aiteemo-bar .ab-tag{
+  display:inline-block;padding:2px 10px;border:1px solid #b8432a;color:#b8432a;
+  border-radius:2px;font-size:12px;letter-spacing:.08em;
+}
+.aiteemo-bar .ab-tag:hover{background:rgba(184,67,42,.08)}
+.aiteemo-foot{
+  max-width:1140px;margin:0 auto;padding:40px 24px 56px;
+  border-top:1px solid rgba(50,40,20,.1);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-family:'Noto Sans SC',-apple-system,sans-serif;font-size:13px;color:#8a8378;
+}
+.aiteemo-foot a{color:#b8432a;text-decoration:none}
+.aiteemo-foot a:hover{text-decoration:underline}
+
+</style>
+</head>
+<body>
+
+<nav class="aiteemo-bar" aria-label="站点导航">
+  <div class="ab-inner">
+    <a class="ab-logo" href="../index.html"><span class="ai">Ai</span>Teemo</a>
+    <div class="ab-meta">
+      <a class="ab-back" href="index.html">← 实践笔记</a>
+      <a class="ab-tag" href="index.html?tag=%E8%A3%85%E4%BF%AE">装修</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ==================== HERO ==================== -->
+<header class="hero">
+  <div class="wrap">
+    <span class="hero-tag">INDUSTRY RESEARCH · 2026</span>
+    <h1>中国扫地机器人<em>行业发展</em><br>与技术迭代调研报告</h1>
+    <p class="hero-sub">
+      从1996年伊莱克斯"三叶虫"的随机乱撞，到2026年中国品牌包揽全球前五、滚筒拖地与仿生机械臂成为新战场——本报告系统梳理国内六大厂商的发展里程碑、品牌基因差异，以及扫地机器人四代技术演进的完整脉络。
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">3272万</div>
+        <div class="lbl">2025年全球出货量（IDC），同比+20.1%</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">Top5 全中</div>
+        <div class="lbl">2025全球前五均为中国品牌，iRobot破产</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">70%+</div>
+        <div class="lbl">2026上半年国内科沃斯+石头+追觅合计份额</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">4代</div>
+        <div class="lbl">技术演进：随机碰撞→激光规划→全能基站→具身智能</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ==================== 市场格局 ==================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">01 / MARKET LANDSCAPE</div>
+      <h2 class="sec-title">市场格局：中国品牌的全球逆袭与头部集中</h2>
+      <p class="sec-desc">
+        2025年是扫地机器人行业的分水岭——曾经的全球霸主iRobot于2025年12月申请破产保护，而全球出货量前五名清一色为中国公司。国内市场则进入"缩量涨价"阶段，份额加速向头部三强集中。
+      </p>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h3>全球家用清洁机器人出货量趋势</h3>
+        <div class="chart-sub">数据来源：IDC，单位：万台</div>
+        <div id="chart-global" class="chart-box"></div>
+      </div>
+      <div class="chart-card">
+        <h3>2025年全球品牌出货量份额</h3>
+        <div class="chart-sub">数据来源：IDC / 新浪财经，前五均为中国品牌</div>
+        <div id="chart-share" class="chart-box"></div>
+      </div>
+    </div>
+    <div class="chart-card" style="margin-top:20px">
+      <h3>2026年Q1全球扫地机器人品牌竞争格局</h3>
+      <div class="chart-sub">追觅首次登顶全球双第一，数据来源：IDC / 电子工程专辑</div>
+      <div id="chart-q1" class="chart-box tall"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 品牌时间线 ==================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">02 / BRAND TIMELINE</div>
+      <h2 class="sec-title">国内六大厂商发展里程碑时间线</h2>
+      <p class="sec-desc">
+        科沃斯深耕28年的行业老兵、石头从小米生态链走出的技术派、云鲸凭自动洗拖布一战封神的颠覆者、追觅以高速马达为根的全球化黑马、小米用性价比改写行业定价的搅局者、大疆携无人机技术降维入场的新变量——六条路径，同一战场。
+      </p>
+    </div>
+    <div class="timeline-brand">
+      <div class="tb-header">
+        <div class="tb-label">品牌 / 年份</div>
+        <div class="tb-year">1998-2014</div>
+        <div class="tb-year">2015-2018</div>
+        <div class="tb-year">2019-2021</div>
+        <div class="tb-year">2022-2023</div>
+        <div class="tb-year">2024-2025</div>
+        <div class="tb-year">2026</div>
+      </div>
+
+      <!-- 科沃斯 -->
+      <div class="tb-row">
+        <div class="tb-brand"><span class="dot" style="background:var(--accent)"></span>科沃斯</div>
+        <div class="tb-cell">
+          <span class="event milestone">1998 钱东奇创立</span>
+          <span class="event normal">2001 首款扫地机器人</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2018 上交所上市</span>
+          <span class="event normal">DN33/55 LDS建图</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2019 退出ODM聚焦中高端</span>
+          <span class="event normal">2020 T8 AIVI 视觉导航</span>
+          <span class="event normal">2021 N9+ 自动洗拖布</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">X1/X2 全能基站旗舰</span>
+          <span class="event normal">T20 热水洗拖布</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2024 T80 首创滚筒拖地</span>
+          <span class="event normal">T30 1mm贴边</span>
+          <span class="event normal">X11 OZMO ROLLER 2.0</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">X12S ROLLER 3.0</span>
+          <span class="event normal">T90 Pro 瞬时超充</span>
+          <span class="event normal">"八界"家庭服务机器人</span>
+        </div>
+      </div>
+
+      <!-- 石头 -->
+      <div class="tb-row">
+        <div class="tb-brand"><span class="dot" style="background:var(--blue)"></span>石头</div>
+        <div class="tb-cell">
+          <span class="event milestone">2014.7 昌敬创立</span>
+          <span class="event normal">2014.10 获小米投资</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2016.9 米家扫地机 1699元</span>
+          <span class="event normal">LDS+SLAM 行业普及</span>
+          <span class="event normal">2017 S5 自有品牌</span>
+          <span class="event normal">2017.12 出海开端</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2020 科创板上市</span>
+          <span class="event normal">T7/T7S 系列</span>
+          <span class="event normal">2021 G10 自清洁基站</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">G20 双螺旋刷</span>
+          <span class="event normal">P10 性价比款</span>
+          <span class="event normal">海外份额快速提升</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2025 G30 Space 五轴机械臂</span>
+          <span class="event normal">P20 底盘升降</span>
+          <span class="event normal">2025全球出货580万台第一</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">G-Rover 轮足爬楼概念</span>
+          <span class="event normal">P30 Pro RRmind大模型</span>
+          <span class="event normal">RockNeo 割草机器人</span>
+        </div>
+      </div>
+
+      <!-- 云鲸 -->
+      <div class="tb-row">
+        <div class="tb-brand"><span class="dot" style="background:var(--green)"></span>云鲸</div>
+        <div class="tb-cell">
+          <span class="event milestone">2016.10 张峻彬创立</span>
+          <span class="event normal">李泽湘学生 XbotPark首批</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">三年磨一剑 研发J1</span>
+          <span class="event normal">团队不足10人 试验30+方案</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2019双11 J1 首发</span>
+          <span class="event normal">首创自动洗拖布 颠覆行业</span>
+          <span class="event normal">J2/J3 持续迭代</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">J4 全链路自动</span>
+          <span class="event normal">逍遥001 履带拖地</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2025 JX 100℃热水洗</span>
+          <span class="event normal">逍遥002/003 AI双目</span>
+          <span class="event normal">120天免维护基站</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">IPO进程推进</span>
+          <span class="event normal">履带技术路线坚守者</span>
+        </div>
+      </div>
+
+      <!-- 追觅 -->
+      <div class="tb-row">
+        <div class="tb-brand"><span class="dot" style="background:var(--gold)"></span>追觅</div>
+        <div class="tb-cell">
+          <span class="event milestone">2017 俞浩创立</span>
+          <span class="event normal">清华航天系 高速数字马达</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">吸尘器产品线起家</span>
+          <span class="event normal">高速马达核心技术积累</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">2020 进入扫地机赛道</span>
+          <span class="event normal">LDS+视觉双导航</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2022 S10 全能基站</span>
+          <span class="event normal">X20 仿生机械臂</span>
+          <span class="event normal">2023 X30/X40 旗舰迭代</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2025 S50 Pro 100℃热水洗</span>
+          <span class="event normal">Matrix10 Ultra 智能换拖布</span>
+          <span class="event normal">全球出货340万台 +102%</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">Q1全球销量/销额双第一</span>
+          <span class="event normal">Cyber X 六足爬楼量产</span>
+          <span class="event normal">180℃蒸汽清洁首发</span>
+          <span class="event normal">X6 系列旗舰</span>
+        </div>
+      </div>
+
+      <!-- 小米 -->
+      <div class="tb-row">
+        <div class="tb-brand"><span class="dot" style="background:var(--purple)"></span>小米/米家</div>
+        <div class="tb-cell">
+          <span class="event normal">2014 投资石头科技</span>
+          <span class="event normal">生态链布局智能清洁</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2016.9 米家扫地机 1699元</span>
+          <span class="event normal">腰斩行业均价 LDS普及功臣</span>
+          <span class="event normal">石头代工</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">米家扫拖一体系列</span>
+          <span class="event normal">持续性价比路线</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">米家全能扫拖机器人</span>
+          <span class="event normal">2000元价位基站普及</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">米家5 Pro/M40 AI视觉</span>
+          <span class="event normal">75天免倒污水宣传</span>
+          <span class="event normal">全球出货前五</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">米家新品持续迭代</span>
+          <span class="event normal">智能家居生态联动优势</span>
+        </div>
+      </div>
+
+      <!-- 大疆 -->
+      <div class="tb-row">
+        <div class="tb-brand"><span class="dot" style="background:#7a6b4c"></span>大疆</div>
+        <div class="tb-cell">
+          <span class="event normal">无人机领域全球霸主</span>
+          <span class="event normal">视觉避障/电机/云台技术积累</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">—</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">—</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event normal">—</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">2025.8 ROMO系列首发</span>
+          <span class="event normal">4699元起 无人机同款避障</span>
+          <span class="event normal">200天免维护基站</span>
+          <span class="event normal">柔性双机械臂 25000Pa</span>
+        </div>
+        <div class="tb-cell">
+          <span class="event milestone">ROMO 2代 36000Pa</span>
+          <span class="event normal">123°超阔外摆机械臂</span>
+          <span class="event normal">全场景AI智能清洁</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 品牌基因对比 ==================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">03 / BRAND DNA</div>
+      <h2 class="sec-title">品牌基因与技术侧重点对比</h2>
+      <p class="sec-desc">
+        每个品牌的产品哲学都深植于其创始团队背景和起家技术。理解品牌基因，比看参数表更能判断哪款产品适合自己。
+      </p>
+    </div>
+    <div class="brand-grid">
+      <!-- 科沃斯 -->
+      <div class="brand-card c1">
+        <div class="bc-top">
+          <div>
+            <h3>科沃斯 ECOVACS</h3>
+            <div class="bc-found">1998年 · 钱东奇 · 苏州</div>
+          </div>
+          <div class="bc-share">
+            <div class="pct">30%+</div>
+            <div class="pct-lbl">2026H1国内份额</div>
+          </div>
+        </div>
+        <div class="bc-section">
+          <h5>核心基因</h5>
+          <p>行业深耕28年的"老大哥"，从ODM代工转型自有品牌，产品线覆盖最全，渠道能力最强。擅长将新技术快速规模化落地，滚筒拖地技术的开创者和主推者。</p>
+        </div>
+        <div class="bc-section">
+          <h5>技术侧重</h5>
+          <p>滚筒活水洗地（OZMO ROLLER已迭代至3.0，全球出货超280万台）、AI视觉避障、全场景家庭服务机器人（"八界"可捡拾/整理/呼救）。</p>
+        </div>
+        <div class="bc-section">
+          <h5>标志性机型</h5>
+          <div class="bc-models">
+            <span>T8 AIVI</span><span>N9+</span><span>X1 OMNI</span><span>T20</span><span>T30</span><span>T80S</span><span>T90 Pro</span><span>X12S</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 石头 -->
+      <div class="brand-card c2">
+        <div class="bc-top">
+          <div>
+            <h3>石头 Roborock</h3>
+            <div class="bc-found">2014年 · 昌敬 · 北京</div>
+          </div>
+          <div class="bc-share">
+            <div class="pct">25%</div>
+            <div class="pct-lbl">2026H1国内份额</div>
+          </div>
+        </div>
+        <div class="bc-section">
+          <h5>核心基因</h5>
+          <p>小米生态链走出的"技术派"，创始团队来自微软/华为/百度，以算法和软件能力见长。2016年用1699元米家扫地机将LDS激光导航普及到大众市场，是行业技术标准的定义者之一。全球化最成功的中国品牌。</p>
+        </div>
+        <div class="bc-section">
+          <h5>技术侧重</h5>
+          <p>RR mason/RRmind导航算法大模型、LDS激光雷达、双螺旋防缠绕滚刷、底盘升降、仿生机械臂（G30 Space五轴折叠）、轮足爬楼机器人（G-Rover概念）。</p>
+        </div>
+        <div class="bc-section">
+          <h5>标志性机型</h5>
+          <div class="bc-models">
+            <span>米家1代</span><span>S5</span><span>T7</span><span>G10</span><span>G20</span><span>P10</span><span>P20</span><span>G30 Space</span><span>P30 Pro</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 云鲸 -->
+      <div class="brand-card c3">
+        <div class="bc-top">
+          <div>
+            <h3>云鲸 Narwal</h3>
+            <div class="bc-found">2016年 · 张峻彬 · 深圳</div>
+          </div>
+          <div class="bc-share">
+            <div class="pct">~5%</div>
+            <div class="pct-lbl">国内份额（第五）</div>
+          </div>
+        </div>
+        <div class="bc-section">
+          <h5>核心基因</h5>
+          <p>李泽湘门下的"颠覆者"，XbotPark机器人基地首批创业者。用三年磨一剑的J1首创自动洗拖布功能，直接开启了"基站时代"。坚持"慢工出细活"，不搞机海战术，是履带式拖地技术路线的坚守者。</p>
+        </div>
+        <div class="bc-section">
+          <h5>技术侧重</h5>
+          <p>自动洗拖布基站（行业首创）、履带式活水拖地、60℃热水洗拖布、AI双目视觉避障、120天免维护基站、气旋导流式防缠毛滚刷。</p>
+        </div>
+        <div class="bc-section">
+          <h5>标志性机型</h5>
+          <div class="bc-models">
+            <span>小白鲸J1</span><span>J2</span><span>J3</span><span>J4</span><span>逍遥001</span><span>逍遥002</span><span>逍遥003</span><span>JX</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 追觅 -->
+      <div class="brand-card c4">
+        <div class="bc-top">
+          <div>
+            <h3>追觅 Dreame</h3>
+            <div class="bc-found">2017年 · 俞浩 · 苏州</div>
+          </div>
+          <div class="bc-share">
+            <div class="pct">12.8%</div>
+            <div class="pct-lbl">2026H1国内份额</div>
+          </div>
+        </div>
+        <div class="bc-section">
+          <h5>核心基因</h5>
+          <p>清华航天系出身的"技术狂人"，以高速数字马达为根，从吸尘器切入扫地机。增长最凶猛的品牌，2025年出货同比+102%，2026年Q1登顶全球双第一。产品线最激进，敢于率先应用新技术。</p>
+        </div>
+        <div class="bc-section">
+          <h5>技术侧重</h5>
+          <p>高速数字马达（16万转）、仿生机械臂、主动割毛滚刷、100℃/180℃高温清洁、智能换拖布（Matrix10 Ultra）、六足履带爬楼机器人（Cyber X量产）、蒸汽清洁。</p>
+        </div>
+        <div class="bc-section">
+          <h5>标志性机型</h5>
+          <div class="bc-models">
+            <span>S10</span><span>X20</span><span>X30</span><span>X40 Pro</span><span>S50 Pro</span><span>Matrix10 Ultra</span><span>X6</span><span>Cyber X</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 小米 -->
+      <div class="brand-card c5">
+        <div class="bc-top">
+          <div>
+            <h3>小米 / 米家</h3>
+            <div class="bc-found">2016年首款 · 北京</div>
+          </div>
+          <div class="bc-share">
+            <div class="pct">~8%</div>
+            <div class="pct-lbl">全球出货第四</div>
+          </div>
+        </div>
+        <div class="bc-section">
+          <h5>核心基因</h5>
+          <p>行业定价的"颠覆者"。2016年用1699元的米家扫地机（石头代工）将LDS激光导航从四五千元拉到千元级，直接推动了整个行业的技术普及。坚持性价比路线，依托小米智能家居生态做联动。</p>
+        </div>
+        <div class="bc-section">
+          <h5>技术侧重</h5>
+          <p>LDS激光导航（早期普及功臣）、AI视觉避障、米家APP生态联动、小爱同学语音控制、全能基站下放至2000元价位。</p>
+        </div>
+        <div class="bc-section">
+          <h5>标志性机型</h5>
+          <div class="bc-models">
+            <span>米家1代</span><span>米家扫拖1T</span><span>米家全能扫拖</span><span>米家5 Pro</span><span>米家M40</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 大疆 -->
+      <div class="brand-card c6">
+        <div class="bc-top">
+          <div>
+            <h3>大疆 DJI / ROMO</h3>
+            <div class="bc-found">2025年入场 · 深圳</div>
+          </div>
+          <div class="bc-share">
+            <div class="pct">新入场</div>
+            <div class="pct-lbl">2025.8 首发</div>
+          </div>
+        </div>
+        <div class="bc-section">
+          <h5>核心基因</h5>
+          <p>无人机全球霸主的"降维打击"。将旗舰无人机的双目鱼眼视觉+固态激光雷达避障技术直接移植到扫地机，毫米级避障能力行业领先。工业设计和供应链管理能力极强，透明基站设计引发行业跟风。</p>
+        </div>
+        <div class="bc-section">
+          <h5>技术侧重</h5>
+          <p>旗舰无人机同款避障（双目鱼眼+13颗固态激光雷达，识别2mm电线）、高压水射流自清洁基站（200天免维护）、柔性双机械臂外摆、双旋臂零缠绕底刷、9叶片金属扇叶电机25000-36000Pa。</p>
+        </div>
+        <div class="bc-section">
+          <h5>标志性机型</h5>
+          <div class="bc-models">
+            <span>ROMO S</span><span>ROMO A</span><span>ROMO P</span><span>ROMO 2代</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 黑猫客诉售后 ==================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">04 / AFTER-SALES</div>
+      <h2 class="sec-title">各大品牌黑猫客诉售后：品牌售后与客诉完结能力汇总</h2>
+      <p class="sec-desc">
+        从投诉量、回复率与结案率（已完成率）的横向对比来看，各品牌在面对消费者争议时的处理态度与效率差异显著。数据口径为黑猫投诉平台公开统计，更适合用来观察「二次客诉升阶后」的售后闭环能力，而非直接等同于故障率或日常客服满意度。
+      </p>
+    </div>
+    <div class="chart-card">
+      <h3>投诉量 · 回复率 · 结案率对比</h3>
+      <div class="chart-sub">按已完成率（结案率）降序；柱状为投诉总量，折线为回复率与结案率</div>
+      <div id="chart-complaint" style="height:400px"></div>
+    </div>
+    <div class="complaint-table-wrap">
+      <table class="complaint-table">
+        <thead>
+          <tr>
+            <th>品牌</th>
+            <th>投诉总量</th>
+            <th>已回复率</th>
+            <th>已完成率（结案率）</th>
+            <th>综合售后特征与原因分析</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="brand-name">科沃斯</td>
+            <td class="num">5,701</td>
+            <td class="num rate-hi">100%</td>
+            <td class="num rate-hi">97.67%</td>
+            <td class="reason"><strong>结案率最高：</strong>体量最大，但售后让步与退换/维修闭环能力极强，纠纷解决最快</td>
+          </tr>
+          <tr>
+            <td class="brand-name">追觅科技</td>
+            <td class="num">5,397</td>
+            <td class="num">99.85%</td>
+            <td class="num rate-hi">86.97%</td>
+            <td class="reason"><strong>跟进积极：</strong>销量体量大，客服跟进迅速，绝大多数客诉能达成共识</td>
+          </tr>
+          <tr>
+            <td class="brand-name">云鲸</td>
+            <td class="num">2,060</td>
+            <td class="num">99.90%</td>
+            <td class="num rate-mid">80.24%</td>
+            <td class="reason"><strong>中规中矩：</strong>客诉基数相对较小，八成以上诉求能顺利完成结案</td>
+          </tr>
+          <tr>
+            <td class="brand-name">石头科技</td>
+            <td class="num">2,967</td>
+            <td class="num">99.90%</td>
+            <td class="num rate-mid">76.91%</td>
+            <td class="reason"><strong>拉锯较多：</strong>回复及时，但因责任认定或退换货标准较硬，结案耗时较长</td>
+          </tr>
+          <tr>
+            <td class="brand-name">大疆硬件</td>
+            <td class="num">4,116</td>
+            <td class="num">95.02%</td>
+            <td class="num rate-lo">61.83%</td>
+            <td class="reason"><strong>权责认定复杂：</strong>受「炸机/进水」等责任判定及高昂定损影响，用户妥协度低</td>
+          </tr>
+          <tr>
+            <td class="brand-name">小米硬件</td>
+            <td class="num">1,548</td>
+            <td class="num rate-hi">100%</td>
+            <td class="num rate-lo">57.17%</td>
+            <td class="reason"><strong>结案率垫底：</strong>跨品类工单流转链条长，虽秒回但实际处理闭环周期较长</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="complaint-caveat">
+      <strong>补充说明：</strong>黑猫投诉等第三方平台的数据确实存在极大的选择性偏差（幸存者偏差）和分母缺失——平台上看到的是已经「闹到二次客诉」的样本，缺少总销量、总保修单、一线客服工单等分母。因此它反映的是「二次客诉升阶」后的处理态度与完结效率，不能完全代表产品的真实故障率，也不能等同于正常客服渠道的满意度。
+    </p>
+  </div>
+</section>
+
+<!-- ==================== 技术演进四阶段 ==================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">05 / TECHNOLOGY EVOLUTION</div>
+      <h2 class="sec-title">行业技术四阶段演进：从"乱撞"到"具身智能"</h2>
+      <p class="sec-desc">
+        扫地机器人的30年发展史，本质上是感知能力、清洁能力和自动化程度三条线的交替突破。每一代技术都解决了上一代的核心痛点，同时引入了新的期待。
+      </p>
+    </div>
+    <div class="evo-steps">
+      <div class="evo-step">
+        <div class="es-gen">1.0 时代</div>
+        <div class="es-era">1996 — 2010</div>
+        <h4>随机碰撞</h4>
+        <ul>
+          <li>碰撞传感器+红外线，"蒙眼乱撞"</li>
+          <li>无建图无规划，漏扫率超40%</li>
+          <li>三段式清扫结构普及</li>
+          <li>价格高、功能单一、易卡住</li>
+        </ul>
+        <div class="es-rep"><strong>代表：</strong>伊莱克斯三叶虫(1996)、iRobot Roomba(2002)</div>
+      </div>
+      <div class="evo-step">
+        <div class="es-gen">2.0 时代</div>
+        <div class="es-era">2010 — 2018</div>
+        <h4>激光规划</h4>
+        <ul>
+          <li>LDS激光雷达+SLAM算法，首次建图</li>
+          <li>弓字形路径规划，覆盖率大幅提升</li>
+          <li>视觉导航路线并行探索</li>
+          <li>米家1699元将LDS普及至大众</li>
+        </ul>
+        <div class="es-rep"><strong>代表：</strong>Neato XV-11(2010)、米家扫地机(2016)、科沃斯DN系列</div>
+      </div>
+      <div class="evo-step">
+        <div class="es-gen">3.0 时代</div>
+        <div class="es-era">2019 — 2024</div>
+        <h4>全能基站</h4>
+        <ul>
+          <li>自动洗拖布（云鲸J1首创）</li>
+          <li>自动集尘、热风烘干、自动补水</li>
+          <li>自动上下水、自动加清洁液</li>
+          <li>2024年全能基站零售额占比超50%</li>
+          <li>扫拖一体成为标配</li>
+        </ul>
+        <div class="es-rep"><strong>代表：</strong>云鲸J1(2019)、石头G10(2021)、科沃斯X1、追觅S10</div>
+      </div>
+      <div class="evo-step">
+        <div class="es-gen">4.0 时代</div>
+        <div class="es-era">2025 — 至今</div>
+        <h4>具身智能</h4>
+        <ul>
+          <li>VLM大模型语义理解，物理AI底座</li>
+          <li>仿生机械臂：从二维清洁到三维作业</li>
+          <li>滚筒拖地普及，清洁力质变</li>
+          <li>爬楼机器人：复式住宅立体清洁</li>
+          <li>家庭服务机器人：捡拾/整理/陪护</li>
+          <li>蒸汽清洁、180℃高温灭菌</li>
+        </ul>
+        <div class="es-rep"><strong>代表：</strong>科沃斯T80/X12、石头G30 Space、追觅Cyber X、大疆ROMO</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 核心技术模块演进 ==================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">06 / MODULE EVOLUTION</div>
+      <h2 class="sec-title">四大核心技术模块的演进脉络</h2>
+      <p class="sec-desc">
+        拆开来看，扫地机器人的进化是导航感知、清洁系统、基站自动化、拖布技术四条线的并行迭代。以下梳理每条线的关键节点。
+      </p>
+    </div>
+    <div class="module-grid">
+      <!-- 导航感知 -->
+      <div class="module-card">
+        <h3><span class="mc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/></svg></span>导航与感知</h3>
+        <div class="mc-row">
+          <div class="mc-stage">1.0</div>
+          <div class="mc-detail">碰撞传感器+红外悬崖传感器，仅感知"撞到了"和"要掉下去了"</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">2.0</div>
+          <div class="mc-detail">LDS激光雷达（2010 Neato首创）+SLAM算法建图；视觉导航（iRobot 980 2015）并行</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">3.0</div>
+          <div class="mc-detail">AI视觉避障（科沃斯T8 AIVI 2020），单目/双目识别物体类型；结构光避障；多传感器融合</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">4.0</div>
+          <div class="mc-detail">VLM大模型语义理解（石头RRmind）、固态激光雷达（大疆ROMO 13颗）、毫米级避障、物理AI决策</div>
+        </div>
+      </div>
+
+      <!-- 清洁系统 -->
+      <div class="module-card">
+        <h3><span class="mc-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>清洁系统</h3>
+        <div class="mc-row">
+          <div class="mc-stage">1.0</div>
+          <div class="mc-detail">单滚刷+边刷，固定吸力，无拖地功能</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">2.0</div>
+          <div class="mc-detail">吸力提升至2000Pa+；扫拖一体出现（渗水拖布）；浮动滚刷适配不同地面</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">3.0</div>
+          <div class="mc-detail">双螺旋防缠绕滚刷（石头）、主动割毛滚刷（追觅）、声波震动拖地、热水拖地（科沃斯T20 55℃）、吸力破万Pa</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">4.0</div>
+          <div class="mc-detail">滚筒活水洗地（科沃斯OZMO ROLLER，压强为圆盘16倍）、100℃/180℃蒸汽清洁（追觅）、双旋臂零缠绕（大疆）、智能换拖布（追觅Matrix10）</div>
+        </div>
+      </div>
+
+      <!-- 基站自动化 -->
+      <div class="module-card">
+        <h3><span class="mc-icon"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M7 8V5a2 2 0 012-2h6a2 2 0 012 2v3"/></svg></span>基站自动化</h3>
+        <div class="mc-row">
+          <div class="mc-stage">1.0</div>
+          <div class="mc-detail">仅充电座，无任何自动化功能</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">2.0</div>
+          <div class="mc-detail">自动回充+断点续扫；部分机型支持APP远程控制</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">3.0</div>
+          <div class="mc-detail">自动集尘（iRobot 2018首创）、自动洗拖布（云鲸J1 2019首创）、热风烘干、自动补水、自动上下水、自动加清洁液——"全能基站"成标配（2024年占比超50%）</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">4.0</div>
+          <div class="mc-detail">200天免维护基站（大疆ROMO高压水射流自清洁）、120天免维护（云鲸JX）、基站自清洁底盘、智能烘干防霉、污水箱除臭</div>
+        </div>
+      </div>
+
+      <!-- 拖布技术 -->
+      <div class="module-card">
+        <h3><span class="mc-icon"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18V8a2 2 0 012-2h8a2 2 0 012 2v10"/></svg></span>拖布技术</h3>
+        <div class="mc-row">
+          <div class="mc-stage">1.0</div>
+          <div class="mc-detail">无拖地功能，纯扫地</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">2.0</div>
+          <div class="mc-detail">渗水式拖布（被动出水），扫拖一体雏形；拖布需手动清洗</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">3.0</div>
+          <div class="mc-detail">双圆盘旋转拖布成为主流（模拟人手搓地）；声波震动拖地；履带式拖布（云鲸逍遥系列）；拖布自动抬升避地毯</div>
+        </div>
+        <div class="mc-row">
+          <div class="mc-stage">4.0</div>
+          <div class="mc-detail">活水滚筒拖地（科沃斯2024首创，实时自清洁+污水回收，压强为圆盘16倍），OZMO ROLLER已迭代至3.0，全球出货超280万台；外扩机械臂贴边（追觅/大疆123°外摆）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 前沿趋势 ==================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">07 / FRONTIER TRENDS</div>
+      <h2 class="sec-title">2025-2026 六大前沿技术趋势</h2>
+      <p class="sec-desc">
+        IFA 2026上，中国品牌集体展示了从"地面清洁工具"向"家庭服务机器人"跃迁的技术路线。以下六个方向正在定义下一代产品。
+      </p>
+    </div>
+    <div class="trend-grid">
+      <div class="trend-card">
+        <span class="tc-tag hot">已量产</span>
+        <h3>滚筒拖地普及化</h3>
+        <p>科沃斯2024年首创的恒压滚筒活水洗地技术，凭借16倍于圆盘的对地压强和实时污水回收，正在从旗舰向中高端下放。OZMO ROLLER已迭代至3.0，全球出货超280万台。石头、追觅也在2026年推出滚筒方案机型。</p>
+        <div class="tc-brands"><strong>代表：</strong>科沃斯T80S/T90/X12S、石头P30 Pro、追觅X6</div>
+      </div>
+      <div class="trend-card">
+        <span class="tc-tag hot">已量产</span>
+        <h3>仿生机械臂外扩</h3>
+        <p>传统圆盘拖布无法真正贴墙，边角始终有盲区。2025年起，外扩式机械臂成为旗舰标配——拖布可伸出机身外侧7-8cm，实现100%边角覆盖。大疆ROMO的123°超阔外摆机械臂将这一技术推到新高度。</p>
+        <div class="tc-brands"><strong>代表：</strong>追觅X20/X40、大疆ROMO、科沃斯T30（1mm贴边）</div>
+      </div>
+      <div class="trend-card">
+        <span class="tc-tag ready">接近量产</span>
+        <h3>爬楼/立体清洁</h3>
+        <p>复式住宅的上下楼层清洁一直是痛点。追觅Cyber X以六足履带式结构实现42°斜坡攀爬，已率先量产；石头G-Rover采用轮足复合运动结构，可自主爬楼梯，目前处于概念阶段。立体清洁从"未来概念"走向"可购买产品"。</p>
+        <div class="tc-brands"><strong>代表：</strong>追觅Cyber X（量产）、石头G-Rover（概念）</div>
+      </div>
+      <div class="trend-card">
+        <span class="tc-tag concept">探索阶段</span>
+        <h3>五轴仿生机械手</h3>
+        <p>从二维地面清洁向三维空间管理跨越。石头G30 Space探索版搭载全球首创五轴折叠仿生机械臂，可模拟人手6自由度动作，能移开障碍物、远程视频巡查、与宠物互动。这是扫地机器人从"清洁工具"到"家庭管家"的关键一步。</p>
+        <div class="tc-brands"><strong>代表：</strong>石头G30 Space探索版、科沃斯"八界"服务机器人</div>
+      </div>
+      <div class="trend-card">
+        <span class="tc-tag hot">已量产</span>
+        <h3>VLM大模型与物理AI</h3>
+        <p>AI不再只是避障算法，而是成为底层技术底座。石头RRmind大模型支持自然语言交互、主动识别长期未清洁区域、智能调整清洁策略；物理AI让机器人从"按固定程序执行"走向"理解家庭环境并自主决策"。</p>
+        <div class="tc-brands"><strong>代表：</strong>石头P30 Pro（RRmind）、云鲸逍遥003（VLM大模型）</div>
+      </div>
+      <div class="trend-card">
+        <span class="tc-tag hot">已量产</span>
+        <h3>高温/蒸汽清洁</h3>
+        <p>从冷水拖地到热水拖地再到蒸汽清洁，温度成为清洁力的新维度。追觅2026年首发180℃蒸汽技术（获欧睿国际认证），科沃斯75℃热水洗、云鲸100℃动态热水洗、石头100℃热水洗拖布——高温灭菌除螨成为高端旗舰新标配。</p>
+        <div class="tc-brands"><strong>代表：</strong>追觅X6（180℃蒸汽）、云鲸JX（100℃）、石头P20（100℃）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 总结展望 ==================== -->
+<section style="border-bottom:none">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">08 / OUTLOOK</div>
+      <h2 class="sec-title">总结与展望</h2>
+    </div>
+    <div class="outlook-box">
+      <h3>行业正处于从3.0向4.0跃迁的关键节点</h3>
+      <ol>
+        <li><strong>竞争格局已定，三强垄断不可逆转。</strong>科沃斯、石头、追觅三家在2026年上半年已占据国内超70%份额，全球前五清一色中国品牌。中小品牌和新进入者（如大疆）只能在细分市场寻找机会，行业从"增量竞争"进入"存量博弈"。</li>
+        <li><strong>滚筒拖地是当前最大的技术变量。</strong>科沃斯开创的滚筒活水洗地在清洁力上对传统圆盘形成代际优势，2026年石头、追觅相继跟进，滚筒有望在2-3年内成为中高端标配，类似当年LDS激光导航的普及路径。</li>
+        <li><strong>"免维护"是基站竞争的终极方向。</strong>从云鲸J1的自动洗拖布，到大疆ROMO的200天免维护，基站自动化的竞争已经从"有没有"转向"能多久不用管"。高压水射流自清洁、基站底盘自清洁、长效除臭是下一阶段重点。</li>
+        <li><strong>机械臂和爬楼是从"扫地机"到"服务机器人"的跃迁钥匙。</strong>外扩机械臂解决了边角清洁痛点，五轴机械手和爬楼结构则在拓展服务边界。但这些功能目前仍处于高价位（5000元+），距离大众普及还有2-3年。</li>
+        <li><strong>国内市场缩量，全球化是必答题。</strong>2026年上半年国内零售额同比下降4%，11个品牌消失。石头、追觅的海外收入占比已超50%，iRobot的破产留下了巨大的欧美市场空白。中国品牌的全球替代才刚刚开始。</li>
+        <li><strong>对消费者的建议：</strong>当前阶段（2026年）选购应优先考虑——①拖布类型（滚筒清洁力最强但成熟度待验证，圆盘最均衡，履带维护量最大）；②基站免维护周期（200天&gt;120天&gt;90天）；③避障方案（固态激光雷达&gt;双目视觉&gt;单目&gt;红外）；④不要为机械臂/爬楼等概念功能支付过高溢价，等第二代产品再入手更稳妥。</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>中国扫地机器人行业发展与技术迭代调研报告 · 2026年9月</p>
+    <p class="src">数据来源：IDC、奥维云网(AVC)、洛图科技(RUNTO)、黑猫投诉、各品牌官网、什么值得买、新浪财经、36氪、IT之家、电子工程专辑</p>
+  </div>
+</footer>
+
+<script>
+// ===== 图表：黑猫客诉售后对比 =====
+(function(){
+  var el = document.getElementById('chart-complaint');
+  if (!el || typeof echarts === 'undefined') return;
+  var chart = echarts.init(el);
+  chart.setOption({
+    tooltip:{
+      trigger:'axis',
+      axisPointer:{type:'shadow'},
+      formatter:function(params){
+        var s = params[0].name + '<br/>';
+        params.forEach(function(p){
+          var unit = p.seriesName.indexOf('率') >= 0 ? '%' : '件';
+          s += p.marker + p.seriesName + '：' + p.value + unit + '<br/>';
+        });
+        return s;
+      }
+    },
+    legend:{
+      data:['投诉总量','已回复率','已完成率'],
+      top:0,
+      textStyle:{fontSize:11,color:'#555048'}
+    },
+    grid:{left:56,right:56,top:42,bottom:36},
+    xAxis:{
+      type:'category',
+      data:['科沃斯','追觅科技','云鲸','石头科技','大疆硬件','小米硬件'],
+      axisLine:{lineStyle:{color:'#ddd4c5'}},
+      axisLabel:{color:'#555048',fontSize:12,fontWeight:500}
+    },
+    yAxis:[
+      {
+        type:'value',
+        name:'投诉量(件)',
+        nameTextStyle:{fontSize:10,color:'#8a8378'},
+        axisLine:{show:false},
+        axisLabel:{color:'#8a8378',fontSize:11},
+        splitLine:{lineStyle:{color:'#eee6d8',type:'dashed'}}
+      },
+      {
+        type:'value',
+        name:'比率(%)',
+        min:50,
+        max:100,
+        nameTextStyle:{fontSize:10,color:'#8a8378'},
+        axisLine:{show:false},
+        axisLabel:{color:'#8a8378',fontSize:11,formatter:'{value}%'},
+        splitLine:{show:false}
+      }
+    ],
+    series:[
+      {
+        name:'投诉总量',
+        type:'bar',
+        data:[5701,5397,2060,2967,4116,1548],
+        barWidth:'36%',
+        itemStyle:{color:'#b8432a',borderRadius:[4,4,0,0]},
+        label:{show:true,position:'top',fontSize:10,color:'#555048'}
+      },
+      {
+        name:'已回复率',
+        type:'line',
+        yAxisIndex:1,
+        data:[100,99.85,99.9,99.9,95.02,100],
+        symbol:'circle',
+        symbolSize:8,
+        lineStyle:{color:'#2d5f7c',width:2},
+        itemStyle:{color:'#2d5f7c'},
+        label:{show:true,position:'top',fontSize:10,color:'#2d5f7c',formatter:'{c}%'}
+      },
+      {
+        name:'已完成率',
+        type:'line',
+        yAxisIndex:1,
+        data:[97.67,86.97,80.24,76.91,61.83,57.17],
+        symbol:'diamond',
+        symbolSize:8,
+        lineStyle:{color:'#4a7c59',width:2},
+        itemStyle:{color:'#4a7c59'},
+        label:{show:true,position:'bottom',fontSize:10,color:'#4a7c59',formatter:'{c}%'}
+      }
+    ]
+  });
+  window.addEventListener('resize',function(){chart.resize()});
+})();
+
+// ===== 图表1：全球出货量趋势 =====
+(function(){
+  var chart = echarts.init(document.getElementById('chart-global'));
+  chart.setOption({
+    tooltip:{trigger:'axis',formatter:'{b}年<br/>出货量：{c}万台'},
+    grid:{left:50,right:20,top:20,bottom:30},
+    xAxis:{
+      type:'category',
+      data:['2020','2021','2022','2023','2024','2025'],
+      axisLine:{lineStyle:{color:'#ddd4c5'}},
+      axisLabel:{color:'#8a8378',fontSize:11}
+    },
+    yAxis:{
+      type:'value',
+      name:'万台',
+      nameTextStyle:{fontSize:10,color:'#8a8378'},
+      axisLine:{show:false},
+      axisLabel:{color:'#8a8378',fontSize:11},
+      splitLine:{lineStyle:{color:'#eee6d8',type:'dashed'}}
+    },
+    series:[{
+      type:'bar',
+      data:[
+        {value:1800,itemStyle:{color:'#c4923a'}},
+        {value:2200,itemStyle:{color:'#c4923a'}},
+        {value:2400,itemStyle:{color:'#5a8fa8'}},
+        {value:2600,itemStyle:{color:'#5a8fa8'}},
+        {value:2725,itemStyle:{color:'#b8432a'}},
+        {value:3272,itemStyle:{color:'#b8432a'}}
+      ],
+      barWidth:'45%',
+      itemStyle:{borderRadius:[4,4,0,0]},
+      label:{show:true,position:'top',fontSize:11,color:'#555048',formatter:'{c}'}
+    }]
+  });
+  window.addEventListener('resize',function(){chart.resize()});
+})();
+
+// ===== 图表2：2025全球份额 =====
+(function(){
+  var chart = echarts.init(document.getElementById('chart-share'));
+  chart.setOption({
+    tooltip:{trigger:'item',formatter:'{b}<br/>出货量：{c}万台 ({d}%)'},
+    legend:{
+      orient:'vertical',
+      right:10,
+      top:'center',
+      textStyle:{fontSize:11,color:'#555048'},
+      itemWidth:12,itemHeight:8
+    },
+    series:[{
+      type:'pie',
+      radius:['40%','70%'],
+      center:['35%','50%'],
+      avoidLabelOverlap:true,
+      itemStyle:{borderColor:'#fdfbf6',borderWidth:2},
+      label:{show:false},
+      data:[
+        {value:580,name:'石头',itemStyle:{color:'#2d5f7c'}},
+        {value:470,name:'科沃斯',itemStyle:{color:'#b8432a'}},
+        {value:340,name:'追觅',itemStyle:{color:'#c4923a'}},
+        {value:260,name:'小米',itemStyle:{color:'#6b4c7a'}},
+        {value:180,name:'云鲸',itemStyle:{color:'#4a7c59'}},
+        {value:1442,name:'其他',itemStyle:{color:'#ccc2b0'}}
+      ]
+    }]
+  });
+  window.addEventListener('resize',function(){chart.resize()});
+})();
+
+// ===== 图表3：2026 Q1全球竞争 =====
+(function(){
+  var chart = echarts.init(document.getElementById('chart-q1'));
+  chart.setOption({
+    tooltip:{
+      trigger:'axis',
+      axisPointer:{type:'shadow'},
+      formatter:function(params){
+        var s = params[0].name + '<br/>';
+        params.forEach(function(p){
+          s += p.marker + p.seriesName + '：' + p.value + (p.seriesName.indexOf('份额')>=0?'%':'万台') + '<br/>';
+        });
+        return s;
+      }
+    },
+    legend:{data:['出货量(万台)','销量份额(%)','销额份额(%)'],top:0,textStyle:{fontSize:11,color:'#555048'}},
+    grid:{left:50,right:50,top:40,bottom:30},
+    xAxis:{
+      type:'category',
+      data:['追觅','石头','科沃斯','云鲸','小米','iRobot'],
+      axisLine:{lineStyle:{color:'#ddd4c5'}},
+      axisLabel:{color:'#555048',fontSize:12,fontWeight:500}
+    },
+    yAxis:[
+      {
+        type:'value',
+        name:'万台',
+        nameTextStyle:{fontSize:10,color:'#8a8378'},
+        axisLine:{show:false},
+        axisLabel:{color:'#8a8378',fontSize:11},
+        splitLine:{lineStyle:{color:'#eee6d8',type:'dashed'}}
+      },
+      {
+        type:'value',
+        name:'%',
+        nameTextStyle:{fontSize:10,color:'#8a8378'},
+        max:35,
+        axisLine:{show:false},
+        axisLabel:{color:'#8a8378',fontSize:11,formatter:'{value}%'},
+        splitLine:{show:false}
+      }
+    ],
+    series:[
+      {
+        name:'出货量(万台)',
+        type:'bar',
+        data:[155.5,138.3,89.7,45,55,35],
+        barWidth:'30%',
+        itemStyle:{color:'#b8432a',borderRadius:[4,4,0,0]},
+        label:{show:true,position:'top',fontSize:10,color:'#555048'}
+      },
+      {
+        name:'销量份额(%)',
+        type:'line',
+        yAxisIndex:1,
+        data:[23.7,21.1,13.7,6.8,8.4,5.3],
+        symbol:'circle',
+        symbolSize:8,
+        lineStyle:{color:'#2d5f7c',width:2},
+        itemStyle:{color:'#2d5f7c'},
+        label:{show:true,position:'top',fontSize:10,color:'#2d5f7c',formatter:'{c}%'}
+      },
+      {
+        name:'销额份额(%)',
+        type:'line',
+        yAxisIndex:1,
+        data:[28.0,25.7,18.5,5.2,6.0,4.1],
+        symbol:'diamond',
+        symbolSize:8,
+        lineStyle:{color:'#c4923a',width:2,type:'dashed'},
+        itemStyle:{color:'#c4923a'},
+        label:{show:true,position:'bottom',fontSize:10,color:'#c4923a',formatter:'{c}%'}
+      }
+    ]
+  });
+  window.addEventListener('resize',function(){chart.resize()});
+})();
+</script>
+
+
+<footer class="aiteemo-foot">
+  <span>© AiTeemo · 标签 <a href="index.html?tag=%E8%A3%85%E4%BF%AE">#装修</a></span>
+  <nav class="post-nav" aria-label="相邻文章" style="display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:flex-end;text-align:right">
+    <a href="robot-vacuum-invisible-workload.html">← 上一篇 · 隐形工作量调查</a>
+    <a href="ai-renovation-bonsai.html">下一篇 · AI帮我装修第2弹之盆景 →</a>
+  </nav>
+</footer>
+
+</body>
+</html>

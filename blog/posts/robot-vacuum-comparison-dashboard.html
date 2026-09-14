@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扫地机器人横评数据可视化 · AiTeemo</title>
+    <meta name="description" content="7 大评测维度 × 7 款热门机型：清洁、避障、维护与售后的横评对比矩阵与选购建议。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        .tab-btn.active { background-color: #3b82f6; color: white; border-color: #3b82f6; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    
+        /* AiTeemo shell — dark dashboard */
+        .aiteemo-bar{
+          position:sticky;top:0;z-index:1000;
+          background:rgba(15,23,42,.92);
+          backdrop-filter:blur(10px);
+          border-bottom:1px solid rgba(148,163,184,.2);
+        }
+        .aiteemo-bar .ab-inner{
+          max-width:80rem;margin:0 auto;padding:12px 16px;
+          display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+        }
+        .aiteemo-bar a{text-decoration:none;color:#e2e8f0}
+        .aiteemo-bar .ab-logo{font-weight:700;letter-spacing:.02em;font-size:15px}
+        .aiteemo-bar .ab-logo .ai{color:#60a5fa}
+        .aiteemo-bar .ab-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px}
+        .aiteemo-bar .ab-back{color:#94a3b8}
+        .aiteemo-bar .ab-back:hover{color:#60a5fa}
+        .aiteemo-bar .ab-tag{
+          display:inline-block;padding:2px 10px;border:1px solid #60a5fa;color:#60a5fa;
+          border-radius:4px;font-size:12px;letter-spacing:.08em;
+        }
+        .aiteemo-bar .ab-tag:hover{background:rgba(96,165,250,.12)}
+        .aiteemo-foot{
+          max-width:80rem;margin:40px auto 0;padding:32px 16px 48px;
+          border-top:1px solid rgba(148,163,184,.2);
+          display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+          font-size:13px;color:#94a3b8;
+        }
+        .aiteemo-foot a{color:#60a5fa;text-decoration:none}
+        .aiteemo-foot a:hover{text-decoration:underline}
+
+    </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+<nav class="aiteemo-bar" aria-label="站点导航">
+  <div class="ab-inner">
+    <a class="ab-logo" href="../index.html"><span class="ai">Ai</span>Teemo</a>
+    <div class="ab-meta">
+      <a class="ab-back" href="index.html">← 实践笔记</a>
+      <a class="ab-tag" href="index.html?tag=%E8%A3%85%E4%BF%AE">装修</a>
+    </div>
+  </div>
+</nav>
+
+
+    <!-- Header -->
+    <header class="max-w-7xl mx-auto mb-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center border-b border-slate-700 pb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+                <i class="fa-solid font-bold text-blue-400 fa-robot"></i> 扫地机器人横评数据可视化
+            </h1>
+            <p class="text-slate-400 mt-2 text-sm">基于 7 大维度全面剖析 7 款热门机型的差异与表现</p>
+        </div>
+        <div class="flex gap-4 mt-4 md:mt-0">
+            <div class="glass-card px-4 py-2 rounded-lg text-center">
+                <span class="block text-xs text-slate-400">参评机型</span>
+                <span class="text-xl font-bold text-blue-400">7 款</span>
+            </div>
+            <div class="glass-card px-4 py-2 rounded-lg text-center">
+                <span class="block text-xs text-slate-400">评测维度</span>
+                <span class="text-xl font-bold text-emerald-400">7 大项</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation Tabs -->
+    <div class="max-w-7xl mx-auto mb-6 flex flex-wrap gap-2 border-b border-slate-800 pb-4">
+        <button onclick="switchTab('dim-tab')" id="btn-dim-tab" class="tab-btn active px-5 py-2.5 rounded-lg border border-slate-700 text-sm font-medium transition-all flex items-center gap-2">
+            <i class="fa-solid fa-layer-group"></i> 7大评测维度详解
+        </button>
+        <button onclick="switchTab('matrix-tab')" id="btn-matrix-tab" class="tab-btn px-5 py-2.5 rounded-lg border border-slate-700 text-sm font-medium transition-all flex items-center gap-2">
+            <i class="fa-solid fa-table"></i> 机型表现对比矩阵
+        </button>
+        <button onclick="switchTab('models-tab')" id="btn-models-tab" class="tab-btn px-5 py-2.5 rounded-lg border border-slate-700 text-sm font-medium transition-all flex items-center gap-2">
+            <i class="fa-solid fa-microchip"></i> 参评机型总结与建议
+        </button>
+    </div>
+
+    <main class="max-w-7xl mx-auto">
+
+        <!-- TAB 1: 7大维度详解 -->
+        <section id="dim-tab" class="tab-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Card 1 -->
+            <div class="glass-card p-6 rounded-xl border-l-4 border-blue-500 hover:border-blue-400 transition">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-3 bg-blue-500/10 text-blue-400 rounded-lg"><i class="fa-solid fa-broom text-xl"></i></div>
+                    <h3 class="text-lg font-bold text-white">1. 清洁能力维度</h3>
+                </div>
+                <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside">
+                    <li><strong class="text-slate-100">脏污清除：</strong>头发/毛发、颗粒物打飞率、顽固干湿污渍。</li>
+                    <li><strong class="text-slate-100">覆盖盲区：</strong>沿边、内/外转角、圆柱体周边的残留量。</li>
+                    <li><strong class="text-slate-100">地毯深度：</strong>长短毛地毯吸尘率及滚刷卡死表现。</li>
+                    <li><strong class="text-slate-100">地面水痕：</strong>亮光/柔光/木纹砖及木地板逆光水渍。</li>
+                    <li><strong class="text-slate-100">宠物场景：</strong>猫砂、猫条、模拟呕吐物清扫效果。</li>
+                </ul>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="glass-card p-6 rounded-xl border-l-4 border-emerald-500 hover:border-emerald-400 transition">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-lg"><i class="fa-solid fa-route text-xl"></i></div>
+                    <h3 class="text-lg font-bold text-white">2. 算法与路线规划</h3>
+                </div>
+                <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside">
+                    <li><strong class="text-slate-100">清扫逻辑：</strong>重污区域识别、加扫频次（走两步加扫/回洗）。</li>
+                    <li><strong class="text-slate-100">清扫顺序：</strong>先干后湿、先清扫干净区再扫重污区。</li>
+                    <li><strong class="text-slate-100">地图构建：</strong>建图耗时、3D建图、地形/家具标注准确度。</li>
+                    <li><strong class="text-slate-100">地图自定义：</strong>禁区、床帘/门帘标注、地面材质设定。</li>
+                </ul>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="glass-card p-6 rounded-xl border-l-4 border-purple-500 hover:border-purple-400 transition">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-3 bg-purple-500/10 text-purple-400 rounded-lg"><i class="fa-solid fa-shield-halved text-xl"></i></div>
+                    <h3 class="text-lg font-bold text-white">3. 避障与越障能力</h3>
+                </div>
+                <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside">
+                    <li><strong class="text-slate-100">静态避障：</strong>蓝牙耳机、贴墙数据线等微小杂物识别。</li>
+                    <li><strong class="text-slate-100">动态避障：</strong>人/宠物干扰避让及事后补扫能力。</li>
+                    <li><strong class="text-slate-100">极限越障：</strong>门槛跨越测试（0.5cm逐档升至4.0cm）。</li>
+                    <li><strong class="text-slate-100">复杂脱困：</strong>床底低矮空间、椅腿密集区及地毯脱困。</li>
+                </ul>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="glass-card p-6 rounded-xl border-l-4 border-amber-500 hover:border-amber-400 transition">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-3 bg-amber-500/10 text-amber-400 rounded-lg"><i class="fa-solid fa-sink text-xl"></i></div>
+                    <h3 class="text-lg font-bold text-white">4. 维护与自清洁</h3>
+                </div>
+                <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside">
+                    <li><strong class="text-slate-100">毛发防缠：</strong>主刷（割毛/防缠）、边刷、滚筒及轴承缠绕。</li>
+                    <li><strong class="text-slate-100">基站残留：</strong>清洗盘、污水槽脏污及污水积存量。</li>
+                    <li><strong class="text-slate-100">机身残留：</strong>尘盒、吸口、滚刷盖板及底盘残留情况。</li>
+                </ul>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="glass-card p-6 rounded-xl border-l-4 border-pink-500 hover:border-pink-400 transition">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-3 bg-pink-500/10 text-pink-400 rounded-lg"><i class="fa-solid fa-comment-dots text-xl"></i></div>
+                    <h3 class="text-lg font-bold text-white">5. 交互与智能生态</h3>
+                </div>
+                <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside">
+                    <li><strong class="text-slate-100">APP 控制：</strong>功能丰富度、界面逻辑与可调选项。</li>
+                    <li><strong class="text-slate-100">语音交互：</strong>指令识别准确率、思考回复自然度及语气。</li>
+                    <li><strong class="text-slate-100">生态联动：</strong>米家（小爱同学）等主流智能家居接入。</li>
+                </ul>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="glass-card p-6 rounded-xl border-l-4 border-cyan-500 hover:border-cyan-400 transition">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-3 bg-cyan-500/10 text-cyan-400 rounded-lg"><i class="fa-solid fa-gauge-high text-xl"></i></div>
+                    <h3 class="text-lg font-bold text-white">6. 基础运行体验</h3>
+                </div>
+                <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside">
+                    <li><strong class="text-slate-100">噪音管控：</strong>清扫噪音、基站集尘/自清洁及烘干噪音。</li>
+                    <li><strong class="text-slate-100">烘干表现：</strong>最小/静音档位下拖布干燥彻底度与耗费时长。</li>
+                    <li><strong class="text-slate-100">能效用时：</strong>全屋清扫耗时、耗电量及快充实用价值。</li>
+                </ul>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="glass-card p-6 rounded-xl border-l-4 border-rose-500 hover:border-rose-400 transition md:col-span-2 lg:col-span-1">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-3 bg-rose-500/10 text-rose-400 rounded-lg"><i class="fa-solid fa-headset text-xl"></i></div>
+                    <h3 class="text-lg font-bold text-white">7. 售后与质保服务</h3>
+                </div>
+                <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside">
+                    <li><strong class="text-slate-100">保障政策：</strong>7天无理由退货支持、2年整机质保。</li>
+                    <li><strong class="text-slate-100">暗访实测：</strong>客服响应速度、师傅上门/寄修效率与态度。</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- TAB 2: 机型对比矩阵 -->
+        <section id="matrix-tab" class="tab-content hidden overflow-x-auto">
+            <div class="glass-card rounded-xl p-4 min-w-[800px]">
+                <table class="w-full text-left text-sm text-slate-300">
+                    <thead class="bg-slate-800/80 text-slate-100 uppercase text-xs">
+                        <tr>
+                            <th class="p-3">品牌型号</th>
+                            <th class="p-3">拖布形态</th>
+                            <th class="p-3">越障能力</th>
+                            <th class="p-3">重污/地毯表现</th>
+                            <th class="p-3">防缠绕/自清洁</th>
+                            <th class="p-3">语音/生态</th>
+                            <th class="p-3">综合避障/防卡死</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-700/50">
+                        <tr class="hover:bg-slate-800/30">
+                            <td class="p-3 font-semibold text-blue-400">追觅 S60 Pro</td>
+                            <td class="p-3">双圆盘</td>
+                            <td class="p-3"><span class="bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded text-xs">中规中矩</span></td>
+                            <td class="p-3">地毯升级明显/顽固湿渍一般</td>
+                            <td class="p-3 text-emerald-400">优秀（干净度高）</td>
+                            <td class="p-3 text-emerald-400">极佳（有人情味）</td>
+                            <td class="p-3 text-emerald-400">顶级（支持补扫）</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/30">
+                            <td class="p-3 font-semibold text-blue-400">石头 P20 Max</td>
+                            <td class="p-3">双圆盘</td>
+                            <td class="p-3"><span class="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded text-xs">3.5 cm</span></td>
+                            <td class="p-3 text-emerald-400">地毯舒适区/全场最佳</td>
+                            <td class="p-3">主刷干净/边缘微变色</td>
+                            <td class="p-3 text-emerald-400">优秀（自然自然）</td>
+                            <td class="p-3 text-emerald-400">顶级（补扫积极）</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/30">
+                            <td class="p-3 font-semibold text-blue-400">云鲸 GX</td>
+                            <td class="p-3">履带/滚筒</td>
+                            <td class="p-3"><span class="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded text-xs">3.5 cm</span></td>
+                            <td class="p-3">宠物场景全场最佳</td>
+                            <td class="p-3">不缠绕/有极少残留</td>
+                            <td class="p-3">良好</td>
+                            <td class="p-3 text-yellow-400">激进（易撞门/思考）</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/30">
+                            <td class="p-3 font-semibold text-blue-400">云鲸 逍遥003</td>
+                            <td class="p-3">履带/滚筒</td>
+                            <td class="p-3"><span class="bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded text-xs">兼容长短毛</span></td>
+                            <td class="p-3">回洗6次/效果极佳</td>
+                            <td class="p-3">不缠绕/表现稳定</td>
+                            <td class="p-3">有进步（出声思考）</td>
+                            <td class="p-3 text-yellow-400">避障偏保守</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/30">
+                            <td class="p-3 font-semibold text-blue-400">小米 6 Pro</td>
+                            <td class="p-3">滚筒</td>
+                            <td class="p-3"><span class="bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-xs">普通</span></td>
+                            <td class="p-3">清扫后留短发/湿渍一般</td>
+                            <td class="p-3 text-rose-400">滚刷最差（剪断散落）</td>
+                            <td class="p-3 text-cyan-400">米家生态/小爱同学</td>
+                            <td class="p-3">良好</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/30">
+                            <td class="p-3 font-semibold text-blue-400">小米 6 Max</td>
+                            <td class="p-3">滚筒+小轮</td>
+                            <td class="p-3"><span class="bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded text-xs">4.0 cm (最高)</span></td>
+                            <td class="p-3">滚筒沿边效果好/水痕多</td>
+                            <td class="p-3">拖布防缠绕效果好</td>
+                            <td class="p-3 text-cyan-400">米家生态/小爱同学</td>
+                            <td class="p-3">展进黑线/推地毯</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/30">
+                            <td class="p-3 font-semibold text-blue-400">科沃斯 X12</td>
+                            <td class="p-3">滚筒（喷水）</td>
+                            <td class="p-3"><span class="bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded text-xs">易卡死</span></td>
+                            <td class="p-3 text-emerald-400">纯地面重污无残留</td>
+                            <td class="p-3 text-rose-400">最差（积污/污水残留多）</td>
+                            <td class="p-3 text-rose-400">离谱（乱回/废话多）</td>
+                            <td class="p-3 text-rose-400">极差（地毯/茶几底死卡）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB 3: 机型总结卡片 -->
+        <section id="models-tab" class="tab-content hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Dreame -->
+            <div class="glass-card p-6 rounded-xl relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">追觅 S60 Pro (圆盘版)</h3>
+                        <p class="text-xs text-slate-400">S50 Pro 升级版 · 综合均衡水准</p>
+                    </div>
+                    <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs px-2.5 py-1 rounded-full">强烈推荐</span>
+                </div>
+                <p class="text-sm text-slate-300 mb-4">各方面非常均衡且无明显短板，烘干静音低，自清洁干净，语音交互优秀，地毯提升大。唯独越障偏中规中矩。</p>
+                <div class="text-xs text-slate-400 border-t border-slate-700/50 pt-3 flex justify-between">
+                    <span>适用人群：追求省心、均衡体验的家庭</span>
+                    <span class="text-amber-400"><i class="fa-solid fa-star"></i> 4.8 / 5.0</span>
+                </div>
+            </div>
+
+            <!-- Roborock -->
+            <div class="glass-card p-6 rounded-xl relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">石头 P20 Max</h3>
+                        <p class="text-xs text-slate-400">P20 Ultra Plus 升级版 · 性价比之选</p>
+                    </div>
+                    <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs px-2.5 py-1 rounded-full">首选推荐</span>
+                </div>
+                <p class="text-sm text-slate-300 mb-4">地毯清洁天花板，噪音变低、越障提升至3.5cm，避障与补扫智能。对比今年旗舰更有性价比，买它不出错。</p>
+                <div class="text-xs text-slate-400 border-t border-slate-700/50 pt-3 flex justify-between">
+                    <span>适用人群：家中铺设地毯、追求稳定算法的用户</span>
+                    <span class="text-amber-400"><i class="fa-solid fa-star"></i> 4.8 / 5.0</span>
+                </div>
+            </div>
+
+            <!-- Narwal GX -->
+            <div class="glass-card p-6 rounded-xl relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">云鲸 GX</h3>
+                        <p class="text-xs text-slate-400">履带式结构 · 高性价比选</p>
+                    </div>
+                    <span class="bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs px-2.5 py-1 rounded-full">值得购买</span>
+                </div>
+                <p class="text-sm text-slate-300 mb-4">宠物测试场地全算下来仅残留几颗，性价比极高。缺点在于动态避障较为激进，避障后偶有原地思考1分钟的现象。</p>
+                <div class="text-xs text-slate-400 border-t border-slate-700/50 pt-3 flex justify-between">
+                    <span>适用人群：养宠家庭、看重性价比</span>
+                    <span class="text-amber-400"><i class="fa-solid fa-star"></i> 4.5 / 5.0</span>
+                </div>
+            </div>
+
+            <!-- Narwal 003 -->
+            <div class="glass-card p-6 rounded-xl relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">云鲸 逍遥003</h3>
+                        <p class="text-xs text-slate-400">科技感高端旗舰</p>
+                    </div>
+                    <span class="bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs px-2.5 py-1 rounded-full">预算充足选</span>
+                </div>
+                <p class="text-sm text-slate-300 mb-4">面对顽固污渍回洗多达6次，重污规划强；首次完美兼容长短毛地毯。性能略胜GX但目前差价较大。</p>
+                <div class="text-xs text-slate-400 border-t border-slate-700/50 pt-3 flex justify-between">
+                    <span>适用人群：追求高清洁深度、预算充足</span>
+                    <span class="text-amber-400"><i class="fa-solid fa-star"></i> 4.4 / 5.0</span>
+                </div>
+            </div>
+
+            <!-- Xiaomi 6 Max / Pro -->
+            <div class="glass-card p-6 rounded-xl relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">小米 6 Max / 6 Pro</h3>
+                        <p class="text-xs text-slate-400">米家生态进阶款</p>
+                    </div>
+                    <span class="bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs px-2.5 py-1 rounded-full">米粉专属</span>
+                </div>
+                <p class="text-sm text-slate-300 mb-4">Max款4cm越障全场第一且滚筒沿边效果极佳；Pro切割毛发但剪碎后易二次残留。清洁力整体一般，最大的优势在于原生接入米家与小爱控制。</p>
+                <div class="text-xs text-slate-400 border-t border-slate-700/50 pt-3 flex justify-between">
+                    <span>适用人群：全屋智能米家生态用户</span>
+                    <span class="text-amber-400"><i class="fa-solid fa-star"></i> 3.8 / 5.0</span>
+                </div>
+            </div>
+
+            <!-- Ecovacs -->
+            <div class="glass-card p-6 rounded-xl relative overflow-hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">科沃斯 X12</h3>
+                        <p class="text-xs text-slate-400">喷水功能创新尝试款</p>
+                    </div>
+                    <span class="bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs px-2.5 py-1 rounded-full">不推荐</span>
+                </div>
+                <p class="text-sm text-slate-300 mb-4">纯依靠滚筒擦地效果好，但喷水未主动触发过。茶几底部/地毯上多次死卡，自清洁污渍与污水残留严重，语音交互反向优化。</p>
+                <div class="text-xs text-slate-400 border-t border-slate-700/50 pt-3 flex justify-between">
+                    <span>建议：建议观望后续软件OTA及算法优化</span>
+                    <span class="text-rose-400"><i class="fa-solid fa-star"></i> 2.5 / 5.0</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Remove active style from all buttons
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabId).classList.remove('hidden');
+            // Add active style to selected button
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+    </script>
+
+<footer class="aiteemo-foot">
+  <span>© AiTeemo · 标签 <a href="index.html?tag=%E8%A3%85%E4%BF%AE">#装修</a></span>
+  <nav class="post-nav" aria-label="相邻文章" style="display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:flex-end;text-align:right">
+    <a href="robot-vacuum-invisible-workload.html">下一篇 · 隐形工作量调查 →</a>
+  </nav>
+</footer>
+
+</body>
+</html>
