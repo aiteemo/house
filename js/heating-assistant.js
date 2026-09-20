@@ -1,13 +1,21 @@
+// Master: js/heating-assistant.js | Mirror: blog/tools/_shared/js/heating-assistant.js
 // ========== 供暖助手 v2.0 ==========
 class HeatingAssistantManager {
     constructor() {
+        this.sheetOpen = false;
+        this._refreshTimer = null;
+        this._host = null;
+        this._vvBound = false;
         this.area = 88.45;
         this.pavingArea = 61;
+        this.pavingSameAsArea = false;
         this.selectedKey = '市热力集团城市热网__';
         // 自采暖参数
         this.boiler = {
             model: '',
             is_condenser: true,
+            thermal_efficiency: 1.08,
+            is_eta_customized: false,
             min_power: 3.8,
             max_power: 22.8,
             has_outdoor_comp: false,
@@ -15,23 +23,80 @@ class HeatingAssistantManager {
             service_life: 8,
             maintain_cost: 400
         };
-        this.user_coeff = 1.0;
+        this.user_coeff = 0.7;
         this.year_life_gas = 300;
         this.customPrice = null;
+        // 难量化常量：默认对齐宣传图，高级可改
+        this.heat_load = HEATING_DATA.constants.base_heat_load;
+        this.gas_heat_equivalent = HEATING_DATA.constants.gas_heat_equivalent;
         // 对比口径：heating=刨除生活用气（默认） / household=家庭燃气总账
         this.compareMode = 'heating';
         // 改自采暖时是否计入停供基本热费（约 30%），默认开启
         this.includePauseFee = true;
-        // 设备升级选型分析（可选）：基准炉 vs 升级炉
-        this.upgrade = {
-            compareKey: '',      // '' 未启用 | 机型下标 | 'custom'
-            basePrice: 3500,
-            upgradePrice: 7000,
-            baseFree: false,     // 精装自带/旧炉拆换 → 基准价按 0
-            saveRate: 0.3,       // 节能率 η
-            lifeYears: 10
-        };
+        // 设备升级选型（可选）：当前表单机型 = 基准；仅当选择对比炉时计算回本 B
+        this.upgrade = { compareKey: '' };
+        this.compareBoiler = this.cloneBoiler(this.boiler);
+        // 按机型名本地校正覆盖（不写回 JSON；重选机型仍保留；「重置参数」清空）
+        this.boiler_overrides = {};
         this.loadState();
+    }
+
+    normalizeBoiler(boiler) {
+        if (!boiler) return;
+        if (boiler.is_eta_customized === undefined) boiler.is_eta_customized = false;
+        const eta = Number(boiler.thermal_efficiency);
+        if (!(eta > 0) || !isFinite(eta)) {
+            boiler.thermal_efficiency = boiler.is_condenser ? 1.08 : 0.90;
+        }
+    }
+
+    suggestedEta(boiler) {
+        let eta = boiler.is_condenser ? 1.08 : 0.90;
+        if (boiler.has_outdoor_comp) eta = Math.round((eta + 0.02) * 100) / 100;
+        return eta;
+    }
+
+    applySuggestedEta(boiler) {
+        if (!boiler || boiler.is_eta_customized) return;
+        boiler.thermal_efficiency = this.suggestedEta(boiler);
+    }
+
+    resolveEta(boiler) {
+        const eta = Number(boiler && boiler.thermal_efficiency);
+        if (eta > 0 && isFinite(eta)) return eta;
+        return (boiler && boiler.is_condenser) ? 1.08 : 0.90;
+    }
+
+    snapshotBoilerOverride(boiler) {
+        if (!boiler) return null;
+        return {
+            is_condenser: !!boiler.is_condenser,
+            thermal_efficiency: Number(boiler.thermal_efficiency),
+            is_eta_customized: !!boiler.is_eta_customized,
+            min_power: Number(boiler.min_power) || 0,
+            max_power: Number(boiler.max_power) || 0,
+            has_outdoor_comp: !!boiler.has_outdoor_comp,
+            price: Number(boiler.price) || 0,
+            service_life: Number(boiler.service_life) || 8,
+            maintain_cost: Number(boiler.maintain_cost) || 0
+        };
+    }
+
+    rememberBoilerOverride(boiler) {
+        const name = boiler && boiler.model;
+        if (!name) return;
+        if (!this.boiler_overrides || typeof this.boiler_overrides !== 'object') {
+            this.boiler_overrides = {};
+        }
+        this.boiler_overrides[name] = this.snapshotBoilerOverride(boiler);
+    }
+
+    hasBoilerOverride(modelName) {
+        return !!(modelName && this.boiler_overrides && this.boiler_overrides[modelName]);
+    }
+
+    clearBoilerOverrides() {
+        this.boiler_overrides = {};
     }
 
     loadState() {
@@ -41,6 +106,7 @@ class HeatingAssistantManager {
                 const d = JSON.parse(saved);
                 if (d.area) this.area = d.area;
                 if (d.pavingArea) this.pavingArea = d.pavingArea;
+                if (d.pavingSameAsArea !== undefined) this.pavingSameAsArea = !!d.pavingSameAsArea;
                 if (d.selectedKey) this.selectedKey = d.selectedKey;
                 if (d.boiler) Object.assign(this.boiler, d.boiler);
                 if (d.user_coeff !== undefined) this.user_coeff = d.user_coeff;
@@ -48,15 +114,37 @@ class HeatingAssistantManager {
                 if (d.customPrice !== undefined) this.customPrice = d.customPrice;
                 if (d.compareMode === 'heating' || d.compareMode === 'household') this.compareMode = d.compareMode;
                 if (d.includePauseFee !== undefined) this.includePauseFee = !!d.includePauseFee;
+                if (d.heat_load > 0) this.heat_load = d.heat_load;
+                if (d.gas_heat_equivalent > 0) this.gas_heat_equivalent = d.gas_heat_equivalent;
                 if (d.upgrade) Object.assign(this.upgrade, d.upgrade);
+                if (d.boiler_overrides && typeof d.boiler_overrides === 'object') {
+                    this.boiler_overrides = d.boiler_overrides;
+                }
+                if (d.compareBoiler) {
+                    Object.assign(this.compareBoiler, d.compareBoiler);
+                } else if (this.upgrade.compareKey && this.upgrade.compareKey !== 'custom') {
+                    const m = HEATING_DATA.boiler_models[this.upgrade.compareKey];
+                    if (m) this.compareBoiler = this.boilerFromCatalogWithOverride(m);
+                } else if (this.upgrade.compareKey === 'custom') {
+                    this.compareBoiler = this.cloneBoiler(this.boiler);
+                    if (this.upgrade.upgradePrice) this.compareBoiler.price = this.upgrade.upgradePrice;
+                    this.compareBoiler.model = '';
+                }
             } catch (e) {}
         }
+        const C = HEATING_DATA.constants;
+        if (!(this.heat_load > 0)) this.heat_load = C.base_heat_load;
+        if (!(this.gas_heat_equivalent > 0)) this.gas_heat_equivalent = C.gas_heat_equivalent;
+        this.normalizeBoiler(this.boiler);
+        this.normalizeBoiler(this.compareBoiler);
+        if (this.pavingSameAsArea) this.pavingArea = this.area;
     }
 
     saveState() {
         localStorage.setItem('heating_assistant_v2', JSON.stringify({
             area: this.area,
             pavingArea: this.pavingArea,
+            pavingSameAsArea: this.pavingSameAsArea,
             selectedKey: this.selectedKey,
             boiler: this.boiler,
             user_coeff: this.user_coeff,
@@ -64,8 +152,68 @@ class HeatingAssistantManager {
             customPrice: this.customPrice,
             compareMode: this.compareMode,
             includePauseFee: this.includePauseFee,
-            upgrade: this.upgrade
+            heat_load: this.heat_load,
+            gas_heat_equivalent: this.gas_heat_equivalent,
+            upgrade: this.upgrade,
+            compareBoiler: this.compareBoiler,
+            boiler_overrides: this.boiler_overrides || {}
         }));
+    }
+
+    cloneBoiler(src) {
+        src = src || {};
+        const isCond = !!src.is_condenser;
+        const eta = Number(src.thermal_efficiency);
+        return {
+            model: src.model || '',
+            is_condenser: isCond,
+            thermal_efficiency: (eta > 0 && isFinite(eta)) ? eta : (isCond ? 1.08 : 0.90),
+            is_eta_customized: !!src.is_eta_customized,
+            min_power: src.min_power || 3.8,
+            max_power: src.max_power || 22.8,
+            has_outdoor_comp: !!src.has_outdoor_comp,
+            price: src.price || 0,
+            service_life: src.service_life || 8,
+            maintain_cost: src.maintain_cost || 0
+        };
+    }
+
+    boilerFromCatalog(m) {
+        return {
+            model: m.model_name,
+            is_condenser: m.is_condenser,
+            thermal_efficiency: m.thermal_efficiency || (m.is_condenser ? 1.08 : 0.90),
+            is_eta_customized: false,
+            min_power: m.min_power,
+            max_power: m.max_power,
+            has_outdoor_comp: m.has_outdoor_comp,
+            price: m.boiler_price_ref,
+            service_life: m.boiler_service_life,
+            maintain_cost: m.annual_maintain_cost
+        };
+    }
+
+    /** 目录默认 + 本机校正覆盖（若有） */
+    boilerFromCatalogWithOverride(m) {
+        const base = this.boilerFromCatalog(m);
+        const ov = this.boiler_overrides && this.boiler_overrides[base.model];
+        if (ov && typeof ov === 'object') {
+            Object.assign(base, ov, { model: base.model });
+            this.normalizeBoiler(base);
+        }
+        return base;
+    }
+
+    applyCompareKey(key) {
+        this.upgrade.compareKey = key;
+        if (!key) return;
+        if (key === 'custom') {
+            this.compareBoiler = this.cloneBoiler(this.boiler);
+            this.compareBoiler.model = '';
+            return;
+        }
+        const m = HEATING_DATA.boiler_models[key];
+        if (m) this.compareBoiler = this.boilerFromCatalogWithOverride(m);
     }
 
     /** 北京居民阶梯气价累进计价（含分档明细，便于核对） */
@@ -134,67 +282,50 @@ class HeatingAssistantManager {
         const area = this.pavingArea;
         if (area <= 0) return null;
 
-        // FR02 基础热负荷
-        const daily_base_kwh = area * C.base_heat_load * C.hour_per_day;
-        const daily_base_gas = daily_base_kwh / C.gas_heat_equivalent;
+        const heatLoad = this.heat_load > 0 ? this.heat_load : C.base_heat_load;
+        const H = this.gas_heat_equivalent > 0 ? this.gas_heat_equivalent : C.gas_heat_equivalent;
+        const eta = this.resolveEta(this.boiler);
+        const days = C.heating_season_days;
+        const hours = C.hour_per_day;
 
-        // FR03 修正系数
-        const condenser_coeff = this.boiler.is_condenser ? 0.7 : 1.0;
-        const temp_comp_coeff = this.boiler.has_outdoor_comp ? 0.9 : 1.0;
-        let power_coeff = 1.0;
-        let power_coeff_rule = '最小功率 > 3.8kW → ×1.05';
-        if (this.boiler.min_power <= 3.1) {
-            power_coeff = 0.95;
-            power_coeff_rule = '最小功率 ≤ 3.1kW → ×0.95';
-        } else if (this.boiler.min_power <= 3.8) {
-            power_coeff = 1.0;
-            power_coeff_rule = '3.1kW < 最小功率 ≤ 3.8kW → ×1.0';
-        } else {
-            power_coeff = 1.05;
-            power_coeff_rule = '最小功率 > 3.8kW → ×1.05';
-        }
+        // Q_season = 面积 × 热指标 × 小时 × 天数 × 使用系数
+        const Q_season = area * heatLoad * hours * days * this.user_coeff;
+        const season_gas = Q_season / (H * eta);
+        const daily_real_gas = season_gas / days;
+        const daily_base_kwh = area * heatLoad * hours;
+        const daily_base_gas = daily_base_kwh / H;
 
-        // FR04 实际耗气量
-        const daily_real_gas = daily_base_gas * condenser_coeff * temp_comp_coeff * power_coeff * this.user_coeff;
-        const season_gas = daily_real_gas * C.heating_season_days;
-
-        // FR05 阶梯气价（生活用气参与梯度，抬高采暖用气单价）
+        // 阶梯气价（生活用气参与梯度）— 计价口径未改
         const total_gas = season_gas + this.year_life_gas;
         const ladder_total = this.calcLadderCost(total_gas);
         const ladder_life = this.calcLadderCost(this.year_life_gas);
         const gas_cost = ladder_total.cost;
         const tier = ladder_total.tier;
         const life_gas_cost = ladder_life.cost;
-        // 采暖归因燃气费 = 全年总燃气费 − 仅生活用气费用（差额法）
         const heating_gas_cost = gas_cost - life_gas_cost;
 
-        // FR06 固定成本
         const year_depreciation = this.boiler.price / this.boiler.service_life;
         const year_fixed = year_depreciation + this.boiler.maintain_cost;
-
-        // FR07 综合总成本
-        // heating_compare_cost：供暖对比口径（刨除生活用气）
-        // household_total_cost：家庭燃气总账（含生活用气）
         const heating_compare_cost = heating_gas_cost + year_fixed;
         const household_total_cost = gas_cost + year_fixed;
 
         return {
             paving_area: area,
+            Q_season,
+            eta,
             daily_base_kwh, daily_base_gas, daily_real_gas, season_gas, total_gas,
             tier, gas_cost, life_gas_cost, heating_gas_cost,
             ladder_total, ladder_life,
             year_depreciation, year_fixed,
             heating_compare_cost, household_total_cost,
-            // 兼容旧字段名
             total_cost: household_total_cost,
             avg_price: total_gas > 0 ? gas_cost / total_gas : 0,
             heating_avg_price: season_gas > 0 ? heating_gas_cost / season_gas : 0,
-            condenser_coeff, temp_comp_coeff, power_coeff, power_coeff_rule,
             constants: {
-                base_heat_load: C.base_heat_load,
-                hour_per_day: C.hour_per_day,
-                gas_heat_equivalent: C.gas_heat_equivalent,
-                heating_season_days: C.heating_season_days
+                base_heat_load: heatLoad,
+                hour_per_day: hours,
+                gas_heat_equivalent: H,
+                heating_season_days: days
             }
         };
     }
@@ -238,37 +369,29 @@ class HeatingAssistantManager {
         };
     }
 
-    /** 普通二级能效炉采暖季耗气（基准 V0，不含冷凝/温补节能） */
-    calcOrdinarySeasonGas() {
-        const C = HEATING_DATA.constants;
-        const area = this.pavingArea;
-        if (area <= 0) return 0;
-        const daily_base_kwh = area * C.base_heat_load * C.hour_per_day;
-        const daily_base_gas = daily_base_kwh / C.gas_heat_equivalent;
-        let power_coeff = 1.0;
-        if (this.boiler.min_power <= 3.1) power_coeff = 0.95;
-        else if (this.boiler.min_power <= 3.8) power_coeff = 1.0;
-        else power_coeff = 1.05;
-        return daily_base_gas * power_coeff * this.user_coeff * C.heating_season_days;
-    }
-
-    /** 设备升级选型：基准炉 → 升级炉 的增量回本 */
+    /** 机型对比：当前表单炉（基准）vs 所选对比炉 的增量回本 */
     calcUpgradeAnalysis() {
-        const u = this.upgrade;
-        if (!u.compareKey) return null;
+        if (!this.upgrade.compareKey) return null;
 
-        const V0 = this.calcOrdinarySeasonGas();
-        const eta = Math.min(0.9, Math.max(0, Number(u.saveRate) || 0));
-        const dV = V0 * eta;
+        const b0 = this.boiler;
+        const b1 = this.compareBoiler;
+        const V0 = this.calcSeasonGasForBoiler(b0);
+        const V1 = this.calcSeasonGasForBoiler(b1);
+        const eta = V0 > 0 ? (V0 - V1) / V0 : 0;
+        const compareName = (this.upgrade.compareKey !== 'custom' && b1.model)
+            ? b1.model
+            : (b1.model || '自定义对比炉');
+
+        const dV = V0 - V1;
         const life = Math.max(0, this.year_life_gas || 0);
         const costBase = this.calcLadderCost(life + V0).cost;
-        const costUp = this.calcLadderCost(life + V0 - dV).cost;
+        const costUp = this.calcLadderCost(life + V1).cost;
         const dC = costBase - costUp;
 
-        const pBase = u.baseFree ? 0 : Math.max(0, Number(u.basePrice) || 0);
-        const pUp = Math.max(0, Number(u.upgradePrice) || 0);
+        const pBase = Math.max(0, Number(b0.price) || 0);
+        const pUp = Math.max(0, Number(b1.price) || 0);
         const dP = pUp - pBase;
-        const years = Math.max(1, Number(u.lifeYears) || 10);
+        const years = Math.max(1, Number(b1.service_life) || Number(b0.service_life) || 8);
 
         let payback = null;
         let paybackLabel = '不适用';
@@ -284,41 +407,31 @@ class HeatingAssistantManager {
 
         const netLife = dC * years - dP;
         const recommend = payback != null && payback > 0 && payback <= years;
-
-        let compareName = '自定义升级炉';
-        if (u.compareKey !== 'custom' && u.compareKey !== '') {
-            const m = HEATING_DATA.boiler_models[u.compareKey];
-            if (m) compareName = m.model_name;
-        }
+        const baseLabel = this.boiler.model || '当前表单机型';
 
         return {
             enabled: true,
             compareName,
-            V0, eta, dV,
+            baseLabel,
+            V0, V1, eta, dV,
             life_gas: life,
             cost_base_gas: costBase,
             cost_upgrade_gas: costUp,
             dC, dP, pBase, pUp,
-            years, payback, paybackLabel, netLife, recommend,
-            baseFree: !!u.baseFree
+            years, payback, paybackLabel, netLife, recommend
         };
     }
 
-    /** 按指定壁挂炉参数估算采暖季耗气 */
+    /** 按指定壁挂炉参数估算采暖季耗气：V = Q / (H × η) */
     calcSeasonGasForBoiler(boiler) {
         const C = HEATING_DATA.constants;
         const area = this.pavingArea;
         if (area <= 0) return 0;
-        const daily_base_kwh = area * C.base_heat_load * C.hour_per_day;
-        const daily_base_gas = daily_base_kwh / C.gas_heat_equivalent;
-        const condenser_coeff = boiler.is_condenser ? 0.7 : 1.0;
-        const temp_comp_coeff = boiler.has_outdoor_comp ? 0.9 : 1.0;
-        let power_coeff = 1.0;
-        const minP = boiler.min_power;
-        if (minP <= 3.1) power_coeff = 0.95;
-        else if (minP <= 3.8) power_coeff = 1.0;
-        else power_coeff = 1.05;
-        return daily_base_gas * condenser_coeff * temp_comp_coeff * power_coeff * this.user_coeff * C.heating_season_days;
+        const heatLoad = this.heat_load > 0 ? this.heat_load : C.base_heat_load;
+        const H = this.gas_heat_equivalent > 0 ? this.gas_heat_equivalent : C.gas_heat_equivalent;
+        const eta = this.resolveEta(boiler);
+        const Q_season = area * heatLoad * C.hour_per_day * C.heating_season_days * this.user_coeff;
+        return Q_season / (H * eta);
     }
 
     /** 累计花费趋势：年限与各方案序列 */
@@ -334,7 +447,7 @@ class HeatingAssistantManager {
         if (c.upgrade && c.upgrade.payback != null && c.upgrade.payback > 0) {
             horizon = Math.ceil(c.upgrade.payback) + 1;
         } else if (c.upgrade) {
-            horizon = Math.max(2, Math.ceil(c.upgrade.years || 10) + 1);
+            horizon = Math.max(2, Math.ceil(c.upgrade.years || this.boiler.service_life || 8) + 1);
         } else {
             horizon = Math.max(2, Math.ceil(this.boiler.service_life || 8) + 1);
         }
@@ -353,26 +466,23 @@ class HeatingAssistantManager {
         let markPaybackYear = null;
 
         if (c.upgrade) {
-            // 与回本 B 同一口径：黄=基准炉，绿=升级炉（交汇年 ≈ 回本 B）
+            // 与回本 B 同一口径：黄=当前炉，绿=对比炉
             const baseCapex = Math.max(0, c.upgrade.pBase || 0);
             const upCapex = Math.max(0, c.upgrade.pUp || 0);
 
             const seasonBase = c.upgrade.V0;
             const totalBase = this.calcLadderCost(life + seasonBase).cost;
             const gasBase = isHeatingMode ? (totalBase - lifeCost) : totalBase;
-            // 维保/停供两边取相同，交汇年才与回本 B（只含气费 ΔC）对齐
             const opexExtra = maintain + pause;
             const baseAnnual = gasBase + opexExtra;
 
-            const seasonUp = c.upgrade.V0 * (1 - c.upgrade.eta);
+            const seasonUp = c.upgrade.V1 != null ? c.upgrade.V1 : c.upgrade.V0 * (1 - c.upgrade.eta);
             const totalUp = this.calcLadderCost(life + seasonUp).cost;
             const gasUp = isHeatingMode ? (totalUp - lifeCost) : totalUp;
             const upAnnual = gasUp + opexExtra;
 
-            const baseName = c.upgrade.baseFree
-                ? `基准炉（精装自带/旧炉，购炉按 ¥0）`
-                : `基准炉（普通二级能效）¥${baseCapex.toLocaleString('zh-CN')}`;
-            const upName = `升级炉 · ${c.upgrade.compareName} ¥${upCapex.toLocaleString('zh-CN')}`;
+            const baseName = `当前炉 · ${c.upgrade.baseLabel} ¥${baseCapex.toLocaleString('zh-CN')}`;
+            const upName = `对比炉 · ${c.upgrade.compareName} ¥${upCapex.toLocaleString('zh-CN')}`;
 
             series.push(
                 { key: 'base', name: baseName, color: '#fbbf24', data: years.map(y => Math.round(baseCapex + y * baseAnnual)), area: false },
@@ -384,10 +494,10 @@ class HeatingAssistantManager {
             }
 
             noteParts = [
-                `回本 B 口径：黄线=基准炉（购炉 ¥${baseCapex.toFixed(0)}，年采暖气费 ¥${gasBase.toFixed(2)}），绿线=升级炉（购炉 ¥${upCapex.toFixed(0)}，年采暖气费 ¥${gasUp.toFixed(2)}）`,
+                `回本 B 口径：黄线=当前炉（购炉 ¥${baseCapex.toFixed(0)}，年采暖气费 ¥${gasBase.toFixed(2)}），绿线=对比炉（购炉 ¥${upCapex.toFixed(0)}，年采暖气费 ¥${gasUp.toFixed(2)}）`,
                 `年维保与停供基本热费两边相同（各 ¥${opexExtra.toFixed(0)}），不影响交汇`
             ];
-            noteParts.push(`黄/绿交汇年 ≈ 升级回本周期 B（${c.upgrade.paybackLabel}）`);
+            noteParts.push(`黄/绿交汇年 ≈ 机型对比回本 B（${c.upgrade.paybackLabel}）`);
         } else {
             // 未选对比机型：集中 vs 当前自采暖
             const selfGasAnnual = isHeatingMode ? s.heating_gas_cost : s.gas_cost;
@@ -451,13 +561,18 @@ class HeatingAssistantManager {
             el.innerHTML = '<div class="heating-trend-fallback">图表库未加载，请检查 echarts 脚本。</div>';
             return;
         }
-        const t = this.buildCostTrendData(c);
-        if (this._trendChart) {
-            try { this._trendChart.dispose(); } catch (e) {}
-            this._trendChart = null;
+        if (el.offsetParent === null || el.clientWidth < 8) {
+            return;
         }
-        const chart = echarts.init(el);
-        this._trendChart = chart;
+        const t = this.buildCostTrendData(c);
+        let chart = this._trendChart;
+        if (!chart || chart.getDom() !== el) {
+            if (chart) {
+                try { chart.dispose(); } catch (e) {}
+            }
+            chart = echarts.init(el);
+            this._trendChart = chart;
+        }
         chart.setOption({
             color: t.series.map(s => s.color),
             tooltip: {
@@ -515,6 +630,484 @@ class HeatingAssistantManager {
             };
             window.addEventListener('resize', this._trendResizeBound);
         }
+        requestAnimationFrame(() => {
+            if (this._trendChart) this._trendChart.resize();
+        });
+    }
+
+    applyPavingSameLock(container) {
+        const paving = container.querySelector('#hPaving');
+        const chk = container.querySelector('#hSameArea');
+        if (chk) chk.checked = this.pavingSameAsArea;
+        if (!paving) return;
+        if (this.pavingSameAsArea) {
+            this.pavingArea = this.area;
+            paving.value = this.area;
+            paving.setAttribute('readonly', 'true');
+            paving.classList.add('is-locked');
+        } else {
+            paving.removeAttribute('readonly');
+            paving.classList.remove('is-locked');
+        }
+    }
+
+    modeTagLabel(mode) {
+        return mode === 'household' ? '含生活用气' : '仅采暖';
+    }
+
+    resolveUserMode() {
+        const modes = HEATING_DATA.user_modes || [];
+        const hit = modes.find(m => Math.abs(Number(m.coeff) - Number(this.user_coeff)) < 0.001);
+        return hit || modes.find(m => Math.abs(Number(m.coeff) - 0.7) < 0.001) || modes[0] || { label: '正常', coeff: 0.7, desc: '' };
+    }
+
+    renderUsageModeControls(idPrefix) {
+        const modes = HEATING_DATA.user_modes || [];
+        const cur = this.resolveUserMode();
+        return `
+            <div class="heating-usage-block" id="${idPrefix}UsageMode">
+                <div class="heating-usage-head">
+                    <span class="heating-usage-title">使用模式</span>
+                    <span class="heating-usage-meta">×${Number(cur.coeff).toFixed(1)} · ${cur.desc || ''}</span>
+                </div>
+                <div class="heating-usage-seg" role="tablist" aria-label="使用模式">
+                    ${modes.map(m => {
+                        const active = Math.abs(Number(m.coeff) - Number(this.user_coeff)) < 0.001 ? 'active' : '';
+                        return `<button type="button" class="husage-btn ${active}" data-coeff="${m.coeff}" title="${m.label}（${m.coeff}）· ${m.desc || ''}" role="tab" aria-selected="${active ? 'true' : 'false'}">${m.label}</button>`;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    renderModeControls(c, idPrefix) {
+        const isHeatingMode = c.mode === 'heating';
+        const pausePct = Math.round((c.pause_ratio || 0.3) * 100);
+        return `
+            <div class="heating-mode-toggle" id="${idPrefix}CompareMode">
+                <button type="button" class="hmode-btn ${isHeatingMode ? 'active' : ''}" data-mode="heating" title="刨除生活用气，只比供暖本身">纯供暖对比</button>
+                <button type="button" class="hmode-btn ${!isHeatingMode ? 'active' : ''}" data-mode="household" title="含生活用气的家庭燃气总账">家庭总燃气</button>
+            </div>
+            <label class="heating-pause-opt">
+                <input type="checkbox" id="${idPrefix}PauseFee" ${c.includePauseFee ? 'checked' : ''}>
+                <span>计入停供基本热费（约 ${pausePct}%）</span>
+            </label>
+            <div class="heating-mode-hint">${isHeatingMode
+                ? '生活用气只参与阶梯计价，不计入对比费用；两边比的是「供暖本身」花了多少钱'
+                : '自采暖侧含全年生活用气+采暖用气；集中供暖侧仍只有供暖费，适合看家庭气费总账，不宜直接比优劣'}
+                ${c.includePauseFee
+                    ? `；改自采暖后停供仍需缴基本热费约 ${pausePct}%（¥${c.pause_basic_fee.toFixed(2)}），已加到自采暖侧`
+                    : '；未计入停供基本热费，可打开上方开关纳入对比'}</div>
+        `;
+    }
+
+    renderCostStructure(gasShare, pauseShare, equipShare) {
+        const slices = [
+            { color: 'var(--orange)', label: '气费', value: gasShare, leg: 'hbs-leg-gas' },
+            { color: '#a78bfa', label: '停供基本热费', value: pauseShare, leg: 'hbs-leg-pause' },
+            { color: 'var(--accent)', label: '设备/维保', value: equipShare, leg: 'hbs-leg-equip' },
+        ].filter(s => s.value > 0.005);
+        const total = slices.reduce((n, s) => n + s.value, 0);
+        if (!total) return '';
+        const r = 37;
+        const circ = 2 * Math.PI * r;
+        let offset = 0;
+        const rings = slices.map(s => {
+            const len = (s.value / total) * circ;
+            const ring = `<circle cx="50" cy="50" r="${r}" fill="none" stroke="${s.color}" stroke-width="18" stroke-dasharray="${len.toFixed(3)} ${(circ - len).toFixed(3)}" stroke-dashoffset="${(-offset).toFixed(3)}" transform="rotate(-90 50 50)"/>`;
+            offset += len;
+            return ring;
+        }).join('');
+        const legend = slices.map(s => {
+            const pct = (s.value / total) * 100;
+            return `<span class="${s.leg}">${s.label} ${pct.toFixed(0)}% · ¥${s.value.toFixed(0)}</span>`;
+        }).join('');
+        return `
+            <div class="heating-board-pie-wrap" title="自采暖费用结构：气费 / 停供基本热费 / 设备·维保">
+                <svg class="heating-board-pie" viewBox="0 0 100 100" role="img" aria-label="自采暖费用结构">${rings}</svg>
+                <div class="heating-board-stack-legend">${legend}</div>
+            </div>`;
+    }
+
+    renderBoard(c) {
+        if (!c) {
+            return `<div class="heating-board-kicker">实时费用看板</div>
+            ${this.renderUsageModeControls('board')}
+            <div class="heating-board-empty">填写面积并选择供暖类型后，这里会实时给出年度对比。</div>`;
+        }
+        const cheaperSelf = c.diff < 0;
+        const cheaperCentral = c.diff > 0;
+        const pct = c.central_fee > 0 ? Math.abs(c.diff) / c.central_fee * 100 : 0;
+        const gasShare = Math.max(0, c.self_gas_part || 0);
+        const pauseShare = c.includePauseFee ? Math.max(0, c.pause_basic_fee || 0) : 0;
+        const equipShare = Math.max(0, c.self.year_fixed || 0);
+        return `
+            <div class="heating-board-kicker">实时费用看板</div>
+            ${this.renderUsageModeControls('board')}
+            ${this.renderModeControls(c, 'board')}
+            <div class="heating-board-kpis">
+                <div class="heating-board-kpi">
+                    <span class="bk-label">集中供暖</span>
+                    <span class="bk-val cmp-central">¥${c.central_fee.toFixed(0)}</span>
+                </div>
+                <div class="heating-board-kpi">
+                    <span class="bk-label">${c.mode === 'heating' ? '自采暖（采暖）' : '自采暖（总账）'}</span>
+                    <span class="bk-val cmp-self">¥${c.self_total.toFixed(0)}</span>
+                </div>
+            </div>
+            <div class="heating-board-diff ${cheaperSelf ? 'is-save' : cheaperCentral ? 'is-cost' : ''}">
+                ${cheaperSelf ? '自采暖更省' : cheaperCentral ? '自采暖更贵' : '持平'}
+                · ${cheaperCentral ? '+' : ''}¥${Math.abs(c.diff).toFixed(0)}/年
+                ${c.central_fee > 0 ? `（${pct.toFixed(0)}%）` : ''}
+            </div>
+            ${this.renderCostStructure(gasShare, pauseShare, equipShare)}
+            <div class="heating-board-payback">回本 A · ${c.payback_years != null ? c.payback_years.toFixed(1) + ' 年' : '不适用'}</div>
+        `;
+    }
+
+    peekHeadline(c) {
+        if (!c) return { main: '填写参数后实时出结论', extra: '', showExtra: false };
+        const cheaperSelf = c.diff < 0;
+        const cheaperCentral = c.diff > 0;
+        const abs = Math.abs(c.diff);
+        const main = cheaperSelf
+            ? `自采暖预计省 ¥${abs.toFixed(0)}/年`
+            : cheaperCentral
+                ? `自采暖预计多花 ¥${abs.toFixed(0)}/年`
+                : '自采暖与集中供暖持平';
+        const extra = (c.payback_years != null && c.payback_years > 0 && c.payback_years < 40)
+            ? `回本 ${c.payback_years.toFixed(1)}年`
+            : '';
+        return { main, extra, showExtra: !!extra };
+    }
+
+    renderPeekBar(c) {
+        const tag = this.modeTagLabel(this.compareMode);
+        const h = this.peekHeadline(c);
+        const open = this.sheetOpen;
+        return `
+            <button type="button" class="heating-peek-row" id="heatingPeekToggle" aria-expanded="${open ? 'true' : 'false'}">
+                <span class="heating-mode-tag">[${tag}]</span>
+                <span class="heating-peek-main">${h.main}</span>
+                ${h.showExtra ? `<span class="heating-peek-extra">${h.extra}</span>` : ''}
+                <span class="heating-peek-cta">${open ? '收起明细 ▼' : '查看明细 ▲'}</span>
+            </button>
+        `;
+    }
+
+    renderSheetPanel(c) {
+        if (!c) {
+            return `
+                <div class="heating-sheet-head">
+                    <span>年度对比</span>
+                    <button type="button" class="heating-sheet-close" id="heatingSheetClose">关闭</button>
+                </div>
+                <div class="heating-board-empty">暂无对比结果</div>
+            `;
+        }
+        const gasShare = Math.max(0, c.self_gas_part || 0);
+        const pauseShare = c.includePauseFee ? Math.max(0, c.pause_basic_fee || 0) : 0;
+        const equipShare = Math.max(0, c.self.year_fixed || 0);
+        return `
+            <div class="heating-sheet-head">
+                <span>年度对比</span>
+                <button type="button" class="heating-sheet-close" id="heatingSheetClose">关闭</button>
+            </div>
+            <div class="heating-sheet-lines">
+                <div class="heating-sheet-line"><span>市政集中供暖</span><span>¥${c.central_fee.toFixed(2)}</span></div>
+                <div class="heating-sheet-line"><span>壁挂炉自采暖</span><span>¥${c.self_total.toFixed(2)}</span></div>
+                <div class="heating-sheet-line"><span>回本 A</span><span>${c.payback_years != null ? c.payback_years.toFixed(1) + ' 年' : '不适用'}</span></div>
+            </div>
+            ${this.renderCostStructure(gasShare, pauseShare, equipShare)}
+            ${this.renderUsageModeControls('sheet')}
+            ${this.renderModeControls(c, 'sheet')}
+            <p class="heating-sheet-foot">修改上方表单或此处档位，计算结果实时更新</p>
+        `;
+    }
+
+    scheduleRefresh(container, immediate) {
+        if (immediate) {
+            if (this._refreshTimer) {
+                clearTimeout(this._refreshTimer);
+                this._refreshTimer = null;
+            }
+            this.refreshResult(container);
+            return;
+        }
+        if (this._refreshTimer) clearTimeout(this._refreshTimer);
+        this._refreshTimer = setTimeout(() => {
+            this._refreshTimer = null;
+            this.refreshResult(container);
+        }, 100);
+    }
+
+    updateMobileSheetPosition() {
+        const sheet = document.getElementById('heatingMobileSheet');
+        if (!sheet) return;
+        if (window.visualViewport) {
+            const pendingBottom = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
+            sheet.style.bottom = Math.max(0, pendingBottom) + 'px';
+        } else {
+            sheet.style.bottom = 'env(safe-area-inset-bottom, 0px)';
+        }
+    }
+
+    bindVisualViewport() {
+        if (this._vvBound) return;
+        this._vvBound = true;
+        const fn = () => {
+            this.updateMobileSheetPosition();
+            this.applySheetLock();
+            if (this._host && this._trendChart) {
+                try { this._trendChart.resize(); } catch (e) {}
+            } else if (this._host) {
+                const c = this.calcCompare();
+                if (c) this.mountCostTrendChart(this._host, c);
+            }
+        };
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', fn);
+            window.visualViewport.addEventListener('scroll', fn);
+        }
+        window.addEventListener('resize', fn);
+        this.updateMobileSheetPosition();
+    }
+
+    applySheetLock() {
+        const mobile = window.matchMedia('(max-width: 1099px)').matches;
+        const lock = mobile && this.sheetOpen;
+        document.documentElement.classList.toggle('heating-sheet-lock', lock);
+        document.body.classList.toggle('heating-sheet-lock', lock);
+        const sheet = document.getElementById('heatingMobileSheet');
+        const backdrop = document.getElementById('heatingSheetBackdrop');
+        if (sheet) sheet.classList.toggle('is-open', this.sheetOpen);
+        if (backdrop) backdrop.classList.toggle('is-open', this.sheetOpen);
+        const toggle = document.getElementById('heatingPeekToggle');
+        if (toggle) toggle.setAttribute('aria-expanded', this.sheetOpen ? 'true' : 'false');
+        const cta = toggle && toggle.querySelector('.heating-peek-cta');
+        if (cta) cta.textContent = this.sheetOpen ? '收起明细 ▼' : '查看明细 ▲';
+    }
+
+    bindSheet(container) {
+        const sheet = container.querySelector('#heatingMobileSheet');
+        if (sheet && !sheet.dataset.bound) {
+            sheet.dataset.bound = '1';
+            sheet.addEventListener('click', (e) => {
+                if (e.target.closest('#heatingPeekToggle')) {
+                    this.sheetOpen = !this.sheetOpen;
+                    this.applySheetLock();
+                    return;
+                }
+                if (e.target.closest('#heatingSheetClose')) {
+                    this.sheetOpen = false;
+                    this.applySheetLock();
+                }
+            });
+        }
+        const backdrop = container.querySelector('#heatingSheetBackdrop');
+        if (backdrop && !backdrop.dataset.bound) {
+            backdrop.dataset.bound = '1';
+            backdrop.addEventListener('click', () => {
+                this.sheetOpen = false;
+                this.applySheetLock();
+            });
+        }
+        this.applySheetLock();
+        this.bindVisualViewport();
+    }
+
+    attrEscape(s) {
+        return String(s || '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    tipBtn(text) {
+        const plain = String(text || '').replace(/<[^>]+>/g, '');
+        return `<button type="button" class="heating-tip" aria-label="说明" aria-expanded="false" data-tip="${this.attrEscape(plain)}">i</button>`;
+    }
+
+    closeTipOverlay() {
+        const overlay = document.getElementById('heatingTipOverlay');
+        if (overlay) overlay.classList.remove('is-open');
+        document.querySelectorAll('.heating-tip.is-open').forEach(el => {
+            el.classList.remove('is-open');
+            el.setAttribute('aria-expanded', 'false');
+        });
+    }
+
+    ensureTipOverlay() {
+        let overlay = document.getElementById('heatingTipOverlay');
+        if (overlay) return overlay;
+        overlay = document.createElement('div');
+        overlay.id = 'heatingTipOverlay';
+        overlay.className = 'heating-tip-overlay';
+        overlay.innerHTML = `
+            <div class="heating-tip-dialog" role="dialog" aria-modal="true" aria-labelledby="heatingTipText">
+                <p id="heatingTipText"></p>
+                <button type="button" class="heating-btn heating-btn-primary heating-tip-close" data-tip-close>知道了</button>
+            </div>`;
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay || e.target.closest('[data-tip-close]')) this.closeTipOverlay();
+        });
+        if (!this._tipVvBound) {
+            this._tipVvBound = true;
+            const fn = () => {
+                const tip = document.querySelector('.heating-tip.is-open');
+                const ov = document.getElementById('heatingTipOverlay');
+                if (tip && ov && ov.classList.contains('is-open')) this.placeTipOnScreen(tip);
+            };
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', fn);
+                window.visualViewport.addEventListener('scroll', fn);
+            }
+            window.addEventListener('resize', fn);
+        }
+        return overlay;
+    }
+
+    placeTipOnScreen(tip) {
+        const overlay = document.getElementById('heatingTipOverlay');
+        const dialog = overlay && overlay.querySelector('.heating-tip-dialog');
+        if (!overlay || !dialog) return;
+        const vv = window.visualViewport;
+        const vw = vv ? vv.width : window.innerWidth;
+        const vh = vv ? vv.height : window.innerHeight;
+        const ox = vv ? vv.offsetLeft : 0;
+        const oy = vv ? vv.offsetTop : 0;
+        overlay.style.top = oy + 'px';
+        overlay.style.left = ox + 'px';
+        overlay.style.width = vw + 'px';
+        overlay.style.height = vh + 'px';
+        const margin = 16;
+        dialog.style.left = '50%';
+        dialog.style.right = 'auto';
+        dialog.style.width = Math.min(360, Math.max(0, vw - margin * 2)) + 'px';
+        dialog.style.top = margin + 'px';
+        const dh = dialog.getBoundingClientRect().height;
+        const tipRect = tip.getBoundingClientRect();
+        const tipBottom = tipRect.bottom - oy;
+        const tipTop = tipRect.top - oy;
+        let top = tipBottom + 8;
+        if (top + dh > vh - margin) top = tipTop - dh - 8;
+        if (top < margin) top = margin;
+        if (top + dh > vh - margin) top = Math.max(margin, vh - dh - margin);
+        dialog.style.top = top + 'px';
+    }
+
+    openTipOverlay(tip) {
+        const overlay = this.ensureTipOverlay();
+        const textEl = overlay.querySelector('#heatingTipText');
+        if (!textEl) return;
+        textEl.textContent = tip.getAttribute('data-tip') || '';
+        this.closeTipOverlay();
+        tip.classList.add('is-open');
+        tip.setAttribute('aria-expanded', 'true');
+        overlay.classList.add('is-open');
+        this.placeTipOnScreen(tip);
+    }
+
+    bindHintTips(container) {
+        if (!container || container.dataset.tipBound) return;
+        container.dataset.tipBound = '1';
+        this.ensureTipOverlay();
+        container.addEventListener('click', (e) => {
+            const tip = e.target.closest('.heating-tip');
+            if (!tip) {
+                this.closeTipOverlay();
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            const was = tip.classList.contains('is-open');
+            this.closeTipOverlay();
+            if (!was) this.openTipOverlay(tip);
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') this.closeTipOverlay();
+        });
+    }
+
+    renderEtaField(boiler, idPrefix, chipGroup) {
+        const etaPct = Math.round(this.resolveEta(boiler) * 100);
+        const presets = HEATING_DATA.efficiency_presets || [0.90, 0.94, 0.98, 1.04, 1.08];
+        const etaTip = '填百分数，如 108 表示 108%。常见铭牌/宣传值可点选；手改后不再被「是否冷凝/室外补偿」覆盖';
+        return `
+            <div class="heating-field heating-field-span2">
+                <label for="${idPrefix}Eta">热效率 η ${this.tipBtn(etaTip)}</label>
+                <div class="heating-eta-row">
+                    <div class="heating-input-with-unit">
+                        <input type="number" class="heating-input" id="${idPrefix}Eta" value="${etaPct}" min="80" max="110" step="1" inputmode="numeric">
+                        <span class="heating-unit" aria-hidden="true">%</span>
+                    </div>
+                    <div class="heating-eta-chips" data-eta-group="${chipGroup}">
+                        ${presets.map(p => {
+                            const pct = Math.round(p * 100);
+                            const active = Math.abs(etaPct - pct) < 0.5 ? 'active' : '';
+                            return `<button type="button" class="heating-eta-chip ${active}" data-eta="${pct}">${pct}%</button>`;
+                        }).join('')}
+                    </div>
+                </div>
+                <div class="heating-hint">${etaTip}</div>
+            </div>
+        `;
+    }
+
+    renderCompareBoilerFields() {
+        if (!this.upgrade.compareKey) return '';
+        const b = this.compareBoiler;
+        const isCustom = this.upgrade.compareKey === 'custom';
+        return `
+                        <div class="heating-compare-block">
+                            <div class="heating-compare-block-title">${isCustom ? '自定义对比炉参数' : '对比炉参数（已载入所选机型，可按报价微调）'}</div>
+                            <p class="heating-hint heating-field-span2">耗气按 V=Q/(H×η)；相对节能率是两边 η 演算结果。趋势图年限：有回本按回本周期+1，否则按对比炉质保年限+1。</p>
+                            ${this.renderEtaField(b, 'hCmp', 'cmp')}
+                            <div class="heating-field">
+                                <label>是否全预混冷凝炉 ${this.tipBtn('未手改 η 时：否→建议 90%，是→建议 108%')}</label>
+                                <div class="heating-radio-group">
+                                    <label class="heating-radio ${b.is_condenser ? 'active' : ''}"><input type="radio" name="cmpCondenser" value="1" ${b.is_condenser ? 'checked' : ''}> 是</label>
+                                    <label class="heating-radio ${!b.is_condenser ? 'active' : ''}"><input type="radio" name="cmpCondenser" value="0" ${!b.is_condenser ? 'checked' : ''}> 否</label>
+                                </div>
+                                <div class="heating-hint">未手改 η 时：否→建议 90%，是→建议 108%</div>
+                            </div>
+                            <div class="heating-field">
+                                <label>是否带室外温度补偿 ${this.tipBtn('未手改 η 时：有补偿相对建议 η +2 个百分点')}</label>
+                                <div class="heating-radio-group">
+                                    <label class="heating-radio ${b.has_outdoor_comp ? 'active' : ''}"><input type="radio" name="cmpOutdoor" value="1" ${b.has_outdoor_comp ? 'checked' : ''}> 是</label>
+                                    <label class="heating-radio ${!b.has_outdoor_comp ? 'active' : ''}"><input type="radio" name="cmpOutdoor" value="0" ${!b.has_outdoor_comp ? 'checked' : ''}> 否</label>
+                                </div>
+                                <div class="heating-hint">未手改 η 时：有补偿相对建议 η +2 个百分点</div>
+                            </div>
+                            <div class="heating-field">
+                                <label>壁挂炉采购总价（元）</label>
+                                <input type="number" class="heating-input" id="hCmpPrice" value="${b.price}" min="0" step="1" inputmode="decimal">
+                            </div>
+                            <div class="heating-field">
+                                <label>计划使用/质保年限</label>
+                                <input type="number" class="heating-input" id="hCmpLife" value="${b.service_life}" min="1" step="1" inputmode="numeric">
+                            </div>
+                            <div class="heating-field">
+                                <label>年度保养费用（元）</label>
+                                <input type="number" class="heating-input" id="hCmpMaintain" value="${b.maintain_cost}" min="0" step="50" inputmode="decimal">
+                            </div>
+                            <details class="heating-advanced heating-field-span2">
+                                <summary>规格信息（不参与耗气）</summary>
+                                <div class="heating-advanced-grid">
+                                    <div class="heating-field">
+                                        <label>最小输出功率（kW） ${this.tipBtn('规格信息，不参与耗气')}</label>
+                                        <input type="number" class="heating-input" id="hCmpMinPower" value="${b.min_power}" min="0" step="0.1" inputmode="decimal">
+                                    </div>
+                                    <div class="heating-field">
+                                        <label>最大输出功率（kW） ${this.tipBtn('规格信息，不参与耗气')}</label>
+                                        <input type="number" class="heating-input" id="hCmpMaxPower" value="${b.max_power}" min="0" step="0.1" inputmode="decimal">
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+        `;
     }
 
     // ========== 渲染 ==========
@@ -525,36 +1118,37 @@ class HeatingAssistantManager {
         const selfResult = this.calcSelfHeating();
         const compare = this.calcCompare();
 
+        this._host = container;
         container.innerHTML = `
-            <div class="heating-calc-wrap">
-                <nav class="heating-side-nav" id="heatingNav">
-                    <a class="hnav-item active" href="#sec-house">🏠 房屋信息</a>
-                    <a class="hnav-item" href="#sec-central">🏢 集中供暖</a>
-                    <a class="hnav-item" href="#sec-self">🔥 燃气自采暖</a>
-                    <a class="hnav-item" href="#sec-result" style="display:${compare ? '' : 'none'}">📊 对比结果</a>
-                    <a class="hnav-item" href="#sec-ref">📄 引用资料</a>
-                </nav>
-                <div class="heating-calc">
+            <div class="heating-page">
                 <div class="heating-header">
                     <div class="heating-title">
                         <h2>供暖助手</h2>
                         <p class="heating-desc">市政集中供暖 vs 燃气壁挂炉自采暖 · 年度成本对比</p>
+                        <p class="heating-live-hint">参数已实时演算</p>
                     </div>
                 </div>
+                <div class="heating-main-grid">
+                <main class="heating-main-form">
 
                 <!-- 房屋信息 -->
                 <div class="heating-section" id="sec-house">
                     <div class="heating-section-title">🏠 房屋信息</div>
                     <div class="heating-row">
                         <div class="heating-field">
-                            <label>房本建筑面积（㎡）</label>
-                            <input type="number" class="heating-input" id="hArea" value="${this.area}" min="0" step="0.01">
+                            <label for="hArea">房本建筑面积（㎡） ${this.tipBtn('集中供暖唯一计费面积')}</label>
+                            <input type="number" class="heating-input" id="hArea" value="${this.area}" min="0" step="0.01" inputmode="decimal">
                             <div class="heating-hint">集中供暖唯一计费面积</div>
                         </div>
                         <div class="heating-field">
-                            <label>地暖实际铺设面积（㎡）</label>
-                            <input type="number" class="heating-input" id="hPaving" value="${this.pavingArea}" min="0" step="0.01">
-                            <div class="heating-hint">自采暖专用，扣除柜体、厨卫等不铺区域，如不知可先填套内面积</div>
+                            <div class="heating-field-header">
+                                <label for="hPaving">地暖实际铺设面积（㎡） ${this.tipBtn('自采暖专用，扣除柜体、厨卫等不铺区域；不确定时可勾选同房本面积')}</label>
+                                <label class="heating-checkbox-inline">
+                                    <input type="checkbox" id="hSameArea" ${this.pavingSameAsArea ? 'checked' : ''}> 同房本面积
+                                </label>
+                            </div>
+                            <input type="number" class="heating-input ${this.pavingSameAsArea ? 'is-locked' : ''}" id="hPaving" value="${this.pavingSameAsArea ? this.area : this.pavingArea}" min="0" step="0.01" inputmode="decimal" ${this.pavingSameAsArea ? 'readonly' : ''}>
+                            <div class="heating-hint">自采暖专用，扣除柜体、厨卫等不铺区域；不确定时可勾选同房本面积</div>
                         </div>
                     </div>
                 </div>
@@ -588,7 +1182,7 @@ class HeatingAssistantManager {
                                     <div class="heating-tcard heating-tcard-custom ${this.customPrice !== null ? 'active' : ''}" data-key="custom">
                                         <div class="tc-name">自定义价格</div>
                                         <div class="tc-price-wrap">
-                                            <input type="number" class="tc-price-input" id="hCustomPrice" value="${this.customPrice !== null ? this.customPrice : ''}" min="0" step="0.5" placeholder="输入">
+                                            <input type="number" class="tc-price-input" id="hCustomPrice" value="${this.customPrice !== null ? this.customPrice : ''}" min="0" step="0.5" placeholder="输入" inputmode="decimal">
                                             <span class="tc-price-unit">元/㎡·季</span>
                                         </div>
                                     </div>
@@ -609,101 +1203,102 @@ class HeatingAssistantManager {
 
                     <div class="heating-form-grid">
                         <div class="heating-field">
-                            <label>机型快捷选择</label>
+                            <label>机型快捷选择 ${this.tipBtn('选机型载入目录默认；手改会按机型名记在本机，再选仍保留。永久改默认请改 JSON')}</label>
                             <select class="heating-select" id="hModel">
                                 <option value="">自定义参数</option>
-                                ${HEATING_DATA.boiler_models.map((m, i) => `<option value="${i}" ${this.boiler.model === m.model_name ? 'selected' : ''}>${m.model_name}</option>`).join('')}
+                                ${HEATING_DATA.boiler_models.map((m, i) => `<option value="${i}" ${this.boiler.model === m.model_name ? 'selected' : ''} title="${(m.remark || '').replace(/"/g, '&quot;')}">${m.model_name}</option>`).join('')}
                             </select>
-                        </div>
-                        <div class="heating-field">
-                            <label>对比机型选择<span class="heating-optional">非必选</span></label>
-                            <select class="heating-select" id="hCompareModel">
-                                <option value="" ${this.upgrade.compareKey === '' ? 'selected' : ''}>不对比</option>
-                                ${HEATING_DATA.boiler_models.map((m, i) => `<option value="${i}" ${String(this.upgrade.compareKey) === String(i) ? 'selected' : ''}>${m.model_name}</option>`).join('')}
-                                <option value="custom" ${this.upgrade.compareKey === 'custom' ? 'selected' : ''}>自定义升级参数</option>
-                            </select>
-                            <div class="heating-hint">选择后可计算不同机型之间的升级回本周期</div>
+                            <div class="heating-hint">选机型载入目录默认；手改会按机型名记在本机，再选仍保留${this.hasBoilerOverride(this.boiler.model) ? ' · <strong>当前机型已校正</strong>' : ''}。永久改默认请改 JSON</div>
                         </div>
 
-                        ${this.upgrade.compareKey !== '' ? `
                         <div class="heating-field">
-                            <label>基准炉价格（元）</label>
-                            <input type="number" class="heating-input" id="hUpBasePrice" value="${this.upgrade.baseFree ? 0 : this.upgrade.basePrice}" min="0" step="100" ${this.upgrade.baseFree ? 'disabled' : ''}>
-                            <label class="heating-inline-check">
-                                <input type="checkbox" id="hUpBaseFree" ${this.upgrade.baseFree ? 'checked' : ''}>
-                                <span>精装自带 / 旧炉拆换（基准价按 0）</span>
-                            </label>
-                        </div>
-                        <div class="heating-field">
-                            <label>升级炉价格（元）</label>
-                            <input type="number" class="heating-input" id="hUpPrice" value="${this.upgrade.upgradePrice}" min="0" step="100">
-                            <div class="heating-hint">拟购高效机型采购价</div>
-                        </div>
-                        <div class="heating-field">
-                            <label>设备节能率 η</label>
-                            <input type="number" class="heating-input" id="hUpSaveRate" value="${Math.round(this.upgrade.saveRate * 100)}" min="0" max="90" step="5">
-                            <div class="heating-hint">相对普通炉少耗气的比例，默认 30%</div>
-                        </div>
-                        <div class="heating-field">
-                            <label>生命周期（年）</label>
-                            <input type="number" class="heating-input" id="hUpLifeYears" value="${this.upgrade.lifeYears}" min="1" max="30" step="1">
-                            <div class="heating-hint">用于计算全周期净收益，默认 10 年</div>
-                        </div>
-                        ` : ''}
-
-                        <div class="heating-field">
-                            <label>是否全预混冷凝炉</label>
+                            <label>是否全预混冷凝炉 ${this.tipBtn('未手改 η 时：是→建议 108%，否→建议 90%。仅建议默认 η，不再单独 ×0.7')}</label>
                             <div class="heating-radio-group">
                                 <label class="heating-radio ${this.boiler.is_condenser ? 'active' : ''}"><input type="radio" name="condenser" value="1" ${this.boiler.is_condenser ? 'checked' : ''}> 是</label>
                                 <label class="heating-radio ${!this.boiler.is_condenser ? 'active' : ''}"><input type="radio" name="condenser" value="0" ${!this.boiler.is_condenser ? 'checked' : ''}> 否</label>
                             </div>
+                            <div class="heating-hint">仅建议默认 η，不再单独 ×0.7</div>
                         </div>
                         <div class="heating-field">
-                            <label>是否带室外温度补偿</label>
+                            <label>是否带室外温度补偿 ${this.tipBtn('不直接乘耗气；未手改时：有补偿相对建议 η +2 个百分点')}</label>
                             <div class="heating-radio-group">
                                 <label class="heating-radio ${this.boiler.has_outdoor_comp ? 'active' : ''}"><input type="radio" name="outdoor" value="1" ${this.boiler.has_outdoor_comp ? 'checked' : ''}> 是</label>
                                 <label class="heating-radio ${!this.boiler.has_outdoor_comp ? 'active' : ''}"><input type="radio" name="outdoor" value="0" ${!this.boiler.has_outdoor_comp ? 'checked' : ''}> 否</label>
                             </div>
+                            <div class="heating-hint">不直接乘耗气；未手改时微调建议 η</div>
                         </div>
 
+                        ${this.renderEtaField(this.boiler, 'h', 'main')}
+
+                        <details class="heating-advanced heating-field-span2">
+                            <summary>高级参数：热指标 / 气热值 / 功率规格</summary>
+                            <div class="heating-advanced-grid">
                         <div class="heating-field">
-                            <label>最小输出功率（kW）</label>
-                            <input type="number" class="heating-input" id="hMinPower" value="${this.boiler.min_power}" min="0" step="0.1">
+                            <label for="hHeatLoad">热指标（W/㎡） ${this.tipBtn('默认 80，对齐宣传图；难量化假设')}</label>
+                            <input type="number" class="heating-input" id="hHeatLoad" value="${Math.round(this.heat_load * 1000)}" min="40" max="150" step="1" inputmode="numeric">
+                            <div class="heating-hint">默认 80，对齐宣传图；难量化假设</div>
                         </div>
                         <div class="heating-field">
-                            <label>最大输出功率（kW）</label>
-                            <input type="number" class="heating-input" id="hMaxPower" value="${this.boiler.max_power}" min="0" step="0.1">
+                            <label for="hGasHeat">气热值 H（kWh/m³） ${this.tipBtn('默认 9.8 为宣传同构高位折算口径；可改低位拟合')}</label>
+                            <input type="number" class="heating-input" id="hGasHeat" value="${this.gas_heat_equivalent}" min="8" max="12" step="0.1" inputmode="decimal">
+                            <div class="heating-hint">默认 9.8 为宣传同构高位折算口径；可改低位拟合</div>
                         </div>
+                        <div class="heating-field">
+                            <label>最小输出功率（kW） ${this.tipBtn('规格信息，不参与耗气')}</label>
+                            <input type="number" class="heating-input" id="hMinPower" value="${this.boiler.min_power}" min="0" step="0.1" inputmode="decimal">
+                            <div class="heating-hint">规格信息，不参与耗气</div>
+                        </div>
+                        <div class="heating-field">
+                            <label>最大输出功率（kW） ${this.tipBtn('规格信息，不参与耗气')}</label>
+                            <input type="number" class="heating-input" id="hMaxPower" value="${this.boiler.max_power}" min="0" step="0.1" inputmode="decimal">
+                            <div class="heating-hint">规格信息，不参与耗气</div>
+                        </div>
+                            </div>
+                        </details>
 
                         <div class="heating-field">
                             <label>壁挂炉采购总价（元）</label>
-                            <input type="number" class="heating-input" id="hPrice" value="${this.boiler.price}" min="0" step="1">
+                            <input type="number" class="heating-input" id="hPrice" value="${this.boiler.price}" min="0" step="1" inputmode="decimal">
                         </div>
                         <div class="heating-field">
                             <label>计划使用/质保年限</label>
-                            <input type="number" class="heating-input" id="hLife" value="${this.boiler.service_life}" min="1" step="1">
+                            <input type="number" class="heating-input" id="hLife" value="${this.boiler.service_life}" min="1" step="1" inputmode="numeric">
                         </div>
 
                         <div class="heating-field">
-                            <label><span>年度保养费用（元）</span><button type="button" class="heating-calc-help" id="hMaintainHelpBtn">🔢 帮我算</button></label>
-                            <input type="number" class="heating-input" id="hMaintain" value="${this.boiler.maintain_cost}" min="0" step="50">
+                            <label class="heating-label-with-action" for="hMaintain">
+                                <span>年度保养费用（元）</span>
+                                <button type="button" class="heating-calc-link" id="hMaintainHelpBtn">帮我算</button>
+                            </label>
+                            <input type="number" class="heating-input" id="hMaintain" value="${this.boiler.maintain_cost}" min="0" step="50" inputmode="decimal">
                         </div>
-                        <div class="heating-field">
-                            <label>使用模式</label>
-                            <select class="heating-select" id="hMode">
-                                ${HEATING_DATA.user_modes.map(m => `<option value="${m.coeff}" ${this.user_coeff === m.coeff ? 'selected' : ''}>${m.label}（${m.coeff}）</option>`).join('')}
-                            </select>
+                        <div class="heating-field heating-field-span2">
+                            <div class="heating-hint">使用模式（舒适/正常/节能）请在右侧实时看板一点切换，便于对照各档费用</div>
                         </div>
 
                         <div class="heating-field heating-field-span2">
-                            <label><span>全年生活用气（m³）</span><button type="button" class="heating-calc-help" id="hGasHelpBtn">🔢 帮我算</button></label>
-                            <input type="number" class="heating-input" id="hLifeGas" value="${this.year_life_gas}" min="0" step="10">
+                            <label class="heating-label-with-action" for="hLifeGas">
+                                <span>全年生活用气（m³） ${this.tipBtn('做饭、日常热水，不含采暖；参与阶梯计价，默认不计入供暖对比')}</span>
+                                <button type="button" class="heating-calc-link" id="hGasHelpBtn">帮我算</button>
+                            </label>
+                            <input type="number" class="heating-input" id="hLifeGas" value="${this.year_life_gas}" min="0" step="10" inputmode="decimal">
                             <div class="heating-hint">做饭、日常热水，不含采暖；参与阶梯计价，默认不计入供暖对比</div>
                         </div>
 
+                        <div class="heating-field heating-field-span2">
+                            <label>对比机型<span class="heating-optional">非必选</span> ${this.tipBtn('选对比炉后载入目录默认（含本机校正）；与上方当前炉比价（回本 B）')}</label>
+                            <select class="heating-select" id="hCompareModel">
+                                <option value="" ${this.upgrade.compareKey === '' ? 'selected' : ''}>不对比</option>
+                                ${HEATING_DATA.boiler_models.map((m, i) => `<option value="${i}" ${String(this.upgrade.compareKey) === String(i) ? 'selected' : ''} title="${(m.remark || '').replace(/"/g, '&quot;')}">${m.model_name}</option>`).join('')}
+                                <option value="custom" ${this.upgrade.compareKey === 'custom' ? 'selected' : ''}>自定义对比参数</option>
+                            </select>
+                            <div class="heating-hint">选对比炉后载入目录默认（含本机校正）；与上方当前炉比价（回本 B）${this.compareBoiler.model && this.hasBoilerOverride(this.compareBoiler.model) ? ' · <strong>对比炉已校正</strong>' : ''}</div>
+                        </div>
+
+                        ${this.renderCompareBoilerFields()}
+
                         <div class="heating-field heating-field-span2 heating-actions">
-                            <button class="heating-btn heating-btn-primary" id="hCalcBtn">🔢 计算对比</button>
-                            <button class="heating-btn" id="hResetBtn">↻ 重置参数</button>
+                            <button class="heating-btn" id="hResetBtn" title="清空本机对各机型的校正覆盖，恢复目录 JSON 默认">↻ 重置参数</button>
                         </div>
                     </div>
                 </div>
@@ -714,9 +1309,8 @@ class HeatingAssistantManager {
                     <div class="heating-section-content">${compare ? this.renderCompare(compare) : ''}</div>
                 </div>
 
-                <!-- 知识卡片 -->
-                <div class="heating-section">
-                    <div class="heating-section-title">📚 供暖小知识</div>
+                <details class="heating-section heating-fold" id="sec-knowledge">
+                    <summary class="heating-section-title">📚 供暖小知识</summary>
                     <div class="heating-kn-grid">
                         <div class="heating-kn-card">
                             <div class="kn-title">供暖季时间</div>
@@ -735,11 +1329,10 @@ class HeatingAssistantManager {
                             <div class="kn-text">全预混冷凝炉热效率可达 108%+，比普通炉节能约 30%，但采购价更高。</div>
                         </div>
                     </div>
-                </div>
+                </details>
 
-                <!-- 引用资料 -->
-                <div class="heating-section" id="sec-ref">
-                    <div class="heating-section-title">📄 引用资料</div>
+                <details class="heating-section heating-fold" id="sec-ref">
+                    <summary class="heating-section-title">📄 引用资料</summary>
                     <div class="heating-ref-list">
                         <a class="heating-ref-link" href="https://fgw.beijing.gov.cn/bmcx/djcx/jzldj/202003/t20200331_1752797.htm" target="_blank" rel="noopener">
                             <span>🔗</span> 北京市居民用管道天然气销售价格表 - 北京市发改委
@@ -757,10 +1350,22 @@ class HeatingAssistantManager {
                             <span>🔗</span> 北京市居民供热采暖合同（按面积计费版）
                         </a>
                     </div>
-                </div>
+                </details>
 
                 <div class="heating-disclaimer">
                     💡 说明：本测算采用标准基准热负荷 0.1kW/㎡，未纳入墙体保温、门窗、楼层散热等变量，结果为理论参考区间。
+                </div>
+                </main>
+                <aside class="heating-sticky-board" id="heatingStickyBoard" aria-label="实时费用看板">
+                    ${this.renderBoard(compare)}
+                </aside>
+                </div>
+
+            <div class="heating-sheet-backdrop" id="heatingSheetBackdrop"></div>
+            <div class="heating-mobile-sheet" id="heatingMobileSheet">
+                ${this.renderPeekBar(compare)}
+                <div class="heating-sheet-body" id="heatingSheetBody">
+                    ${this.renderSheetPanel(compare)}
                 </div>
             </div>
 
@@ -860,8 +1465,10 @@ class HeatingAssistantManager {
 
         this.bindEvents(container);
         this.bindCompareMode(container);
+        this.bindSheet(container);
         const compareAfter = this.calcCompare();
         if (compareAfter) this.mountCostTrendChart(container, compareAfter);
+        this.updateMobileSheetPosition();
     }
 
     formatLadderSteps(ladderResult) {
@@ -893,32 +1500,22 @@ class HeatingAssistantManager {
                     </div>
 
                     <div class="hf-step">
-                        <div class="hf-step-title">② 基础热负荷 → 日基础耗气</div>
-                        <div class="hf-eq">日基础热负荷(kWh) = 地暖铺设面积 × 基础热指标 × 日运行小时</div>
-                        <div class="hf-plug">${s.paving_area} ㎡ × ${C.base_heat_load} kW/㎡ × ${C.hour_per_day} h = <strong>${s.daily_base_kwh.toFixed(2)} kWh/日</strong></div>
-                        <div class="hf-eq">日基础耗气(m³) = 日基础热负荷 ÷ 气热当量</div>
-                        <div class="hf-plug">${s.daily_base_kwh.toFixed(2)} ÷ ${C.gas_heat_equivalent} kWh/m³ = <strong>${s.daily_base_gas.toFixed(4)} m³/日</strong></div>
-                        <div class="hf-note">常量：基础热指标 ${C.base_heat_load}、气热当量 ${C.gas_heat_equivalent}（约 1m³ 气 ≈ ${C.gas_heat_equivalent} kWh）</div>
+                        <div class="hf-step-title">② 采暖季总热量 Q → 耗气 V = Q ÷ (H × η)</div>
+                        <div class="hf-eq">Q = 铺设面积 × 热指标 × 日运行小时 × 采暖季天数 × 使用模式系数</div>
+                        <div class="hf-plug">${s.paving_area} ㎡ × ${C.base_heat_load} kW/㎡ × ${C.hour_per_day} h × ${C.heating_season_days} 天 × ${this.user_coeff} = <strong>${s.Q_season.toFixed(2)} kWh</strong></div>
+                        <div class="hf-eq">V = Q ÷ (气热值 H × 热效率 η)</div>
+                        <div class="hf-plug">${s.Q_season.toFixed(2)} ÷ (${C.gas_heat_equivalent} × ${s.eta.toFixed(2)}) = <strong>${s.season_gas.toFixed(2)} m³</strong></div>
+                        <div class="hf-note">热指标默认 80 W/㎡（${C.base_heat_load} kW/㎡）；H 默认 9.8 kWh/m³ 为对齐宣传的高位热值折算口径；η=${(s.eta * 100).toFixed(0)}%（市场常见可含 LHV 标称 &gt;100%）。气费仍按北京阶梯，非一口价。</div>
                     </div>
 
                     <div class="hf-step">
-                        <div class="hf-step-title">③ 修正系数 → 日实际耗气</div>
-                        <div class="hf-eq">日实际耗气 = 日基础耗气 × 冷凝炉系数 × 室外温补系数 × 功率适配系数 × 使用模式系数</div>
-                        <div class="hf-plug">冷凝炉：${this.boiler.is_condenser ? '是 → ×0.7' : '否 → ×1.0'}（当前 ×${s.condenser_coeff}）</div>
-                        <div class="hf-plug">室外温度补偿：${this.boiler.has_outdoor_comp ? '是 → ×0.9' : '否 → ×1.0'}（当前 ×${s.temp_comp_coeff}）</div>
-                        <div class="hf-plug">功率适配：最小功率 ${this.boiler.min_power} kW，规则「${s.power_coeff_rule}」（当前 ×${s.power_coeff}）</div>
-                        <div class="hf-plug">使用模式系数：×${this.user_coeff}</div>
-                        <div class="hf-plug">${s.daily_base_gas.toFixed(4)} × ${s.condenser_coeff} × ${s.temp_comp_coeff} × ${s.power_coeff} × ${this.user_coeff} = <strong>${s.daily_real_gas.toFixed(4)} m³/日</strong></div>
+                        <div class="hf-step-title">③ 日均参考（由采暖季均摊）</div>
+                        <div class="hf-plug">日均热量 ≈ ${(s.Q_season / C.heating_season_days).toFixed(2)} kWh/日；日均耗气 ≈ <strong>${s.daily_real_gas.toFixed(4)} m³/日</strong></div>
+                        <div class="hf-note">冷凝/室外补偿/功率为机型规格；未手改 η 时冷凝与室外补偿仅用于建议默认 η，不另乘耗气系数。</div>
                     </div>
 
                     <div class="hf-step">
-                        <div class="hf-step-title">④ 采暖季耗气量</div>
-                        <div class="hf-eq">采暖季耗气 = 日实际耗气 × 采暖季天数</div>
-                        <div class="hf-plug">${s.daily_real_gas.toFixed(4)} × ${C.heating_season_days} 天 = <strong>${s.season_gas.toFixed(2)} m³</strong></div>
-                    </div>
-
-                    <div class="hf-step">
-                        <div class="hf-step-title">⑤ 阶梯气价（生活用气参与梯度）</div>
+                        <div class="hf-step-title">④ 阶梯气价（生活用气参与梯度）</div>
                         <div class="hf-eq">全年总耗气 = 采暖季耗气 + 全年生活用气</div>
                         <div class="hf-plug">${s.season_gas.toFixed(2)} + ${this.year_life_gas.toFixed(2)} = <strong>${s.total_gas.toFixed(2)} m³</strong></div>
                         <div class="hf-eq">全年总燃气费 = 阶梯累进计价(总耗气)</div>
@@ -933,7 +1530,7 @@ class HeatingAssistantManager {
                     </div>
 
                     <div class="hf-step">
-                        <div class="hf-step-title">⑥ 设备固定成本（年化）</div>
+                        <div class="hf-step-title">⑤ 设备固定成本（年化）</div>
                         <div class="hf-eq">年均折旧 = 壁挂炉采购总价 ÷ 计划使用年限</div>
                         <div class="hf-plug">¥${this.boiler.price} ÷ ${this.boiler.service_life} 年 = <strong>¥${s.year_depreciation.toFixed(2)}</strong></div>
                         <div class="hf-eq">年固定成本 = 年均折旧 + 年度保养</div>
@@ -941,7 +1538,7 @@ class HeatingAssistantManager {
                     </div>
 
                     <div class="hf-step">
-                        <div class="hf-step-title">⑦ 自采暖口径费用（当前：${modeLabel}）</div>
+                        <div class="hf-step-title">⑥ 自采暖口径费用（当前：${modeLabel}）</div>
                         ${isHeatingMode ? `
                         <div class="hf-eq">供暖对比基础费用 = 采暖归因气费 + 年固定成本</div>
                         <div class="hf-plug">¥${s.heating_gas_cost.toFixed(2)} + ¥${s.year_fixed.toFixed(2)} = <strong>¥${s.heating_compare_cost.toFixed(2)}</strong></div>
@@ -956,7 +1553,7 @@ class HeatingAssistantManager {
                     </div>
 
                     <div class="hf-step hf-step-final">
-                        <div class="hf-step-title">⑧ 回本 A：自采暖 vs 集中供暖</div>
+                        <div class="hf-step-title">⑦ 回本 A：自采暖 vs 集中供暖</div>
                         <div class="hf-eq">年节约 = 集中供暖 − 自采暖对比费用</div>
                         <div class="hf-plug">¥${c.central_fee.toFixed(2)} − ¥${c.self_total.toFixed(2)} = <strong>${c.annual_saving >= 0 ? '' : '-'}¥${Math.abs(c.annual_saving).toFixed(2)}</strong></div>
                         <div class="hf-eq">回本 A = 壁挂炉价格 ÷ 年节约（仅当自采暖更省）</div>
@@ -969,21 +1566,46 @@ class HeatingAssistantManager {
 
                     ${c.upgrade ? `
                     <div class="hf-step hf-step-final">
-                        <div class="hf-step-title">⑨ 回本 B：机型升级（${c.upgrade.compareName} vs 基准炉）</div>
-                        <div class="hf-eq">基准采暖耗气 V0（普通炉）= ${c.upgrade.V0.toFixed(2)} m³</div>
-                        <div class="hf-eq">节气量 ΔV = V0 × η = ${c.upgrade.V0.toFixed(2)} × ${c.upgrade.eta} = ${c.upgrade.dV.toFixed(2)} m³</div>
-                        <div class="hf-eq">年节约气费 ΔC = 阶梯(生活+V0) − 阶梯(生活+V0−ΔV)</div>
+                        <div class="hf-step-title">⑧ 回本 B：机型对比（${c.upgrade.compareName} vs ${c.upgrade.baseLabel}）</div>
+                        <div class="hf-eq">当前炉采暖耗气 V0 = ${c.upgrade.V0.toFixed(2)} m³</div>
+                        <div class="hf-eq">对比炉采暖耗气 V1 = ${c.upgrade.V1.toFixed(2)} m³（相对节能 ${(c.upgrade.eta * 100).toFixed(1)}%，由两边参数演算）</div>
+                        <div class="hf-eq">年节约气费 ΔC = 阶梯(生活+V0) − 阶梯(生活+V1)</div>
                         <div class="hf-plug">¥${c.upgrade.cost_base_gas.toFixed(2)} − ¥${c.upgrade.cost_upgrade_gas.toFixed(2)} = <strong>¥${c.upgrade.dC.toFixed(2)}</strong></div>
-                        <div class="hf-eq">增量投资 ΔP = 升级炉价 − 基准炉价${c.upgrade.baseFree ? '（精装自带按 0）' : ''}</div>
+                        <div class="hf-eq">增量投资 ΔP = 对比炉价 − 当前炉采购价</div>
                         <div class="hf-plug">¥${c.upgrade.pUp.toFixed(0)} − ¥${c.upgrade.pBase.toFixed(0)} = <strong>¥${c.upgrade.dP.toFixed(2)}</strong></div>
                         <div class="hf-eq">回本 B = ΔP ÷ ΔC（仅当有增量投资且有节气收益）</div>
-                        <div class="hf-plug"><strong>${c.upgrade.paybackLabel}</strong>${c.upgrade.recommend ? ' · 推荐升级（≤生命周期）' : (c.upgrade.payback != null && c.upgrade.payback > c.upgrade.years ? ' · 回收期较长' : '')}</div>
-                        <div class="hf-eq">${c.upgrade.years} 年净收益 = ΔC×${c.upgrade.years} − ΔP</div>
+                        <div class="hf-plug"><strong>${c.upgrade.paybackLabel}</strong>${c.upgrade.recommend ? ' · 推荐更换（回本 ≤ 对比炉质保年限）' : (c.upgrade.payback != null && c.upgrade.payback > c.upgrade.years ? ' · 回收期较长' : '')}</div>
+                        <div class="hf-eq">${c.upgrade.years} 年净收益（按对比炉质保年限）= ΔC×${c.upgrade.years} − ΔP</div>
                         <div class="hf-plug">¥${c.upgrade.dC.toFixed(2)} × ${c.upgrade.years} − ¥${c.upgrade.dP.toFixed(2)} = <strong>¥${c.upgrade.netLife.toFixed(2)}</strong></div>
                     </div>
                     ` : ''}
                 </div>
             </details>
+        `;
+    }
+
+    /** 回本 B 下方宣传式省气摘要（仅左侧结果区；仅 payback>0） */
+    renderUpgradeSavings(c) {
+        const u = c && c.upgrade;
+        if (!u || !(u.payback > 0) || !(u.dC > 0)) return '';
+        const dV = u.dV;
+        const dC = u.dC;
+        const N = u.years;
+        const X = u.payback;
+        const show5 = true;
+        const showN = Math.abs(N - 5) >= 0.1;
+        const showX = Math.abs(X - N) >= 0.1 && Math.abs(X - 5) >= 0.1;
+        const overLife = X > N;
+        return `
+            <div class="heating-upgrade-savings">
+                <div class="heating-upgrade-savings-title">换机省气摘要 · 累计少花的气费（未扣购机差）</div>
+                <div class="heating-upgrade-savings-row">每年共省燃气约 <strong>${dV.toFixed(0)} m³</strong></div>
+                <div class="heating-upgrade-savings-row">每年共省燃气费约 <strong>¥${dC.toFixed(0)}</strong></div>
+                ${show5 ? `<div class="heating-upgrade-savings-row">5 年共省约 <strong>¥${(5 * dC).toFixed(0)}</strong></div>` : ''}
+                ${showN ? `<div class="heating-upgrade-savings-row">${N} 年（质保/计划使用）共省约 <strong>¥${(N * dC).toFixed(0)}</strong></div>` : ''}
+                ${showX ? `<div class="heating-upgrade-savings-row">回本年限 ${X.toFixed(1)} 年累计少花气费约 <strong>¥${(X * dC).toFixed(0)}</strong>${overLife ? '<span class="heating-upgrade-savings-warn"> · 超出计划使用/质保年限</span>' : ''}</div>` : ''}
+                <div class="heating-upgrade-savings-note">气费按北京居民阶梯差额法，非固定单价 3.5 元/m³</div>
+            </div>
         `;
     }
 
@@ -1000,28 +1622,13 @@ class HeatingAssistantManager {
         const gasVal = isHeatingMode ? s.heating_gas_cost : s.gas_cost;
         const formulaLines = [
             `${gasLabel} ¥${gasVal.toFixed(2)}`,
-            `设备及保养 ¥${s.year_fixed.toFixed(2)}`,
         ];
         if (c.includePauseFee) {
             formulaLines.push(`停供基本热费 ¥${c.pause_basic_fee.toFixed(2)}`);
         }
+        formulaLines.push(`设备/维保 ¥${s.year_fixed.toFixed(2)}`);
 
         return `
-            <div class="heating-mode-toggle" id="hCompareMode">
-                <button type="button" class="hmode-btn ${isHeatingMode ? 'active' : ''}" data-mode="heating">供暖对比（刨除生活用气）</button>
-                <button type="button" class="hmode-btn ${!isHeatingMode ? 'active' : ''}" data-mode="household">家庭燃气总账</button>
-            </div>
-            <label class="heating-pause-opt">
-                <input type="checkbox" id="hPauseFee" ${c.includePauseFee ? 'checked' : ''}>
-                <span>计入停供基本热费（约 ${pausePct}%）</span>
-            </label>
-            <div class="heating-mode-hint">${isHeatingMode
-                ? '生活用气只参与阶梯计价，不计入对比费用；两边比的是「供暖本身」花了多少钱'
-                : '自采暖侧含全年生活用气+采暖用气；集中供暖侧仍只有供暖费，适合看家庭气费总账，不宜直接比优劣'}
-                ${c.includePauseFee
-                    ? `；改自采暖后停供仍需缴基本热费约 ${pausePct}%（¥${c.pause_basic_fee.toFixed(2)}），已加到自采暖侧`
-                    : '；未计入停供基本热费，可打开上方开关纳入对比'}</div>
-
             <div class="heating-compare-grid">
                 <div class="heating-cmp-card">
                     <div class="cmp-label">🏢 集中供暖年度费用</div>
@@ -1051,24 +1658,25 @@ class HeatingAssistantManager {
                     <span class="pb-sub">vs 集中供暖</span>
                 </div>
                 ${c.upgrade ? `
-                <div class="pb-chip ${c.upgrade.recommend ? 'pb-chip-rec' : ''}" title="升级炉相对基准炉：增量投资 ΔP ÷ 每年节约气费 ΔC；悬停查看含义">
+                <div class="pb-chip ${c.upgrade.recommend ? 'pb-chip-rec' : ''}" title="对比炉相对当前炉：增量投资 ΔP ÷ 每年节约气费 ΔC">
                     <span class="pb-key">回本 B</span>
                     <span class="pb-val">${c.upgrade.paybackLabel}</span>
-                    <span class="pb-sub">机型升级 · ${c.upgrade.compareName}</span>
+                    <span class="pb-sub">vs 当前炉 · ${c.upgrade.compareName}</span>
                 </div>
-                <div class="pb-chip" title="${c.upgrade.years} 年节约气费累计 − 增量投资">
+                <div class="pb-chip" title="${c.upgrade.years} 年节约气费累计 − 增量投资（按对比炉质保年限）">
                     <span class="pb-key">${c.upgrade.years}年净收益</span>
                     <span class="pb-val">¥${c.upgrade.netLife.toFixed(0)}</span>
                     <span class="pb-sub">ΔC×${c.upgrade.years} − ΔP</span>
                 </div>
                 ` : `
-                <div class="pb-chip pb-chip-muted" title="在「对比机型选择」中选一个机型后，可计算升级炉相对基准炉的回本">
+                <div class="pb-chip pb-chip-muted" title="选择对比机型后，才计算对比炉相对当前炉的回本">
                     <span class="pb-key">回本 B</span>
                     <span class="pb-val">未启用</span>
                     <span class="pb-sub">选对比机型后计算</span>
                 </div>
                 `}
             </div>
+            ${this.renderUpgradeSavings(c)}
 
             ${this.renderCostTrendBlock(c)}
 
@@ -1092,14 +1700,15 @@ class HeatingAssistantManager {
                     <div class="dt-row dt-total"><span>${isHeatingMode ? '供暖对比费用' : '家庭总账费用'}</span><span>¥${c.self_total.toFixed(2)}</span></div>
                 </div>
                 <div class="heating-detail-card">
-                    <div class="dt-title">修正系数明细</div>
-                    <div class="dt-row"><span>冷凝炉修正</span><span>×${s.condenser_coeff}</span></div>
-                    <div class="dt-row"><span>室外温度补偿</span><span>×${s.temp_comp_coeff}</span></div>
-                    <div class="dt-row"><span>功率适配修正</span><span>×${s.power_coeff}</span></div>
-                    <div class="dt-row"><span>用户行为系数</span><span>×${this.user_coeff}</span></div>
-                    <div class="dt-row"><span>基础日耗气</span><span>${s.daily_base_gas.toFixed(2)} m³/日</span></div>
-                    <div class="dt-row"><span>实际日耗气</span><span>${s.daily_real_gas.toFixed(2)} m³/日</span></div>
+                    <div class="dt-title">热效率与耗气</div>
+                    <div class="dt-row"><span>热效率 η</span><span>${(s.eta * 100).toFixed(0)}%</span></div>
+                    <div class="dt-row"><span>热指标</span><span>${(s.constants.base_heat_load * 1000).toFixed(0)} W/㎡</span></div>
+                    <div class="dt-row"><span>气热值 H</span><span>${s.constants.gas_heat_equivalent} kWh/m³</span></div>
+                    <div class="dt-row"><span>使用模式系数</span><span>×${this.user_coeff}</span></div>
+                    <div class="dt-row"><span>采暖季热量 Q</span><span>${s.Q_season.toFixed(0)} kWh</span></div>
+                    <div class="dt-row"><span>日均耗气</span><span>${s.daily_real_gas.toFixed(2)} m³/日</span></div>
                     <div class="dt-row"><span>采暖气费边际均价</span><span>¥${s.heating_avg_price.toFixed(2)}/m³</span></div>
+                    <div class="dt-row"><span>室外补偿 / 功率</span><span>规格信息，不参与耗气</span></div>
                     <div class="dt-row dt-total" style="color:var(--orange);">
                         <span title="自采暖相对市政集中供暖的静态回本">回本 A · vs 集中</span>
                         <span>${c.payback_years != null
@@ -1108,16 +1717,20 @@ class HeatingAssistantManager {
                     </div>
                     ${c.upgrade ? `
                     <div class="dt-row dt-total" style="color:var(--orange);">
-                        <span title="升级炉相对基准炉的增量投资回本">回本 B · 机型升级</span>
+                        <span title="对比炉相对当前炉的增量投资回本">回本 B · vs 当前炉</span>
                         <span>${c.upgrade.paybackLabel}</span>
                     </div>
                     <div class="dt-row">
-                        <span>升级增量投资 ΔP</span>
+                        <span>增量投资 ΔP</span>
                         <span>¥${c.upgrade.dP.toFixed(0)}</span>
                     </div>
                     <div class="dt-row">
                         <span>每年节约气费 ΔC</span>
                         <span>¥${c.upgrade.dC.toFixed(2)}</span>
+                    </div>
+                    <div class="dt-row">
+                        <span>相对当前炉节能率</span>
+                        <span>${(c.upgrade.eta * 100).toFixed(1)}%</span>
                     </div>
                     <div class="dt-row">
                         <span>${c.upgrade.years} 年净收益</span>
@@ -1130,54 +1743,57 @@ class HeatingAssistantManager {
     }
 
     bindEvents(container) {
-        // 房屋面积
+        this.bindHintTips(container);
+        const onNum = (fn) => {
+            this.saveState();
+            fn();
+            this.scheduleRefresh(container, false);
+        };
+        const onNow = () => {
+            this.saveState();
+            this.scheduleRefresh(container, true);
+        };
+
         container.querySelector('#hArea').addEventListener('input', e => {
             this.area = parseFloat(e.target.value) || 0;
-            this.saveState();
-            this.refreshResult(container);
+            if (this.pavingSameAsArea) this.applyPavingSameLock(container);
+            onNum(() => this.updateCentralBar(container));
         });
         container.querySelector('#hPaving').addEventListener('input', e => {
+            if (this.pavingSameAsArea) return;
             this.pavingArea = parseFloat(e.target.value) || 0;
-            this.saveState();
-            this.refreshResult(container);
+            onNum(() => {});
         });
+        const sameChk = container.querySelector('#hSameArea');
+        if (sameChk) {
+            sameChk.addEventListener('change', () => {
+                this.pavingSameAsArea = sameChk.checked;
+                this.applyPavingSameLock(container);
+                onNow();
+            });
+        }
 
-        // 选中卡片的统一方法
         const selectCard = (card) => {
             container.querySelectorAll('.heating-tcard').forEach(c => c.classList.remove('active'));
             card.classList.add('active');
         };
 
-        // 更新集中供暖费用 + 对比结果
         const updateAll = () => {
-            const central = this.calcCentral();
-            const bar = container.querySelector('#centralResultBar');
-            if (bar) {
-                if (central) {
-                    bar.innerHTML = `<span>本采暖季费用</span><span class="heating-result-val">¥${central.fee.toFixed(2)}</span><span class="heating-result-formula">${this.area}㎡ × ${central.pricePerUnit}元/㎡</span>`;
-                    bar.style.display = '';
-                } else {
-                    bar.style.display = 'none';
-                }
-            }
-            this.refreshResult(container);
+            this.updateCentralBar(container);
+            this.scheduleRefresh(container, true);
         };
 
-        // 集中供暖类型选择
         container.querySelectorAll('.heating-tcard').forEach(card => {
             card.addEventListener('click', (e) => {
                 if (e.target.tagName === 'INPUT') return;
                 selectCard(card);
                 if (card.classList.contains('heating-tcard-custom')) {
-                    // 点击自定义卡片区域，聚焦输入框
                     this.selectedKey = 'custom';
                     const inp = card.querySelector('input');
                     if (inp) setTimeout(() => inp.focus(), 0);
                 } else {
-                    // 点击预设选项，清空自定义价格
                     this.selectedKey = card.dataset.key;
                     this.customPrice = null;
-                    // 清空自定义输入框
                     const inp = container.querySelector('#hCustomPrice');
                     if (inp) inp.value = '';
                 }
@@ -1186,11 +1802,9 @@ class HeatingAssistantManager {
             });
         });
 
-        // 自定义价格输入
         const customPriceInput = container.querySelector('#hCustomPrice');
         if (customPriceInput) {
             customPriceInput.addEventListener('focus', () => {
-                // 聚焦时自动切换到自定义卡片
                 const customCard = container.querySelector('.heating-tcard-custom');
                 if (customCard) selectCard(customCard);
                 this.selectedKey = 'custom';
@@ -1201,158 +1815,184 @@ class HeatingAssistantManager {
                 this.customPrice = isNaN(val) || val <= 0 ? null : val;
                 this.selectedKey = 'custom';
                 this.saveState();
-                updateAll();
+                this.updateCentralBar(container);
+                this.scheduleRefresh(container, false);
             });
             customPriceInput.addEventListener('click', e => e.stopPropagation());
         }
 
-        // 壁挂炉机型
         container.querySelector('#hModel').addEventListener('change', e => {
             const idx = e.target.value;
             if (idx !== '') {
                 const m = HEATING_DATA.boiler_models[idx];
-                this.boiler.model = m.model_name;
-                this.boiler.is_condenser = m.is_condenser;
-                this.boiler.min_power = m.min_power;
-                this.boiler.max_power = m.max_power;
-                this.boiler.has_outdoor_comp = m.has_outdoor_comp;
-                this.boiler.price = m.boiler_price_ref;
-                this.boiler.service_life = m.boiler_service_life;
-                this.boiler.maintain_cost = m.annual_maintain_cost;
+                Object.assign(this.boiler, this.boilerFromCatalogWithOverride(m));
                 this.saveState();
                 this.render(container);
+            } else {
+                this.boiler.model = '';
+                this.saveState();
+                this.scheduleRefresh(container, true);
             }
         });
 
-        // 对比机型（设备升级选型）
         const compareSel = container.querySelector('#hCompareModel');
         if (compareSel) {
             compareSel.addEventListener('change', e => {
-                const key = e.target.value;
-                this.upgrade.compareKey = key;
-                if (key !== '' && key !== 'custom') {
-                    const m = HEATING_DATA.boiler_models[key];
-                    if (m) {
-                        this.upgrade.upgradePrice = m.boiler_price_ref;
-                        this.upgrade.saveRate = m.is_condenser ? 0.3 : 0.2;
-                    }
-                }
+                this.applyCompareKey(e.target.value);
                 this.saveState();
                 this.render(container);
             });
         }
-        const upBase = container.querySelector('#hUpBasePrice');
-        if (upBase) {
-            upBase.addEventListener('input', e => {
-                this.upgrade.basePrice = parseFloat(e.target.value) || 0;
-                this.saveState();
-                this.refreshResult(container);
-            });
-        }
-        const upFree = container.querySelector('#hUpBaseFree');
-        if (upFree) {
-            upFree.addEventListener('change', e => {
-                this.upgrade.baseFree = e.target.checked;
+        container.querySelectorAll('input[name="cmpCondenser"]').forEach(r => {
+            r.addEventListener('change', e => {
+                this.compareBoiler.is_condenser = e.target.value === '1';
+                this.applySuggestedEta(this.compareBoiler);
+                this.rememberBoilerOverride(this.compareBoiler);
                 this.saveState();
                 this.render(container);
             });
-        }
-        const upPrice = container.querySelector('#hUpPrice');
-        if (upPrice) {
-            upPrice.addEventListener('input', e => {
-                this.upgrade.upgradePrice = parseFloat(e.target.value) || 0;
+        });
+        container.querySelectorAll('input[name="cmpOutdoor"]').forEach(r => {
+            r.addEventListener('change', e => {
+                this.compareBoiler.has_outdoor_comp = e.target.value === '1';
+                this.applySuggestedEta(this.compareBoiler);
+                this.rememberBoilerOverride(this.compareBoiler);
                 this.saveState();
-                this.refreshResult(container);
+                this.render(container);
             });
-        }
-        const upRate = container.querySelector('#hUpSaveRate');
-        if (upRate) {
-            upRate.addEventListener('input', e => {
-                this.upgrade.saveRate = (parseFloat(e.target.value) || 0) / 100;
-                this.saveState();
-                this.refreshResult(container);
+        });
+        const cmpBind = (id, field, intMode) => {
+            const el = container.querySelector(id);
+            if (!el) return;
+            el.addEventListener('input', e => {
+                this.compareBoiler[field] = intMode ? (parseInt(e.target.value, 10) || 0) : (parseFloat(e.target.value) || 0);
+                this.rememberBoilerOverride(this.compareBoiler);
+                onNum(() => {});
             });
-        }
-        const upYears = container.querySelector('#hUpLifeYears');
-        if (upYears) {
-            upYears.addEventListener('input', e => {
-                this.upgrade.lifeYears = parseInt(e.target.value, 10) || 10;
-                this.saveState();
-                this.refreshResult(container);
-            });
-        }
+        };
+        cmpBind('#hCmpMinPower', 'min_power');
+        cmpBind('#hCmpMaxPower', 'max_power');
+        cmpBind('#hCmpPrice', 'price');
+        cmpBind('#hCmpLife', 'service_life', true);
+        cmpBind('#hCmpMaintain', 'maintain_cost');
 
-        // 冷凝炉/室外补偿
         container.querySelectorAll('input[name="condenser"]').forEach(r => {
             r.addEventListener('change', e => {
                 this.boiler.is_condenser = e.target.value === '1';
-                this.syncRadios(container, 'condenser', this.boiler.is_condenser);
+                this.applySuggestedEta(this.boiler);
+                this.rememberBoilerOverride(this.boiler);
                 this.saveState();
+                this.render(container);
             });
         });
         container.querySelectorAll('input[name="outdoor"]').forEach(r => {
             r.addEventListener('change', e => {
                 this.boiler.has_outdoor_comp = e.target.value === '1';
-                this.syncRadios(container, 'outdoor', this.boiler.has_outdoor_comp);
+                this.applySuggestedEta(this.boiler);
+                this.rememberBoilerOverride(this.boiler);
                 this.saveState();
+                this.render(container);
             });
         });
 
-        // 数值输入
-        const numBind = (id, field) => {
-            container.querySelector(id).addEventListener('input', e => {
-                this.boiler[field] = parseFloat(e.target.value) || 0;
-                this.saveState();
+        const bindEtaGroup = (group, boilerRef, inputId) => {
+            container.querySelectorAll(`.heating-eta-chips[data-eta-group="${group}"] .heating-eta-chip`).forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const pct = parseInt(btn.dataset.eta, 10);
+                    if (!(pct > 0)) return;
+                    boilerRef.thermal_efficiency = pct / 100;
+                    boilerRef.is_eta_customized = true;
+                    this.rememberBoilerOverride(boilerRef);
+                    this.saveState();
+                    this.render(container);
+                });
+            });
+            const etaInput = container.querySelector(inputId);
+            if (etaInput) {
+                etaInput.addEventListener('input', e => {
+                    const pct = parseFloat(e.target.value);
+                    if (!(pct > 0) || !isFinite(pct)) return;
+                    boilerRef.thermal_efficiency = pct / 100;
+                    boilerRef.is_eta_customized = true;
+                    this.rememberBoilerOverride(boilerRef);
+                    onNum(() => {});
+                });
+            }
+        };
+        bindEtaGroup('main', this.boiler, '#hEta');
+        bindEtaGroup('cmp', this.compareBoiler, '#hCmpEta');
+
+        const numBind = (id, field, intMode) => {
+            const el = container.querySelector(id);
+            if (!el) return;
+            el.addEventListener('input', e => {
+                this.boiler[field] = intMode ? (parseInt(e.target.value, 10) || 0) : (parseFloat(e.target.value) || 0);
+                this.rememberBoilerOverride(this.boiler);
+                onNum(() => {});
             });
         };
         numBind('#hMinPower', 'min_power');
         numBind('#hMaxPower', 'max_power');
         numBind('#hPrice', 'price');
-        numBind('#hLife', 'service_life');
+        numBind('#hLife', 'service_life', true);
         numBind('#hMaintain', 'maintain_cost');
 
-        // 使用模式
-        container.querySelector('#hMode').addEventListener('change', e => {
-            this.user_coeff = parseFloat(e.target.value);
-            this.saveState();
-        });
+        const heatLoadEl = container.querySelector('#hHeatLoad');
+        if (heatLoadEl) {
+            heatLoadEl.addEventListener('input', e => {
+                const w = parseFloat(e.target.value);
+                this.heat_load = (w > 0 ? w : 80) / 1000;
+                onNum(() => {});
+            });
+        }
+        const gasHeatEl = container.querySelector('#hGasHeat');
+        if (gasHeatEl) {
+            gasHeatEl.addEventListener('input', e => {
+                const h = parseFloat(e.target.value);
+                this.gas_heat_equivalent = h > 0 ? h : HEATING_DATA.constants.gas_heat_equivalent;
+                onNum(() => {});
+            });
+        }
 
-        // 生活用气
         container.querySelector('#hLifeGas').addEventListener('input', e => {
             this.year_life_gas = parseFloat(e.target.value) || 0;
-            this.saveState();
+            onNum(() => {});
         });
 
-        // 计算按钮
-        container.querySelector('#hCalcBtn').addEventListener('click', () => {
-            this.render(container);
-        });
-
-        // 重置
         container.querySelector('#hResetBtn').addEventListener('click', () => {
-            if (confirm('确定重置自采暖参数？')) {
+            if (confirm('确定重置自采暖参数？\n将清除本机对各机型的校正覆盖，并恢复为目录 JSON 默认（不影响线上 JSON 文件）。')) {
+                this.clearBoilerOverrides();
                 this.boiler = {
-                    model: '', is_condenser: true, min_power: 3.8, max_power: 22.8,
+                    model: '', is_condenser: true, thermal_efficiency: 1.08, is_eta_customized: false,
+                    min_power: 3.8, max_power: 22.8,
                     has_outdoor_comp: false, price: 6999, service_life: 8, maintain_cost: 400
                 };
-                this.user_coeff = 1.0;
+                this.user_coeff = 0.7;
                 this.year_life_gas = 300;
                 this.customPrice = null;
-                this.upgrade = {
-                    compareKey: '', basePrice: 3500, upgradePrice: 7000,
-                    baseFree: false, saveRate: 0.3, lifeYears: 10
-                };
+                this.heat_load = HEATING_DATA.constants.base_heat_load;
+                this.gas_heat_equivalent = HEATING_DATA.constants.gas_heat_equivalent;
+                this.upgrade = { compareKey: '' };
+                this.compareBoiler = this.cloneBoiler(this.boiler);
                 this.saveState();
                 this.render(container);
             }
         });
 
-        // 帮我算 - 生活用气 / 年度保养
         this.bindGasHelper(container);
         this.bindMaintainHelper(container);
+    }
 
-        // 侧边导航
-        this.bindSideNav(container);
+    updateCentralBar(container) {
+        const central = this.calcCentral();
+        const bar = container.querySelector('#centralResultBar');
+        if (!bar) return;
+        if (central) {
+            bar.innerHTML = `<span>本采暖季费用</span><span class="heating-result-val">¥${central.fee.toFixed(2)}</span><span class="heating-result-formula">${this.area}㎡ × ${central.pricePerUnit}元/㎡</span>`;
+            bar.style.display = '';
+        } else {
+            bar.style.display = 'none';
+        }
     }
 
     bindGasHelper(container) {
@@ -1368,6 +2008,7 @@ class HeatingAssistantManager {
         // 打开弹窗
         openBtn.addEventListener('click', e => {
             e.preventDefault();
+            e.stopPropagation();
             gasModal.classList.add('open');
             this.updateGasEstimate(container);
         });
@@ -1433,6 +2074,7 @@ class HeatingAssistantManager {
 
         openBtn.addEventListener('click', e => {
             e.preventDefault();
+            e.stopPropagation();
             syncTypeFromBoiler();
             modal.classList.add('open');
             this.updateMaintainEstimate(container);
@@ -1490,40 +2132,6 @@ class HeatingAssistantManager {
         }
     }
 
-    bindSideNav(container) {
-        const nav = container.querySelector('#heatingNav');
-        if (!nav) return;
-        const links = nav.querySelectorAll('.hnav-item');
-        const sections = ['sec-house', 'sec-central', 'sec-self', 'sec-result', 'sec-ref'];
-
-        const setActive = (id) => {
-            links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
-        };
-
-        // 点击滚动 + 立即切换样式
-        links.forEach(link => {
-            link.addEventListener('click', e => {
-                e.preventDefault();
-                const id = link.getAttribute('href').slice(1);
-                setActive(id);
-                const target = container.querySelector('#' + id);
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
-
-        // 滚动高亮
-        const onScroll = () => {
-            let current = sections[0];
-            for (const id of sections) {
-                const el = container.querySelector('#' + id);
-                if (el && el.getBoundingClientRect().top <= 200) current = id;
-            }
-            setActive(current);
-        };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
-    }
-
     syncRadios(container, name, val) {
         container.querySelectorAll(`input[name="${name}"]`).forEach(r => {
             const label = r.closest('.heating-radio');
@@ -1531,55 +2139,87 @@ class HeatingAssistantManager {
         });
     }
 
+    updatePeek(container, compare) {
+        const toggle = container.querySelector('#heatingPeekToggle');
+        if (!toggle) return;
+        const h = this.peekHeadline(compare);
+        const tag = toggle.querySelector('.heating-mode-tag');
+        const main = toggle.querySelector('.heating-peek-main');
+        if (tag) tag.textContent = `[${this.modeTagLabel(this.compareMode)}]`;
+        if (main) main.textContent = h.main;
+        let extra = toggle.querySelector('.heating-peek-extra');
+        if (h.showExtra) {
+            if (!extra) {
+                extra = document.createElement('span');
+                extra.className = 'heating-peek-extra';
+                const cta = toggle.querySelector('.heating-peek-cta');
+                toggle.insertBefore(extra, cta);
+            }
+            extra.textContent = h.extra;
+            extra.style.display = '';
+        } else if (extra) {
+            extra.remove();
+            extra = null;
+        }
+        if (extra && toggle.scrollWidth > toggle.clientWidth + 2) extra.remove();
+    }
+
     refreshResult(container) {
         const compare = this.calcCompare();
+        const board = container.querySelector('#heatingStickyBoard');
+        const sheetBody = container.querySelector('#heatingSheetBody');
+        if (board) board.innerHTML = this.renderBoard(compare);
+        if (sheetBody) sheetBody.innerHTML = this.renderSheetPanel(compare);
+        this.updatePeek(container, compare);
+
         const section = container.querySelector('#sec-result');
-        if (!section) return;
-        const contentEl = section.querySelector('.heating-section-content');
-        if (compare) {
-            section.style.display = '';
-            if (contentEl) {
-                contentEl.innerHTML = this.renderCompare(compare);
-                this.bindCompareMode(container);
-                this.mountCostTrendChart(container, compare);
-            }
-        } else {
-            section.style.display = 'none';
-            if (contentEl) contentEl.innerHTML = '';
-            if (this._trendChart) {
-                try { this._trendChart.dispose(); } catch (e) {}
-                this._trendChart = null;
+        if (section) {
+            const contentEl = section.querySelector('.heating-section-content');
+            if (compare) {
+                section.style.display = '';
+                if (contentEl) {
+                    contentEl.innerHTML = this.renderCompare(compare);
+                    this.mountCostTrendChart(container, compare);
+                }
+            } else {
+                section.style.display = 'none';
+                if (contentEl) contentEl.innerHTML = '';
+                if (this._trendChart) {
+                    try { this._trendChart.dispose(); } catch (e) {}
+                    this._trendChart = null;
+                }
             }
         }
-        // 更新导航显示
-        const nav = document.getElementById('heatingNav');
-        if (nav) {
-            const resultLink = nav.querySelector('a[href="#sec-result"]');
-            if (resultLink) resultLink.style.display = compare ? '' : 'none';
-        }
+        this.bindCompareMode(container);
     }
 
     bindCompareMode(container) {
-        const toggle = container.querySelector('#hCompareMode');
-        if (toggle) {
-            toggle.querySelectorAll('.hmode-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const mode = btn.dataset.mode;
-                    if (mode !== 'heating' && mode !== 'household') return;
-                    if (this.compareMode === mode) return;
-                    this.compareMode = mode;
-                    this.saveState();
-                    this.refreshResult(container);
-                });
-            });
-        }
-        const pauseChk = container.querySelector('#hPauseFee');
-        if (pauseChk) {
-            pauseChk.addEventListener('change', () => {
-                this.includePauseFee = pauseChk.checked;
+        container.querySelectorAll('.heating-mode-toggle .hmode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mode = btn.dataset.mode;
+                if (mode !== 'heating' && mode !== 'household') return;
+                if (this.compareMode === mode) return;
+                this.compareMode = mode;
                 this.saveState();
                 this.refreshResult(container);
             });
-        }
+        });
+        container.querySelectorAll('#boardPauseFee, #sheetPauseFee').forEach(chk => {
+            chk.addEventListener('change', () => {
+                this.includePauseFee = chk.checked;
+                this.saveState();
+                this.refreshResult(container);
+            });
+        });
+        container.querySelectorAll('.heating-usage-seg .husage-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const coeff = parseFloat(btn.dataset.coeff);
+                if (!(coeff > 0) || !isFinite(coeff)) return;
+                if (Math.abs(this.user_coeff - coeff) < 0.001) return;
+                this.user_coeff = coeff;
+                this.saveState();
+                this.refreshResult(container);
+            });
+        });
     }
 }

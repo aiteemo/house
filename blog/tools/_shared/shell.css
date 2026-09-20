@@ -60,6 +60,12 @@ body.ate-tool {
 @media (min-width: 768px) {
   .ate-bar { padding: 12px 20px; }
 }
+@media (max-width: 640px) {
+  .ate-bar { padding: 8px 12px; }
+  .ate-bar-inner { flex-wrap: nowrap; gap: 8px; }
+  .ate-links,
+  .ate-note { display: none !important; }
+}
 
 #panel-tools {
   flex: 1;

@@ -17,11 +17,11 @@ class StyleQuizManager {
             modes: this.modes,
             state: this.state
         };
-        localStorage.setItem('aiteemo_style_quiz_demo_v1', JSON.stringify(data));
+        localStorage.setItem('style_quiz_state', JSON.stringify(data));
     }
 
     loadState() {
-        const raw = localStorage.getItem('aiteemo_style_quiz_demo_v1');
+        const raw = localStorage.getItem('style_quiz_state');
         if (!raw) return;
         try {
             const data = JSON.parse(raw);
@@ -35,7 +35,7 @@ class StyleQuizManager {
     }
 
     clearState() {
-        localStorage.removeItem('aiteemo_style_quiz_demo_v1');
+        localStorage.removeItem('style_quiz_state');
     }
 
     // ========== 多选判断 ==========
@@ -906,26 +906,29 @@ class StyleQuizManager {
     }
 
     // ========== 供暖助手 ==========
-    renderHeating(container) {
+    async renderHeating(container) {
         if (!this._heating) {
             this._heating = new HeatingAssistantManager();
         }
         container.innerHTML = `
-            <div class="quiz-container" style="max-width:900px;">
+            <div class="quiz-container heating-page-wide">
                 <div class="quiz-back" id="heatingBack">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     返回工具箱
                 </div>
-                <div id="heatingContent"></div>
+                <div id="heatingContent"><p class="heating-live-hint">机型目录加载中…</p></div>
             </div>
         `;
-        this._heating.render(container.querySelector('#heatingContent'));
         container.querySelector('#heatingBack').addEventListener('click', () => {
             this.state = 'home';
             this.renderToolsHome();
         });
+        if (typeof HEATING_DATA !== 'undefined' && HEATING_DATA.loadBoilerModels) {
+            await HEATING_DATA.loadBoilerModels();
+        }
+        this._heating.render(container.querySelector('#heatingContent'));
     }
 
     // ========== 装修需求问卷 ==========

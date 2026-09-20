@@ -2,13 +2,13 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>供暖助手 · AiTeemo</title>
   <meta name="description" content="北京市集中供热费用与停供测算。结果仅供参考。">
-  <link rel="stylesheet" href="../_shared/tools.css?v=20260908g">
-  <link rel="stylesheet" href="../_shared/shell.css">
+  <link rel="stylesheet" href="../_shared/tools.css?v=20260920m5">
+  <link rel="stylesheet" href="../_shared/shell.css?v=20260920m3">
 </head>
-<body class="ate-tool">
+<body class="ate-tool tool-page-wide">
   <div class="ate-bar">
     <div class="ate-bar-inner">
       <div>
@@ -25,12 +25,12 @@
   <script>
     window.AITEEMO_TOOL = 'heating';
     window.AITEEMO_TOOLS_HOME = "../index.html";
-    
+    window.AITEEMO_HEATING_BOILER_MODELS_URL = "../_shared/js/heating-boiler-models.json";
   </script>
-  <script src="../_shared/js/heating-data.js"></script>
+  <script src="../_shared/js/heating-data.js?v=20260918b"></script>
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
-  <script src="../_shared/js/heating-assistant.js?v=20260908g"></script>
-  <script src="../_shared/js/style-quiz.js"></script>
+  <script src="../_shared/js/heating-assistant.js?v=20260920m5"></script>
+  <script src="../_shared/js/style-quiz.js?v=20260918b"></script>
   <script src="../_shared/boot.js"></script>
 </body>
 </html>

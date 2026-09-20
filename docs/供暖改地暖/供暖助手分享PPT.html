@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>供暖助手</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #1a1612;
+      --paper: #f3eadc;
+      --muted: #b9a894;
+      --accent: #c45c26;
+      --line: rgba(243, 234, 220, 0.14);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: var(--bg); color: var(--paper); font-family: Outfit, sans-serif; }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.09;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .slide {
+      display: none;
+      position: relative;
+      height: 100%;
+      padding: 7vh 8vw 7vh;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 1;
+    }
+    .slide.active { display: flex; }
+    .slide.cover.active {
+      flex-direction: column;
+    }
+    .cover-body {
+      flex: 1;
+      min-height: 0;
+      margin-top: 3vh;
+      display: grid;
+      grid-template-columns: minmax(240px, 30%) minmax(0, 1fr);
+      grid-template-rows: 1fr auto;
+      grid-template-areas:
+        "copy shots"
+        "btn shots";
+      column-gap: 3.5vw;
+      row-gap: 18px;
+      align-items: stretch;
+    }
+    .cover-copy {
+      grid-area: copy;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .slide.cover h1 {
+      font-size: clamp(26px, 2.7vw, 42px);
+      max-width: none;
+    }
+    .cover-copy .keys {
+      grid-template-columns: 1fr;
+      max-width: none;
+      gap: 16px;
+      padding-top: 0;
+    }
+    .cover-copy .keys article { padding-top: 12px; }
+    .cover .demo-link.btn {
+      grid-area: btn;
+      align-self: end;
+      justify-self: start;
+    }
+    .shots {
+      grid-area: shots;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      overflow: visible;
+    }
+    .shots figure {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      min-width: 0;
+    }
+    .shot-ui { flex: 2491 1 0; }
+    .shot-boiler { flex: 571 1 0; }
+    .shots img {
+      width: 100%;
+      height: auto;
+      max-height: 72vh;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 36px rgba(0,0,0,0.45));
+      cursor: pointer;
+      transform-origin: center bottom;
+      transition: transform 0.28s ease, filter 0.28s ease;
+    }
+    .shot-ui img { border-radius: 10px; }
+    .shots img:hover {
+      transform: translateY(-8px) scale(1.04);
+      filter: drop-shadow(0 28px 48px rgba(0,0,0,0.55));
+    }
+    .shots figcaption {
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 14px 26px;
+      font: 600 16px Outfit, sans-serif;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.22s ease, filter 0.22s ease, box-shadow 0.22s ease;
+    }
+    .btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 12px 28px rgba(196, 92, 38, 0.38);
+    }
+    .btn:active { transform: translateY(0) scale(0.98); }
+    .slide::after {
+      content: "";
+      position: absolute;
+      left: 8vw;
+      right: 8vw;
+      top: 0;
+      height: 3px;
+      background: var(--accent);
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 13px;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+    }
+    .top b { font-weight: 600; color: var(--accent); letter-spacing: 0.12em; }
+    .hero .product {
+      font-size: 14px;
+      letter-spacing: 0.28em;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-family: "Noto Serif SC", serif;
+      font-size: clamp(32px, 4.4vw, 52px);
+      font-weight: 700;
+      line-height: 1.22;
+      letter-spacing: 0.02em;
+      max-width: 14em;
+    }
+    .keys {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 36px 48px;
+      max-width: 1080px;
+      padding-top: 8px;
+    }
+    .keys article {
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+    .keys .vs {
+      font-family: "Noto Serif SC", serif;
+      font-size: clamp(20px, 2.2vw, 28px);
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .keys .sum {
+      font-size: clamp(14px, 1.4vw, 17px);
+      color: var(--muted);
+      line-height: 1.5;
+      font-weight: 400;
+    }
+    .foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding-top: 8px;
+    }
+    .url {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .url:hover { color: var(--paper); }
+    .url span {
+      letter-spacing: 0.16em;
+      margin-right: 10px;
+      font-size: 11px;
+    }
+    .nav {
+      position: fixed;
+      right: 28px;
+      bottom: 24px;
+      z-index: 3;
+      display: flex;
+      gap: 10px;
+    }
+    .dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: rgba(244,234,217,0.22); border: 0; cursor: pointer;
+    }
+    .dot.on { background: var(--accent); }
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3vh 3vw;
+      background: rgba(10, 8, 6, 0.92);
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.22s ease, visibility 0.22s ease;
+    }
+    .lightbox.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .lightbox img {
+      width: 92vw;
+      height: 90vh;
+      object-fit: contain;
+      cursor: pointer;
+      filter: drop-shadow(0 24px 60px rgba(0,0,0,0.5));
+    }
+    .lightbox .shot-ui-preview { border-radius: 12px; }
+    @media (prefers-reduced-motion: reduce) {
+      .btn, .shots img, .lightbox { transition: none; }
+      .btn:hover, .shots img:hover { transform: none; }
+    }
+    @media (max-width: 1280px) {
+      .keys { grid-template-columns: 1fr; gap: 22px; }
+      .foot { flex-direction: column; align-items: flex-start; }
+      .cover-body {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .cover-copy {
+        flex: 0 0 auto;
+        gap: 20px;
+      }
+      .cover-copy .keys {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px 24px;
+      }
+      .shots {
+        flex: 1 1 auto;
+        width: 100%;
+        justify-content: center;
+        min-height: 28vh;
+      }
+      .cover .demo-link.btn {
+        align-self: flex-start;
+      }
+    }
+    @media (max-width: 800px) {
+      .cover-copy .keys { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <section class="slide cover active">
+    <div class="top">
+      <span>装修小工具</span>
+      <b>01</b>
+    </div>
+    <div class="cover-body">
+      <div class="cover-copy">
+        <div class="hero">
+          <p class="product">供暖助手</p>
+          <h1>改壁挂炉自采暖<br>把多花的钱算清楚。</h1>
+        </div>
+        <div class="keys">
+          <article>
+            <p class="vs">集中供暖 VS<br>壁挂炉自采暖</p>
+            <p class="sum">一年到底多花还是省</p>
+          </article>
+          <article>
+            <p class="vs">常规炉 VS<br>全预混 / 冷凝炉</p>
+            <p class="sum">价差、耗气、几年回本</p>
+          </article>
+          <article>
+            <p class="vs">如何直观评估</p>
+            <p class="sum">三档花费 · 费用结构 · 回本交汇</p>
+          </article>
+        </div>
+      </div>
+      <div class="shots">
+        <figure class="shot-ui">
+          <img src="供暖助手工具示例图.png" alt="供暖助手界面" class="shot-open" data-preview="ui" tabindex="0" role="button">
+          <figcaption>供暖助手</figcaption>
+        </figure>
+        <figure class="shot-boiler">
+          <img src="菲斯曼壁挂炉产品图.png" alt="壁挂炉" class="shot-open" data-preview="boiler" tabindex="0" role="button">
+          <figcaption>壁挂炉</figcaption>
+        </figure>
+      </div>
+      <a class="btn demo-link" href="https://blog.aiteemo.com/tools/heating/index.html" target="_blank" rel="noopener">查看演示</a>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="top">
+      <span>下次预告</span>
+      <b>02</b>
+    </div>
+    <div class="hero">
+      <p class="product">需求调查表</p>
+      <h1>填完出图<br>发给设计师就够。</h1>
+    </div>
+    <div class="keys">
+      <article>
+        <p class="vs">Word 文档 VS<br>网页问卷</p>
+        <p class="sum">打开就能填，不用来回传文件</p>
+      </article>
+      <article>
+        <p class="vs">口头复述 VS<br>填完出图</p>
+        <p class="sum">发给设计师，不用挨个讲</p>
+      </article>
+      <article>
+        <p class="vs">如何直观评估</p>
+        <p class="sum">点选填写 · 自动保存 · 导出长图</p>
+      </article>
+    </div>
+    <div class="foot">
+      <a class="url demo-link" href="https://blog.aiteemo.com/tools/heating/index.html" target="_blank" rel="noopener"><span>体验地址</span>blog.aiteemo.com/tools/heating</a>
+    </div>
+  </section>
+
+  <div class="nav">
+    <button class="dot on" type="button" data-go="0" aria-label="封面"></button>
+    <button class="dot" type="button" data-go="1" aria-label="结尾"></button>
+  </div>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <img alt="">
+  </div>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const dots = [...document.querySelectorAll('.dot')];
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    let i = 0;
+    function show(n) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, k) => s.classList.toggle('active', k === i));
+      dots.forEach((d, k) => d.classList.toggle('on', k === i));
+    }
+    function openPreview(img) {
+      lightboxImg.src = img.currentSrc || img.src;
+      lightboxImg.alt = img.alt || '';
+      lightboxImg.classList.toggle('shot-ui-preview', img.dataset.preview === 'ui');
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+    }
+    function closePreview() {
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImg.removeAttribute('src');
+    }
+    dots.forEach(d => d.addEventListener('click', () => show(+d.dataset.go)));
+    document.querySelectorAll('.demo-link').forEach(a => {
+      a.addEventListener('click', () => show(1));
+    });
+    document.querySelectorAll('.shot-open').forEach(img => {
+      img.addEventListener('click', () => openPreview(img));
+      img.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openPreview(img);
+        }
+      });
+    });
+    lightbox.addEventListener('click', closePreview);
+    document.addEventListener('keydown', e => {
+      if (lightbox.classList.contains('is-open')) {
+        e.preventDefault();
+        if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') closePreview();
+        return;
+      }
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+    });
+  </script>
+</body>
+</html>
