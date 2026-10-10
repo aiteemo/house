@@ -995,8 +995,9 @@ class StyleQuizManager {
         if (!this._md2img) {
             this._md2img = new Md2ImgManager();
         }
+        document.body.classList.add('md2img-page');
         container.innerHTML = `
-            <div class="quiz-container" style="max-width:1200px;">
+            <div class="quiz-container md2img-page">
                 <div class="quiz-back" id="md2imgBack">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1011,6 +1012,7 @@ class StyleQuizManager {
             if (this._md2img && typeof this._md2img.destroy === 'function') {
                 this._md2img.destroy();
             }
+            document.body.classList.remove('md2img-page');
             this.state = 'home';
             this.renderToolsHome();
         });

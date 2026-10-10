@@ -153,6 +153,7 @@ class Md2ImgManager {
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;');
             // marked@12 仍使用旧签名：code(text, lang, escaped)
+            const toProxy = (href) => this.toSameOriginImageUrl(href);
             marked.use({
                 gfm: true,
                 breaks: true,
@@ -187,13 +188,14 @@ class Md2ImgManager {
                             text = href.text;
                             href = href.href;
                         }
-                        const src = esc(href || '');
+                        const src = esc(toProxy(href || ''));
                         const alt = esc(text || '');
                         const titleAttr = title ? ` title="${esc(title)}"` : '';
                         const cap = text
                             ? `<figcaption>${esc(text)}</figcaption>`
                             : '';
-                        return `<figure class="md2img-figure"><img src="${src}" alt="${alt}"${titleAttr} loading="eager" decoding="async">${cap}</figure>\n`;
+                        // no-referrer：OpenAI 等 CDN 常拦带 Referer 的热链
+                        return `<figure class="md2img-figure"><img src="${src}" alt="${alt}"${titleAttr} loading="eager" decoding="async" referrerpolicy="no-referrer">${cap}</figure>\n`;
                     },
                 },
             });
@@ -227,6 +229,18 @@ class Md2ImgManager {
         );
     }
 
+    // images.openai.com 不给跨域头，浏览器不能把像素画进 PNG。改走本站 /openai-img/ 反代。
+    toSameOriginImageUrl(url) {
+        if (!url || url.startsWith('data:') || url.startsWith('/openai-img/')) return url;
+        try {
+            const u = new URL(url, location.href);
+            if (!/(^|\.)images\.openai\.com$/i.test(u.hostname)) return url;
+            return '/openai-img' + u.pathname + u.search;
+        } catch (e) {
+            return url;
+        }
+    }
+
     blobToDataUrl(blob) {
         return new Promise((resolve, reject) => {
             const r = new FileReader();
@@ -236,49 +250,94 @@ class Md2ImgManager {
         });
     }
 
+    waitImageSettled(img) {
+        if (img.complete && img.naturalWidth > 0) return Promise.resolve(true);
+        if (img.complete && img.naturalWidth === 0) return Promise.resolve(false);
+        return new Promise((resolve) => {
+            const done = (ok) => resolve(ok);
+            img.addEventListener('load', () => done(true), { once: true });
+            img.addEventListener('error', () => done(false), { once: true });
+        });
+    }
+
+    // 预览：只等自然加载，绝不改 crossOrigin（改了会强制重载并因 CORS 变破图）
+    async waitImagesForPreview(capture) {
+        const imgs = Array.from(capture.querySelectorAll('img'));
+        if (!imgs.length) return { total: 0, failed: 0, external: 0 };
+        const results = await Promise.all(imgs.map(async (img) => {
+            img.setAttribute('referrerpolicy', 'no-referrer');
+            const ok = await this.waitImageSettled(img);
+            if (img.decode) await img.decode().catch(() => {});
+            return ok;
+        }));
+        const failed = results.filter((ok) => !ok).length;
+        const external = imgs.filter((img) => {
+            const s = img.getAttribute('src') || '';
+            return s && !s.startsWith('data:');
+        }).length;
+        return { total: imgs.length, failed, external };
+    }
+
+    placeholderDataUrl(text) {
+        const c = document.createElement('canvas');
+        c.width = 1200;
+        c.height = 280;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#f6f1e8';
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.strokeStyle = '#e4d8c8';
+        ctx.strokeRect(12, 12, c.width - 24, c.height - 24);
+        ctx.fillStyle = '#6b5344';
+        ctx.font = '600 32px sans-serif';
+        ctx.fillText('外链图片无法写入导出文件', 48, 120);
+        ctx.fillStyle = '#8a7764';
+        ctx.font = '22px sans-serif';
+        const line = String(text || '图片').replace(/\s+/g, ' ').slice(0, 42);
+        ctx.fillText(line, 48, 172);
+        return c.toDataURL('image/png');
+    }
+
+    // 导出：尽量 fetch 内联为 data URI。失败则换成占位图，避免 html-to-image 再去拉跨域地址导致整单失败。
     async inlineImageEl(img) {
-        const src = img.getAttribute('src') || '';
+        const raw = img.getAttribute('src') || '';
+        const src = this.toSameOriginImageUrl(raw);
+        if (src !== raw) img.setAttribute('src', src);
         if (!src || src.startsWith('data:')) return true;
         try {
-            const res = await fetch(src, { mode: 'cors', credentials: 'omit', cache: 'force-cache' });
+            const res = await fetch(src, {
+                mode: 'cors',
+                credentials: 'omit',
+                cache: 'force-cache',
+                referrerPolicy: 'no-referrer',
+            });
             if (!res.ok) throw new Error('HTTP ' + res.status);
             const blob = await res.blob();
-            if (!blob.type.startsWith('image/') && !/\bimage\b/i.test(blob.type || '')) {
-                // 有些 CDN 不给 type，仍尝试按图读
-            }
             img.src = await this.blobToDataUrl(blob);
             img.removeAttribute('crossorigin');
             return true;
         } catch (e) {
-            // 预览仍可显示外链；导出时可能空白
-            try {
-                img.crossOrigin = 'anonymous';
-                if (!img.complete) {
-                    await new Promise((resolve) => {
-                        img.addEventListener('load', resolve, { once: true });
-                        img.addEventListener('error', resolve, { once: true });
-                    });
-                }
-            } catch (e2) { /* ignore */ }
             img.dataset.md2imgCors = 'fail';
+            img.removeAttribute('crossorigin');
+            img.src = this.placeholderDataUrl(img.getAttribute('alt') || '');
             return false;
         }
     }
 
-    async prepareImages(capture) {
+    async prepareImagesForExport(capture) {
         const imgs = Array.from(capture.querySelectorAll('img'));
         if (!imgs.length) return { total: 0, failed: 0 };
-        const results = await Promise.all(imgs.map((img) => this.inlineImageEl(img)));
-        await Promise.all(imgs.map((img) => {
-            if (img.decode) return img.decode().catch(() => {});
-            if (img.complete) return Promise.resolve();
-            return new Promise((resolve) => {
-                img.addEventListener('load', resolve, { once: true });
-                img.addEventListener('error', resolve, { once: true });
-            });
-        }));
+        const results = [];
+        for (const img of imgs) {
+            results.push(await this.inlineImageEl(img));
+            await this.waitImageSettled(img);
+        }
         const failed = results.filter((ok) => !ok).length;
         return { total: imgs.length, failed };
+    }
+
+    formatExportError(e) {
+        if (e instanceof Event) return '外链图片不允许跨域写入导出文件';
+        return (e && e.message) || String(e);
     }
 
     insertMarkdownAtCursor(editor, snippet) {
@@ -356,11 +415,13 @@ class Md2ImgManager {
                 }
             }
 
-            const imgStat = await this.prepareImages(capture);
+            const imgStat = await this.waitImagesForPreview(capture);
             this.fitPreview(root);
             if (status) {
                 if (imgStat.failed) {
-                    status.textContent = `就绪（${imgStat.failed} 张外链图可能无法导出，可改插本地图）`;
+                    status.textContent = `就绪（${imgStat.failed} 张图加载失败，可插本地图）`;
+                } else if (imgStat.external) {
+                    status.textContent = '就绪（外链图预览可用；导出若空白请改插本地图）';
                 } else {
                     status.textContent = '就绪';
                 }
@@ -415,18 +476,22 @@ class Md2ImgManager {
             stage.style.height = 'auto';
         }
 
+        const liveImgs = Array.from(capture.querySelectorAll('img'));
+        const savedSrc = liveImgs.map((img) => img.getAttribute('src'));
+
         try {
             if (document.fonts && document.fonts.ready) await document.fonts.ready;
-            const imgStat = await this.prepareImages(capture);
-            // 给 mermaid/svg / 图片解码一点稳定时间
+            // 就地截当前可见卡片。离屏副本在 html-to-image 里会导出成空白图。
+            const imgStat = await this.prepareImagesForExport(capture);
             await new Promise(r => setTimeout(r, 80));
 
             const dataUrl = await htmlToImage.toPng(capture, {
                 pixelRatio: 2,
-                cacheBust: true,
-                backgroundColor: null,
-                // data: 已内联的图无需再拉取；外链失败时仍尽量导出正文
-                imagePlaceholder: undefined,
+                cacheBust: false,
+                skipFonts: true,
+                backgroundColor: '#ffffff',
+                width: capture.scrollWidth,
+                height: capture.scrollHeight,
             });
             const a = document.createElement('a');
             const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
@@ -435,13 +500,16 @@ class Md2ImgManager {
             a.click();
             if (status) {
                 status.textContent = imgStat.failed
-                    ? `已下载（${imgStat.failed} 张外链图可能空白）`
+                    ? `已下载（${imgStat.failed} 张外链图无法写入，请改插本地图片）`
                     : '已下载';
             }
         } catch (e) {
             console.error(e);
-            if (status) status.textContent = '导出失败：' + (e.message || e);
+            if (status) status.textContent = '导出失败：' + this.formatExportError(e);
         } finally {
+            liveImgs.forEach((img, i) => {
+                if (savedSrc[i] != null) img.setAttribute('src', savedSrc[i]);
+            });
             capture.style.transform = prevTransform;
             if (stage) {
                 stage.style.width = prevStageW;

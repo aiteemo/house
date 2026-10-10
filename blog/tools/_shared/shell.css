@@ -76,5 +76,14 @@ body.ate-tool {
   margin: 0 auto;
   box-sizing: border-box;
 }
+body.ate-tool.md2img-page #panel-tools {
+  max-width: none;
+  width: 100%;
+  padding-left: clamp(12px, 2vw, 28px);
+  padding-right: clamp(12px, 2vw, 28px);
+}
+body.ate-tool.md2img-page .ate-bar-inner {
+  max-width: none;
+}
 #panel-tools .quiz-back { color: #c4a574; }
 #panel-tools .quiz-back:hover { color: #e8e2d6; }
