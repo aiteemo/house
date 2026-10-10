@@ -41,7 +41,7 @@ js/style-quiz.js                 # 工具箱入口卡片
 | 基础 | 标题 H1–H3、段落、加粗/斜体、引用、有序/无序列表、分割线、链接 |
 | 表格 | GFM 表格 |
 | 代码 | 行内代码、围栏代码块 + highlight.js 高亮 |
-| 图片 | `![alt](url)`；外链需可跨域，否则导出可能空白 |
+| 图片 | `![alt](url)`；亦识别 ChatGPT 式 `[标题](图片url)`；支持粘贴/插入本地图为 data URI；外链需可跨域，否则导出可能空白 |
 | 流程图 | ` ```mermaid ` 代码块 |
 
 暂不支持（二期）：数学公式、任务列表勾选交互、自定义 CSS 编辑器、PDF。
@@ -92,11 +92,12 @@ js/style-quiz.js                 # 工具箱入口卡片
 
 ## 三、技术要点
 
-1. **按需加载 CDN**：进入工具再注入 script/link，避免拖慢主站。
+1. **按需加载 CDN**：进入工具再注入 script/link；多源回退（jsDelivr / BootCDN / unpkg）。`highlight.js` 用 `@highlightjs/cdn-assets`（旧 npm 根路径已 404）。高亮/流程图/导出库失败时正文仍可渲染。
 2. **Mermaid**：marked 渲染后将 `.language-mermaid` 转为 `.mermaid`，再 `mermaid.run()`。
 3. **截图节点**：只截 `#md2imgCapture`（真实设计宽度），不截缩放外壳。
-4. **外链图**：导出前尽量 `crossOrigin=anonymous`；失败不阻塞整图。
-5. **接入方式**：与供暖助手一致，挂在「小工具」工具箱。
+4. **外链图**：渲染/导出前尝试 `fetch` 内联为 data URI；失败不阻塞整图，状态栏提示可改插本地图。
+5. **本地图**：编辑区可「插入图片」或直接粘贴截图，写入 `![alt](data:image/...)`，导出最稳。
+6. **接入方式**：与供暖助手一致，挂在「小工具」工具箱。
 
 ---
 

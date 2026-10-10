@@ -5,6 +5,7 @@ class Md2ImgManager {
         this.themeId = 'life';
         this.width = 750;
         this._libsReady = false;
+        this._libsPromise = null;
         this._renderTimer = null;
         this._exporting = false;
         this.loadState();
@@ -12,7 +13,7 @@ class Md2ImgManager {
 
     loadState() {
         try {
-            const saved = localStorage.getItem('aiteemo_md2img_demo_v1');
+            const saved = localStorage.getItem('md2img_v1');
             if (!saved) return;
             const d = JSON.parse(saved);
             if (typeof d.markdown === 'string') this.markdown = d.markdown;
@@ -22,26 +23,51 @@ class Md2ImgManager {
     }
 
     saveState() {
-        localStorage.setItem('aiteemo_md2img_demo_v1', JSON.stringify({
+        localStorage.setItem('md2img_v1', JSON.stringify({
             markdown: this.markdown,
             themeId: this.themeId,
             width: this.width,
         }));
     }
 
-    // ---------- CDN 按需加载 ----------
+    // ---------- CDN 按需加载（多源回退；可选库失败不拖垮正文） ----------
     loadScript(src) {
         return new Promise((resolve, reject) => {
-            if (document.querySelector(`script[src="${src}"]`)) {
-                resolve();
-                return;
+            const existing = document.querySelector(`script[src="${src}"]`);
+            if (existing) {
+                if (existing.dataset.md2imgLoaded === '1') {
+                    resolve();
+                    return;
+                }
+                // 上次失败留下的空壳，去掉后重试
+                existing.remove();
             }
             const s = document.createElement('script');
             s.src = src;
-            s.onload = () => resolve();
-            s.onerror = () => reject(new Error('load failed: ' + src));
+            s.async = true;
+            s.onload = () => {
+                s.dataset.md2imgLoaded = '1';
+                resolve();
+            };
+            s.onerror = () => {
+                s.remove();
+                reject(new Error('load failed: ' + src));
+            };
             document.head.appendChild(s);
         });
+    }
+
+    async loadScriptFallback(urls) {
+        let lastErr = null;
+        for (const src of urls) {
+            try {
+                await this.loadScript(src);
+                return src;
+            } catch (e) {
+                lastErr = e;
+            }
+        }
+        throw lastErr || new Error('load failed');
     }
 
     loadCss(href) {
@@ -52,16 +78,66 @@ class Md2ImgManager {
         document.head.appendChild(l);
     }
 
+    loadCssFallback(urls) {
+        // CSS 用首个可用链接即可；加载失败不影响正文
+        for (const href of urls) {
+            this.loadCss(href);
+            break;
+        }
+    }
+
     async ensureLibs() {
         if (this._libsReady) return;
-        this.loadCss('https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css');
-        this.loadCss('https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css');
-        await Promise.all([
-            this.loadScript('https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js'),
-            this.loadScript('https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/highlight.min.js'),
-            this.loadScript('https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js'),
-            this.loadScript('https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js'),
+        if (this._libsPromise) return this._libsPromise;
+        this._libsPromise = this._ensureLibsInner().finally(() => {
+            this._libsPromise = null;
+        });
+        return this._libsPromise;
+    }
+
+    async _ensureLibsInner() {
+        this.loadCssFallback([
+            'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/styles/github.min.css',
+            'https://cdn.bootcdn.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css',
+            'https://fastly.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/styles/github.min.css',
         ]);
+        this.loadCssFallback([
+            'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/styles/github-dark.min.css',
+            'https://cdn.bootcdn.net/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css',
+            'https://fastly.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/styles/github-dark.min.css',
+        ]);
+
+        // marked 必需：正文渲染
+        await this.loadScriptFallback([
+            'https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js',
+            'https://cdn.bootcdn.net/ajax/libs/marked/12.0.2/marked.min.js',
+            'https://fastly.jsdelivr.net/npm/marked@12.0.2/marked.min.js',
+            'https://unpkg.com/marked@12.0.2/marked.min.js',
+        ]);
+        if (!window.marked) throw new Error('Markdown 引擎加载失败，请检查网络后刷新');
+
+        // 以下可选：失败只降级，不阻断预览
+        // 注意：highlight.js 包根路径 highlight.min.js 在 jsDelivr 已 404，须用 @highlightjs/cdn-assets
+        await Promise.allSettled([
+            this.loadScriptFallback([
+                'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/highlight.min.js',
+                'https://cdn.bootcdn.net/ajax/libs/highlight.js/11.9.0/highlight.min.js',
+                'https://fastly.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/highlight.min.js',
+                'https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js',
+            ]),
+            this.loadScriptFallback([
+                'https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js',
+                'https://cdn.bootcdn.net/ajax/libs/mermaid/10.9.1/mermaid.min.js',
+                'https://fastly.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js',
+                'https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js',
+            ]),
+            this.loadScriptFallback([
+                'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js',
+                'https://fastly.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js',
+                'https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js',
+            ]),
+        ]);
+
         if (window.mermaid) {
             mermaid.initialize({
                 startOnLoad: false,
@@ -70,7 +146,7 @@ class Md2ImgManager {
                 fontFamily: 'inherit',
             });
         }
-        if (window.marked) {
+        if (window.marked && !marked.__md2imgConfigured) {
             const esc = (s) => String(s)
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
@@ -105,16 +181,136 @@ class Md2ImgManager {
                         const cls = language ? ` class="hljs language-${esc(language)}"` : ' class="hljs"';
                         return `<pre><code${cls}>${body}</code></pre>\n`;
                     },
+                    image(href, title, text) {
+                        if (href && typeof href === 'object') {
+                            title = href.title;
+                            text = href.text;
+                            href = href.href;
+                        }
+                        const src = esc(href || '');
+                        const alt = esc(text || '');
+                        const titleAttr = title ? ` title="${esc(title)}"` : '';
+                        const cap = text
+                            ? `<figcaption>${esc(text)}</figcaption>`
+                            : '';
+                        return `<figure class="md2img-figure"><img src="${src}" alt="${alt}"${titleAttr} loading="eager" decoding="async">${cap}</figure>\n`;
+                    },
                 },
             });
+            marked.__md2imgConfigured = true;
         }
         this._libsReady = true;
+    }
+
+    // ---------- 图片识别 / 内联 ----------
+    isImageUrl(url) {
+        if (!url || typeof url !== 'string') return false;
+        if (url.startsWith('data:image/')) return true;
+        try {
+            const u = new URL(url, location.href);
+            if (/\.(png|jpe?g|gif|webp|svg|avif|bmp)(\?|#|$)/i.test(u.pathname)) return true;
+            if (/(^|\.)images\.openai\.com$/i.test(u.hostname)) return true;
+            if (u.searchParams.get('purpose') === 'inline') return true;
+            if (/\/(oaidalleurl|dalle|generated[-_]images?)\b/i.test(u.pathname)) return true;
+        } catch (e) { /* ignore */ }
+        return false;
+    }
+
+    // ChatGPT 等常把图写成 [标题](图片url)，先提升为 ![标题](url)
+    promoteImageLinks(md) {
+        return String(md || '').replace(
+            /(^|[^!])\[([^\]]*)]\(([^)\s]+)(?:\s+"[^"]*")?\)/g,
+            (m, prefix, text, url) => {
+                if (!this.isImageUrl(url)) return m;
+                return `${prefix}![${text}](${url})`;
+            }
+        );
+    }
+
+    blobToDataUrl(blob) {
+        return new Promise((resolve, reject) => {
+            const r = new FileReader();
+            r.onload = () => resolve(r.result);
+            r.onerror = () => reject(r.error || new Error('read failed'));
+            r.readAsDataURL(blob);
+        });
+    }
+
+    async inlineImageEl(img) {
+        const src = img.getAttribute('src') || '';
+        if (!src || src.startsWith('data:')) return true;
+        try {
+            const res = await fetch(src, { mode: 'cors', credentials: 'omit', cache: 'force-cache' });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const blob = await res.blob();
+            if (!blob.type.startsWith('image/') && !/\bimage\b/i.test(blob.type || '')) {
+                // 有些 CDN 不给 type，仍尝试按图读
+            }
+            img.src = await this.blobToDataUrl(blob);
+            img.removeAttribute('crossorigin');
+            return true;
+        } catch (e) {
+            // 预览仍可显示外链；导出时可能空白
+            try {
+                img.crossOrigin = 'anonymous';
+                if (!img.complete) {
+                    await new Promise((resolve) => {
+                        img.addEventListener('load', resolve, { once: true });
+                        img.addEventListener('error', resolve, { once: true });
+                    });
+                }
+            } catch (e2) { /* ignore */ }
+            img.dataset.md2imgCors = 'fail';
+            return false;
+        }
+    }
+
+    async prepareImages(capture) {
+        const imgs = Array.from(capture.querySelectorAll('img'));
+        if (!imgs.length) return { total: 0, failed: 0 };
+        const results = await Promise.all(imgs.map((img) => this.inlineImageEl(img)));
+        await Promise.all(imgs.map((img) => {
+            if (img.decode) return img.decode().catch(() => {});
+            if (img.complete) return Promise.resolve();
+            return new Promise((resolve) => {
+                img.addEventListener('load', resolve, { once: true });
+                img.addEventListener('error', resolve, { once: true });
+            });
+        }));
+        const failed = results.filter((ok) => !ok).length;
+        return { total: imgs.length, failed };
+    }
+
+    insertMarkdownAtCursor(editor, snippet) {
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        const before = this.markdown.slice(0, start);
+        const after = this.markdown.slice(end);
+        const needsNlBefore = before && !/\n$/.test(before) ? '\n\n' : (before && !/\n\n$/.test(before) ? '\n' : '');
+        const needsNlAfter = after && !/^\n/.test(after) ? '\n\n' : '';
+        const block = `${needsNlBefore}${snippet}${needsNlAfter}`;
+        this.markdown = before + block + after;
+        editor.value = this.markdown;
+        const caret = (before + block).length;
+        editor.setSelectionRange(caret, caret);
+        editor.focus();
+    }
+
+    async insertImageFile(file, editor, root) {
+        if (!file || !file.type.startsWith('image/')) return;
+        const dataUrl = await this.blobToDataUrl(file);
+        const alt = (file.name || '图片').replace(/\.[^.]+$/, '').replace(/[[\]]/g, '');
+        this.insertMarkdownAtCursor(editor, `![${alt}](${dataUrl})`);
+        this.saveState();
+        this.schedulePreview(root);
     }
 
     // ---------- 渲染 ----------
     async renderMarkdown(md) {
         await this.ensureLibs();
-        let html = marked.parse(md || '');
+        if (!window.marked) throw new Error('Markdown 引擎未就绪');
+        const source = this.promoteImageLinks(md || '');
+        let html = marked.parse(source);
         // 将 mermaid 代码块转为 mermaid 容器
         html = html.replace(
             /<pre><code class="language-mermaid">([\s\S]*?)<\/code><\/pre>/g,
@@ -159,8 +355,16 @@ class Md2ImgManager {
                     await mermaid.run({ nodes });
                 }
             }
+
+            const imgStat = await this.prepareImages(capture);
             this.fitPreview(root);
-            if (status) status.textContent = '就绪';
+            if (status) {
+                if (imgStat.failed) {
+                    status.textContent = `就绪（${imgStat.failed} 张外链图可能无法导出，可改插本地图）`;
+                } else {
+                    status.textContent = '就绪';
+                }
+            }
         } catch (e) {
             console.error(e);
             if (status) status.textContent = '渲染失败：' + (e.message || e);
@@ -213,20 +417,27 @@ class Md2ImgManager {
 
         try {
             if (document.fonts && document.fonts.ready) await document.fonts.ready;
-            // 给 mermaid/svg 一点稳定时间
+            const imgStat = await this.prepareImages(capture);
+            // 给 mermaid/svg / 图片解码一点稳定时间
             await new Promise(r => setTimeout(r, 80));
 
             const dataUrl = await htmlToImage.toPng(capture, {
                 pixelRatio: 2,
                 cacheBust: true,
                 backgroundColor: null,
+                // data: 已内联的图无需再拉取；外链失败时仍尽量导出正文
+                imagePlaceholder: undefined,
             });
             const a = document.createElement('a');
             const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
             a.download = `md2img_${this.themeId}_${ts}.png`;
             a.href = dataUrl;
             a.click();
-            if (status) status.textContent = '已下载';
+            if (status) {
+                status.textContent = imgStat.failed
+                    ? `已下载（${imgStat.failed} 张外链图可能空白）`
+                    : '已下载';
+            }
         } catch (e) {
             console.error(e);
             if (status) status.textContent = '导出失败：' + (e.message || e);
@@ -277,7 +488,11 @@ class Md2ImgManager {
 
                 <div class="md2img-main">
                     <div class="md2img-editor-pane">
-                        <div class="md2img-pane-label">Markdown</div>
+                        <div class="md2img-pane-label">
+                            <span>Markdown</span>
+                            <button type="button" class="md2img-btn md2img-btn-ghost" id="md2imgInsertImg" title="插入本地图片，或直接粘贴截图">插入图片</button>
+                            <input type="file" id="md2imgFile" accept="image/*" hidden>
+                        </div>
                         <textarea class="md2img-editor" id="md2imgEditor" spellcheck="false">${this.escapeText(this.markdown)}</textarea>
                     </div>
                     <div class="md2img-preview-pane">
@@ -305,11 +520,35 @@ class Md2ImgManager {
 
     bindEvents(container) {
         const editor = container.querySelector('#md2imgEditor');
+        const fileInput = container.querySelector('#md2imgFile');
         editor.addEventListener('input', e => {
             this.markdown = e.target.value;
             this.saveState();
             this.schedulePreview(container);
         });
+
+        editor.addEventListener('paste', (e) => {
+            const items = e.clipboardData && e.clipboardData.items;
+            if (!items) return;
+            for (const item of items) {
+                if (item.type && item.type.startsWith('image/')) {
+                    e.preventDefault();
+                    const file = item.getAsFile();
+                    if (file) this.insertImageFile(file, editor, container);
+                    return;
+                }
+            }
+        });
+
+        const insertBtn = container.querySelector('#md2imgInsertImg');
+        if (insertBtn && fileInput) {
+            insertBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', () => {
+                const file = fileInput.files && fileInput.files[0];
+                if (file) this.insertImageFile(file, editor, container);
+                fileInput.value = '';
+            });
+        }
 
         container.querySelectorAll('.md2img-theme').forEach(btn => {
             btn.addEventListener('click', () => {
